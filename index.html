@@ -75,6 +75,10 @@ h1,h2,h3{margin:0;text-wrap:balance}
 .topbar .muted{font-size:12px;line-height:1}
 .topbar .btn.small{height:28px;min-width:28px;padding:0 8px;display:inline-grid;place-items:center;font-size:15px;line-height:1}
 .topbar .xbtn{font-size:18px;font-weight:400}
+.topbar .hbtn{font-size:16px;font-weight:700;min-width:36px}
+.help h3{font-size:14px;margin:10px 0 4px;color:var(--ink-dim,#9fb5a9)}
+.help ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:14px;line-height:1.45}
+.help kbd{display:inline-block;padding:0 6px;border-radius:5px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);font:inherit;font-size:12px;white-space:nowrap}
 .table{--S:min(calc(100vw - 32px), max(260px, calc(100dvh - var(--below))), 660px);
   --C:calc(var(--S)*.33); --rw:calc(var(--C)/6.2); --bw:calc(var(--S)*.05);
   width:var(--S);height:var(--S);position:relative;border-radius:0;
@@ -235,6 +239,7 @@ h1,h2,h3{margin:0;text-wrap:balance}
 .sk .tf .tile{box-shadow:none;background:none}
 .sk.h .tf .tile{--w:calc(var(--ww)*.95)}
 .sk.v .tf .tile{--w:calc(var(--ww)*.74)}
+.tile.inv svg{transform:rotate(180deg);transform-origin:50% 50%}   /* 거꾸로 놓인 손패: 앞면 그림만 뒤집혀 보인다 */
 .tile.rot1{transform:rotate(-90deg)}.tile.rot2{transform:rotate(180deg)}.tile.rot3{transform:rotate(90deg)}
 /* 자리 정하기 */
 .windrow{display:flex;gap:calc(var(--C)*.035)}
@@ -1164,7 +1169,7 @@ class Game {
       const p = this.players[s], ctrl = this.controllers[s];
       let drawn = null, rinshan = false;
       if (draw) {
-        if (this.opts.beforeDraw && s !== this.humanSeat && this.log.length) await this.opts.beforeDraw(s);   // 앞 사람이 버린 뒤 잠깐 템포를 둔다
+        if (this.opts.beforeDraw && (s !== this.humanSeat || p.riichi) && this.log.length) await this.opts.beforeDraw(s);   // 앞 사람이 버린 뒤 잠깐 템포를 둔다
         if (draw === 'normal') {
           if (this.wall.length === 0) return this.ryuukyoku();
           drawn = this.wall.pop();
@@ -1782,6 +1787,7 @@ function makeCPU(delayFn) {
       const r = adviseRiichi(g, s, rec, ctx.riichiOptions);
       return { type: 'discard', id: pickId(p.hand, rec.best.kind), riichi: !!(r && r.riichi) };
     },
+    async onAuto() { await wait(); },   // 리치 중 자동 쯔모기리: 평소 타패와 같은 고민 시간을 둔다
     async decideTsumo() { return true; },
     async decideRon() { return true; },
     async decideRiichiKan(g, s, opts) { return opts[0]; },
@@ -1952,6 +1958,7 @@ const seatsBy = n => [...Array(n).keys()];
 const layerOrder = n => seatsBy(n).filter(s => s !== 0).concat([0]);
 const modeName = m => (m && m.endsWith('3') ? '3인 ' : '') + (m && m.startsWith('south') ? '반장전' : '동풍전');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ASYM_K = new Set([0,1,2,3,4,5,6,7,8, 15, 18, 20, 24, 27,28,29,30, 32]);   // 상하가 구분되는 패: 만수 전부 · 7통 · 1·3·7삭 · 東南西北 · 發 (白·中·나머지 통삭은 위아래가 같아 보인다)
 const kname = k => k >= 27 ? HONOR_CH[k-27] : (k%9+1) + ['만','통','삭'][Math.floor(k/9)];
 const shTxt = s => s <= 0 ? '텐파이' : s === 1 ? '이샹텐' : s === 2 ? '량샹텐' : s + '샹텐';
 const pct = x => (x*100).toFixed(0) + '%';
@@ -2105,7 +2112,7 @@ function homeHTML(){
 
 // ---------- 효과음 (Web Audio로 합성, 파일 없음) ----------
 const SFX = (() => {
-  let ctx = null;
+  let ctx = null, base = 0;   // base: 지금부터 몇 초 뒤에 낼지(오디오 시계로 정확히 예약)
   const ac = () => {
     if(settings.sound === false) return null;
     if(!ctx){ try{ ctx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return null; } }
@@ -2121,11 +2128,11 @@ const SFX = (() => {
     const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = q;
     const g = c.createGain(); g.gain.value = gain;
     src.connect(f); f.connect(g); g.connect(c.destination);
-    src.start(c.currentTime + (delay || 0));
+    src.start(c.currentTime + base + (delay || 0));
   }
   function tone(freq, dur, gain, type, delay){
     const c = ac(); if(!c) return;
-    const t0 = c.currentTime + (delay || 0);
+    const t0 = c.currentTime + base + (delay || 0);
     const o = c.createOscillator(); o.type = type || 'sine'; o.frequency.value = freq;
     const g = c.createGain(); g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(gain, t0 + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
     o.connect(g); g.connect(c.destination); o.start(t0); o.stop(t0 + dur + 0.02);
@@ -2174,7 +2181,7 @@ const SFX = (() => {
   // 음높이가 미끄러지는 소리(첨벙·휙)
   function blip(f0, f1, dur, gain, delay, type){
     const c = ac(); if(!c) return;
-    const t0 = c.currentTime + (delay || 0);
+    const t0 = c.currentTime + base + (delay || 0);
     const o = c.createOscillator(); o.type = type || 'sine';
     o.frequency.setValueAtTime(f0, t0); o.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t0 + dur);
     const g = c.createGain(); g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
@@ -2185,10 +2192,11 @@ const SFX = (() => {
     const c = ac(); if(!c) return;
     const src = c.createBufferSource(); src.buffer = clackBuffer(c, kind, 0);
     const g = c.createGain(); g.gain.value = gain;
-    src.connect(g); g.connect(c.destination); src.start();
+    src.connect(g); g.connect(c.destination); src.start(c.currentTime + base);
   }
-  return {
+  const api = {
     unlock: ac,
+    now(){ const c = ac(); return c ? c.currentTime : null; },   // 오디오 시계(초). 소리가 꺼져 있으면 null
     draw(){ clack('draw', .28); },                                         // 패 집는 소리
     discard(){ clack('discard', 1.0); },                                   // 딱! 내려놓는 소리
     call(){ clack('discard', .6); tone(587, .12, .16, 'triangle', .02); tone(784, .18, .16, 'triangle', .1); },
@@ -2202,6 +2210,8 @@ const SFX = (() => {
     fish(){ noise(.26, 900, .7, .42, 0); noise(.2, 2400, 1, .22, .05); blip(620, 300, .14, .12, .02, 'sine'); blip(820, 420, .1, .08, .12, 'sine'); }, // 첨벙
     lvup(){ [659, 784, 988, 1319].forEach((f, i) => tone(f, .28, .14, 'triangle', .12 + i * .08)); }
   };
+  api.at = (name, sec) => { base = Math.max(0, sec || 0); try{ api[name](); } finally { base = 0; } };   // name 소리를 sec초 뒤에 정확히 내도록 예약
+  return api;
 })();
 
 // ---------- 대국 ----------
@@ -2238,7 +2248,7 @@ function flyIn(dropAt){
   const fly = document.createElement('div');
   fly.className = 'flytile';
   fly.style.cssText = `position:fixed;left:${to.left}px;top:${to.top}px;width:${to.width}px;height:${to.height}px;z-index:50;pointer-events:none;--hw:${to.width}px`;
-  fly.innerHTML = tileId(pd.id, {size:'lg', nofk:true});
+  fly.innerHTML = tileId(pd.id, {size:'lg', nofk:true, cls: UI.inv && UI.inv.has(pd.id) ? 'inv' : ''});
   document.body.appendChild(fly);
   const sc = Math.max(.3, from.width / to.width);
   const dx = from.left + from.width/2 - (to.left + to.width/2), dy = from.top + from.height/2 - (to.top + to.height/2);
@@ -2255,7 +2265,7 @@ const Human = {
   async decideRiichiKan(g,s,opts){ await takeDraw(); return ask({kind:'riichiKan', opts}); },
   async decideRiichiNuki(){ await takeDraw(); return ask({kind:'riichiNuki'}); },
   decideCall(g,s,opts){ return ask({kind:'call', opts}); },
-  async onAuto(g, s){ if(g.players[s].riichi && !UI.pendingDraw){ UI.autoTG = false; return sleep(settings.speed === 'fast' ? 120 : 260); } await takeDraw(); UI.autoTG = false; return sleep(Math.max(250, SPEED[settings.speed])); }
+  async onAuto(g, s){ if(g.players[s].riichi && !UI.pendingDraw){ UI.autoTG = false; return sleep(SPEED[settings.speed]); } await takeDraw(); UI.autoTG = false; return sleep(Math.max(250, SPEED[settings.speed])); }
 };
 
 // 점봉: 10000 빨강 · 5000 노랑 · 1000 파랑 · 500 초록 · 100 하양. 25000 = 빨1 노2 파4 초1 하5
@@ -2343,6 +2353,8 @@ function startGame(mode, saved, practice, drill){
     onKyokuStart: async (game) => {
       UI.frozen = null; UI.cpuOut = {}; UI.handSet = game.results.length % 2; document.documentElement.classList.toggle('setb', UI.handSet === 1);
       UI.callouts = {}; UI.carryKyotaku = game.kyotaku;
+      UI.inv = new Set();   // 처음 배패된 손패는 상하가 정리되지 않은 채로 온다(끌면서 우클릭해 180도 돌려 다시 손패에 놓아 정리)
+      if(!UI.drill && !settings.skipDeal) game.players[0].hand.forEach(id => { if(ASYM_K.has(kindOf(id)) && Math.random() < .5) UI.inv.add(id); });
       if((settings.skipDeal || UI.drill) && !(D && D.full)){   // 배패 스킵(연습 모드도 바로 시작): 자리 정하기·주사위·배패 연출 없이 바로 시작
         UI.oyaShown = true; UI.seating = false; UI.windPick = null; UI.diceShow = null; UI.dealCount = null;
         UI.wallSplit = true; UI.dealing = false; UI.dealerFirst = game.dealer === 0; UI.cpuFirst = game.dealer !== 0 ? game.dealer : null; render(); return;
@@ -2430,6 +2442,7 @@ function startGame(mode, saved, practice, drill){
   UI.lastDraw = {}; UI.cpuOut = {};
   g.on((type, d) => {
     if(type === 'draw') UI.lastDraw[d.seat] = d.id;
+    if(type === 'draw' && d.seat === 0 && !UI.drill && ASYM_K.has(kindOf(d.id)) && Math.random() < .5){ if(!UI.inv) UI.inv = new Set(); UI.inv.add(d.id); }   // 쯔모해 온 패도 상하가 제각각
     if((type === 'draw' || type === 'discard') && !UI.dealing) UI.wallFx = null;
     // CPU 친의 첫 차례: ちょんちょん으로 이미 14장이라 패산에서 뽑지 않는다(게임 안에서는 14번째 패를 첫 쯔모로 셈)
     let cpuFirstDraw = false;
@@ -2441,6 +2454,7 @@ function startGame(mode, saved, practice, drill){
       if(el){ const r = el.getBoundingClientRect(); UI.flipMany = { keys: ['h' + d.id], pt: {x: r.left + r.width/2, y: r.top + r.height/2}, dur: CPU_FLY() }; SFX.draw(); }
     }
     if(type === 'discard' && UI.cpuOut){ for(const k of Object.keys(UI.cpuOut)) if(+k !== d.seat) delete UI.cpuOut[k]; }   // 빠진 이빨 자리는 다음 사람이 쯔모하고 타패할 때 정리된다
+    if(type === 'discard' && d.seat !== 0 && !UI.drill && ASYM_K.has(kindOf(d.id)) && Math.random() < .5){ if(!UI.inv) UI.inv = new Set(); UI.inv.add(d.id); }   // CPU도 상하를 안 맞추고 버릴 때가 있다
     if(type === 'discard' && d.seat !== 0) cpuDiscarded(g, d.seat, d.id);
     if((type === 'call' || type === 'nuki') && UI.cpuOut){ delete UI.cpuOut[d.seat]; UI.lastDraw[d.seat] = null; }
     if(type === 'call' && d.from !== d.seat){   // 울기: 꺼낸 패만 먼저 펼치고, 가져올 패는 그 사람이 타패한 뒤에 날아와 붙는다
@@ -2735,8 +2749,8 @@ function layerHTML(g, s, walls){
   const river = p.discards.map((d,i) => {
     if(d.called && !(UI.claim && UI.claim.id === d.id)) return '';   // 울려 간 패는 강에서 사라진다
     const callme = cpd && i === p.discards.length-1;
-    return tileId(d.id, {size:'rv', cls:[d.riichi?'rii':'', d.tsumogiri && !(i === 0 && s === g.dealer) ? 'tg' : '', (last && last.seat===s && i===p.discards.length-1 && !d.called)?'last':'', callme?'callme':''].join(' '), attrs: callme ? 'data-act="callTile" role="button" aria-label="이 패로 울기"' : ''});
-  }).join('') + (s === 0 && UI.riichiDiscard != null ? tileId(UI.riichiDiscard, {size:'rv', cls:'rii pendrii'}) : '');
+    return tileId(d.id, {size:'rv', cls:[d.riichi?'rii':'', d.tsumogiri && !(i === 0 && s === g.dealer) ? 'tg' : '', (last && last.seat===s && i===p.discards.length-1 && !d.called)?'last':'', callme?'callme':'', UI.inv && UI.inv.has(d.id) ? 'inv' : ''].join(' '), attrs: callme ? 'data-act="callTile" role="button" aria-label="이 패로 울기"' : ''});
+  }).join('') + (s === 0 && UI.riichiDiscard != null ? tileId(UI.riichiDiscard, {size:'rv', cls:'rii pendrii' + (UI.inv && UI.inv.has(UI.riichiDiscard) ? ' inv' : '')}) : '');
   const co = UI.callouts[s];
   const coNew = co && Date.now() - (UI.calloutAt[s] || 0) < 300;
   const v = VS(s);
@@ -2905,7 +2919,7 @@ function drillGuideHTML(g){
   if(D === 'deal'){   // 자리 정하기 → 패산 가르기 → 배패 → 첫 타패
     if(UI.windPick && UI.windPick.picked == null){ l1 = '바람패 한 장을 눌러 고르세요'; l2 = '자리 정하기'; cls = 'up'; }
     else if(UI.rollWait){ l1 = '주사위를 가운데로 끌어 놓으세요'; l2 = esc(UI.rollWait.title); cls = 'up'; }
-    else if(UI.dealWait){ l1 = `패산에서 빛나는 ${UI.dealWait.n}장을 끌어 오세요`; l2 = '→ 내 손패로'; cls = 'up'; }
+    else if(UI.dealWait){ l1 = `패산에서 빛나는 ${UI.dealWait.n}장을 끌어 오세요`; l2 = '→ 내 손패로 (우클릭: 바로 가져오기)'; cls = 'up'; }
     else if(pd && pd.kind === 'action' && !UI.confirm){ l1 = '버릴 패 1장을 끌어 놓으세요'; l2 = '→ 작탁 안으로'; }
   }
   else if(UI.pendingDraw && UI.pendingDraw.rinshan && !UI.pendingDraw.flying && DRILL_RINSHAN.includes(D)){ l1 = '영상패를 뽑으세요'; l2 = '→ 패산에서 손패로 끌어 오기'; }
@@ -3050,11 +3064,11 @@ function gameHTML(){
   const ht = id => {
     const k = kindOf(id);
     const aiHere = cf && cf.aiTile === k && !aiMarked; if(aiHere) aiMarked = true;
-    return tileId(id, {size:'lg', cls:[selId===id?'sel':'', act && !legal(id)?'off':'', aiHere?'hint':'', UI.alice && UI.alice.hit === k ? 'ahit' : ''].join(' '), attrs:`data-tile="${id}" role="button" tabindex="0" aria-label="${kname(k)}"`});
+    return tileId(id, {size:'lg', cls:[selId===id?'sel':'', act && !legal(id)?'off':'', aiHere?'hint':'', UI.alice && UI.alice.hit === k ? 'ahit' : '', UI.inv && UI.inv.has(id) ? 'inv' : ''].join(' '), attrs:`data-tile="${id}" role="button" tabindex="0" aria-label="${kname(k)}"`});
   };
   // 배패 중: 친이 ちょんちょん으로 14장째를 받으면 그 패(=곧 첫 쯔모로 셈할 패산 맨 앞 패)를 바로 쯔모 칸에 둔다
   const chon14 = UI.dealing && UI.dealCount && UI.dealCount[0] >= 14 ? g.wall[g.wall.length - 1] : null;
-  const hand = UI.dealing ? (UI.dealCount ? me.hand.slice(0, Math.min(13, UI.dealCount[0])).sort((a,b)=>a-b).map(id => tileId(id, {size:'lg'})).join('') + '<span class="gap"></span>' + (chon14 != null ? tileId(chon14, {size:'lg'}) : '<span class="tile lg slot" aria-hidden="true"></span>') : '') : rest.map(ht).join('') + '<span class="gap"></span>' + (drawnId!=null && drawnId !== UI.riichiDiscard && !autoTG ? ht(drawnId) : drawnId!=null ? '<span class="tile lg slot" aria-hidden="true"></span>' : (pend != null && !UI.pendingDraw.flying ? '<span class="tile lg slot pend" data-act="takeDraw" role="button" aria-label="쯔모"></span>' : '<span class="tile lg slot" aria-hidden="true"></span>')) +
+  const hand = UI.dealing ? (UI.dealCount ? me.hand.slice(0, Math.min(13, UI.dealCount[0])).sort((a,b)=>a-b).map(id => tileId(id, {size:'lg', cls: UI.inv && UI.inv.has(id) ? 'inv' : ''})).join('') + '<span class="gap"></span>' + (chon14 != null ? tileId(chon14, {size:'lg'}) : '<span class="tile lg slot" aria-hidden="true"></span>') : '') : rest.map(ht).join('') + '<span class="gap"></span>' + (drawnId!=null && drawnId !== UI.riichiDiscard && !autoTG ? ht(drawnId) : drawnId!=null ? '<span class="tile lg slot" aria-hidden="true"></span>' : (pend != null && !UI.pendingDraw.flying ? '<span class="tile lg slot pend" data-act="takeDraw" role="button" aria-label="쯔모"></span>' : '<span class="tile lg slot" aria-hidden="true"></span>')) +
     (staged.length ? `<span class="mymeld staging">${staged.map(id => tileId(id, {size:'lg'})).join('')}</span>` : '') +
     me.melds.slice().reverse().map(m => meldHTML(m, 'lg', 'mymeld', 0)).join('') +
     '';
@@ -3094,7 +3108,7 @@ function gameHTML(){
     }
     else if(!kamiCall) actions += `<span class="btn rcguide" aria-label="넘기려면 우클릭">우클릭</span>`;
     prompt = UI.callStage && UI.callStage.wait ? '깡하려면 1장 더 끌어 놓으세요' : `${SEATNAME[pd.opts.from]}가 버린 ${kname(t)} · 울려면 손패에서 꺼낼 패를 오른쪽 후로 자리로 끌어 놓으세요` + (kamiCall ? ' · 울지 않으려면 패산에서 쯔모(우클릭도 돼요)' : '');
-  } else if(UI.dealWait) prompt = `배패: 패산에서 빛나는 ${UI.dealWait.n}장을 손으로 끌어오세요`;
+  } else if(UI.dealWait) prompt = `배패: 패산에서 빛나는 ${UI.dealWait.n}장을 손으로 끌어오세요 (우클릭: 바로 가져오기)`;
   else prompt = (g.turn === 0 || UI.dealing) ? '' : `${SEATNAME[g.turn]} 차례`;
   if(settings.hint && !cf && pd && pd.kind !== 'tsumo' && pd.kind !== 'ron') prompt += (prompt ? ' · ' : '') + 'AI와 다르게 고르면 의견을 보여 드려요';
   const rd = UI.frozen ? UI.frozen.split(' · ')[0] : ['동','남','서','북'][Math.floor(g.kyoku/g.N)] + ' ' + (g.kyoku%g.N+1) + '국';
@@ -3109,7 +3123,7 @@ function gameHTML(){
     if(fx.cnt && walls[fx.cseat]){ const w = walls[fx.cseat]; for(let k = 0; k < fx.cnt && k < w.length; k++){ const sl = w[w.length - 1 - k]; sl.cnt = true; sl.out = !!fx.split; } }
   }
   return `<div class="game">
-  <div class="topbar"><span></span><span class="row" style="gap:6px;align-items:center"><span class="muted">${UI.drill ? '연습모드' : modeName(UI.mode) + (UI.usedHint ? ' · 힌트 사용 판' : '')}</span><button class="btn small spk ${settings.sound!==false?'on':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button><button class="btn small xbtn" data-act="quit" aria-label="나가기" title="나가기">✕</button></span></div>
+  <div class="topbar"><span></span><span class="row" style="gap:6px;align-items:center"><span class="muted">${UI.drill ? '연습모드' : modeName(UI.mode) + (UI.usedHint ? ' · 힌트 사용 판' : '')}</span><button class="btn small spk ${settings.sound!==false?'on':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button><button class="btn small hbtn" data-act="help" aria-label="조작 설명" title="조작 설명">?</button><button class="btn small xbtn" data-act="quit" aria-label="나가기" title="나가기">✕</button></span></div>
   ${drillBarHTML()}
   <div class="table ${walls?'withwall':''} ${Date.now() < (UI.diffUntil || 0) ? 'showdiff' : ''}" aria-label="마작 탁자">
     ${consoleHTML(!!UI.diceShow, UI.lastDice || g.diceVals, !!UI.rollWait, UI.autoDeal)}
@@ -3263,6 +3277,36 @@ function gameEnd(fin, g){
   UI.recP = UI.mode.endsWith('3') ? 3 : 4;
   UI.last = rec.id;
   UI.token++; show('home');
+}
+function helpHTML(){
+  return `<div class="sheet help" role="dialog" aria-modal="true"><h2>조작 설명</h2>
+    <h3>기본</h3>
+    <ul>
+      <li><b>쯔모</b>: 패산에서 빛나는 패를 손패 줄로 <kbd>끌어오기</kbd> 또는 <kbd>우클릭</kbd>(바로 쯔모)</li>
+      <li><b>타패</b>: 손패를 강으로 <kbd>끌어 놓기</kbd> 또는 클릭 · 쯔모한 직후 <kbd>우클릭</kbd>이면 쯔모기리</li>
+      <li><b>넘기기</b>: 치·퐁·깡·론·쯔모 선택에서 <kbd>우클릭</kbd>(상가 패는 우클릭이 곧 쯔모)</li>
+      <li><b>울기·깡</b>: 울 패를 탁자나 오른쪽 후로 자리로 끌어 놓기 · 가깡은 퐁 위로, 암깡은 후로 자리로</li>
+      <li><b>북 빼기</b>(3인): 北을 오른쪽 아래 구석으로 끌어 놓기</li>
+    </ul>
+    <h3>리치</h3>
+    <ul>
+      <li>리치할 수 있는 패를 끌다가 <kbd>우클릭</kbd> → 가로로 꺾임. 강에 놓고 파란 점봉을 가운데 콘솔로 던지세요</li>
+      <li>세로 그대로 놓으면 리치 없이 버리기(다마)</li>
+    </ul>
+    <h3>배패</h3>
+    <ul>
+      <li>패산에서 빛나는 패(4장씩, 마지막 1장·친은 2장)를 손패로 <kbd>끌어오기</kbd> 또는 <kbd>우클릭</kbd>(바로 가져오기)</li>
+      <li>자리 정하기는 바람패를 클릭, 주사위는 가운데로 끌어 놓기</li>
+    </ul>
+    <h3>패놀음 · 상하 정리</h3>
+    <ul>
+      <li>손패를 <kbd>좌클릭으로 잡은 채</kbd> <kbd>휠 위/아래</kbd> → 패가 위/아래로 한 바퀴 굴러요(도는 중 뒷면이 보여요)</li>
+      <li>잡은 채 <kbd>우클릭</kbd> → 180° 회전(상하 반전). 손패 줄에 놓으면 그 방향으로 정리돼요</li>
+      <li>배패·쯔모한 패 중 상하가 구분되는 패는 가끔 거꾸로 와요. 거꾸로 버리면 강에도 거꾸로 놓여요(CPU도 가끔 그래요)</li>
+      <li>CPU가 치는 중에도 손패를 잡고 놀 수 있어요(놓으면 제자리)</li>
+      <li>리치 가능한 패를 끌 때의 <kbd>우클릭</kbd>은 반전이 아니라 리치(가로 꺾기)예요</li>
+    </ul>
+    <div class="row"><button class="btn primary" data-act="closeModal">닫기</button></div></div>`;
 }
 function alertSheet(msg){
   $modal.innerHTML = `<div class="sheet"><p>${esc(msg)}</p><div class="row"><button class="btn primary" data-act="home">홈으로</button></div></div>`;
@@ -3585,7 +3629,7 @@ function rpgLive(){
 }
 // 휘두르는 애니메이션(swing, 1.15초 주기)의 타격 시점(약 55%)에 맞춰 효과음을 낸다
 const SWING_MS = 1150, SWING_HIT = 0.55;
-const SWING = { el:null, last:0 };
+const SWING = { el:null, last:0, nextA:null };
 function swingAnim(){
   const el = document.querySelector('.rpg .scene:not(.idle) .hero:not(.fish) .arm');
   if(!el || !el.getAnimations) return null;
@@ -3593,13 +3637,25 @@ function swingAnim(){
 }
 function rpgSwingSfx(){
   const st = RPG.st;
-  if(UI.screen !== 'rpg' || !st.active || st.active !== st.sel || st.active === 'fish' || document.hidden){ SWING.el = null; return; }
+  if(UI.screen !== 'rpg' || !st.active || st.active !== st.sel || st.active === 'fish' || document.hidden){ SWING.el = null; SWING.nextA = null; return; }
   const an = swingAnim();
-  if(!an || an.currentTime == null){ SWING.el = null; return; }
+  if(!an || an.currentTime == null){ SWING.el = null; SWING.nextA = null; return; }
+  const now = SFX.now(); if(now == null){ SWING.nextA = null; return; }   // 효과음이 꺼져 있으면 아무것도 하지 않는다
+  // 프레임마다 소리를 '감지'하면 프레임 지연 때문에 간격이 들쭉날쭉해진다. 대신 오디오 시계로 1.15초 간격을 정확히 이어 예약하고,
+  // 애니메이션 타격 시점과 어긋났을 때(화면이 다시 그려져 애니메이션이 새로 시작된 경우 등)만 다시 맞춘다
+  const period = SWING_MS / 1000;
   const ph = (an.currentTime % SWING_MS) / SWING_MS;
-  if(SWING.el !== an){ SWING.el = an; SWING.last = ph; return; }   // 화면이 다시 그려져 애니메이션이 새로 생기면 기준만 다시 잡는다
-  if((SWING.last < SWING_HIT && ph >= SWING_HIT) || (ph < SWING.last && (SWING.last < SWING_HIT || ph >= SWING_HIT))){ if(SFX[st.active]) SFX[st.active](); }
-  SWING.last = ph;
+  let untilHit = (SWING_HIT - ph) * period; if(untilHit < 0) untilHit += period;
+  const actual = now + untilHit;                                  // 애니메이션 기준 다음 타격의 오디오 시각
+  if(SWING.nextA == null) SWING.nextA = actual;
+  else {
+    let d = actual - SWING.nextA; d -= Math.round(d / period) * period;
+    if(Math.abs(d) > .07) SWING.nextA = actual;                   // 70ms 넘게 어긋나면 재동기
+  }
+  while(SWING.nextA - now < .3){                                  // 0.3초 앞까지만 미리 예약
+    if(SWING.nextA >= now - .02) SFX.at(st.active, SWING.nextA - now);
+    SWING.nextA += period;
+  }
 }
 function rpgFrame(){ if(UI.screen === 'rpg'){ const st = RPG.st, tb = document.querySelector('.rpg .tickbar b'); if(tb && st.active && st.active === st.sel) tb.style.width = Math.min(100, (st.carry + (Date.now() - st.last)) / tickMs(st.sk[st.active].stage, st.sk[st.active].gear) * 100) + '%'; } rpgSwingSfx(); requestAnimationFrame(rpgFrame); }
 // ---------- 그림 ----------
@@ -3768,7 +3824,7 @@ function rpgAct(a, b){
   const r = rpgAdvance(true);
   if(r && r.gain > 0) RPG.away = r;
   rpgSave();
-  setInterval(rpgTick, 250);
+  setInterval(rpgTick, 50);
   requestAnimationFrame(rpgFrame);
   const flush = () => { rpgAdvance(false); rpgSave(); };
   document.addEventListener('visibilitychange', () => { if(document.hidden) flush(); else { const r2 = rpgAdvance(true); if(r2 && r2.gain > 0){ RPG.away = r2; rpgSave(); if(UI.screen === 'rpg') render(); } } });
@@ -3795,6 +3851,7 @@ document.addEventListener('click', e => {
       $modal.innerHTML = `<div class="sheet"><h2>대국을 나갈까요?</h2><p class="muted" style="margin:0">이번 국 시작 시점까지는 저장돼 있어요. 홈에서 이어서 할 수 있습니다.</p>
         <div class="row"><button class="btn warn" data-act="home">나가기</button><button class="btn" data-act="closeModal">계속 두기</button></div></div>`;
       $modal.hidden = false; break;
+    case 'help': $modal.innerHTML = helpHTML(); $modal.hidden = false; break;
     case 'closeModal': $modal.hidden = true; break;
     case 'tab': show(b.dataset.t === 'rpg' ? 'rpg' : 'home'); break;
     case 'rpgSel': case 'rpgGo': case 'rpgBuyG': case 'rpgEqG': case 'rpgBuyS': case 'rpgEqS': rpgAct(a, b); break;
@@ -4036,6 +4093,7 @@ document.addEventListener('pointerdown', e => {
     else if(pd && pd.kind === 'call' && !UI.confirm) mode = 'call';
     else if(canNuki) mode = 'nuki';
   }
+  if(!mode && ht && !UI.dealing && !UI.dealWait) mode = 'play';   // 패놀음: 내 차례가 아니어도 손패를 잡고 놀 수 있다(놓으면 제자리로)
   if(!mode) return;
   e.preventDefault();
   const src = wn || ht, r0 = src.getBoundingClientRect();
@@ -4054,25 +4112,73 @@ document.addEventListener('pointerdown', e => {
   else { ghost.innerHTML = ht.outerHTML.replace(/data-fk="[^"]*"/, '').replace(/\bsel\b|\bhint\b/g, ''); ghost.firstElementChild.style.setProperty('--w', r0.width + 'px'); }
   document.body.appendChild(ghost);
   const sx = e.clientX, sy = e.clientY;
-  let moved = false, yoko = false, lastFlip = 0;
+  let moved = false, yoko = false, lastFlip = 0, flips = 0, spinAng = 0;
   // 잡은 패는 원래 자리에서 사라진다(빈자리만 남김). 끄는 동안 화면을 다시 그려도 유지되도록 스타일로 숨긴다
   const hideCss = mode === 'deal' ? '.sk.dnext i.dn{visibility:hidden}' : (mode === 'draw' || mode === 'passdraw') ? '.wnext{visibility:hidden}' : `.hand > .tile[data-tile="${id}"]{visibility:hidden}`;
   // 끄는 도중 우클릭: 패를 가로로 꺾어 든다(리치 선언패) ↔ 다시 우클릭하면 세로로
   const flip = () => {
-    if(mode === 'draw' || mode === 'deal' || mode === 'passdraw' || Date.now() - lastFlip < 220) return;
+    if(mode === 'draw' || mode === 'deal' || mode === 'passdraw' || Date.now() - lastFlip < 60) return;
     lastFlip = Date.now();
     const q = UI.pending;
-    const canRiichi = id != null && q && q.kind === 'action' && UI.riichiDiscard == null && q.ctx.riichiOptions.includes(kindOf(id));
+    const canRiichi = mode !== 'play' && id != null && q && q.kind === 'action' && UI.riichiDiscard == null && q.ctx.riichiOptions.includes(kindOf(id));
     if(canRiichi){ yoko = !yoko; ghost.classList.toggle('yoko', yoko); return; }   // 리치할 수 있는 패: 가로 ↔ 세로
-    const t = ghost.firstElementChild;   // 그 밖에는 패놀음: 반시계로 한 바퀴
-    try{ t.animate([{rotate:'0deg'}, {rotate:'-360deg'}], {duration: 420, easing:'cubic-bezier(.3,.1,.3,1)'}); }catch(e){}
+    const t = ghost.firstElementChild;
+    if(id != null){   // 손패: 우클릭마다 반시계로 180도 — 상하가 뒤집힌다. 손패 쪽에 놓으면 그 방향으로 정리된다
+      flips++; spinAng -= 180;
+      try{ t.animate([{rotate:(spinAng + 180) + 'deg'}, {rotate:spinAng + 'deg'}], {duration: 120, easing:'cubic-bezier(.3,.1,.3,1)', fill:'forwards'}); }catch(e){ t.style.rotate = spinAng + 'deg'; }
+      return;
+    }
+    try{ t.animate([{rotate:'0deg'}, {rotate:'-360deg'}], {duration: 210, easing:'cubic-bezier(.3,.1,.3,1)'}); }catch(e){}
   };
-  const rdown = ev => { if(ev.button === 2){ ev.preventDefault(); flip(); } };
-  const cm = ev => { ev.preventDefault(); ev.stopImmediatePropagation(); flip(); };
+  // 우클릭 한 번에 mousedown·contextmenu(·pointermove)가 다 올 수 있어서 한 번만 반응하게 한다: 누를 때 처리하고, 뒤따라오는 contextmenu는 메뉴만 막는다
+  let rDone = false;
+  const rdown = ev => { if(ev.button === 2){ ev.preventDefault(); rDone = true; flip(); } };
+  const cm = ev => { ev.preventDefault(); ev.stopImmediatePropagation(); if(rDone){ rDone = false; return; } flip(); };   // mousedown 없이 메뉴만 온 경우에만 여기서 처리
+  let ang = 0, lastWheel = 0;
+  let fl = null;   // 굴릴 때만 만드는 입체 패: 앞면 = 손패의 그 패, 뒷면 = 지금 판 색(파랑/노랑)의 엎은 패, 옆면 4개로 두께를 준다
+  const flipper = () => {
+    if(fl) return fl;
+    const t = ghost.firstElementChild;
+    if(!t || id == null) return t;   // 손패가 아닌 것(쯔모 뒷면 등)은 그대로 돌린다
+    const W = r0.width, H = W * 1.36, D = W * .62;   // 실제 마작패처럼 두께가 있는 패
+    fl = document.createElement('div');
+    fl.style.cssText = `position:relative;display:block;width:${W}px;height:${H}px;transform-style:preserve-3d;transform:perspective(560px) rotateX(0deg)`;
+    const face = css => { const s = document.createElement('span'); s.style.cssText = 'position:absolute;display:block;' + css; fl.appendChild(s); return s; };
+    const shade = 'linear-gradient(rgba(0,0,0,.14),rgba(0,0,0,.14)),';
+    const rad = `border-radius:${W * .13}px;`;
+    // 위·아래 옆면(W×D): 뒤쪽 절반은 뒷면 색, 앞쪽 절반은 상아색
+    const tb = `width:${W}px;height:${D}px;left:0;transform:rotateX(90deg);background:${shade}linear-gradient(to bottom,var(--tile-back) 0 50%,var(--ivory-2) 50% 100%);`;
+    face(tb + `top:${-D / 2}px;`);
+    face(tb + `top:${H - D / 2}px;`);
+    // 왼쪽·오른쪽 옆면(D×H)
+    const lr = `width:${D}px;height:${H}px;top:0;transform:rotateY(90deg);background:${shade}linear-gradient(to right,var(--ivory-2) 0 50%,var(--tile-back) 50% 100%);`;
+    face(lr + `left:${-D / 2}px;`);
+    face(lr + `left:${W - D / 2}px;`);
+    // 뒷면
+    const back = document.createElement('span');
+    back.className = 'tile facedown';
+    back.style.cssText = `--w:${W}px;position:absolute;left:0;top:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.45);transform:rotateX(180deg) translateZ(${D / 2}px);backface-visibility:hidden;-webkit-backface-visibility:hidden`;
+    fl.appendChild(back);
+    // 앞면(손패 그대로)
+    t.style.cssText += `;position:absolute;left:0;top:0;box-shadow:inset 0 0 0 1px var(--ivory-edge);transform:translateZ(${D / 2}px);backface-visibility:hidden;-webkit-backface-visibility:hidden`;
+    ghost.insertBefore(fl, t); fl.appendChild(t);
+    void fl.offsetWidth;   // 처음 굴릴 때도 모션이 보이도록 시작 상태를 먼저 확정한다
+    return fl;
+  };
+  const wheel = ev => {
+    if(mode === 'deal') return;
+    ev.preventDefault();
+    if(!ev.deltaY || Date.now() - lastWheel < 90) return;
+    const t = flipper(); if(!t) return;
+    lastWheel = Date.now();
+    ang += (ev.deltaY < 0 ? 1 : -1) * 360;   // 휠 위 = 패가 위쪽으로 한 바퀴(도는 중 배면이 보임), 휠 아래 = 아래쪽으로 한 바퀴
+    t.style.transition = 'transform .45s cubic-bezier(.25,.8,.3,1)';
+    t.style.transform = `perspective(560px) rotateX(${ang}deg)`;
+  };
+  document.addEventListener('wheel', wheel, {passive:false});
   UI.dragging = true;
   document.addEventListener('mousedown', rdown, true); document.addEventListener('contextmenu', cm, true);
   const move = ev => {
-    if(ev.button === 2 && (ev.buttons & 2)) flip();
     if(!moved && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 6){
       moved = true; dragHideStyle.textContent = hideCss;
       dropHint({discard: mode.startsWith('tile'), nuki: mode.includes('nuki'), draw: mode === 'draw'});
@@ -4082,11 +4188,20 @@ document.addEventListener('pointerdown', e => {
   move(e);
   const up = ev => {
     document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); document.removeEventListener('pointercancel', up);
-    document.removeEventListener('mousedown', rdown, true);
+    document.removeEventListener('mousedown', rdown, true); document.removeEventListener('wheel', wheel);
     setTimeout(() => { document.removeEventListener('contextmenu', cm, true); UI.dragging = false; }, 250);   // 손을 뗄 때 따라오는 우클릭 메뉴도 막는다
     ghost.remove(); dropHint(null); dragHideStyle.textContent = '';
     if(!moved || ev.type !== 'pointerup') return;
     const x = ev.clientX, y = ev.clientY;
+    if(id != null && flips % 2 === 1){   // 홀수 번 돌렸고 손패 줄에 놓았으면 상하 반전 확정(버리기는 하지 않는다)
+      const hw0 = document.querySelector('.handwrap'), hr0 = hw0 && hw0.getBoundingClientRect();
+      if(hr0 && y >= hr0.top - 30 && y <= hr0.bottom + 30){
+        if(!UI.inv) UI.inv = new Set();
+        if(UI.inv.has(id)) UI.inv.delete(id); else UI.inv.add(id);
+        SFX.draw(); render(); return;
+      }
+    }
+    if(mode === 'play') return;
     if(mode === 'draw' || mode === 'deal' || mode === 'passdraw'){
       const hw = document.querySelector('.handwrap'); const r = hw && hw.getBoundingClientRect();
       if(!(r && y >= r.top - 30 && y <= r.bottom + 30)) return;
@@ -4119,6 +4234,10 @@ document.addEventListener('pointerdown', e => {
     if(mode.startsWith('tile')){
       const tb = document.querySelector('.game .table').getBoundingClientRect();
       if(inRect(tb, x, y)){
+        if(flips % 2 === 1){   // 끄는 중 우클릭으로 돌렸으면, 손에 들린 모양(상하) 그대로 강에 놓이도록 상태를 맞춘다
+          if(!UI.inv) UI.inv = new Set();
+          if(UI.inv.has(id)) UI.inv.delete(id); else UI.inv.add(id);
+        }
         UI.flipFrom = {key:'h' + id, pt:{x, y}};
         const opt = q.kind === 'action' && q.ctx.riichiOptions.includes(kindOf(id));
         // 리치할 수 있는 패: 가로로 놓으면 리치 선언패(이어서 점봉을 콘솔로), 세로로 놓으면 그냥 다마로 버린다
@@ -4141,7 +4260,12 @@ document.addEventListener('mouseover', e => {
 document.addEventListener('contextmenu', e => {
   if(UI.screen !== 'game') return;
   e.preventDefault();
-  if(UI.dealWait) return;   // 배패는 끌어와야 한다
+  if(UI.dealWait){   // 배패: 끌어오지 않아도 우클릭하면 빛나는 패를 바로 손으로 가져온다
+    let pt = {x: e.clientX, y: e.clientY};
+    const els = [...document.querySelectorAll('.sk.dnext')];
+    if(els.length){ let l = Infinity, t = Infinity, r = -Infinity, b = -Infinity; els.forEach(el => { const q = el.getBoundingClientRect(); l = Math.min(l, q.left); t = Math.min(t, q.top); r = Math.max(r, q.right); b = Math.max(b, q.bottom); }); pt = {x: (l + r) / 2, y: (t + b) / 2}; }
+    dealTake(pt); return;
+  }
   if(UI.pendingDraw){ if(!UI.pendingDraw.flying) flyIn(); return; }   // 쯔모(패산·영상패): 끌어 오거나 우클릭하면 손으로 날아온다
   const pd = UI.pending, g = UI.game;
   if(pd && pd.kind === 'action' && UI.riichiDiscard != null) return;   // 리치 선언패를 눕혔으면 점봉만 던질 수 있다

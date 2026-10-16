@@ -1980,8 +1980,10 @@ function meldParts(m, owner){
   const list = (m.ids || m.ks).slice();
   if(m.type === 'ankan') return [{x:list[0], back:true}, {x:list[1]}, {x:list[2]}, {x:list[3], back:true}];
   if(m.called == null || m.from == null || owner == null) return list.map(x => ({x}));
-  const relT = (m.from - owner + NP) % NP;
-  const rel = relT === 1 ? 1 : relT === NP - 1 ? 3 : 2;   // 1 하가(오른쪽) · 2 대면 · 3 상가(왼쪽)
+  // 퐁·깡은 앉은 자리 순서(상가/하가)가 아니라 실제 화면상 방향으로 정한다.
+  //  3인은 위쪽이 비어 있어 CPU 둘끼리는 논리상 상가/하가여도 화면에서는 마주 보고 있다 → 대면(가운데)
+  const relT = (VS(m.from) - VS(owner) + 4) % 4;
+  const rel = relT === 1 ? 1 : relT === 3 ? 3 : 2;   // 1 하가(오른쪽) · 2 대면 · 3 상가(왼쪽)
   const rest = list.slice();
   const ci = rest.indexOf(m.called); if(ci >= 0) rest.splice(ci, 1);
   if(m.type === 'chi'){ rest.sort((a, b) => a - b); return [{x:m.called, side:true}, ...rest.map(x => ({x}))]; }

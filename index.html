@@ -562,7 +562,8 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 const HONOR_CH = ['東', '南', '西', '北', '白', '發', '中'];
 const SUIT_KR = ['만', '통', '삭'];
 const kindOf = id => id >> 2;
-const isRedId = id => id === 16 || id === 52 || id === 88;
+const isRedId = id => { const k = id >> 2; return k === 4 || k === 13 || k === 22; };   // 모든 5(만·통·삭)는 적도라
+const SHIRO_ID = 124;   // 3인 마작 시로폿치: 白(31) 4장 중 1장 (올 마이티)
 const isHonor = k => k >= 27;
 const isYaochu = k => k >= 27 || k % 9 === 0 || k % 9 === 8;
 const isDragon = k => k >= 31;
@@ -757,7 +758,7 @@ function situationYaku(ctx, menzen) {
 }
 
 function finalize(ctx, yaku, yakuman, fu) {
-  const allIds = ctx.closed.concat(...ctx.melds.map(m => m.ids), ctx.nuki || []);
+  const allIds = (ctx.countIds || ctx.closed).concat(...ctx.melds.map(m => m.ids), ctx.nuki || []);
   const ym = yakuman.slice();
   if (ctx.tenhou) ym.push(['천화', 1]);
   if (ctx.chiihou) ym.push(['지화', 1]);
@@ -1360,10 +1361,19 @@ class Game {
   checkTsumo(s, drawn, rinshan) {
     const p = this.players[s];
     const c = countsOf(p.hand);
-    if (shanten(c, p.melds.length) !== -1) return null;
     const extra = { rinshan };
     if (rinshan) { extra.last = false; extra.tenhou = false; extra.chiihou = false; }
-    return evaluateWin(this.winCtx(s, p.hand.slice(), kindOf(drawn), true, extra));
+    let best = null;
+    if (shanten(c, p.melds.length) === -1) best = evaluateWin(this.winCtx(s, p.hand.slice(), kindOf(drawn), true, extra));
+    // 시로폿치(3인): 리치 후 텐파이에서 쯔모해 왔으면(영상패 쯔모 포함) 내 대기패 중 어느 것으로든 쓸 수 있다(올 마이티). 역은 따로 없고 평소 역·부수 계산 그대로
+    if (this.sanma && drawn === SHIRO_ID && p.riichi && p.waits.length) {
+      const rest = p.hand.filter(id => id !== drawn);
+      for (const k of p.waits) {
+        const r = evaluateWin(this.winCtx(s, rest.concat([k * 4]), k, true, Object.assign({ countIds: p.hand.slice() }, extra)));
+        if (r && (!best || r.score > best.score)) best = r;
+      }
+    }
+    return best;
   }
   checkRon(o, id, chankan) {
     const p = this.players[o];
@@ -1547,7 +1557,7 @@ class Game {
     const p = this.players[seat];
     const hand = p.hand.slice();
     if (tsumo) hand.splice(hand.indexOf(winTile), 1);
-    return { winner: seat, res, hand, winTile, melds: p.melds.map(m => ({ type: m.type, ids: m.ids.slice(), called: m.called, from: m.from })), nuki: (p.nuki || []).slice(), riichi: p.riichi };
+    return { winner: seat, res, hand, winTile, melds: p.melds.map(m => ({ type: m.type, ids: m.ids.slice(), called: m.called, from: m.from })), nuki: (p.nuki || []).slice(), riichi: p.riichi, shiro: !!(tsumo && this.sanma && p.riichi && winTile === SHIRO_ID) };
   }
   settleTsumo(s, res, winTile) {
     const isDealer = s === this.dealer;
@@ -1783,7 +1793,7 @@ function makeCPU(delayFn) {
   };
 }
 
-const MJ = { adviseCall, adviseSelfKan, adviseRiichi, HONOR_CH, SUIT_KR, SEAT_KR, kindOf, isRedId, isHonor, isYaochu, doraOf, kindName, countsOf, countsOfKinds, shanten, waitsOf, ukeire, evaluateWin, advise, pickId, Game, makeCPU, basePoints, ceil100 };
+const MJ = { adviseCall, adviseSelfKan, adviseRiichi, HONOR_CH, SUIT_KR, SEAT_KR, kindOf, isRedId, isHonor, isYaochu, doraOf, kindName, countsOf, countsOfKinds, shanten, waitsOf, ukeire, evaluateWin, advise, pickId, Game, makeCPU, basePoints, ceil100, SHIRO_ID };
 if (typeof module !== 'undefined' && module.exports) module.exports = MJ;
 else root.MJ = MJ;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -1911,6 +1921,7 @@ else root.MJ = MJ;
     out += `<symbol id="f4r" viewBox="0 0 60 80">${man(4, true)}</symbol>`;
     out += `<symbol id="f13r" viewBox="0 0 60 80">${pins(4, true)}</symbol>`;
     out += `<symbol id="f22r" viewBox="0 0 60 80">${sous(4, true)}</symbol>`;
+    out += `<symbol id="f31s" viewBox="0 0 60 80">${honor(4)}<circle cx="30" cy="40" r="9.5" fill="${RED}"/><circle cx="30" cy="40" r="9.5" fill="none" stroke="#7a0a1c" stroke-width="1" opacity=".5"/><ellipse cx="27" cy="36.5" rx="3" ry="2" fill="#fff" opacity=".35"/></symbol>`;   // 시로폿치
     return `<svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false"><defs>${out}</defs></svg>`;
   }
   root.TileFaces = { symbols };
@@ -1949,7 +1960,7 @@ const MODE = {eff:'패효율', fold:'리치 대응 · 오리(안전패 우선)',
 function tile(k, o){
   o = o || {};
   const red = o.id != null && (UI.screen === 'game' || UI.screen === 'review' ? UI.aka !== false : settings.aka) && isRedId(o.id);
-  const key = red ? k + 'r' : k;
+  const key = (o.id === MJ.SHIRO_ID && NP === 3 && UI.screen === 'game') ? '31s' : red ? k + 'r' : k;
   return `<span class="tile ${o.size||'sm'} ${o.cls||''}" data-k="${k}" ${o.attrs||''}><svg viewBox="0 0 60 80" aria-hidden="true"><use href="#f${key}"/></svg></span>`;
 }
 const tileId = (id, o) => { o = Object.assign({id}, o||{}); if(!o.nofk) o.attrs = `data-fk="h${id}" ` + (o.attrs || ''); return tile(kindOf(id), o); };
@@ -2577,7 +2588,7 @@ function wallLayout(o){
     const {seat, j} = pos(a0 + st);
     if(P3 && st >= HALF - KD){   // 3인: 깡도라로 넘어간 꽁무니 줄은 왕패가 된다
       const sl = slots[seat][j], i = 1 + (HALF - 1 - st);
-      sl.dead = true; sl.t = true; sl.b = true; if(i < o.dora.length) sl.dora = o.dora[i];
+      sl.dead = true; sl.t = true; sl.b = true; if(i < o.dora.length){ sl.dora = o.dora[i]; if(o.doraIds) sl.doraId = o.doraIds[i]; }
       continue;
     }
     if(!P3) for(let k = 0; k < R; k++){ if(HALF - 1 - (k >> 1) === st){ if(k % 2 === 0) top = false; else bot = false; } }   // 깡 보충으로 끝에서 빠진 패
@@ -2587,7 +2598,7 @@ function wallLayout(o){
       const aj = HALF - KD - 1 - st;
       if(aj >= 0 && aj < o.alice.flips.length){
         const sl = slots[seat][j];
-        sl.t = true; sl.b = true; sl.dora = kindOf(o.alice.flips[aj].id);
+        sl.t = true; sl.b = true; sl.dora = kindOf(o.alice.flips[aj].id); sl.doraId = o.alice.flips[aj].id;
         if(aj === o.alice.flips.length - 1){ sl.afl = o.alice.age; if(o.alice.blink) { sl.hl = true; sl.ablk = true; } }
       }
     }
@@ -2599,7 +2610,7 @@ function wallLayout(o){
     sl.dead = true; sl.t = true; sl.b = true;
     if(P3){   // 3인: 내려 두는 패 없이 끝 줄 윗패 → 아랫패 → 다음 줄 순으로 영상패
       if(q < RS){ sl.t = R < 2*q + 1; sl.b = R < 2*q + 2; if(o.next === 'rinshan' && (R >> 1) === q) sl.nx = R % 2 === 0 ? 't' : 'b'; }
-      else if(o.dora && o.dora.length) sl.dora = o.dora[0];
+      else if(o.dora && o.dora.length){ sl.dora = o.dora[0]; if(o.doraIds) sl.doraId = o.doraIds[0]; }
       continue;
     }
     // 영상패: 끝 줄의 윗패는 옆에 내려 두고 그것부터 뽑는다 → 내린 패, 끝 줄 아랫패, 다음 줄 윗패, 다음 줄 아랫패 순
@@ -2611,7 +2622,7 @@ function wallLayout(o){
       if(q === 1 && R === 2) sl.nx = 't';
       if(q === 1 && R === 3) sl.nx = 'b';
     }
-    if(q >= 2){ const i = q - 2; if(i < o.dora.length) sl.dora = o.dora[i]; }   // 영상패를 뽑을 차례에도 도라 표시패는 그대로 보인다
+    if(q >= 2){ const i = q - 2; if(i < o.dora.length){ sl.dora = o.dora[i]; if(o.doraIds) sl.doraId = o.doraIds[i]; } }   // 영상패를 뽑을 차례에도 도라 표시패는 그대로 보인다
   }
   return slots;
 }
@@ -2649,7 +2660,7 @@ function wallsScreenHTML(walls, fx){
       else if(v === 3){ x = .5 - WD; y = .5 + off; }
       else { x = .5 + WD; y = .5 - off; }
       let face = '';
-      if(sl.t && sl.dora != null) face = `<span class="tf ${sl.afl != null ? 'afl' : ''}" ${sl.afl != null ? `style="animation-delay:-${sl.afl}ms"` : ''}>${tile(sl.dora,{size:'wl', cls: vert ? 'rot'+v : ''})}</span>`;
+      if(sl.t && sl.dora != null) face = `<span class="tf ${sl.afl != null ? 'afl' : ''}" ${sl.afl != null ? `style="animation-delay:-${sl.afl}ms"` : ''}>${tile(sl.dora,{size:'wl', id: sl.doraId, cls: vert ? 'rot'+v : ''})}</span>`;
       if(sl.drop){   // 내려 둔 영상패: 산패 쪽 옆자리에 한 단으로
         const prevLive = j > 0 && !slots[j-1].dead;
         const d = (prevLive || j === 0 ? -1 : 1) * (WW + WGAP);
@@ -3091,7 +3102,7 @@ function gameHTML(){
   const pw = UI.pendingDraw && !UI.pendingDraw.flying ? UI.pendingDraw : null;
   const walls = (UI.seating || (UI.dealing && !UI.wallSplit)) ? fullWalls(g.N) : g.dice ? wallLayout({ N:g.N, dice:g.dice, dealer:g.dealer,
     left: UI.dealing ? g.liveTotal - (UI.dealCount ? UI.dealCount.reduce((a, b) => a + b, 0) : 0) : g.wall.length + (pw ? 1 : 0), deal: UI.dealing && UI.dealCount ? { base: UI.chon ? UI.chon.base : null, taken: UI.chon ? UI.chon.taken : [], next: UI.dealWait ? UI.dealWait.offs : null } : null,
-    rinshan: g.rinshanIdx - (pw && pw.rinshan ? 1 : 0), dora:g.doraInd, alice: UI.alice ? { flips: UI.alice.flips.slice(0, UI.alice.n), blink: UI.alice.blink, age: Date.now() - UI.alice.at } : null, next: pw ? (pw.rinshan ? 'rinshan' : 'live') : (callFromKami() ? 'live' : null) }) : null;
+    rinshan: g.rinshanIdx - (pw && pw.rinshan ? 1 : 0), dora:g.doraInd, doraIds:g.doraIndIds, alice: UI.alice ? { flips: UI.alice.flips.slice(0, UI.alice.n), blink: UI.alice.blink, age: Date.now() - UI.alice.at } : null, next: pw ? (pw.rinshan ? 'rinshan' : 'live') : (callFromKami() ? 'live' : null) }) : null;
   const fx = UI.wallFx;
   if(walls && fx){   // 주사위 세기·패산 가르기 표시
     if(fx.seat != null && walls[fx.seat]) walls[fx.seat].forEach(sl => { sl.hl = true; sl.fin = !!fx.fin; });
@@ -3150,7 +3161,7 @@ function onTile(id){
 
 // ---------- 국 결과 ----------
 // 축의칩: 내가 화료하면 적도라 + 뒷도라(리치) + 일발 1개
-function chipsOfWin(w){
+function chipsOfWin(w, res){
   const y = (w.res && w.res.yaku) || [];
   const get = nm => { const e = y.find(x => x[0] === nm); return e && typeof e[1] === 'number' ? e[1] : 0; };
   let aka = get('적도라'), ura = get('뒷도라');
@@ -3161,7 +3172,13 @@ function chipsOfWin(w){
   }
   const parts = [];
   if(aka) parts.push(`적도라 ${aka}`); if(ura) parts.push(`뒷도라 ${ura}`); if(ipp) parts.push('일발 1');
-  return { n: aka + ura + ipp, parts };
+  let n = aka + ura + ipp;
+  const r = w.res;
+  if(r && r.yakuman){ const ym = 5 * r.yakuman; n += ym; parts.push(`역만 ${ym}`); }
+  else if(r && r.label === '헤아림 역만'){ n += 5; parts.push('헤아림 역만 5'); }   // 13판 이상도 역만 1개로   // 역만 1개당 5장 (더블 10, 트리플 15, 복합은 개수대로)
+  if(res && !res.tsumo && res.scores && w.deltas.some((d, i) => i !== w.winner && d < 0 && res.scores[i] < 0)){ n += 1; parts.push('토비 1'); }   // 론으로 상대를 0점 미만으로
+  if(w.shiro){ n += 1; parts.push('시로폿치 1'); }
+  return { n, parts };
 }
 // 아리스(3인 전용): 멘젠(리치 포함) 화료 후 다음 깡도라 표시패 자리부터 차례로 뒤집는다.
 //  뒤집은 패가 내 패에 있으면 가진 장수만큼(안커 3장이면 +3, 안깡이면 +4) 축의를 받고 다음 자리로, 없으면 끝.
@@ -3212,7 +3229,7 @@ function kyokuEnd(res, g){
           const yaku = r.yaku.map(y => `<tr><td>${esc(y[0])}</td><td class="num">${typeof y[1]==='number'?y[1]+'판':y[1]}</td></tr>`).join('');
           const head = r.yakuman ? r.label : `${r.han}판 ${r.fu}부${r.label?' · '+r.label:''}`;
           const got = w.deltas[w.winner];
-          const chip = w.winner === 0 ? chipsOfWin(w) : null;
+          const chip = w.winner === 0 ? chipsOfWin(w, res) : null;
           const alice = w.winner === 0 ? (res._alice || (res._alice = aliceOf(w, g))) : null;
           const chipTotal = (chip ? chip.n : 0) + (alice ? alice.n : 0);
           if(chipTotal > 0 && !res._chips && !UI.drill){ res._chips = true; rpgAddChips(chipTotal); }

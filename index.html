@@ -270,6 +270,7 @@ h1,h2,h3{margin:0;text-wrap:balance}
 .tst.up{filter:drop-shadow(0 2px 1.2px rgba(0,0,0,.85)) brightness(1.08)}   /* 위 단 점봉: 아래 단 위에 얹혀 그림자가 진다 */
 .stk2{width:100%;height:100%;display:block;filter:drop-shadow(0 1px 0 rgba(0,0,0,.25))}
 .tcell .more{position:absolute;top:2px;right:4px;font:700 10px var(--f-num);font-style:normal;color:#aaa}
+.tcell.dipped{box-shadow:inset 0 2px 5px rgba(0,0,0,.7),0 0 0 2px var(--brass),0 0 10px var(--brass)}
 .tcell.can{cursor:grab;animation:wglow 1s ease-in-out infinite alternate}
 .tray{left:50%;transform:translateX(-50%);top:calc(100% + var(--hw)*1.75 + 8px);--tw:min(84px,calc((100vw - 56px)/3));--th:52px;--sh:5px}
 .dragghost{position:fixed;left:-999px;top:-999px;transform:translate(-50%,-50%) rotate(-4deg);z-index:70;pointer-events:none;filter:drop-shadow(0 10px 14px rgba(0,0,0,.5))}
@@ -3705,34 +3706,23 @@ function gameEnd(fin, g){
   UI.token++; show('home');
 }
 function helpHTML(){
-  return `<div class="sheet help" role="dialog" aria-modal="true"><h2>조작 설명</h2>
-    <h3>기본</h3>
+  return `<div class="sheet help" role="dialog" aria-modal="true"><h2>조작</h2>
     <ul>
-      <li><b>쯔모</b>: 패산에서 빛나는 패를 손패 줄로 <kbd>끌어오기</kbd> 또는 <kbd>우클릭</kbd>(바로 쯔모)</li>
-      <li><b>타패</b>: 손패를 강으로 <kbd>끌어 놓기</kbd> 또는 클릭 · 쯔모한 직후 <kbd>우클릭</kbd>이면 쯔모기리</li>
-      <li><b>넘기기</b>: 치·퐁·깡·론·쯔모 선택에서 <kbd>우클릭</kbd>(상가 패는 우클릭이 곧 쯔모)</li>
-      <li><b>울기·깡</b>: 울 패를 탁자나 오른쪽 후로 자리로 끌어 놓기 · 가깡은 퐁 위로, 안깡은 후로 자리로</li>
-      <li><b>북 빼기</b>(3인): 北을 오른쪽 아래 구석으로 끌어 놓기</li>
+      <li><b>쯔모</b> 빛나는 패산 패를 손패로 <kbd>좌클릭 드래그</kbd> · <kbd>우클릭</kbd></li>
+      <li><b>타패</b> 손패를 강으로 <kbd>좌클릭 드래그</kbd> · 쯔모 직후 <kbd>우클릭</kbd> = 쯔모기리</li>
+      <li><b>넘기기</b> 울기·론·쯔모 물음에서 <kbd>우클릭</kbd></li>
+      <li><b>울기·깡</b> 패를 오른쪽 아래로 <kbd>좌클릭 드래그</kbd> · 가깡은 퐁 위로</li>
+      <li><b>북 빼기</b> 北을 오른쪽 아래 구석으로 <kbd>좌클릭 드래그</kbd></li>
+      <li><b>리치</b> <kbd>좌클릭 드래그</kbd> 중 <kbd>우클릭</kbd>로 가로로 꺾어 강에 놓고, 점봉을 콘솔로 <kbd>좌클릭 드래그</kbd></li>
+      <li><b>패 돌리기</b> <kbd>좌클릭 드래그</kbd> 중 <kbd>휠</kbd> · <kbd>우클릭</kbd> 180°</li>
+      <li><b>폰</b> <kbd>드래그</kbd> 중 패를 점봉 케이스에 담그기: 왼쪽 <kbd>휠</kbd>↑ · 가운데 <kbd>우클릭</kbd> · 오른쪽 <kbd>휠</kbd>↓</li>
     </ul>
-    <h3>리치</h3>
+    <h3>스킬 (실버 20% → 옵시디언 100%)</h3>
     <ul>
-      <li>리치할 수 있는 패를 끌다가 <kbd>우클릭</kbd> → 가로로 꺾임. 강에 놓고 파란 점봉을 가운데 콘솔로 던지세요</li>
-      <li>세로 그대로 놓으면 리치 없이 버리기(다마)</li>
-    </ul>
-    <h3>배패</h3>
-    <ul>
-      <li>패산에서 빛나는 패(4장씩, 마지막 1장·친은 2장)를 손패로 <kbd>끌어오기</kbd> 또는 <kbd>우클릭</kbd>(바로 가져오기)</li>
-      <li>자리 정하기는 바람패를 클릭, 주사위는 가운데로 끌어 놓기</li>
-    </ul>
-    <h3>RPG 스킬 (실버 장비부터 20% · 옵시디언 100%)</h3>
-    <ul>${SK_KEYS.map(k => `<li><b>${MJSK[k].icon} ${MJSK[k].n}</b>(${SKILLS[k].name}): ${esc(MJSK[k].d)}</li>`).join('')}</ul>
-    <h3>패놀음 · 상하 정리</h3>
-    <ul>
-      <li>손패를 <kbd>좌클릭으로 잡은 채</kbd> <kbd>휠 위/아래</kbd> → 패가 위/아래로 한 바퀴 굴러요(도는 중 뒷면이 보여요)</li>
-      <li>잡은 채 <kbd>우클릭</kbd> → 180° 회전(상하 반전). 손패 줄에 놓으면 그 방향으로 정리돼요</li>
-      <li>배패·쯔모한 패 중 상하가 구분되는 패는 가끔 거꾸로 와요. 거꾸로 버리면 강에도 거꾸로 놓여요(CPU도 가끔 그래요)</li>
-      <li>CPU가 치는 중에도 손패를 잡고 놀 수 있어요(놓으면 제자리)</li>
-      <li>리치 가능한 패를 끌 때의 <kbd>우클릭</kbd>은 반전이 아니라 리치(가로 꺾기)예요</li>
+      <li>⚔ 살기 감지 — <kbd>좌클릭 드래그</kbd> 중 <kbd>휠</kbd>: 론 대기패인지 (초록 안전 · 빨강 방총)</li>
+      <li>🪓 바꿔치기 — 손패를 패산으로 <kbd>좌클릭 드래그</kbd>해 2장까지 교체</li>
+      <li>⛏ 광맥 탐지 — 도라 표시패 <kbd>좌클릭</kbd>: 뒷도라</li>
+      <li>🎣 입질 — 다음 쯔모 패가 패산에 보임</li>
     </ul>
     <div class="row"><button class="btn primary" data-act="closeModal">닫기</button></div></div>`;
 }
@@ -4236,7 +4226,7 @@ function rpgScene(k){
 }
 // ---------- 화면 ----------
 function appTabs(on){
-  return `<div class="apptabs"><button class="btn ${on==='mj'?'on':''}" data-act="tab" data-t="mj">마작</button><button class="btn ${on==='rpg'?'on':''}" data-act="tab" data-t="rpg">RPG</button>${on === 'rpg' ? `<button class="btn small spk ${settings.bgm!==false && settings.sound!==false?'spkon':''}" data-act="toggleBgm" aria-label="BGM ${settings.bgm!==false?'끄기':'켜기'}" aria-pressed="${settings.bgm!==false}" title="던전 BGM">${settings.bgm!==false ? '♪' : '<s>♪</s>'}</button>` : ''}${on === 'rpg' ? `<button class="btn small spk ${settings.sound!==false?'spkon':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button>` : ''}</div>`;
+  return `<div class="apptabs"><button class="btn ${on==='mj'?'on':''}" data-act="tab" data-t="mj">마작</button><button class="btn ${on==='rpg'?'on':''}" data-act="tab" data-t="rpg">RPG</button>${on === 'mj' ? `<button class="btn small spk hbtn" data-act="help" aria-label="조작 설명" title="조작 설명">?</button>` : ''}${on === 'rpg' ? `<button class="btn small spk ${settings.bgm!==false && settings.sound!==false?'spkon':''}" data-act="toggleBgm" aria-label="BGM ${settings.bgm!==false?'끄기':'켜기'}" aria-pressed="${settings.bgm!==false}" title="던전 BGM">${settings.bgm!==false ? '♪' : '<s>♪</s>'}</button>` : ''}${on === 'rpg' ? `<button class="btn small spk ${settings.sound!==false?'spkon':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button>` : ''}</div>`;
 }
 function rpgHTML(){
   const st = RPG.st, sel = st.sel || 'fish', S = SKILLS[sel], sk = st.sk[sel];
@@ -4663,24 +4653,42 @@ document.addEventListener('pointerdown', e => {
     if(mode === 'deal') return;
     ev.preventDefault();
     if(!ev.deltaY || Date.now() - lastWheel < 90) return;
+    roll(ev.deltaY < 0);
+  };
+  const roll = upward => {   // 패를 위(앞휠)/아래(뒷휠)로 한 바퀴 굴린다
+    if(mode === 'deal') return;
     const t = flipper(); if(!t) return;
     lastWheel = Date.now();
     if(id != null){   // 살기 감지(전투 스킬): 잡은 패를 휠로 굴리는 순간 판정 (우클릭 상하 정리와 겹치지 않게)
       const sr = trySense(id);
       if(sr) ghost.querySelectorAll('.tile:not(.facedown)').forEach(gt => { gt.classList.remove('sn-fail', 'sn-red', 'sn-green'); gt.classList.add('sn-' + sr); });
     }
-    ang += (ev.deltaY < 0 ? 1 : -1) * 360;   // 휠 위 = 패가 위쪽으로 한 바퀴(도는 중 배면이 보임), 휠 아래 = 아래쪽으로 한 바퀴
+    ang += (upward ? 1 : -1) * 360;   // 휠 위 = 패가 위쪽으로 한 바퀴(도는 중 배면이 보임), 휠 아래 = 아래쪽으로 한 바퀴
     t.style.transition = 'transform .45s cubic-bezier(.25,.8,.3,1)';
     t.style.transform = `perspective(560px) rotateX(${ang}deg)`;
   };
   document.addEventListener('wheel', wheel, {passive:false});
   UI.dragging = true;
   document.addEventListener('mousedown', rdown, true); document.addEventListener('contextmenu', cm, true);
+  // 폰 모드: 잡은 패를 점봉 케이스에 담그면 휠·우클릭 대신 — 왼쪽 칸(만점·오천점) 앞휠, 가운데(천점) 가로꺾기/180°, 오른쪽(오백·백점) 뒷휠
+  let dipCell = null;
+  const dip = ev => {
+    if(!settings.phone || id == null || mode === 'deal') return;
+    const cells = [...document.querySelectorAll('.tray .tcell')];
+    const ci = cells.findIndex(c => inRect(c.getBoundingClientRect(), ev.clientX, ev.clientY));
+    const now = ci >= 0 ? ci : null;
+    if(now === dipCell) return;
+    dipCell = now;
+    if(now === null) return;
+    cells[now].classList.add('dipped'); setTimeout(() => cells[now] && cells[now].classList.remove('dipped'), 250);
+    if(now === 0) roll(true); else if(now === 2) roll(false); else { lastFlip = 0; flip(); }
+  };
   const move = ev => {
     if(!moved && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 6){
       moved = true; dragHideStyle.textContent = hideCss;
       dropHint({discard: mode.startsWith('tile'), nuki: mode.includes('nuki'), draw: mode === 'draw'});
     }
+    if(moved) dip(ev);
     ghost.style.left = ev.clientX + 'px'; ghost.style.top = ev.clientY + 'px'; ghost.style.opacity = moved ? 1 : 0;
   };
   move(e);

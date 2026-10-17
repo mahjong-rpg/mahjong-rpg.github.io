@@ -108,7 +108,8 @@ h1,h2,h3{margin:0;text-wrap:balance}
   height:calc(var(--C)*.06)}
 .stick .stk2{filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
 .river{position:absolute;left:calc((var(--S) - var(--C))/2);top:calc((var(--S) + var(--C))/2 + var(--S)*.012);width:calc(var(--rw)*6.2);
-  display:flex;flex-wrap:wrap;gap:calc(var(--rw)*.04);align-content:flex-start}
+  display:flex;flex-direction:column;gap:calc(var(--rw)*.04);align-items:flex-start}
+.river .rrow{display:flex;flex-wrap:nowrap;gap:calc(var(--rw)*.04);align-items:flex-start;min-height:calc(var(--rw)*1.36)}   /* 강은 3단까지: 1·2단 6장씩, 3단부터는 오른쪽으로 계속 붙인다 */
 /* 상대 손패는 가운데, 울은 패는 그 사람 기준 오른쪽 벽에 붙인다(기가마크·연장봉이 있으면 그 왼쪽). 멘쯔끼리도 틈 없이 */
 .edge{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(max-content,1fr);align-items:end;justify-content:end}   /* 넘치면 손패 쪽(왼쪽)으로 밀려난다 */
 .edge .ehand{display:flex;gap:1px;align-items:flex-end;margin-bottom:calc(var(--S)*.012)}
@@ -195,6 +196,7 @@ h1,h2,h3{margin:0;text-wrap:balance}
 .meld,.mymeld{align-items:flex-end}
 /* 플레이어 시점 패산 */
 .wallsc{position:absolute;inset:0;pointer-events:none;z-index:1}
+.wallsc.front{z-index:3}   /* 내 앞 패산은 내 강보다 나에게 가까우니 강 위에 보인다 */
 .wnext{pointer-events:auto;cursor:pointer;animation:wglow 1s ease-in-out infinite alternate}
 @keyframes wglow{from{filter:brightness(1)}to{filter:brightness(1.45)}}
 .hand .tile.slot.pend{visibility:visible;cursor:default;background:none;box-shadow:none}
@@ -261,13 +263,14 @@ h1,h2,h3{margin:0;text-wrap:balance}
 /* 기가 마크: 기가 자리 오른쪽 아래, 그 사람 쪽을 향한 가로 명패 */
 .tray{position:absolute;z-index:4;display:flex;gap:4px;padding:5px;border-radius:8px;user-select:none;
   background:linear-gradient(#262829,#121314);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 3px 8px rgba(0,0,0,.45)}
-.tcell{width:var(--tw);height:var(--th);display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:1px;padding:3px 5px;
+.tcell{width:var(--tw);height:var(--th);display:block;padding:3px 5px;
   border-radius:5px;background:linear-gradient(#1b1c1d,#2a2c2e);box-shadow:inset 0 2px 5px rgba(0,0,0,.7),inset 0 -1px 0 rgba(255,255,255,.06);position:relative;touch-action:none}
-.tst{display:block;width:100%;height:var(--sh)}
+.tst{position:absolute;left:calc(8px + var(--sx, 0px));right:calc(8px - var(--sx, 0px));display:block;height:var(--sh);bottom:calc(4px + var(--sp) * var(--sh) * 1.36 + var(--sl) * 2px)}
+.tst.up{filter:drop-shadow(0 2px 1.2px rgba(0,0,0,.85)) brightness(1.08)}   /* 위 단 점봉: 아래 단 위에 얹혀 그림자가 진다 */
 .stk2{width:100%;height:100%;display:block;filter:drop-shadow(0 1px 0 rgba(0,0,0,.25))}
 .tcell .more{position:absolute;top:2px;right:4px;font:700 10px var(--f-num);font-style:normal;color:#aaa}
 .tcell.can{cursor:grab;animation:wglow 1s ease-in-out infinite alternate}
-.tray{left:50%;transform:translateX(-50%);top:calc(100% + var(--hw)*1.75 + 8px);--tw:min(84px,calc((100vw - 56px)/3));--th:44px;--sh:5.5px}
+.tray{left:50%;transform:translateX(-50%);top:calc(100% + var(--hw)*1.75 + 8px);--tw:min(84px,calc((100vw - 56px)/3));--th:52px;--sh:5px}
 .dragghost{position:fixed;left:-999px;top:-999px;transform:translate(-50%,-50%) rotate(-4deg);z-index:70;pointer-events:none;filter:drop-shadow(0 10px 14px rgba(0,0,0,.5))}
 .dragghost .tile{display:block}
 .drillbar{max-width:min(660px, calc(100vw - 32px));margin:0 auto 6px;padding:8px 12px;border-radius:10px;background:#1d3a52;color:#dcefff;font-size:13.5px;text-align:center;line-height:1.4}
@@ -480,6 +483,58 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .skc .xpbar b{display:block;height:100%;background:linear-gradient(90deg,#4fb0ff,#9be3ff)}
 .rpg .skc .m{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px;color:var(--ink-dim);line-height:1.35}
 .rpg .skc .on{position:absolute;right:8px;top:-8px;background:#21b14b;color:#fff;font-size:11px;font-weight:800;border-radius:99px;padding:1px 8px;box-shadow:0 0 8px rgba(33,177,75,.8)}
+.xptab .xpwrap{max-height:min(60vh,520px);overflow:auto;border-radius:8px;background:var(--panel-2)}
+.xpt{width:100%;border-collapse:collapse;font-size:13.5px}
+.xpt th{position:sticky;top:0;background:#1d4738;color:var(--ink-dim);font-weight:700;text-align:right;padding:6px 10px}
+.xpt td{text-align:right;padding:4px 10px;border-bottom:1px dashed var(--felt-line)}
+.xpt th:first-child,.xpt td:first-child{text-align:center}
+.xpt tr.cap td{border-bottom:2px solid var(--alert)}
+.xpt tr.cur td{background:rgba(216,180,90,.22);color:#fff;font-weight:800}
+.skbs{display:inline-flex;gap:4px}
+@media (max-width:520px){.topbar .row > .muted{display:none}.skb{padding:4px 5px;font-size:12px}}   /* 좁은 화면: 모드 이름 대신 스킬 표시를 남긴다 */
+.skb{display:inline-flex;align-items:baseline;gap:1px;font-size:13px;line-height:1;padding:4px 6px;border-radius:99px;background:rgba(0,0,0,.35);box-shadow:0 0 0 1px var(--gc),0 0 6px var(--gc)}
+.skb small{font:700 10px var(--f-num);color:#fff}
+.hand .tile.sn-red,.dragghost .tile.sn-red{box-shadow:inset 0 0 0 1px var(--ivory-edge),0 0 0 3px #ff3b30,0 0 16px 5px rgba(255,40,30,.95)}
+.hand .tile.sn-green,.dragghost .tile.sn-green{box-shadow:inset 0 0 0 1px var(--ivory-edge),0 0 0 3px #2fe06a,0 0 16px 5px rgba(40,230,100,.9)}
+.hand .tile.sn-fail,.dragghost .tile.sn-fail{filter:brightness(.38);box-shadow:inset 0 0 0 1px #000,0 0 0 3px #000,0 0 12px 4px rgba(0,0,0,.9)}
+.dragghost .tile.sn-red{box-shadow:0 0 0 3px #ff3b30,0 0 16px 5px rgba(255,40,30,.95)!important}
+.dragghost .tile.sn-green{box-shadow:0 0 0 3px #2fe06a,0 0 16px 5px rgba(40,230,100,.9)!important}
+.dragghost .tile.sn-fail{box-shadow:0 0 0 3px #000,0 0 12px 4px rgba(0,0,0,.9)!important}
+.hand .tile.swapin{box-shadow:inset 0 0 0 1px var(--ivory-edge),0 0 0 3px #b04dff,0 0 16px 5px rgba(176,77,255,.9);animation:skpulse 1s ease-in-out infinite alternate}
+.hand .tile.prune{box-shadow:inset 0 0 0 1px var(--ivory-edge),0 0 0 3px var(--gc),0 0 14px 4px var(--gc);animation:skpulse 1s ease-in-out infinite alternate}
+@keyframes skpulse{from{filter:brightness(1)}to{filter:brightness(1.18)}}
+.btn.sklbl{pointer-events:none;cursor:default;font-size:13px;padding:6px 12px}
+.btn.skbtn{border-color:var(--gc);box-shadow:0 0 0 1px var(--gc),0 0 10px var(--gc),0 4px 12px rgba(0,0,0,.45)}
+.sk .tf.pk{box-shadow:0 0 0 .5px rgba(0,0,0,.6),0 calc(var(--ww)*.3) 0 #e2ddcd,0 0 0 1.5px var(--gc),0 0 calc(var(--ww)*.35) var(--gc);z-index:1}
+.sk .urap{position:absolute;display:flex;align-items:center;justify-content:center;border-radius:calc(var(--ww)*.08);background:linear-gradient(#fefdf8 0%,#f4f2e8 72%,#dfdccd 100%);
+  /* 마작패 두께: 상아색 옆면 + 뒷판 색 */
+  box-shadow:inset 0 0 0 1px var(--ivory-edge),0 calc(var(--ww)*.2) 0 #e2ddcd,0 calc(var(--ww)*.2) 0 .5px rgba(0,0,0,.45),0 calc(var(--ww)*.32) 0 var(--tile-back),
+    0 calc(var(--ww)*.32) 0 1px var(--gc),0 calc(var(--ww)*.15) calc(var(--ww)*.45) var(--gc);pointer-events:none;
+  animation:var(--ura-anim) .55s cubic-bezier(.2,.8,.3,1) both}
+/* 광맥 탐지: 왕패에서 콘솔 쪽으로 스르륵 밀려 나온다 */
+.ura-v0{--ura-anim:uraUp}.ura-v2{--ura-anim:uraDown}.ura-v1{--ura-anim:uraLeft}.ura-v3{--ura-anim:uraRight}
+/* 처음부터 두께가 있는 패 그대로, 원래 자리(도라 표시패 아랫칸)에서 콘솔 쪽으로 밀려 나온다 */
+@keyframes uraUp{from{transform:translateY(calc(var(--ww)*1.93))}to{transform:none}}
+@keyframes uraDown{from{transform:translateY(calc(var(--ww)*-1.6))}to{transform:none}}
+@keyframes uraLeft{from{transform:translateX(calc(var(--ww)*1.46))}to{transform:none}}
+@keyframes uraRight{from{transform:translateX(calc(var(--ww)*-1.46))}to{transform:none}}
+@media (prefers-reduced-motion: reduce){.sk .urap{animation:none}}
+.sk .urap .tile{box-shadow:none;background:none}
+.sk.h .urap{left:0;right:0;height:calc(var(--ww)*1.26)}.sk.h .urap .tile{--w:calc(var(--ww)*.95)}
+.sk.v .urap{top:calc(var(--ww)*.2);width:100%;height:calc(var(--ww)*1.0)}.sk.v .urap .tile{--w:calc(var(--ww)*.74)}
+.sk.urahost{pointer-events:none}
+.ura-v0{bottom:calc(100% + var(--ww)*.45)}.ura-v2{top:calc(100% + var(--ww)*.12)}
+.sk.v.side1 .ura-v1{left:auto;right:calc(100% + var(--ww)*.12)}.sk.v.side3 .ura-v3{left:calc(100% + var(--ww)*.12)}
+.sk .tf.uratap{pointer-events:auto;cursor:pointer;box-shadow:0 0 0 .5px rgba(0,0,0,.6),0 calc(var(--ww)*.3) 0 #e2ddcd,0 0 0 1.5px var(--gc);animation:skpulse 1.2s ease-in-out infinite alternate}
+.sk .tf.pkb{bottom:0;z-index:0}
+.sk.h .tf.pkb{height:calc(var(--ww)*1.0)}
+.sk.v .tf.pkb{bottom:calc(var(--ww)*.3)}
+.sk:has(.tf.pkb) i.t{opacity:.45;z-index:2}
+.urasee{display:flex;align-items:center;gap:3px;padding:2px 5px;border-radius:6px;background:rgba(0,0,0,.35);box-shadow:0 0 0 1px var(--gc),0 0 8px var(--gc)}
+.urasee span{font-size:calc(var(--C)*.07)}
+.rpg .mjsk{background:var(--panel);border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.rpg .mjsk .t{font-weight:800}.rpg .mjsk .t b{color:var(--gc)}
+.rpg .mjsk .d{font-size:12px;color:var(--ink-dim);flex:1 1 260px}
 .rpg .ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 .rpg .rate{font-size:13px;color:var(--ink-dim)}
 .rpg .shop{background:var(--panel);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px}
@@ -489,6 +544,11 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .it.eq{border-color:var(--brass);background:rgba(216,178,90,.12)}
 .rpg .it .n{display:flex;align-items:center;gap:6px;font-weight:800;font-size:13.5px}
 .rpg .it .n i{width:12px;height:12px;border-radius:3px;display:inline-block;box-shadow:0 0 0 1px rgba(0,0,0,.4)}
+.rpg .it .n i.glow{box-shadow:0 0 0 1px var(--gl),0 0 6px 1px var(--gl)}
+/* 형광빛: 금속 부분을 흐리게 한 장을 손잡이 '아래'에 깔아, 빛이 나무 손잡이 위로 번지지 않고 금속만 빛나 보이게 */
+.rpg .hero .tgl{fill:var(--gl);stroke:var(--gl);stroke-width:3px;filter:blur(2.2px);animation:tglow 1.8s ease-in-out infinite alternate}
+.rpg .hero line.tgl{stroke-width:6px}
+@keyframes tglow{from{opacity:.45}to{opacity:.95}}
 .rpg .it .d{font-size:11.5px;color:var(--ink-dim)}
 .rpg .it .btn{padding:5px 8px;font-size:12.5px}
 .rpg .it.lock{opacity:.5}
@@ -1245,7 +1305,10 @@ class Game {
       this.discard(s, id, !!action.riichi, drawn);
       this.flushPendingDora();
       const wins = await this.collectRon(s, id, false);
-      if (wins.length) return this.settleRon(wins, s, id);
+      if (wins.length) {
+        if (action.riichi) { const p0 = this.players[s]; p0.riichi = false; p0.doubleRiichi = false; p0.ippatsu = false; }   // 선언패로 방총: 리치는 성립하지 않는다(점봉도 안 낸다)
+        return this.settleRon(wins, s, id);
+      }
       if (action.riichi) {
         this.scores[s] -= 1000; this.kyotaku++;
         this.emit('riichiStick', { seat: s });
@@ -1336,7 +1399,7 @@ class Game {
     for (let k = 0; k < 34; k++) {
       if (c[k] !== 4) continue;
       if (p.riichi) {
-        // 리치 후 암깡: 방금 뽑은 패로만, 대기가 바뀌지 않을 때만
+        // 리치 후 안깡: 방금 뽑은 패로만, 대기가 바뀌지 않을 때만
         if (k !== kindOf(drawn)) continue;
         const before = countsOf(p.hand); before[k]--;
         const w1 = waitsOf(before, p.melds.length);
@@ -1416,7 +1479,7 @@ class Game {
       p.melds.push({ type: 'ankan', ids: ids.reverse(), called: null, from: s });
       this.afterKan(s, 'ankan');
       this.emit('call', { seat: s, from: s, type: 'kan' });
-      // 국사무쌍만 암깡을 창깡할 수 있다
+      // 국사무쌍만 안깡을 창깡할 수 있다
       const wins = await this.collectRon(s, ids[0], true, true);
       if (wins.length) return this.settleRon(wins, s, ids[0]);
       this.revealDora();
@@ -1749,7 +1812,7 @@ function adviseSelfKan(g, s, kanOptions) {
   const cur = bestAfterDiscard(c, mc);
   for (const o of kanOptions) {
     const cc = c.slice(); cc[o.k] -= (o.type === 'ankan' ? 4 : 1);
-    if (shanten(cc, mc + (o.type === 'ankan' ? 1 : 0)) <= cur) return { choice: o, reason: `${o.type === 'ankan' ? '암깡' : '가깡'} 추천 · 손이 나빠지지 않고 깡도라와 영상패 기회가 생겨요` };
+    if (shanten(cc, mc + (o.type === 'ankan' ? 1 : 0)) <= cur) return { choice: o, reason: `${o.type === 'ankan' ? '안깡' : '가깡'} 추천 · 손이 나빠지지 않고 깡도라와 영상패 기회가 생겨요` };
   }
   return { choice: null, reason: '깡을 하면 손 모양이 나빠져요' };
 }
@@ -1908,8 +1971,7 @@ else root.MJ = MJ;
     }
   }
   function honor(i) {
-    if (i === 4) return `<rect x="9" y="12" width="42" height="56" rx="4" fill="none" stroke="${BLUE}" stroke-width="4.2"/>` +
-      `<rect x="15" y="18" width="30" height="44" rx="2.5" fill="none" stroke="${BLUE}" stroke-width="1.8"/>`;
+    if (i === 4) return '';   // 白: 아무 무늬 없는 깨끗한 흰 패
     const ch = '東南西北白發中'[i];
     const col = i === 5 ? GREEN : i === 6 ? RED : INK;
     return T(30, 56, 44, col, 2.2, ch);
@@ -1927,7 +1989,7 @@ else root.MJ = MJ;
     out += `<symbol id="f4r" viewBox="0 0 60 80">${man(4, true)}</symbol>`;
     out += `<symbol id="f13r" viewBox="0 0 60 80">${pins(4, true)}</symbol>`;
     out += `<symbol id="f22r" viewBox="0 0 60 80">${sous(4, true)}</symbol>`;
-    out += `<symbol id="f31s" viewBox="0 0 60 80">${honor(4)}<circle cx="30" cy="40" r="9.5" fill="${RED}"/><circle cx="30" cy="40" r="9.5" fill="none" stroke="#7a0a1c" stroke-width="1" opacity=".5"/><ellipse cx="27" cy="36.5" rx="3" ry="2" fill="#fff" opacity=".35"/></symbol>`;   // 시로폿치
+    out += `<symbol id="f31s" viewBox="0 0 60 80"><circle cx="30" cy="40" r="9.5" fill="${RED}"/><circle cx="30" cy="40" r="9.5" fill="none" stroke="#7a0a1c" stroke-width="1" opacity=".5"/><ellipse cx="27" cy="36.5" rx="3" ry="2" fill="#fff" opacity=".35"/></symbol>`;   // 시로폿치
     return `<svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false"><defs>${out}</defs></svg>`;
   }
   root.TileFaces = { symbols };
@@ -1974,7 +2036,7 @@ const tileId = (id, o) => { o = Object.assign({id}, o||{}); if(!o.nofk) o.attrs 
 const backTile = size => `<span class="tile ${size||'sm'} facedown"></span>`;
 // 울은 패 놓는 법: 가져온 패를 옆으로 눕히고, 눕힌 위치로 누구에게서 가져왔는지 나타낸다
 //  상가(왼쪽)에서 → 왼쪽 끝, 대면에서 → 가운데, 하가(오른쪽)에서 → 오른쪽 끝. 치는 항상 상가라 왼쪽 끝.
-//  가깡은 눕힌 패 위에 한 장 더 눕혀 쌓고, 암깡은 양끝을 엎어 둔다. 3인은 대면이 없어 하가·상가 두 경우뿐.
+//  가깡은 눕힌 패 위에 한 장 더 눕혀 쌓고, 안깡은 양끝을 엎어 둔다. 3인은 대면이 없어 하가·상가 두 경우뿐.
 //  한 멘쯔는 세로·가로 구분 없이 틈 없이 붙인다.
 function meldParts(m, owner){
   const list = (m.ids || m.ks).slice();
@@ -2055,6 +2117,7 @@ function draw(){
   else if(UI.screen === 'records') { $app.innerHTML = recordsHTML(); drawChart(); }
   else if(UI.screen === 'review') $app.innerHTML = reviewHTML();
   else if(UI.screen === 'rpg'){ $app.innerHTML = rpgHTML(); rpgLive(); }
+  BGM.sync();
 }
 
 // ---------- 홈 ----------
@@ -2206,14 +2269,177 @@ const SFX = (() => {
     dice(){ const c = ac(); if(!c) return; [0,.07,.15,.26].forEach((d,i) => setTimeout(() => clack('draw', .5 - i*.08), d*1000)); },
     win(){ [523, 659, 784, 1047].forEach((f, i) => tone(f, .4, .16, 'triangle', i * .09)); },
     // ---- RPG 행동 효과음(짧게) ----
-    combat(){ noise(.11, 3600, 1.2, .5, 0); noise(.16, 1900, .8, .32, .05); clack('discard', .35); blip(260, 90, .12, .16, .07, 'sawtooth'); },   // 휙! 베고 퍽
+    combat(){ noise(.11, 2600, 1.2, .25, 0); noise(.16, 1300, .8, .16, .05); clack('discard', .17); blip(190, 65, .12, .08, .07, 'sawtooth'); },   // 휙! 베고 퍽 (피치 낮추고 음량 절반)   // 휙! 베고 퍽
     wood(){ blip(170, 70, .16, .38, 0, 'triangle'); noise(.08, 750, 1.4, .5, 0); clack('discard', .8); noise(.05, 2600, 2, .18, .06); },       // 퍽! 도끼가 나무에 박힘
     mine(){ noise(.04, 3200, 2, .55, 0); tone(1760, .2, .13, 'triangle', .005); tone(2637, .13, .07, 'sine', .015); clack('discard', .4); },       // 쨍! 곡괭이가 바위를 침
     fish(){ noise(.26, 900, .7, .42, 0); noise(.2, 2400, 1, .22, .05); blip(620, 300, .14, .12, .02, 'sine'); blip(820, 420, .1, .08, .12, 'sine'); }, // 첨벙
-    lvup(){ [659, 784, 988, 1319].forEach((f, i) => tone(f, .28, .14, 'triangle', .12 + i * .08)); }
+    lvup(){ [659, 784, 988, 1319].forEach((f, i) => tone(f, .28, .14, 'triangle', .12 + i * .08)); },
+    // ---- 마작 스킬 ----
+    skFail(){   // 치익~ 달군 쇠를 물에 담그는 소리: 높은 쉬익 잡음이 서서히 잦아들고, 끝에 작은 보글
+      const c = ac(); if(!c) return;
+      const t0 = c.currentTime + base, dur = .55, len = Math.floor(c.sampleRate * dur);
+      const buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+      for(let i = 0; i < len; i++){ const x = i / len; d[i] = (Math.random() * 2 - 1) * (x < .04 ? x / .04 : Math.pow(1 - (x - .04) / .96, 1.6)) * (.75 + .25 * Math.random()); }
+      const src = c.createBufferSource(); src.buffer = buf;
+      const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.setValueAtTime(4200, t0); hp.frequency.exponentialRampToValueAtTime(1800, t0 + dur);
+      const bp = c.createBiquadFilter(); bp.type = 'peaking'; bp.frequency.value = 6500; bp.gain.value = 6;
+      const g = c.createGain(); g.gain.value = .32;
+      src.connect(hp); hp.connect(bp); bp.connect(g); g.connect(c.destination); src.start(t0);
+      blip(380, 620, .06, .05, .32, 'sine'); blip(450, 760, .05, .04, .42, 'sine');
+    },
+    skOk(){     // 파칭~ 반짝이는 금속성 성공음
+      noise(.03, 5200, 1.5, .35, 0);
+      tone(2093, .7, .1, 'triangle', 0); tone(2637, .65, .08, 'triangle', .02); tone(3136, .8, .07, 'sine', .05);
+      tone(4186, .9, .05, 'sine', .11); tone(5274, .6, .03, 'sine', .16);
+    },
+    cash(){     // 카칭~ 금전등록기: 맑은 종 두 번 + 동전 짤랑
+      tone(2637, .5, .11, 'sine', .07); tone(3951, .45, .06, 'sine', .07);
+      tone(3136, .7, .11, 'sine', .19); tone(4699, .6, .06, 'sine', .19);
+      [.3, .36, .43].forEach((d, i) => tone(5200 + i * 600, .12, .025, 'triangle', d));
+    },
+    skWarn(){   // 위험! 짧은 경고음 두 번
+      [0, .2].forEach(d => { tone(880, .13, .11, 'square', d); tone(660, .13, .09, 'square', d + .07); });
+    }
   };
+  api.ctx = ac;
   api.at = (name, sec) => { base = Math.max(0, sec || 0); try{ api[name](); } finally { base = 0; } };   // name 소리를 sec초 뒤에 정확히 내도록 예약
   return api;
+})();
+
+// ---------- 던전 BGM (Web Audio로 합성, 파일 없음) ----------
+// 잠들 때 틀어 둬도 거슬리지 않게: 아주 작은 소리의 느린 화음 패드 + 바람·물결 같은 갈색 잡음 + 이따금 새소리·물방울 같은 작은 소리
+const BGM_ENV = {   // [분위기, 바탕 소리, 이따금 나는 소리들] — 행동별 9단계
+  combat: [['calm','breeze',['bird']], ['calm','breeze',['bird']], ['calm','marsh',['frog','drop']], ['calm','wind',[]], ['calm','wind',[]],
+           ['dark','wind',['drop','bell']], ['dark','rumble',['crackle']], ['dark','wind',['bell']], ['dark','rumble',['crackle']]],
+  wood:   [['calm','breeze',['bird']], ['calm','breeze',['bird']], ['calm','breeze',['bird','owl']], ['calm','breeze',['bird']], ['calm','breeze',['bird','insect']],
+           ['calm','wind',['owl']], ['calm','breeze',['bird','owl']], ['dark','none',['chime']], ['calm','breeze',['bird','chime']]],
+  mine:   [['calm','cave',['drop']], ['calm','cave',['drop']], ['calm','cave',['drop']], ['calm','cave',['drop','chime']], ['calm','cave',['drop','chime']],
+           ['calm','cave',['drop','chime']], ['dark','rumble',['crackle','drop']], ['dark','cave',['drop','chime']], ['dark','deep',['drop']]],
+  fish:   [['calm','brook',['bird']], ['calm','lake',['bird']], ['calm','brook',['bird']], ['calm','waves',['bird']], ['dark','deep',['bubble']],
+           ['calm','waves',['chime']], ['dark','rain',[]], ['dark','rumble',['crackle']], ['dark','rumble',['crackle']]]
+};
+const BGM = (() => {
+  let cur = null;   // { key, master, nodes, timers, chordIdx }
+  const CHORDS = {
+    calm: [[130.81, 196.00, 329.63], [110.00, 164.81, 261.63], [87.31, 174.61, 261.63], [98.00, 146.83, 246.94]],   // C · Am · F · G
+    dark: [[110.00, 164.81, 220.00], [87.31, 130.81, 207.65], [82.41, 123.47, 196.00], [98.00, 146.83, 233.08]]
+  };
+  let brown = null;
+  function brownBuf(c){
+    if(brown) return brown;
+    const len = c.sampleRate * 4, b = c.createBuffer(1, len, c.sampleRate), d = b.getChannelData(0);
+    let last = 0; for(let i = 0; i < len; i++){ last = (last + .02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.2; }
+    return (brown = b);
+  }
+  const later = (fn, ms) => { const id = setTimeout(fn, ms); if(cur) cur.timers.push(id); return id; };
+  // 바탕 소리: 갈색 잡음 반복 + 필터 + 아주 느린 숨결(LFO)
+  function bed(o, type){
+    const c = o.c, P = {
+      breeze:[ 'bandpass', 420, .7, .035, .015, 11], wind:[ 'bandpass', 520, .9, .05, .022, 13], cave:[ 'lowpass', 160, .7, .045, .01, 17],
+      brook:[ 'bandpass', 1300, .6, .08, .03, 3.2], lake:[ 'lowpass', 520, .7, .10, .05, 9], waves:[ 'lowpass', 650, .7, .14, .10, 10],
+      rain:[ 'highpass', 1400, .6, .07, .015, 7], rumble:[ 'lowpass', 95, .8, .09, .02, 15], deep:[ 'lowpass', 130, .8, .075, .025, 14], marsh:[ 'lowpass', 380, .7, .08, .03, 12]
+    }[type];
+    if(!P) return;
+    const src = c.createBufferSource(); src.buffer = brownBuf(c); src.loop = true;
+    const f = c.createBiquadFilter(); f.type = P[0]; f.frequency.value = P[1]; f.Q.value = P[2];
+    const g = c.createGain(); g.gain.value = P[3];
+    const lfo = c.createOscillator(); lfo.frequency.value = 1 / P[5];
+    const lg = c.createGain(); lg.gain.value = P[4];
+    lfo.connect(lg); lg.connect(g.gain);
+    if(type === 'wind'){ const l2 = c.createOscillator(); l2.frequency.value = 1 / 19; const g2 = c.createGain(); g2.gain.value = 160; l2.connect(g2); g2.connect(f.frequency); l2.start(); o.nodes.push(l2); }
+    src.connect(f); f.connect(g); g.connect(o.master);
+    src.start(); lfo.start(); o.nodes.push(src, lfo);
+  }
+  // 느린 화음 패드: 화음마다 18초, 6초에 걸쳐 서서히 바뀐다
+  function pad(o){
+    const c = o.c, ch = CHORDS[o.mood][o.chordIdx++ % 4], t0 = c.currentTime;
+    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = o.mood === 'dark' ? 600 : 900;
+    const g = c.createGain(); g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(1, t0 + 6); g.gain.setValueAtTime(1, t0 + 18); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 25);
+    lp.connect(g); g.connect(o.master);
+    ch.forEach((f, i) => [0, 1.8].forEach(det => {
+      const os = c.createOscillator(); os.type = 'sine'; os.frequency.value = f; os.detune.value = det * (i % 2 ? 1 : -1) + (det ? 3 : 0);
+      const og = c.createGain(); og.gain.value = (i === 0 ? .05 : .035) * (det ? .6 : 1);
+      os.connect(og); og.connect(lp); os.start(t0); os.stop(t0 + 26);
+    }));
+    later(() => cur === o && pad(o), 18000);
+  }
+  // 이따금 나는 작은 소리들
+  const EV = {
+    bird(o, t){ const n = 2 + Math.floor(Math.random() * 3), base = 2600 + Math.random() * 1200;
+      for(let i = 0; i < n; i++) sweep(o, base, base * (1.3 + Math.random() * .3), .07, .018, t + i * (.12 + Math.random() * .06)); },
+    owl(o, t){ [0, .55].forEach((d, i) => sweep(o, 390 - i * 20, 350 - i * 20, .45, .03, t + d, 'sine', .12)); },
+    insect(o, t){ for(let i = 0; i < 8; i++) sweep(o, 4600, 4500, .035, .006, t + i * .06); },
+    drop(o, t){ const f = 900 + Math.random() * 700; sweep(o, f, f * .45, .14, .035, t, 'sine', .004); sweep(o, f * .9, f * .4, .14, .012, t + .23, 'sine', .004); sweep(o, f * .85, f * .4, .14, .005, t + .46, 'sine', .004); },
+    chime(o, t){ const notes = [1318.5, 1568, 1760, 2093, 2349]; for(let i = 0; i < 2; i++) ring(o, notes[Math.floor(Math.random() * notes.length)], 2.4, .012, t + i * .4); },
+    crackle(o, t){ for(let i = 0; i < 6; i++) click(o, t + Math.random() * 1.2, .02); },
+    frog(o, t){ for(let i = 0; i < 2; i++) croak(o, t + i * .35); },
+    bubble(o, t){ for(let i = 0; i < 3; i++) sweep(o, 280 + Math.random() * 80, 640, .08, .02, t + i * .13, 'sine', .01); },
+    bell(o, t){ ring(o, 196, 5, .025, t); ring(o, 196 * 2.76, 3, .008, t); ring(o, 196 * 5.4, 2, .004, t); }
+  };
+  function sweep(o, f0, f1, dur, gain, t, type, att){
+    const c = o.c, os = c.createOscillator(); os.type = type || 'sine';
+    os.frequency.setValueAtTime(f0, t); os.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    const g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + (att || .015)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    os.connect(g); g.connect(o.fx); os.start(t); os.stop(t + dur + .05);
+  }
+  function ring(o, f, dur, gain, t){
+    const c = o.c, os = c.createOscillator(); os.type = 'sine'; os.frequency.value = f;
+    const g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + .01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    os.connect(g); g.connect(o.fx); os.start(t); os.stop(t + dur + .05);
+  }
+  function click(o, t, gain){
+    const c = o.c, len = Math.floor(c.sampleRate * .012), b = c.createBuffer(1, len, c.sampleRate), d = b.getChannelData(0);
+    for(let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+    const src = c.createBufferSource(); src.buffer = b; const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 1800 + Math.random() * 1500;
+    const g = c.createGain(); g.gain.value = gain; src.connect(f); f.connect(g); g.connect(o.fx); src.start(t);
+  }
+  function croak(o, t){
+    const c = o.c, os = c.createOscillator(); os.type = 'sawtooth'; os.frequency.value = 120;
+    const am = c.createOscillator(); am.frequency.value = 28; const amg = c.createGain(); amg.gain.value = .5;
+    const g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(.018, t + .03); g.gain.exponentialRampToValueAtTime(0.0001, t + .26);
+    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 700;
+    am.connect(amg); amg.connect(g.gain); os.connect(lp); lp.connect(g); g.connect(o.fx);
+    os.start(t); am.start(t); os.stop(t + .3); am.stop(t + .3);
+  }
+  function events(o){
+    if(o.ev.length){
+      const k = o.ev[Math.floor(Math.random() * o.ev.length)];
+      EV[k](o, o.c.currentTime + .05);
+    }
+    later(() => cur === o && events(o), 6000 + Math.random() * 12000);   // 6~18초에 한 번쯤
+  }
+  function stop(){
+    if(!cur) return;
+    const o = cur; cur = null;
+    o.timers.forEach(clearTimeout);
+    try{ const t = o.c.currentTime; o.master.gain.cancelScheduledValues(t); o.master.gain.setValueAtTime(o.master.gain.value, t); o.master.gain.linearRampToValueAtTime(0, t + 1.5); }catch(e){}
+    setTimeout(() => { o.nodes.forEach(n => { try{ n.stop(); }catch(e){} }); try{ o.master.disconnect(); }catch(e){} }, 1700);
+  }
+  function play(key, conf){
+    if(cur && cur.key === key) return;
+    stop();
+    const c = SFX.ctx(); if(!c) return;
+    const master = c.createGain(); master.gain.setValueAtTime(0, c.currentTime); master.gain.linearRampToValueAtTime(.55, c.currentTime + 4);   // 천천히 커진다
+    const comp = c.createDynamicsCompressor(); comp.threshold.value = -30; comp.ratio.value = 4;   // 갑자기 큰 소리가 나지 않게
+    master.connect(comp); comp.connect(c.destination);
+    const fx = c.createGain(); fx.gain.value = 1;
+    // 작은 소리들에는 짧은 잔향(동굴이면 길게)
+    const dl = c.createDelay(1); dl.delayTime.value = conf[1] === 'cave' || conf[1] === 'deep' ? .33 : .18;
+    const fb = c.createGain(); fb.gain.value = conf[1] === 'cave' || conf[1] === 'deep' ? .45 : .2;
+    fx.connect(master); fx.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(master);
+    const o = { key, c, master, fx, nodes: [], timers: [], mood: conf[0], ev: conf[2], chordIdx: 0 };
+    cur = o;
+    bed(o, conf[1]); pad(o); later(() => cur === o && events(o), 2500);
+  }
+  return {
+    sync(){   // 화면이 바뀔 때마다 부른다: RPG 화면이고 소리·BGM이 켜져 있으면 지금 던전의 BGM
+      if(UI.screen === 'rpg' && settings.sound !== false && settings.bgm !== false){
+        const st = RPG.st, k = st.sel || 'fish', sg = st.sk[k].stage;
+        play(k + sg, BGM_ENV[k][sg - 1]);
+      } else stop();
+    },
+    stop
+  };
 })();
 
 // ---------- 대국 ----------
@@ -2226,7 +2452,7 @@ function ask(p){
     const autoTG = p.kind === 'action' && UI.autoTG; UI.autoTG = false;
     if(autoTG && !p.ctx.tsumo && UI.game && UI.game.drawn && UI.game.drawn.seat === 0){
       const id = UI.game.drawn.id;
-      setTimeout(() => { const q = UI.pending; if(!q || q.kind !== 'action') return; if(q.ctx.riichiOptions.includes(kindOf(id))){ UI.riichiDiscard = id; render(); } else choose({type:'discard', id, riichi:false}); }, 0);
+      setTimeout(() => { const q = UI.pending; if(!q || q.kind !== 'action') return; if(q.ctx.riichiOptions.includes(kindOf(id))){ setRiichiDiscard(id); } else choose({type:'discard', id, riichi:false}); }, 0);
     }
     UI.pending = Object.assign(p, {resolve: v => { if(t !== UI.token) return; UI.pending = null; UI.confirm = null; UI.sel = null; UI.riichiMode = false; UI.riichiDiscard = null; UI.callPick = false; if(UI.callStage && UI.callStage.timer) clearTimeout(UI.callStage.timer); UI.callStage = null; res(v); render(); }});
     render();
@@ -2260,14 +2486,129 @@ function flyIn(dropAt){
     an.onfinish = done; an.oncancel = done;
   }catch(e){ done(); }
 }
+// ---------- RPG 행동별 마작 스킬 ----------
+// 실버(2등급) 장비부터 20%, 한 등급마다 +10%, 옵시디언 90%. RPG 화면에서 행동마다 켜고 끌 수 있다(연습 모드에서는 꺼짐)
+const MJSK = {
+  combat: { icon:'⚔', n:'살기 감지', d:'손패를 잡고 휠을 위나 아래로 굴리면 그 패가 CPU의 론 대기패인지 알려 줘요. 내 차례 한 번에 패 1장, 1회. 실패 검정 · 방총 빨강 · 안전 초록' },
+  fish:   { icon:'🎣', n:'입질', d:'내 차례에 발동하면 다음에 내가 뽑을 패산의 패가 그 자리에서 앞면으로 보여요 (울기로 순서가 바뀌면 따라 바뀌어요)' },
+  mine:   { icon:'⛏', n:'광맥 탐지', d:'도라 표시패(깡도라 포함)를 누르면 표시패마다 1번씩 발동해요. 성공하면 그 아래 뒷도라 표시패가 콘솔 쪽으로 밀려 나와요' },
+  wood:   { icon:'🪓', n:'바꿔치기', d:'국의 첫 차례에 발동하면 그 국 동안 언제든(내 차례, 리치 전) 필요 없는 손패를 1톤(2장)까지 패산으로 끌어 놓아 패산의 패와 바꿀 수 있어요' }
+};
+function mjSkillPct(k){
+  if(UI.drill || typeof RPG === 'undefined') return 0;
+  const sk = RPG.st.sk[k];
+  if(!sk || sk.skillOn === false || sk.gear < 2) return 0;
+  return Math.min(90, sk.gear * 10);
+}
+function mjSkillRoll(k){   // 켜져 있지 않으면 null, 켜져 있으면 성공 여부
+  const p = mjSkillPct(k);
+  if(!p) return null;
+  UI.usedSkill = true;
+  return Math.random() * 100 < p;
+}
+const mjSkillColor = k => { const t = TIERS[(RPG.st.sk[k].gear || 1) - 1]; return t.gl || t.c; };
+const turnKey = () => UI.game ? `${UI.kyokuSerial || 0}-${UI.game.players[0].discards.length}` : '';
+// 살기 감지: 이 패를 지금 내면 누가 론하는지
+function trySense(id){
+  const g = UI.game;
+  if(!g || UI.dealing || UI.frozen || !g.players[0].hand.includes(id)) return null;
+  if(!UI.pending || UI.pending.kind !== 'action' || UI.pendingDraw) return null;   // 내 차례(쯔모해 온 뒤)에만. CPU를 기다리며 패놀음할 때는 발동하지 않는다
+  const key = turnKey();
+  if(UI.sense && UI.sense.key === key) return UI.sense.id === id ? UI.sense.res : null;   // 이번 차례에는 이미 썼다
+  const r = mjSkillRoll('combat');
+  if(r === null) return null;
+  let res = 'fail';
+  if(r){ res = 'green'; for(let o = 1; o < g.N; o++){ if(g.checkRon(o, id, false)){ res = 'red'; break; } } }
+  UI.sense = { key, id, res };
+  if(res === 'fail') SFX.skFail(); else if(res === 'red') SFX.skWarn(); else SFX.skOk();
+  return res;
+}
+// 입질: 아무도 울지 않으면 다음에 내가 뽑을 패 (지금 패산 앞에서 N번째)
+function rollPeek(g){
+  UI.peek = null;
+  if(g.players[0].riichi || g.wall.length < g.N) return;
+  const r = mjSkillRoll('fish');
+  if(!r) return;   // 저절로 발동하는 스킬이라 소리 없이 조용히
+  UI.peek = { serial: UI.kyokuSerial };   // 어느 패인지는 그릴 때마다 지금 순서로 다시 계산한다(울기로 순서가 바뀌면 따라 바뀐다)
+}
+// 입질: 지금 상태에서 내가 다음에 뽑게 될 패산의 패 (pw: 지금 뽑으려는 내 쯔모)
+function peekTarget(g, pw){
+  if(!UI.peek || UI.peek.serial !== UI.kyokuSerial || UI.dealing) return null;
+  const tail = g.sanma ? 2 * Math.max(0, g.doraInd.length - 1) : g.rinshanIdx;
+  const left = g.wall.length + (pw ? 1 : 0);
+  const F = g.liveTotal - left - tail;
+  if(!pw && UI.pendingDraw) return null;   // 손으로 날아오는 중
+  if(pw && !pw.rinshan) return { i: F, id: pw.id };
+  if(pw) return null;
+  // 지금 차례인 사람이 이미 쯔모해 들고 있으면 다음 쯔모는 그다음 사람부터
+  const holding = g.players[g.turn].hand.length % 3 === 2;
+  const justDiscarded = g.log.length && g.log[g.log.length - 1].seat === g.turn;   // 방금 버리고 울기·론 물음을 기다리는 중
+  const nextDrawer = (g.turn + (holding || justDiscarded ? 1 : 0)) % g.N;
+  const k = (g.N - nextDrawer) % g.N;   // 나보다 먼저 뽑는 사람 수
+  if(k >= g.wall.length) return null;
+  return { i: F + k, id: g.wall[g.wall.length - 1 - k] };
+}
+// 바꿔치기: 국의 첫 타패 전, 가장 쓸모없는 패 1장
+function rollPrune(g, ctx){
+  const me = g.players[0];
+  if(me.riichi || UI.pruneTried === UI.kyokuSerial) return;   // 국의 첫 내 차례에 판정, 성공하면 그 국 동안 언제든 쓸 수 있게 남는다
+  UI.pruneTried = UI.kyokuSerial;
+  const r = mjSkillRoll('wood');
+  if(!r) return;   // 저절로 발동하는 스킬이라 소리 없이 조용히
+  UI.prune = { serial: UI.kyokuSerial, left: 2 };   // 어떤 패를 쳐낼지는 플레이어가 고른다. 1톤(2장)까지
+}
+function pruneReady(){
+  const g = UI.game, pd = UI.pending, pr = UI.prune;
+  return !!(g && pr && pr.serial === UI.kyokuSerial && pd && pd.kind === 'action' && !UI.confirm && UI.riichiDiscard == null
+    && !g.players[0].riichi && pr.left > 0 && g.wall.length > g.N + 2);   // 리치 중엔 안 되고, 곧 뽑힐 패와 겹치지 않게 패산이 넉넉할 때만
+}
+function doPrune(id){
+  if(!pruneReady() || !UI.game.players[0].hand.includes(id)) return;
+  const fresh = UI.swapIn && UI.swapIn.key === turnKey() ? UI.swapIn.ids : [];
+  if(fresh.includes(id)) return;                    // 방금 바꿔 들어온 패는 다시 내보내지 않는다
+  const g = UI.game, me = g.players[0], pd = UI.pending, ctx = pd.ctx;
+  const wi = 2 - UI.prune.left;                     // 패산 맨 끝 1톤: 첫 장은 [0], 둘째 장은 [1]
+  const hi = me.hand.indexOf(id), t = g.wall[wi];
+  g.wall[wi] = id; me.hand[hi] = t;                 // 패산 맨 끝(가장 늦게 뽑힐 곳)의 패와 맞바꾼다
+  if(g.drawn && g.drawn.id === id) g.drawn = { seat:0, id:t };
+  if(UI.inv) UI.inv.delete(id);
+  g.updateWaits(me);
+  // 손패가 바뀌었으니 이번 차례의 선택지를 다시 계산한다. 엔진이 미리 잡아 둔 값과 어긋나지 않게 '둘 다 될 때만' 남긴다
+  ctx.tsumo = null;
+  ctx.kyuushu = !!(ctx.kyuushu && g.canKyuushu(0));
+  ctx.nuki = !!(ctx.nuki && g.canNuki(0));
+  ctx.riichiOptions = g.riichiOptions(0);
+  ctx.kanOptions = g.selfKanOptions(0, g.drawn ? g.drawn.id : t);
+  ctx.rec = advise(g, 0, ctx.forbidden);
+  UI.prune.left--;
+  if(UI.prune.left <= 0){ UI.prune = null; UI.pruneMode = false; }
+  UI.sel = null; UI.hoverDiscard = null;
+  UI.swapIn = { key: turnKey(), ids: fresh.concat([t]) };   // 바꿔 들어온 패: 이번 차례 동안 보라색으로 빛난다
+  callout(0, '바꿔치기'); SFX.draw(); render();
+}
+// 광맥 탐지: 국마다 1번, 처음 도라 표시패를 누르면 판정. 성공하면 그 아래 뒷도라 표시패가 콘솔 쪽으로 밀려 나온다
+// 광맥 탐지: 도라 표시패(깡도라 포함)마다 1번씩, 누르면 판정. 성공하면 그 아래 뒷도라 표시패가 콘솔 쪽으로 밀려 나온다
+function uraCanTry(i){ const g = UI.game; if(!g || UI.drill || UI.dealing || UI.frozen || mjSkillPct('mine') <= 0 || i >= g.uraInd.length) return false; uraState(); return !UI.uraTried.has(i); }
+function uraState(){ if(UI.uraK !== UI.kyokuSerial){ UI.uraK = UI.kyokuSerial; UI.uraTried = new Set(); UI.uraSeen = new Set(); UI.uraAt = {}; } }
+function uraTry(i){
+  if(!uraCanTry(i)) return;
+  uraState();
+  UI.uraTried.add(i);
+  if(mjSkillRoll('mine')){ UI.uraSeen.add(i); UI.uraAt[i] = Date.now(); SFX.skOk(); }
+  else SFX.skFail();
+  render();
+}
+function skillBadges(){
+  return SK_KEYS.map(k => { const p = mjSkillPct(k); return p ? `<span class="skb" style="--gc:${mjSkillColor(k)}" title="${MJSK[k].n} ${p}%">${MJSK[k].icon}<small>${p}</small></span>` : ''; }).join('');
+}
 const Human = {
-  async chooseAction(g,s,ctx){ await takeDraw(); return ask({kind:'action', ctx}); },
+  async chooseAction(g,s,ctx){ await takeDraw(); if(!UI.drill){ rollPeek(g); rollPrune(g, ctx); } return ask({kind:'action', ctx}); },
   async decideTsumo(){ await takeDraw(); return ask({kind:'tsumo'}); },
   decideRon(g,s,r,id,chankan){ return ask({kind:'ron', tile:id, chankan:!!chankan}); },
   async decideRiichiKan(g,s,opts){ await takeDraw(); return ask({kind:'riichiKan', opts}); },
   async decideRiichiNuki(){ await takeDraw(); return ask({kind:'riichiNuki'}); },
   decideCall(g,s,opts){ return ask({kind:'call', opts}); },
-  async onAuto(g, s){ if(g.players[s].riichi && !UI.pendingDraw){ UI.autoTG = false; return sleep(SPEED[settings.speed]); } await takeDraw(); UI.autoTG = false; return sleep(Math.max(250, SPEED[settings.speed])); }
+  async onAuto(g, s){ if(g.players[s].riichi && !UI.pendingDraw){ UI.autoTG = false; return sleep(SPEED[settings.speed]); }   /* 뽑은 패를 CPU가 치는 템포만큼 보여 준 뒤 쯔모기리 */ await takeDraw(); UI.autoTG = false; return sleep(Math.max(250, SPEED[settings.speed])); }
 };
 
 // 점봉: 10000 빨강 · 5000 노랑 · 1000 파랑 · 500 초록 · 100 하양. 25000 = 빨1 노2 파4 초1 하5
@@ -2307,8 +2648,22 @@ function trayHTML(g){
   const can = pd && pd.kind === 'action' && !UI.confirm && UI.riichiDiscard != null;
   const n = sticksOf(g.scores[0]);
   // 점봉 케이스: 1칸 빨강·노랑, 2칸 파랑, 3칸 초록·하양
-  const pile = (c, k) => { const m = Math.min(k, 8); let h = ''; for(let i = 0; i < m; i++) h += `<span class="tst">${stickSVG(c)}</span>`; return h + (k > 8 ? `<i class="more">+${k-8}</i>` : ''); };
-  const cell = (cs, extra) => `<div class="tcell ${extra||''}" ${extra==='can'?'data-stickdrag="1" title="콘솔로 끌어 놓으면 리치"':''} aria-label="${cs.map(c => ({r:'만점봉',y:'오천점봉',b:'천점봉',g:'오백점봉',w:'백점봉'}[c]) + ' ' + n[c] + '개').join(', ')}">${cs.map(c => pile(c, n[c])).join('')}</div>`;
+  // 차곡차곡 쌓기: 1단은 6개를 나란히, 2단은 1단 점봉 사이 홈에 5개, 3단은 다시 2단 사이에 6개 … (아래쪽 칸부터 채운다)
+  const MAXL = 4;   // 6+5+6+5 = 22개까지 보이고 그 뒤는 +N
+  const stack = seq => {
+    let h = '', i = 0, L = 0;
+    while(i < seq.length && L < MAXL){
+      const slots = L % 2 ? 5 : 6;
+      for(let j = 0; j < slots && i < seq.length; j++, i++){
+        const pos = L % 2 ? j + .5 : j;
+        h += `<span class="tst ${L ? 'up' : ''}" style="--sp:${pos};--sl:${L};--sx:${[0, 5, -4, 4][L]}px">${stickSVG(seq[i])}</span>`;
+      }
+      L++;
+    }
+    return h + (seq.length > i ? `<i class="more">+${seq.length - i}</i>` : '');
+  };
+  const seqOf = cs => cs.slice().reverse().flatMap(c => Array(n[c]).fill(c));   // 아래 단부터: 노랑 → 빨강, 하양 → 초록
+  const cell = (cs, extra) => `<div class="tcell ${extra||''}" ${extra==='can'?'data-stickdrag="1" title="콘솔로 끌어 놓으면 리치"':''} aria-label="${cs.map(c => ({r:'만점봉',y:'오천점봉',b:'천점봉',g:'오백점봉',w:'백점봉'}[c]) + ' ' + n[c] + '개').join(', ')}">${stack(seqOf(cs))}</div>`;
   return `<div class="tray">${cell(['r','y'])}${cell(['b'], can ? 'can' : '')}${cell(['g','w'])}</div>`;
 }
 function speakerSVG(on){
@@ -2334,6 +2689,7 @@ function startGame(mode, saved, practice, drill){
   const P3 = UI.mode.endsWith('3');
   setNP(P3 ? 3 : 4);
   UI.usedHint = saved ? !!saved.usedHint : false;
+  UI.usedSkill = saved ? !!saved.usedSkill : false;
   UI.startedAt = saved ? saved.startedAt : Date.now();
   UI.aka = saved ? saved.aka : settings.aka;
   UI.practice = saved ? !!saved.practice : !!practice;
@@ -2355,6 +2711,7 @@ function startGame(mode, saved, practice, drill){
     onKyokuStart: async (game) => {
       UI.frozen = null; UI.cpuOut = {}; UI.handSet = game.results.length % 2; document.documentElement.classList.toggle('setb', UI.handSet === 1);
       UI.callouts = {}; UI.carryKyotaku = game.kyotaku;
+      UI.kyokuSerial = (UI.kyokuSerial || 0) + 1; UI.sense = null; UI.swapIn = null; UI.peek = null; UI.prune = null; uraState();
       UI.inv = new Set();   // 처음 배패된 손패는 상하가 정리되지 않은 채로 온다(끌면서 우클릭해 180도 돌려 다시 손패에 놓아 정리)
       if(!UI.drill && !settings.skipDeal) game.players[0].hand.forEach(id => { if(ASYM_K.has(kindOf(id)) && Math.random() < .5) UI.inv.add(id); });
       if((settings.skipDeal || UI.drill) && !(D && D.full)){   // 배패 스킵(연습 모드도 바로 시작): 자리 정하기·주사위·배패 연출 없이 바로 시작
@@ -2439,7 +2796,7 @@ function startGame(mode, saved, practice, drill){
         if(!UI.drillDone){ const key = UI.drill, tk = UI.token; setTimeout(() => { if(tk === UI.token) startGame(DRILLS[key].mode, null, true, key); }, 300); }
         return new Promise(() => {});
       }
-      UI.frozen = res.label; if(res.type === 'win'){ SFX.win(); res.winners.forEach(w => callout(w, res.tsumo ? '쯔모' : '론')); await sleep(900); await aliceShow(res, game); } else if(res.type === 'abort'){ if(res.who != null) callout(res.who, '구종구패'); await sleep(700); } return kyokuEnd(res, game); } });
+      UI.frozen = res.label; if(res.type === 'win'){ SFX.win(); res.winners.forEach(w => callout(w, res.tsumo ? '쯔모' : '론')); await sleep(900); await aliceShow(res, game); } else if(res.type === 'abort'){ if(res.who != null) callout(res.who, '구종구패'); await sleep(700); } else if(res.type === 'draw'){ await sleep(1400); }   /* 마지막 패를 버리고 강에 놓이는 걸 본 뒤 유국 결과 */ return kyokuEnd(res, game); } });
   UI.game = g; UI.pending = null; UI.sel = null; UI.riichiMode = false;
   UI.lastDraw = {}; UI.cpuOut = {};
   g.on((type, d) => {
@@ -2467,7 +2824,13 @@ function startGame(mode, saved, practice, drill){
     if(UI.drill && !UI.drillDone) drillCheck(g, type, d);
     if(type === 'draw' && d.seat === 0 && !UI.dealing){
       if(UI.dealerFirst && !d.rinshan){ UI.dealerFirst = false; SFX.draw(); }
-      else if(g.players[0].riichi) {}   // 리치 중엔 쯔모 동작 없이 자동 쯔모기리
+      else if(g.players[0].riichi){   // 리치 중: 패산에서 손패 쯔모 칸으로 저절로 끌어와 보여 주고, 잠시 뒤 쯔모기리(화료면 쯔모 선택)
+        let el = null;
+        if(!d.rinshan){ let mi = Infinity; document.querySelectorAll('[data-wi]').forEach(x => { const v = +x.dataset.wi; if(v < mi){ mi = v; el = x; } }); }
+        else el = document.querySelector('.sk.dead i.b, .sk.dead i.t');
+        if(el){ const r = el.getBoundingClientRect(); UI.flipMany = { keys: ['h' + d.id], pt: {x: r.left + r.width/2, y: r.top + r.height/2}, dur: 260 }; }
+        SFX.draw();
+      }
       else {
         UI.pendingDraw = { id: d.id, rinshan: !!d.rinshan };
         const at = UI.autoTake; UI.autoTake = null;
@@ -2513,7 +2876,7 @@ function callout(s, text){
 }
 function saveProgress(g){
   if(UI.drill) return;   // 연습은 이어하기에 남기지 않는다
-  store.set(KEY.save, { mode:UI.mode, aka:UI.aka, usedHint:UI.usedHint, practice:UI.practice, startedAt:UI.startedAt, label:g.kyokuLabel(), state:g.saveState() });
+  store.set(KEY.save, { mode:UI.mode, aka:UI.aka, usedHint:UI.usedHint, usedSkill:UI.usedSkill, practice:UI.practice, startedAt:UI.startedAt, label:g.kyokuLabel(), state:g.saveState() });
 }
 
 // 각 자리 레이어: 아래쪽에 앉은 사람 기준으로 그린 뒤 돌린다 (나 0°, 하가 -90°, 대면 180°, 상가 90°)
@@ -2604,11 +2967,12 @@ function wallLayout(o){
     const {seat, j} = pos(a0 + st);
     if(P3 && st >= HALF - KD){   // 3인: 깡도라로 넘어간 꽁무니 줄은 왕패가 된다
       const sl = slots[seat][j], i = 1 + (HALF - 1 - st);
-      sl.dead = true; sl.t = true; sl.b = true; if(i < o.dora.length){ sl.dora = o.dora[i]; if(o.doraIds) sl.doraId = o.doraIds[i]; }
+      sl.dead = true; sl.t = true; sl.b = true; if(i < o.dora.length){ sl.dora = o.dora[i]; sl.dIdx = i; if(o.doraIds) sl.doraId = o.doraIds[i]; if(o.ura && o.ura[i] != null){ sl.ura = o.ura[i]; sl.uraAt = o.uraAt[i]; sl.b = false; } }
       continue;
     }
     if(!P3) for(let k = 0; k < R; k++){ if(HALF - 1 - (k >> 1) === st){ if(k % 2 === 0) top = false; else bot = false; } }   // 깡 보충으로 끝에서 빠진 패
-    slots[seat][j].t = top; slots[seat][j].b = bot; slots[seat][j].wi = st;   // 패산 순번(앞에서부터): 윗패 2st, 아랫패 2st+1
+    slots[seat][j].t = top; slots[seat][j].b = bot; slots[seat][j].wi = st;
+    if(o.peek && (o.peek.i >> 1) === st && (o.peek.i % 2 === 0 ? top : bot)) slots[seat][j].pk = Object.assign({ lower: o.peek.i % 2 === 1 }, o.peek);   // 입질: 내가 다음에 뽑을 패(윗패/아랫패)   // 패산 순번(앞에서부터): 윗패 2st, 아랫패 2st+1
     if(o.next === 'live' && st === (F >> 1)) slots[seat][j].nx = (F % 2 === 0) ? 't' : 'b';
     if(P3 && o.alice){   // 아리스: 패산 꽁무니(깡도라 다음 줄)부터 한 줄씩 윗패를 뒤집어 보인다
       const aj = HALF - KD - 1 - st;
@@ -2626,7 +2990,7 @@ function wallLayout(o){
     sl.dead = true; sl.t = true; sl.b = true;
     if(P3){   // 3인: 내려 두는 패 없이 끝 줄 윗패 → 아랫패 → 다음 줄 순으로 영상패
       if(q < RS){ sl.t = R < 2*q + 1; sl.b = R < 2*q + 2; if(o.next === 'rinshan' && (R >> 1) === q) sl.nx = R % 2 === 0 ? 't' : 'b'; }
-      else if(o.dora && o.dora.length){ sl.dora = o.dora[0]; if(o.doraIds) sl.doraId = o.doraIds[0]; }
+      else if(o.dora && o.dora.length){ sl.dora = o.dora[0]; if(o.doraIds) sl.doraId = o.doraIds[0]; if(o.ura && o.ura[0] != null){ sl.ura = o.ura[0]; sl.uraAt = o.uraAt[0]; sl.b = false; } sl.dIdx = 0; }
       continue;
     }
     // 영상패: 끝 줄의 윗패는 옆에 내려 두고 그것부터 뽑는다 → 내린 패, 끝 줄 아랫패, 다음 줄 윗패, 다음 줄 아랫패 순
@@ -2638,18 +3002,21 @@ function wallLayout(o){
       if(q === 1 && R === 2) sl.nx = 't';
       if(q === 1 && R === 3) sl.nx = 'b';
     }
-    if(q >= 2){ const i = q - 2; if(i < o.dora.length){ sl.dora = o.dora[i]; if(o.doraIds) sl.doraId = o.doraIds[i]; } }   // 영상패를 뽑을 차례에도 도라 표시패는 그대로 보인다
+    if(q >= 2){ const i = q - 2; if(i < o.dora.length){ sl.dora = o.dora[i]; if(o.doraIds) sl.doraId = o.doraIds[i]; if(o.ura && o.ura[i] != null){ sl.ura = o.ura[i]; sl.uraAt = o.uraAt[i]; sl.b = false; } sl.dIdx = i; } }   // 영상패를 뽑을 차례에도 도라 표시패는 그대로 보인다
   }
   return slots;
 }
 // 화면 좌표로 그린 패산: 어느 벽이든 윗면(뒷면 색)이 위, 앞쪽 상아색 두께가 아래로 보인다
 const WW = 0.033, WGAP = 0.0012, WD = 0.3628;   // 탁자 한 변(S) 대비 패 폭 · 간격 · 중심에서 벽까지 거리
-function wallsScreenHTML(walls, fx){
-  let out = '';
+function wallsScreenHTML(walls, fx, uraGc){
+  let out = '', front = '';
   const split = !!(fx && fx.split);
   const np = walls.length, vsOf = s => np === 3 ? [0, 1, 3][s] : s;
   for(const v of [2,1,3,0]){
     const s = seatsBy(np).find(x => vsOf(x) === v); if(s == null) continue;
+    if(v === 0){ const o0 = out; out = ''; wallSide(); front = out; out = o0; continue; }
+    wallSide();
+    function wallSide(){
     const slots = walls[s];
     const pos = []; let u = 0;
     // 왕패와 산패 사이는 패 한 장만큼 띄운다. 영상패 쪽은 내려 둔 패 자리까지 한 장 더
@@ -2676,7 +3043,8 @@ function wallsScreenHTML(walls, fx){
       else if(v === 3){ x = .5 - WD; y = .5 + off; }
       else { x = .5 + WD; y = .5 - off; }
       let face = '';
-      if(sl.t && sl.dora != null) face = `<span class="tf ${sl.afl != null ? 'afl' : ''}" ${sl.afl != null ? `style="animation-delay:-${sl.afl}ms"` : ''}>${tile(sl.dora,{size:'wl', id: sl.doraId, cls: vert ? 'rot'+v : ''})}</span>`;
+      const tap = sl.dIdx != null && sl.ura == null && uraCanTry(sl.dIdx);   // 광맥 탐지: 도라 표시패를 누르면 그 뒷도라 판정
+      if(sl.t && sl.dora != null) face = `<span class="tf ${sl.afl != null ? 'afl' : ''} ${tap ? 'uratap' : ''}" ${tap ? `data-act="uraTry" data-i="${sl.dIdx}" title="광맥 탐지: 눌러서 뒷도라 보기" style="--gc:${uraGc}"` : ''} ${sl.afl != null ? `style="animation-delay:-${sl.afl}ms"` : ''}>${tile(sl.dora,{size:'wl', id: sl.doraId, cls: vert ? 'rot'+v : ''})}</span>`;
       if(sl.drop){   // 내려 둔 영상패: 산패 쪽 옆자리에 한 단으로
         const prevLive = j > 0 && !slots[j-1].dead;
         const d = (prevLive || j === 0 ? -1 : 1) * (WW + WGAP);
@@ -2691,12 +3059,20 @@ function wallsScreenHTML(walls, fx){
       const wiB = sl.wi != null && !sl.dead ? `data-wi="${2*sl.wi+1}"` : '', wiT = sl.wi != null && !sl.dead ? `data-wi="${2*sl.wi}"` : '';
       const inner = (sl.b ? `<i class="b ${nb?'wnext':''} ${sl.dnb?'dn':''}" ${wiB} ${nb?'data-act="takeDraw"':''}></i>` : '') + (sl.t ? (face || `<i class="t ${nt?'wnext':''} ${sl.dnt?'dn':''}" ${wiT} ${nt?'data-act="takeDraw"':''}></i>`) : '');
       if(!inner) return;
+      // 입질: 그 자리에 놓인 방향 그대로 앞면을 보인다. 아랫패면 윗패를 반투명하게 해서 비쳐 보이게
+      const pkNext = sl.pk && ((!sl.pk.lower && nt) || (sl.pk.lower && nb));   // 입질로 본 패가 바로 지금 뽑을 패면, 앞면 그대로 끌어 온다
+      const pkf = sl.pk ? `<span class="tf pk ${sl.pk.lower ? 'pkb' : ''} ${pkNext ? 'wnext' : ''}" ${pkNext ? `data-act="takeDraw" ${sl.pk.lower ? wiB : wiT}` : ''} style="--gc:${sl.pk.gc}">${tile(kindOf(sl.pk.id), {size:'wl', id: sl.pk.id, cls: vert ? 'rot' + v : ''})}</span>` : '';
+      const urap = sl.ura != null && sl.t && sl.dora != null ? `<span class="urap ura-v${v}" style="--gc:${uraGc};animation-delay:-${Date.now() - (sl.uraAt || 0)}ms" title="광맥 탐지: 뒷도라 표시패">${tile(sl.ura, {size:'wl', cls: vert ? 'rot' + v : ''})}</span>` : '';
+      // 광맥 탐지: 뒷도라 표시패를 콘솔 쪽으로 완전히 빼서 붙여 둔다. 강보다 위에 보이도록 앞 레이어에 따로 그린다
+      // 아랫칸에서 빼내는 패라 어느 벽이든 위에 얹힌 도라 표시패(패산) 밑으로 지나가며 밀려 나온다
+      if(urap) out += `<span class="sk ${vert?'v side'+v:'h'} urahost" style="left:calc(var(--S)*${x.toFixed(4)});top:calc(var(--S)*${y.toFixed(4)});z-index:${Math.round(y*1000) - 1}">${urap}</span>`;
       const [sc, sv] = splitVars(j);
       const fxc = [sl.hl?'hl':'', sl.fin?'fin':'', sl.cnt?'cnt':'', sl.out?'out':'', sl.dn?'dnext':'', sl.ablk?'ablk':'', sc].join(' ');
-      out += `<span class="sk ${vert?'v side'+v:'h'} ${sl.dead?'dead':''} ${fxc}" style="${sv}left:calc(var(--S)*${x.toFixed(4)});top:calc(var(--S)*${y.toFixed(4)});z-index:${Math.round(y*1000)}">${inner}</span>`;
+      out += `<span class="sk ${vert?'v side'+v:'h'} ${sl.dead?'dead':''} ${fxc}" style="${sv}left:calc(var(--S)*${x.toFixed(4)});top:calc(var(--S)*${y.toFixed(4)});z-index:${Math.round(y*1000)}">${sl.pk && !sl.pk.lower ? inner.replace(/<i class="t[^"]*"[^>]*><\/i>/, '') + pkf : sl.pk ? inner.replace(/<i class="b[^"]*"[^>]*><\/i>/, pkf) : inner}</span>`;
     });
+    }
   }
-  return `<div class="wallsc">${out}</div>`;
+  return `<div class="wallsc">${out}</div><div class="wallsc front">${front}</div>`;
 }
 function wallRowHTML(slots){
   return `<div class="wall">${slots.map(sl => `<span class="stk ${sl.dead?'dead':''}">${sl.b?'<i class="b"></i>':''}${sl.t ? (sl.dora != null ? `<span class="tf">${tile(sl.dora,{size:'wl'})}</span>` : '<i class="t"></i>') : ''}</span>`).join('')}</div>`;
@@ -2743,6 +3119,12 @@ function edgeHTML(backs, melds, rightGap, nuki, kikaW){
   const mrow = melds || backs ? `<span class="mrow">${melds}</span>` : kikaW ? '<span class="mrow" style="min-height:calc(var(--S)*.042);padding-bottom:0"></span>' : '';
   return `<div class="edge" style="padding:0 calc(var(--S)*${pad})"><span></span><span class="ehand">${backs}</span><span class="emelds ${on?'on':''}">${on ? nrow + mrow : ''}</span></div>`;
 }
+function riverRows(list){
+  list = list.filter(Boolean);
+  if(!list.length) return '';
+  const rows = [list.slice(0, 6), list.slice(6, 12), list.slice(12)].filter(r => r.length);
+  return rows.map(r => `<div class="rrow">${r.join('')}</div>`).join('');
+}
 function layerHTML(g, s, walls){
   const p = g.players[s];
   const dealer = g.dealer === s;
@@ -2752,7 +3134,7 @@ function layerHTML(g, s, walls){
     if(d.called && !(UI.claim && UI.claim.id === d.id)) return '';   // 울려 간 패는 강에서 사라진다
     const callme = cpd && i === p.discards.length-1;
     return tileId(d.id, {size:'rv', cls:[d.riichi?'rii':'', d.tsumogiri && !(i === 0 && s === g.dealer) ? 'tg' : '', (last && last.seat===s && i===p.discards.length-1 && !d.called)?'last':'', callme?'callme':'', UI.inv && UI.inv.has(d.id) ? 'inv' : ''].join(' '), attrs: callme ? 'data-act="callTile" role="button" aria-label="이 패로 울기"' : ''});
-  }).join('') + (s === 0 && UI.riichiDiscard != null ? tileId(UI.riichiDiscard, {size:'rv', cls:'rii pendrii' + (UI.inv && UI.inv.has(UI.riichiDiscard) ? ' inv' : '')}) : '');
+  }).concat(s === 0 && UI.riichiDiscard != null ? [tileId(UI.riichiDiscard, {size:'rv', cls:'rii pendrii' + (UI.inv && UI.inv.has(UI.riichiDiscard) ? ' inv' : '')})] : []);
   const co = UI.callouts[s];
   const coNew = co && Date.now() - (UI.calloutAt[s] || 0) < 300;
   const v = VS(s);
@@ -2764,7 +3146,7 @@ function layerHTML(g, s, walls){
   const rightGap = (cornerSt ? (g.honba + carry) * .0105 : 0) + kikaW;
   let edge = '';
   if(s === 0 && !UI.dealing && p.nuki && p.nuki.length){   // 내가 뺀 北: 탁자 오른쪽 구석에
-    edge = edgeHTML('', '', rightGap, p.nuki.map(id => tileId(id)).join(''), kikaW);
+    edge = edgeHTML('', '', rightGap, p.nuki.map(id => tileId(id, {cls: UI.inv && UI.inv.has(id) ? 'inv' : ''})).join(''), kikaW);   // 상하 반전한 채 뺀 北은 뒤집힌 채로
   } else if(s !== 0 && UI.dealing){
     edge = UI.dealCount ? edgeHTML(Array.from({length: UI.dealCount[s]}, (_, i) => `<span class="back" data-fk="d${s}-${i}"></span>`).join(''), '', rightGap) : '';
   } else if(s !== 0){
@@ -2778,7 +3160,7 @@ function layerHTML(g, s, walls){
     ${p.riichi?`<div class="stick">${stickSVG('b')}</div>`:(s===0 && UI.riichiMode ? '<div class="stick pendst"></div>' : '')}
     ${cornerSt ? `<div class="cornerst" title="${g.honba}본장${carry?` · 공탁 ${carry}`:''}">${Array.from({length:g.honba}, () => `<span class="vst">${stickSVGv('w')}</span>`).join('')}${Array.from({length:carry}, () => `<span class="vst">${stickSVGv('b')}</span>`).join('')}</div>` : ''}
     ${kikaSeat(g)===s ? `<div class="kikamark ${Date.now() - (UI.kikaAt || 0) < 400 ? 'kmv' : ''}" title="기가" style="animation-delay:-${Date.now() - (UI.kikaAt || 0)}ms;${cornerSt?`right:calc(var(--S)*${((g.honba + carry) * .0105).toFixed(4)})`:''}">${g.kyoku < g.N ? '東' : '南'}</div>` : ''}
-    <div class="river">${river}</div>
+    <div class="river">${riverRows(river)}</div>
     ${edge}
     ${co?`<div class="callout" style="transform:translateX(-50%) rotate(${-ROT[v]}deg)${coNew?'':';animation:none'}">${esc(co)}</div>`:''}
   </div>`;
@@ -2959,7 +3341,7 @@ function drillGuideHTML(g){
 }
 
 // ---------- 힌트: 고른 뒤에 보여 주고 확인을 눌러야 진행 ----------
-const CALLNAME = c => !c ? '넘기기' : c.type === 'pon' ? '퐁' : c.type === 'minkan' ? '깡' : c.type === 'chi' ? '치' : c.type === 'ankan' ? '암깡 ' + kname(c.k) : c.type === 'kakan' ? '가깡 ' + kname(c.k) : '';
+const CALLNAME = c => !c ? '넘기기' : c.type === 'pon' ? '퐁' : c.type === 'minkan' ? '깡' : c.type === 'chi' ? '치' : c.type === 'ankan' ? '안깡 ' + kname(c.k) : c.type === 'kakan' ? '가깡 ' + kname(c.k) : '';
 function sameChoice(a, b){
   if(!a || !b) return !a && !b;
   if(a.type !== b.type) return false;
@@ -3049,7 +3431,7 @@ function gameHTML(){
   const dora = g.doraIndIds.map(id => tileId(id, {size:'dr'})).join('');
   const pend = UI.pendingDraw ? UI.pendingDraw.id : null;
   const drawnId = (pend == null && g.drawn && g.drawn.seat === 0 && me.hand.includes(g.drawn.id)) ? g.drawn.id : null;
-  const autoTG = me.riichi && !pd && drawnId != null;   // 리치 중 자동 쯔모기리: 뽑은 패를 손에 보이지 않고 바로 강으로
+  const autoTG = false;   // 리치 중에도 쯔모해 온 패는 손패 쯔모 칸에 먼저 보인다
   const staged = UI.callStage ? UI.callStage.ids : [];
   const rest = me.hand.filter(id => id !== drawnId && id !== pend && id !== UI.riichiDiscard && !staged.includes(id)).sort((a,b)=>a-b);
   const act = pd && pd.kind === 'action' && !cf;
@@ -3066,7 +3448,7 @@ function gameHTML(){
   const ht = id => {
     const k = kindOf(id);
     const aiHere = cf && cf.aiTile === k && !aiMarked; if(aiHere) aiMarked = true;
-    return tileId(id, {size:'lg', cls:[selId===id?'sel':'', act && !legal(id)?'off':'', aiHere?'hint':'', UI.alice && UI.alice.hit === k ? 'ahit' : '', UI.inv && UI.inv.has(id) ? 'inv' : ''].join(' '), attrs:`data-tile="${id}" role="button" tabindex="0" aria-label="${kname(k)}"`});
+    return tileId(id, {size:'lg', cls:[selId===id?'sel':'', act && !legal(id)?'off':'', aiHere?'hint':'', UI.alice && UI.alice.hit === k ? 'ahit' : '', UI.inv && UI.inv.has(id) ? 'inv' : '', UI.sense && UI.sense.key === turnKey() && UI.sense.id === id ? 'sn-' + UI.sense.res : '', UI.pruneMode && pruneReady() ? 'prune' : '', UI.swapIn && UI.swapIn.key === turnKey() && UI.swapIn.ids.includes(id) ? 'swapin' : ''].join(' '), attrs:`data-tile="${id}" role="button" tabindex="0" aria-label="${kname(k)}"` + (UI.pruneMode && pruneReady() ? ` style="--gc:${mjSkillColor('wood')}"` : '')});
   };
   // 배패 중: 친이 ちょんちょん으로 14장째를 받으면 그 패(=곧 첫 쯔모로 셈할 패산 맨 앞 패)를 바로 쯔모 칸에 둔다
   const chon14 = UI.dealing && UI.dealCount && UI.dealCount[0] >= 14 ? g.wall[g.wall.length - 1] : null;
@@ -3081,8 +3463,12 @@ function gameHTML(){
   } else if(act){
     if(pd.ctx.tsumo) actions += `<button class="btn warn" data-act="tsumo">쯔모</button>`;
     if(pd.ctx.kyuushu) actions += `<button class="btn" data-act="kyuushu">구종구패 유국</button>`;
+    if(pruneReady()){
+      if(settings.phone) actions += `<button class="btn skbtn ${UI.pruneMode ? 'primary' : ''}" style="--gc:${mjSkillColor('wood')}" data-act="pruneMode">🪓 바꿔치기 ${UI.prune.left}장${UI.pruneMode ? ' · 바꿀 패를 누르세요' : ''}</button>`;
+      else actions += `<span class="btn skbtn sklbl" style="--gc:${mjSkillColor('wood')}">🪓 바꿔치기 · 필요 없는 패를 패산으로 끌어 놓기 (${UI.prune.left}장 남음)</span>`;
+    }
     if(settings.phone){   // 폰 모드: 깡·북 빼기·리치를 버튼으로
-      (pd.ctx.kanOptions||[]).forEach((o,i) => { actions += `<button class="btn primary" data-act="selfkan" data-i="${i}">${o.type==='ankan'?'암깡':'가깡'} ${kname(o.k)}</button>`; });
+      (pd.ctx.kanOptions||[]).forEach((o,i) => { actions += `<button class="btn primary" data-act="selfkan" data-i="${i}">${o.type==='ankan'?'안깡':'가깡'} ${kname(o.k)}</button>`; });
       if(pd.ctx.nuki) actions += `<button class="btn primary" data-act="nuki">북 빼기</button>`;
       if(UI.sel != null && pd.ctx.riichiOptions.includes(kindOf(UI.sel))) actions += `<button class="btn warn" data-act="riichiGo">리치</button><button class="btn" data-act="discard">다마로 버리기</button>`;
     }
@@ -3095,8 +3481,8 @@ function gameHTML(){
   } else if(pd && pd.kind === 'riichiNuki'){
     actions = (settings.phone ? `<button class="btn primary" data-act="nuki">북 빼기</button>` : '') + `<button class="btn" data-act="no">쯔모기리</button>`; prompt = '北을 오른쪽 탁자 구석으로 끌어 놓으면 북 빼기 · 그대로 버리려면 쯔모기리';
   } else if(pd && pd.kind === 'riichiKan'){
-    pd.opts.forEach((o,i) => { actions += `<button class="btn primary" data-act="rkan" data-i="${i}">암깡 ${kname(o.k)}</button>`; });
-    actions += passBtn(); prompt = '리치 중에도 대기가 그대로라 암깡할 수 있어요';
+    pd.opts.forEach((o,i) => { actions += `<button class="btn primary" data-act="rkan" data-i="${i}">안깡 ${kname(o.k)}</button>`; });
+    actions += passBtn(); prompt = '리치 중에도 대기가 그대로라 안깡할 수 있어요';
   } else if(pd && pd.kind === 'ron'){
     actions = `<button class="btn warn" data-act="yes">${pd.chankan?'창깡 론':'론'}</button>${passBtn()}`; prompt = pd.chankan ? `${kname(kindOf(pd.tile))} 가깡을 창깡할 수 있어요` : `${kname(kindOf(pd.tile))}로 론할 수 있어요`;
   } else if(pd && pd.kind === 'call'){
@@ -3118,18 +3504,20 @@ function gameHTML(){
   const pw = UI.pendingDraw && !UI.pendingDraw.flying ? UI.pendingDraw : null;
   const walls = (UI.seating || (UI.dealing && !UI.wallSplit)) ? fullWalls(g.N) : g.dice ? wallLayout({ N:g.N, dice:g.dice, dealer:g.dealer,
     left: UI.dealing ? g.liveTotal - (UI.dealCount ? UI.dealCount.reduce((a, b) => a + b, 0) : 0) : g.wall.length + (pw ? 1 : 0), deal: UI.dealing && UI.dealCount ? { base: UI.chon ? UI.chon.base : null, taken: UI.chon ? UI.chon.taken : [], next: UI.dealWait ? UI.dealWait.offs : null } : null,
-    rinshan: g.rinshanIdx - (pw && pw.rinshan ? 1 : 0), dora:g.doraInd, doraIds:g.doraIndIds, alice: UI.alice ? { flips: UI.alice.flips.slice(0, UI.alice.n), blink: UI.alice.blink, age: Date.now() - UI.alice.at } : null, next: pw ? (pw.rinshan ? 'rinshan' : 'live') : (callFromKami() ? 'live' : null) }) : null;
+    rinshan: g.rinshanIdx - (pw && pw.rinshan ? 1 : 0), dora:g.doraInd, doraIds:g.doraIndIds, alice: UI.alice ? { flips: UI.alice.flips.slice(0, UI.alice.n), blink: UI.alice.blink, age: Date.now() - UI.alice.at } : null, next: pw ? (pw.rinshan ? 'rinshan' : 'live') : (callFromKami() ? 'live' : null),
+    ura: (uraState(), UI.dealing ? null : g.uraInd.map((k, i) => UI.uraSeen.has(i) ? k : null)), uraAt: UI.uraAt,
+    peek: (() => { const t = peekTarget(g, pw); return t ? Object.assign({ gc: mjSkillColor('fish') }, t) : null; })() }) : null;
   const fx = UI.wallFx;
   if(walls && fx){   // 주사위 세기·패산 가르기 표시
     if(fx.seat != null && walls[fx.seat]) walls[fx.seat].forEach(sl => { sl.hl = true; sl.fin = !!fx.fin; });
     if(fx.cnt && walls[fx.cseat]){ const w = walls[fx.cseat]; for(let k = 0; k < fx.cnt && k < w.length; k++){ const sl = w[w.length - 1 - k]; sl.cnt = true; sl.out = !!fx.split; } }
   }
   return `<div class="game">
-  <div class="topbar"><span></span><span class="row" style="gap:6px;align-items:center"><span class="muted">${UI.drill ? '연습모드' : modeName(UI.mode) + (UI.usedHint ? ' · 힌트 사용 판' : '')}</span><button class="btn small spk ${settings.sound!==false?'on':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button><button class="btn small hbtn" data-act="help" aria-label="조작 설명" title="조작 설명">?</button><button class="btn small xbtn" data-act="quit" aria-label="나가기" title="나가기">✕</button></span></div>
+  <div class="topbar"><span></span><span class="row" style="gap:6px;align-items:center"><span class="muted">${UI.drill ? '연습모드' : modeName(UI.mode) + (UI.usedHint ? ' · 힌트 사용 판' : '') + (UI.usedSkill ? ' · 스킬 사용 판' : '')}</span>${UI.drill ? '' : `<span class="skbs">${skillBadges()}</span>`}<button class="btn small spk ${settings.sound!==false?'on':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button><button class="btn small hbtn" data-act="help" aria-label="조작 설명" title="조작 설명">?</button><button class="btn small xbtn" data-act="quit" aria-label="나가기" title="나가기">✕</button></span></div>
   ${drillBarHTML()}
   <div class="table ${walls?'withwall':''} ${Date.now() < (UI.diffUntil || 0) ? 'showdiff' : ''}" aria-label="마작 탁자">
     ${consoleHTML(!!UI.diceShow, UI.lastDice || g.diceVals, !!UI.rollWait, UI.autoDeal)}
-    ${walls ? wallsScreenHTML(walls, fx) : ''}
+    ${walls ? wallsScreenHTML(walls, fx, mjSkillColor('mine')) : ''}
     ${layerOrder(g.N).map(s => layerHTML(g, s, walls)).join('')}
     <div class="center">
       ${UI.diceShow || UI.windPick || UI.rollWait ? '' : roundHTML(KR2CH[rd[0]], rd.replace(/[^0-9]/g,''))}
@@ -3154,10 +3542,18 @@ const passBtn = () => settings.phone ? '<button class="btn" data-act="no">넘기
 function phoneTap(id){
   const pd = UI.pending;
   if(!pd || pd.kind !== 'action' || UI.confirm) return;
+  if(UI.pruneMode && pruneReady()){ doPrune(id); return; }   // 바꿔치기: 고른 패를 패산의 패와 바꾼다
   const me = UI.game.players[0], k = kindOf(id), fb = pd.ctx.forbidden;
   if(fb && fb.includes(k) && me.hand.some(x => !fb.includes(kindOf(x)))) return;
   if(pd.ctx.riichiOptions.includes(k) && UI.sel !== id){ UI.sel = id; render(); return; }
   choose({type:'discard', id, riichi:false});
+}
+// 리치 선언패를 가로로 눕힌 순간: 그 패로 누가 론하면 점봉을 낼 틈 없이 바로 방총(리치는 성립하지 않아 공탁도 없다)
+function setRiichiDiscard(id){
+  const g = UI.game;
+  if(g && g.seats.some(o => o !== 0 && g.checkRon(o, id, false))){ UI.riichiDiscard = null; choose({type:'discard', id, riichi:true}); return; }
+  UI.riichiDiscard = id; UI.hoverDiscard = null;
+  render();
 }
 function onTile(id){
   const pd = UI.pending;
@@ -3167,10 +3563,10 @@ function onTile(id){
   const fb = pd.ctx.forbidden;
   if(!UI.riichiMode && fb && fb.includes(k) && me.hand.some(x => !fb.includes(kindOf(x)))) return;
   if(UI.riichiDiscard != null){                       // 리치 대기 중: 다른 텐파이 타패로 바꾸기만
-    if(pd.ctx.riichiOptions.includes(k)){ UI.riichiDiscard = id; render(); }
+    if(pd.ctx.riichiOptions.includes(k)) setRiichiDiscard(id);
     return;
   }
-  if(pd.ctx.riichiOptions.includes(k)){ UI.riichiDiscard = id; UI.hoverDiscard = null; render(); return; }   // 텐파이 타패: 리치/다마를 정할 때까지 옆으로 눕혀 둔다
+  if(pd.ctx.riichiOptions.includes(k)){ setRiichiDiscard(id); return; }   // 텐파이 타패: 리치/다마를 정할 때까지 옆으로 눕혀 둔다
   if(settings.oneTap || UI.sel === id) return choose({type:'discard', id, riichi:false});
   UI.sel = id; render();
 }
@@ -3270,7 +3666,7 @@ function kyokuEnd(res, g){
 // ---------- 게임 종료 ----------
 function gameEnd(fin, g){
   store.del(KEY.save);
-  const rec = { id: 'g' + UI.startedAt, date: UI.startedAt, mode: UI.mode, rank: fin.ranks[0], score: fin.scores[0], decisions: fin.decisions, matches: fin.matches, rate: fin.rate, hint: UI.usedHint || UI.practice, stats: fin.stats,
+  const rec = { id: 'g' + UI.startedAt, date: UI.startedAt, mode: UI.mode, rank: fin.ranks[0], score: fin.scores[0], decisions: fin.decisions, matches: fin.matches, rate: fin.rate, hint: UI.usedHint || UI.practice, skill: !!UI.usedSkill, stats: fin.stats,
     order: fin.order.map(s => [s, fin.scores[s]]) };
   let r = records().filter(x => x.id !== rec.id);
   r.push(rec);
@@ -3287,7 +3683,7 @@ function helpHTML(){
       <li><b>쯔모</b>: 패산에서 빛나는 패를 손패 줄로 <kbd>끌어오기</kbd> 또는 <kbd>우클릭</kbd>(바로 쯔모)</li>
       <li><b>타패</b>: 손패를 강으로 <kbd>끌어 놓기</kbd> 또는 클릭 · 쯔모한 직후 <kbd>우클릭</kbd>이면 쯔모기리</li>
       <li><b>넘기기</b>: 치·퐁·깡·론·쯔모 선택에서 <kbd>우클릭</kbd>(상가 패는 우클릭이 곧 쯔모)</li>
-      <li><b>울기·깡</b>: 울 패를 탁자나 오른쪽 후로 자리로 끌어 놓기 · 가깡은 퐁 위로, 암깡은 후로 자리로</li>
+      <li><b>울기·깡</b>: 울 패를 탁자나 오른쪽 후로 자리로 끌어 놓기 · 가깡은 퐁 위로, 안깡은 후로 자리로</li>
       <li><b>북 빼기</b>(3인): 北을 오른쪽 아래 구석으로 끌어 놓기</li>
     </ul>
     <h3>리치</h3>
@@ -3300,6 +3696,8 @@ function helpHTML(){
       <li>패산에서 빛나는 패(4장씩, 마지막 1장·친은 2장)를 손패로 <kbd>끌어오기</kbd> 또는 <kbd>우클릭</kbd>(바로 가져오기)</li>
       <li>자리 정하기는 바람패를 클릭, 주사위는 가운데로 끌어 놓기</li>
     </ul>
+    <h3>RPG 스킬 (실버 장비부터 20% · 옵시디언 90%)</h3>
+    <ul>${SK_KEYS.map(k => `<li><b>${MJSK[k].icon} ${MJSK[k].n}</b>(${SKILLS[k].name}): ${esc(MJSK[k].d)}</li>`).join('')}</ul>
     <h3>패놀음 · 상하 정리</h3>
     <ul>
       <li>손패를 <kbd>좌클릭으로 잡은 채</kbd> <kbd>휠 위/아래</kbd> → 패가 위/아래로 한 바퀴 굴러요(도는 중 뒷면이 보여요)</li>
@@ -3388,7 +3786,7 @@ function boardHTML(d){
   const seen = new Set([...(d.me.uk||[]), ...(d.ai.uk||[])].map(x => x[0]));
   const mark = k => seen.has(k) ? 'seen' : '';
   const layer = s => {
-    const rv = b.rivers[s].map(v => { const k = v & 63; return tile(k, {size:'rv', cls:[(v&64)?'rii':'', (v&128)?'gone':'', mark(k)].join(' ')}); }).join('');
+    const rv = b.rivers[s].map(v => { const k = v & 63; return tile(k, {size:'rv', cls:[(v&64)?'rii':'', (v&128)?'gone':'', mark(k)].join(' ')}); });
     let edge = '';
     if(s !== 0){
       const n = b.handN ? b.handN[s] : 13 - 3*b.melds[s].length;
@@ -3405,7 +3803,7 @@ function boardHTML(d){
       <div class="strip ${s===0?'on':''}"><span class="w ${dealer?'dealer':''}">${HONOR_CH[b.winds[s]-27]}</span>${b.scores?scoreHTML(b.scores[s]):`<span>${SEATNAME[s]}</span>`}</div>
       ${s===0?'<div class="turnbar"></div>':''}
       ${b.riichi[s]?`<div class="stick">${stickSVG('b')}</div>`:''}
-      <div class="river">${rv}</div>
+      <div class="river">${riverRows(rv)}</div>
       ${edge}
     </div>`;
   };
@@ -3491,7 +3889,7 @@ function importCode(txt){
     const st = data.rpg;
     st.chips = Math.max(0, +st.chips || 0); st.sel = st.sel || 'fish'; st.carry = +st.carry || 0; st.active = SK_KEYS.includes(st.active) ? st.active : null;
     st.last = Date.now();   // 내보낸 뒤 지난 시간이 한꺼번에 쌓이지 않게
-    for(const k of SK_KEYS) st.sk[k] = Object.assign({ exp:0, gear:1, stage:1, gMax:1, sMax:1 }, st.sk[k] || {});
+    rpgNorm(st);
     RPG.st = st; rpgSave(); chipFix(); UI.importedRpg = true;
   }
   return added;
@@ -3503,7 +3901,7 @@ function importCode(txt){
 const RPG_KEY = 'rm.rpg.v1';
 const TIERS = [
   {n:'브론즈', c:'#9a5a2c'}, {n:'실버', c:'#cdd5dd'}, {n:'골드', c:'#f5cc35'}, {n:'아이언', c:'#7b8087'}, {n:'스틸', c:'#c9ced4'},
-  {n:'미스릴', c:'#3a78ff'}, {n:'아다만트', c:'#2db84c'}, {n:'룬', c:'#3fd2bd'}, {n:'드래곤', c:'#ff1a3c'}
+  {n:'미스릴', c:'#3a78ff', gl:'#6fa0ff'}, {n:'아다만트', c:'#2db84c', gl:'#5cff7c'}, {n:'룬', c:'#3fd2bd', gl:'#6fffe8'}, {n:'옵시디언', c:'#120a1c', gl:'#b04dff'}
 ];
 // 단계: 이름, 하늘 위/아래, 땅, 주색(물·잎·바위·몬스터), 보조색(광석·몬스터 종류), 날씨
 const SKILLS = {
@@ -3549,24 +3947,48 @@ const SKILLS = {
     ['지옥 바다', '#0d0000','#4a0606','#1e1212','#b0101a','#ff4a4a', 'ember'] ] },
 };
 const SK_KEYS = ['combat', 'wood', 'mine', 'fish'];
-const GEAR_PRICE  = [0, 5, 12, 25, 50, 90, 150, 240, 380];    // 등급 g를 사는 값 (동은 처음부터)
-const STAGE_PRICE = [0, 3, 8, 18, 35, 65, 110, 180, 280];     // 단계 s를 여는 값
+// 등급 g(장비 + 같은 등급 던전)를 사는 값. 하루에 마작 2~3판 → 축의 하루 약 10개로 보고,
+//  앞 등급이 상한까지 가는 실제 시간(6등급 11h · 7등급 28h · 8등급 72h)에 하루치 축의가 맞도록 정했다
+const GRADE_PRICE = [0, 1, 2, 2, 3, 5, 8, 15, 30];
+// 레벨 상한: 1등급 19 · 2등급 29 … 8등급 89, 옵시디언은 99 이후로도 끝없이. 상한에 닿으면 경험치도 더 쌓이지 않는다(저축 없음)
+const LV_CAP = g => g >= 9 ? Infinity : 10 * g + 9;
+const EXP_CAP = g => g >= 9 ? Infinity : CUM[LV_CAP(g) + 1] - 1;   // 상한 레벨의 막대가 꽉 찬 지점
+const capped = sk => sk.exp >= EXP_CAP(sk.gear);   // 등급 g(장비 + 같은 등급 던전)를 사는 값. 1등급은 처음부터
 const OFFLINE_CAP = 24 * 3600 * 1000;                         // 꺼 둔 동안은 최대 24시간까지 쌓인다
-// 레벨: 다음 레벨까지 37×1.19^(L-1) → 장비·단계를 사 가며 키우면 행동 하나에 약 7.5년, 넷 합쳐 약 30년
-const NEED = [0]; for(let L = 1; L < 99; L++) NEED[L] = Math.round(37 * Math.pow(1.19, L - 1));
-const CUM = [0, 0]; for(let L = 2; L <= 99; L++) CUM[L] = CUM[L-1] + NEED[L-1];
-const MAXEXP = CUM[99];
+// 레벨 L까지 누적 경험치 = ⌊¼ × Σ(l=1..L-1) ⌊l + 300·2^(l/7)⌋⌋ (Lv2 83 · Lv50 101,333 · Lv92 6,517,253 · Lv99 13,034,431)
+const CUM = [0, 0]; { let pts = 0; for(let L = 2; L <= 99; L++){ pts += Math.floor((L - 1) + 300 * Math.pow(2, (L - 1) / 7)); CUM[L] = Math.floor(pts / 4); } }
+const NEED = [0]; for(let L = 1; L < 99; L++) NEED[L] = CUM[L+1] - CUM[L];
+// 예전 버전(37×1.19^(L-1)) 경험치 → 레벨·진행률을 유지한 채 새 표로 옮길 때 쓴다
+const OLD_CUM = [0, 0]; for(let L = 2; L <= 99; L++) OLD_CUM[L] = OLD_CUM[L-1] + Math.round(37 * Math.pow(1.19, L - 2));
+const MAXEXP = CUM[99];   // Lv 99가 되는 경험치. 그 뒤로는 레벨은 그대로지만 경험치는 끝없이 쌓인다
 const lvOf = e => { let L = 1; while(L < 99 && e >= CUM[L+1]) L++; return L; };
-// 틱은 최대 9초: 단계 1은 3초 → 단계 9는 9초, 장비 한 등급마다 12%씩 짧아진다(신화는 ×0.36)
-const tickMs = (s, g) => 3000 * Math.pow(3, (s - 1) / 8) * Math.pow(0.88, g - 1);
-const EXP_PER = [1, 2, 3, 5, 9, 15, 26, 45, 77];                                  // 단계별 한 틱 exp (전 행동 99까지 약 30년)
-const expPer = s => EXP_PER[s - 1];
+// 틱은 3.6초(시간당 1000틱). 던전(등급)별 시간당 경험치: 13K·25K·30K·34K·37K·41K·44K·47K·50K
+const tickMs = () => 3600;
+const XP_PER_HOUR = [13000, 25000, 30000, 34000, 37000, 41000, 44000, 47000, 50000];
+const expPer = s => XP_PER_HOUR[s - 1] / 1000;
 const fmtDur = ms => { const s = ms / 1000; return s < 60 ? `${s.toFixed(s < 10 ? 1 : 0)}초` : s < 3600 ? `${Math.floor(s/60)}분 ${Math.round(s%60)}초` : `${Math.floor(s/3600)}시간 ${Math.round(s%3600/60)}분`; };
-const fmtNum = n => n >= 1e6 ? (n/1e6).toFixed(n >= 1e8 ? 0 : 1) + 'M' : n >= 1e4 ? (n/1e3).toFixed(n >= 1e6 ? 0 : 1) + 'K' : Math.floor(n).toLocaleString();
+const fmtNum = n => n >= 1e9 ? (n/1e9).toFixed(n >= 1e11 ? 0 : 2) + 'B' : n >= 1e6 ? (n/1e6).toFixed(n >= 1e8 ? 0 : 1) + 'M' : n >= 1e4 ? (n/1e3).toFixed(n >= 1e6 ? 0 : 1) + 'K' : Math.floor(n).toLocaleString();
 function rpgLoad(){
   let st = null; try{ st = JSON.parse(localStorage.getItem(RPG_KEY) || 'null'); }catch(e){}
-  if(!st || st.v !== 1) st = { v:1, chips:0, active:null, last:Date.now(), carry:0, sel:'fish', sk:{} };
-  for(const k of SK_KEYS) st.sk[k] = Object.assign({ exp:0, gear:1, stage:1, gMax:1, sMax:1 }, st.sk[k] || {});
+  if(!st || st.v !== 1) st = { v:1, xv:2, chips:0, active:null, last:Date.now(), carry:0, sel:'fish', sk:{} };
+  return rpgNorm(st);
+}
+// 행동마다 장비와 던전은 한 등급(grade)으로 묶인다. 예전 저장(장비·단계 따로, 옛 경험치 표)은 여기서 옮긴다
+function rpgNorm(st){
+  const old = st.xv !== 2;
+  for(const k of SK_KEYS){
+    const sk = Object.assign({ exp:0, gear:1, stage:1, gMax:1, sMax:1 }, st.sk[k] || {});
+    if(old){
+      let L = 1; while(L < 99 && sk.exp >= OLD_CUM[L+1]) L++;
+      const f = L >= 99 ? 0 : (sk.exp - OLD_CUM[L]) / (OLD_CUM[L+1] - OLD_CUM[L]);
+      sk.exp = L >= 99 ? CUM[99] : Math.floor(CUM[L] + f * NEED[L]);
+    }
+    const g = Math.max(1, Math.min(9, Math.max(+sk.gMax || 1, +sk.sMax || 1)));   // 예전에 사 둔 장비·단계 중 높은 등급으로
+    sk.gear = sk.stage = sk.gMax = sk.sMax = g;
+    sk.exp = Math.max(0, +sk.exp || 0);
+    st.sk[k] = sk;
+  }
+  st.xv = 2;
   return st;
 }
 const RPG = { st: rpgLoad(), away: null, events: [] };
@@ -3591,14 +4013,17 @@ function rpgAdvance(offline){
   if(n <= 0) return null;
   st.carry -= n * T;
   const before = lvOf(sk.exp);
-  const gain = Math.min(n * expPer(sk.stage), MAXEXP - sk.exp);
+  const gain = Math.max(0, Math.min(n * expPer(sk.stage), EXP_CAP(sk.gear) - sk.exp));
   sk.exp += gain;
   const after = lvOf(sk.exp);
-  return { k, n, gain, before, after };
+  const cap = capped(sk);
+  if(cap){ st.active = null; st.carry = 0; }   // 상한에 닿으면 멈춘다. 다음 장비를 사야 이어서 오른다
+  return { k, n, gain, before, after, cap };
 }
 function rpgTick(){
   const r = rpgAdvance(false);
   if(r && r.gain > 0){ rpgSave(); if(UI.screen === 'rpg') rpgFx(r); }
+  if(r && r.cap){ rpgSave(); if(UI.screen === 'rpg'){ rpgToast(`${SKILLS[r.k].name} Lv ${LV_CAP(RPG.st.sk[r.k].gear)} 상한 · 다음 장비가 필요해요`); setTimeout(render, r.after > r.before ? 1900 : 0); } }
   if(UI.screen === 'rpg') rpgLive();
 }
 function rpgFx(r){
@@ -3623,7 +4048,7 @@ function rpgLive(){
     const into = sk.exp - CUM[L], need = L >= 99 ? 1 : NEED[L];
     el.querySelector('.lv').textContent = 'Lv ' + L;
     el.querySelector('.xpbar b').style.width = (L >= 99 ? 100 : Math.min(100, into / need * 100)) + '%';
-    el.querySelector('.xp').textContent = L >= 99 ? 'MAX' : `${fmtNum(into)} / ${fmtNum(need)}`;
+    el.querySelector('.xp').textContent = L >= 99 ? `MAX · 총 ${fmtNum(sk.exp)}` : (capped(sk) ? `${fmtNum(need)} / ${fmtNum(need)} · 상한` : `${fmtNum(into)} / ${fmtNum(need)}`);
   }
   const tb = document.querySelector('.rpg .tickbar b');
   if(tb){ const a = st.active === st.sel ? st.active : null; tb.style.width = a ? Math.min(100, (st.carry + (Date.now() - st.last)) / tickMs(st.sk[a].stage, st.sk[a].gear) * 100) + '%' : '0%'; }
@@ -3666,15 +4091,25 @@ function rpgPerson(k, tierC){
   const X = k === 'fish' ? 70 : k === 'combat' ? 150 : k === 'mine' ? 112 : 112, Y = 170, sh = [X + 4, Y - 58];
   const tool = {
     // 손(아래 끝)에서 바깥으로 뻗고, 날은 휘두르는 쪽(-x)을 향한다
-    wood:   `<line x1="0" y1="16" x2="0" y2="60" stroke="#7a4a22" stroke-width="4" stroke-linecap="round"/><path d="M1 44 L-15 38 Q-21 49 -15 61 L1 56 Z" fill="${tierC}" stroke="rgba(0,0,0,.45)" stroke-width="1"/>`,
-    mine:   `<line x1="0" y1="16" x2="0" y2="58" stroke="#7a4a22" stroke-width="4" stroke-linecap="round"/><path d="M-19 48 Q0 64 19 48 L17 45 Q0 57 -17 45 Z" fill="${tierC}" stroke="rgba(0,0,0,.45)" stroke-width="1"/>`,
-    combat: `<rect x="-2" y="18" width="4" height="11" rx="1.5" fill="#5a3a1a"/><rect x="-8" y="28" width="16" height="4" rx="2" fill="#6b5a3a"/><path d="M-3 32 L-3 74 L0 81 L3 74 L3 32 Z" fill="${tierC}" stroke="rgba(0,0,0,.45)" stroke-width="1"/>`,
-    fish:   `<g class="rodA"><line x1="-12" y1="22" x2="104" y2="63" stroke="${tierC}" stroke-width="3" stroke-linecap="round"/><line x1="-12" y1="22" x2="10" y2="30" stroke="#5a3a1a" stroke-width="5" stroke-linecap="round"/></g>`
+    wood:   `<line x1="0" y1="16" x2="0" y2="60" stroke="#7a4a22" stroke-width="4" stroke-linecap="round"/><path d="M1 44 L-15 38 Q-21 49 -15 61 L1 56 Z" fill="${tierC}" class="tc" stroke="rgba(0,0,0,.45)" stroke-width="1"/>`,
+    mine:   `<line x1="0" y1="16" x2="0" y2="58" stroke="#7a4a22" stroke-width="4" stroke-linecap="round"/><path d="M-19 48 Q0 64 19 48 L17 45 Q0 57 -17 45 Z" fill="${tierC}" class="tc" stroke="rgba(0,0,0,.45)" stroke-width="1"/>`,
+    combat: `<rect x="-2" y="18" width="4" height="11" rx="1.5" fill="#5a3a1a"/><rect x="-8" y="28" width="16" height="4" rx="2" fill="#6b5a3a"/><path d="M-3 32 L-3 74 L0 81 L3 74 L3 32 Z" fill="${tierC}" class="tc" stroke="rgba(0,0,0,.45)" stroke-width="1"/>`,
+    fish:   `<g class="rodA"><line x1="-12" y1="22" x2="104" y2="63" stroke="${tierC}" class="tc" stroke-width="3" stroke-linecap="round"/><line x1="-12" y1="22" x2="10" y2="30" stroke="#5a3a1a" stroke-width="5" stroke-linecap="round"/></g>`
   }[k];
   const seated = k === 'fish';
-  return `<g class="hero ${k}">
+  const gl0 = (TIERS.find(t => t.c === tierC) || {}).gl;
+  // 빛나는 등급이면 금속 부분(.tc)의 흐린 복사본을 그 묶음 맨 앞(손잡이보다 아래)에 깐다
+  const glowify = svg => !gl0 ? svg : svg.replace(/^(<g[^>]*>)?/, m => m + (svg.match(/<(?:path|line)[^>]*class="tc"[^>]*\/>/g) || []).map(e => e.replace('class="tc"', 'class="tgl"')).join(''));
+  const chair = seated ? `<g class="chair">
+      <rect x="${X-15}" y="${Y-48}" width="5" height="38" rx="2" fill="#7a4a22"/>
+      <rect x="${X-11}" y="${Y-11}" width="3" height="11" fill="#6b3f1c"/><rect x="${X+13}" y="${Y-11}" width="3" height="11" fill="#6b3f1c"/>
+      <rect x="${X-14}" y="${Y-14}" width="32" height="5" rx="2" fill="#9a6232"/>
+    </g>` : '';
+  const gl = (TIERS.find(t => t.c === tierC) || {}).gl;   // 미스릴·아다만트·룬·옵시디언: 제 색으로 빛난다
+  return `<g class="hero ${k} ${gl ? 'glow' : ''}" ${gl ? `style="--gl:${gl}"` : ''}>
+    ${chair}
     <g class="body">
-      ${seated ? `<rect x="${X-14}" y="${Y-22}" width="34" height="9" rx="4" fill="#2f3a52"/><rect x="${X+14}" y="${Y-22}" width="9" height="22" rx="4" fill="#2f3a52"/><rect x="${X+12}" y="${Y-4}" width="14" height="5" rx="2" fill="#3a2a1a"/>`
+      ${seated ? `<rect x="${X-6}" y="${Y-22}" width="26" height="9" rx="4" fill="#2f3a52"/><rect x="${X+14}" y="${Y-22}" width="9" height="22" rx="4" fill="#2f3a52"/><rect x="${X+12}" y="${Y-4}" width="14" height="5" rx="2" fill="#3a2a1a"/>`
                : `<rect x="${X-9}" y="${Y-30}" width="8" height="30" rx="3" fill="#2f3a52"/><rect x="${X+2}" y="${Y-30}" width="8" height="30" rx="3" fill="#2f3a52"/><rect x="${X-10}" y="${Y-3}" width="10" height="4" rx="2" fill="#3a2a1a"/><rect x="${X+1}" y="${Y-3}" width="11" height="4" rx="2" fill="#3a2a1a"/>`}
       <rect x="${X-11}" y="${Y-(seated?56:64)}" width="23" height="${seated?36:36}" rx="8" fill="#3d73c4"/>
       <rect x="${X-3}" y="${Y-(seated?64:72)}" width="8" height="10" rx="2" fill="#e9b88f"/>
@@ -3684,11 +4119,11 @@ function rpgPerson(k, tierC){
       <circle cx="${X+6}" cy="${Y-(seated?72:80)}" r="1.4" fill="#2a1a10"/>
       </g>
     </g>
-    ${seated ? `<g class="rodS"><line x1="${X+30}" y1="${Y-34}" x2="${X-48}" y2="${Y-118}" stroke="${tierC}" stroke-width="3" stroke-linecap="round"/><line x1="${X+30}" y1="${Y-34}" x2="${X+14}" y2="${Y-52}" stroke="#5a3a1a" stroke-width="5" stroke-linecap="round"/></g>` : ''}
+    ${seated ? glowify(`<g class="rodS"><line x1="${X+30}" y1="${Y-34}" x2="${X-48}" y2="${Y-118}" stroke="${tierC}" class="tc" stroke-width="3" stroke-linecap="round"/><line x1="${X+30}" y1="${Y-34}" x2="${X+14}" y2="${Y-52}" stroke="#5a3a1a" stroke-width="5" stroke-linecap="round"/></g>`) : ''}
     <g class="arm" style="transform-origin:${sh[0]}px ${seated ? sh[1] + 8 : sh[1]}px">
       <g transform="translate(${sh[0]} ${seated ? sh[1] + 8 : sh[1]})">
         <rect x="-4" y="-2" width="8" height="26" rx="4" fill="#e9b88f"/>
-        <g transform="translate(0 2)">${tool}</g>
+        <g transform="translate(0 2)">${glowify(tool)}</g>
       </g>
     </g>
   </g>`;
@@ -3769,7 +4204,7 @@ function rpgScene(k){
 }
 // ---------- 화면 ----------
 function appTabs(on){
-  return `<div class="apptabs"><button class="btn ${on==='mj'?'on':''}" data-act="tab" data-t="mj">마작</button><button class="btn ${on==='rpg'?'on':''}" data-act="tab" data-t="rpg">RPG</button>${on === 'rpg' ? `<button class="btn small spk ${settings.sound!==false?'spkon':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button>` : ''}</div>`;
+  return `<div class="apptabs"><button class="btn ${on==='mj'?'on':''}" data-act="tab" data-t="mj">마작</button><button class="btn ${on==='rpg'?'on':''}" data-act="tab" data-t="rpg">RPG</button>${on === 'rpg' ? `<button class="btn small spk ${settings.bgm!==false && settings.sound!==false?'spkon':''}" data-act="toggleBgm" aria-label="BGM ${settings.bgm!==false?'끄기':'켜기'}" aria-pressed="${settings.bgm!==false}" title="던전 BGM">${settings.bgm!==false ? '♪' : '<s>♪</s>'}</button>` : ''}${on === 'rpg' ? `<button class="btn small spk ${settings.sound!==false?'spkon':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button>` : ''}</div>`;
 }
 function rpgHTML(){
   const st = RPG.st, sel = st.sel || 'fish', S = SKILLS[sel], sk = st.sk[sel];
@@ -3780,28 +4215,37 @@ function rpgHTML(){
     return `<button class="skc ${k===sel?'sel':''}" data-act="rpgSel" data-s="${k}">${st.active===k?'<span class="on">진행 중</span>':''}
       <span class="t">${SKILLS[k].name}<small class="lv">Lv ${L}</small></span>
       <span class="xpbar"><b style="width:${L>=99?100:Math.min(100, into/need*100)}%"></b></span>
-      <span class="m"><span class="xp">${L>=99?'MAX':`${fmtNum(into)} / ${fmtNum(need)}`}</span><br>${esc(SKILLS[k].stages[s.stage-1][0])} · ${TIERS[s.gear-1].n} ${SKILLS[k].tool}</span></button>`;
+      <span class="m"><span class="xp">${L>=99?`MAX · 총 ${fmtNum(s.exp)}`:(capped(s) ? `${fmtNum(need)} / ${fmtNum(need)} · 상한` : `${fmtNum(into)} / ${fmtNum(need)}`)}</span><br>${esc(SKILLS[k].stages[s.stage-1][0])} · ${TIERS[s.gear-1].n} ${SKILLS[k].tool}</span></button>`;
   }).join('');
-  const gearItems = TIERS.map((t, i) => {
-    const g = i + 1, own = g <= sk.gMax, eq = g === sk.gear, next = g === sk.gMax + 1;
-    const btn = eq ? '<span class="d">착용 중</span>' : own ? `<button class="btn small" data-act="rpgEqG" data-g="${g}">착용</button>` : next ? `<button class="btn small buy" data-act="rpgBuyG" data-g="${g}">축의 ${GEAR_PRICE[i]}개</button>` : `<span class="d">축의 ${GEAR_PRICE[i]}개 · 앞 등급 먼저</span>`;
-    return `<div class="it ${eq?'eq':''} ${!own && !next?'lock':''}"><span class="n"><i style="background:${t.c}"></i>${t.n} ${S.tool}</span><span class="d">틱 ×${Math.pow(0.88, i).toFixed(2)}</span>${btn}</div>`;
-  }).join('');
-  const stageItems = S.stages.map((s0, i) => {
-    const s = i + 1, own = s <= sk.sMax, eq = s === sk.stage, next = s === sk.sMax + 1;
-    const btn = eq ? '<span class="d">여기서 하는 중</span>' : own ? `<button class="btn small" data-act="rpgEqS" data-st="${s}">이동</button>` : next ? `<button class="btn small buy" data-act="rpgBuyS" data-st="${s}">축의 ${STAGE_PRICE[i]}개</button>` : `<span class="d">축의 ${STAGE_PRICE[i]}개 · 앞 단계 먼저</span>`;
-    return `<div class="it ${eq?'eq':''} ${!own && !next?'lock':''}"><span class="n"><i style="background:linear-gradient(${s0[1]},${s0[3]})"></i>${s}. ${esc(s0[0])}</span><span class="d">틱 ${fmtDur(tickMs(s, sk.gear))} · +${fmtNum(expPer(s))} exp</span>${btn}</div>`;
+  // 등급 하나 = 장비 + 같은 등급 던전. 사면 다음 던전으로 옮겨 새 장비를 든 채 멈춰 있고, 지난 등급으로는 돌아갈 수 없다
+  const gradeItems = TIERS.map((t, i) => {
+    const g = i + 1, s0 = S.stages[i], past = g < sk.gear, cur = g === sk.gear, next = g === sk.gear + 1;
+    const btn = cur ? '<span class="d">지금 등급</span>' : past ? '<span class="d">지나온 등급</span>' : next ? `<button class="btn small buy" data-act="rpgBuy" data-g="${g}">축의 ${GRADE_PRICE[i]}개</button>` : `<span class="d">축의 ${GRADE_PRICE[i]}개</span>`;
+    return `<div class="it ${cur?'eq':''} ${past || (!cur && !next) ? 'lock' : ''}"><span class="n"><i class="${t.gl ? 'glow' : ''}" style="background:${t.c};${t.gl ? '--gl:' + t.gl : ''}"></i>${g}. ${t.n} ${S.tool}</span><span class="d"><i style="display:inline-block;width:9px;height:9px;border-radius:2px;vertical-align:-1px;background:linear-gradient(${s0[1]},${s0[3]})"></i> ${esc(s0[0])} · 시간당 ${fmtNum(XP_PER_HOUR[i])} exp · ${g >= 9 ? 'Lv 99+' : 'Lv ' + LV_CAP(g) + '까지'}</span>${btn}</div>`;
   }).join('');
   const away = RPG.away; RPG.away = null;
   return `<div class="rpg">${appTabs('rpg')}
-    ${away ? `<div class="welcome">자리를 비운 동안 ${esc(SKILLS[away.k].name)} +${fmtNum(away.gain)} exp${away.after > away.before ? ` · Lv ${away.before} → ${away.after}` : ''}</div>` : ''}
+    ${away ? `<div class="welcome">자리를 비운 동안 ${esc(SKILLS[away.k].name)} +${fmtNum(away.gain)} exp${away.after > away.before ? ` · Lv ${away.before} → ${away.after}` : ''}${away.cap ? ' · 레벨 상한에 닿아 멈췄어요' : ''}</div>` : ''}
     <div class="scene ${st.active === sel ? '' : 'idle'}">${rpgScene(sel)}<div class="shead"><span>${esc(S.name)} · ${esc(stg[0])}</span><span>${tier.n} ${S.tool}</span></div><div class="tickbar"><b></b></div></div>
-    <div class="ctl"><span class="rate">${fmtDur(T)}마다 +${fmtNum(X)} exp</span>
-      ${st.active === sel ? `<button class="btn" data-act="rpgGo">그만하기</button>` : `<button class="btn primary" data-act="rpgGo">${esc(S.name)} 시작</button>`}</div>
+    <div class="ctl"><span class="rate">${capped(sk) ? `<b style="color:var(--led)">Lv ${LV_CAP(sk.gear)} 상한</b> · 다음 장비를 사면 이어서 올라요` : `${fmtDur(T)}마다 +${fmtNum(X)} exp · 시간당 ${fmtNum(X * 1000)} · ${sk.gear >= 9 ? '상한 없음' : 'Lv ' + LV_CAP(sk.gear) + '까지'}`}</span>
+      <span class="row" style="gap:8px"><button class="btn" data-act="rpgTable">경험치 테이블</button>${st.active === sel ? `<button class="btn" data-act="rpgGo">그만하기</button>` : `<button class="btn primary" data-act="rpgGo">${esc(S.name)} 시작</button>`}</span></div>
+    ${(() => { const M = MJSK[sel], on = sk.skillOn !== false, ok = sk.gear >= 2, gc = TIERS[sk.gear-1].gl || TIERS[sk.gear-1].c;
+      return `<div class="mjsk" style="--gc:${gc}"><span class="t">${M.icon} 마작 스킬 · <b>${M.n}</b> ${ok ? `· 발동률 ${Math.min(90, sk.gear * 10)}%` : ''}</span><span class="d">${esc(M.d)}${ok ? '' : ' · 실버 장비부터 쓸 수 있어요'}</span>${ok ? `<button class="btn small ${on ? 'primary' : ''}" data-act="rpgSkill" aria-pressed="${on}">${on ? 'ON' : 'OFF'}</button>` : ''}</div>`; })()}
     <div class="skills">${cards}</div>
-    <div class="shop"><h3>상점 · ${esc(S.name)} 장비</h3><div class="items">${gearItems}</div></div>
-    <div class="shop"><h3>상점 · ${esc(S.name)} 단계</h3><div class="items">${stageItems}</div></div>
+    <div class="shop"><h3>상점 · ${esc(S.name)} 장비</h3><div class="items">${gradeItems}</div></div>
   </div>`;
+}
+// 경험치 테이블: 레벨별 누적 경험치와 다음 레벨까지 필요한 양. 지금 고른 행동의 레벨을 강조한다
+function rpgTableHTML(){
+  const st = RPG.st, sel = st.sel || 'fish', sk = st.sk[sel], L = lvOf(sk.exp);
+  const left = L >= 99 ? 0 : CUM[L+1] - sk.exp;
+  const rows = [];
+  for(let l = 1; l <= 99; l++) rows.push(`<tr class="${l === L ? 'cur' : ''} ${l === LV_CAP(sk.gear) ? 'cap' : ''}"><td class="num">${l}</td><td class="num">${CUM[l].toLocaleString()}</td><td class="num">${l < 99 ? NEED[l].toLocaleString() : '–'}</td></tr>`);
+  return `<div class="sheet xptab" role="dialog" aria-modal="true"><h2>경험치 테이블</h2>
+    <p class="muted" style="margin:0">${esc(SKILLS[sel].name)} Lv ${L} · ${capped(sk) ? `<b style="color:var(--led)">${TIERS[sk.gear-1].n} 장비 상한(Lv ${LV_CAP(sk.gear)})</b> · 다음 장비를 사야 더 올라요` : L >= 99 ? `최고 레벨 · 총 ${sk.exp.toLocaleString()} exp` : `다음 레벨까지 <b style="color:var(--led)">${left.toLocaleString()}</b> exp (약 ${fmtDur(left / expPer(sk.stage) * tickMs())})`}</p>
+    ${sk.gear < 9 && !capped(sk) ? `<p class="muted" style="margin:0">${TIERS[sk.gear-1].n} 장비 상한 Lv ${LV_CAP(sk.gear)}까지 ${(EXP_CAP(sk.gear) + 1 - sk.exp).toLocaleString()} exp (약 ${fmtDur((EXP_CAP(sk.gear) + 1 - sk.exp) / expPer(sk.stage) * tickMs())})</p>` : ''}
+    <div class="xpwrap"><table class="xpt"><thead><tr><th>레벨</th><th>누적 경험치</th><th>다음 레벨까지</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>
+    <div class="row"><button class="btn primary" data-act="closeModal">닫기</button></div></div>`;
 }
 function rpgToast(msg){
   document.querySelectorAll('.rpgtoast').forEach(x => x.remove());
@@ -3812,12 +4256,17 @@ function rpgAct(a, b){
   const st = RPG.st, sel = st.sel || 'fish', sk = st.sk[sel];
   rpgAdvance(false);
   if(a === 'rpgSel'){ if(b.dataset.s !== st.sel && st.active){ st.active = null; st.carry = 0; } st.sel = b.dataset.s; }   // 다른 행동으로 바꾸면 하던 행동은 멈춘다
+  else if(a === 'rpgGo' && st.active !== sel && capped(sk)){ rpgToast(`Lv ${LV_CAP(sk.gear)} 상한 · ${TIERS[sk.gear].n} ${SKILLS[sel].tool}이 필요해요`); return; }
   else if(a === 'rpgGo'){ if(st.active === sel) st.active = null; else { st.active = sel; st.carry = 0; st.last = Date.now(); SFX.unlock(); if(SFX[sel]) SFX[sel](); } }
-  else if((a === 'rpgBuyG' && st.chips < GEAR_PRICE[+b.dataset.g - 1]) || (a === 'rpgBuyS' && st.chips < STAGE_PRICE[+b.dataset.st - 1])){ rpgToast('축의칩이 부족합니다'); return; }
-  else if(a === 'rpgBuyG'){ const g = +b.dataset.g, p = GEAR_PRICE[g-1]; if(g === sk.gMax + 1 && st.chips >= p){ st.chips -= p; sk.gMax = g; sk.gear = g; if(st.active === sel) st.carry = 0; } }
-  else if(a === 'rpgEqG'){ const g = +b.dataset.g; if(g <= sk.gMax){ sk.gear = g; if(st.active === sel) st.carry = 0; } }
-  else if(a === 'rpgBuyS'){ const s = +b.dataset.st, p = STAGE_PRICE[s-1]; if(s === sk.sMax + 1 && st.chips >= p){ st.chips -= p; sk.sMax = s; sk.stage = s; if(st.active === sel) st.carry = 0; } }
-  else if(a === 'rpgEqS'){ const s = +b.dataset.st; if(s <= sk.sMax){ sk.stage = s; if(st.active === sel) st.carry = 0; } }
+  else if(a === 'rpgSkill'){ sk.skillOn = sk.skillOn === false; }
+  else if(a === 'rpgBuy'){
+    const g = +b.dataset.g, p = GRADE_PRICE[g-1];
+    if(g !== sk.gear + 1) return;
+    if(st.chips < p){ rpgToast('축의칩이 부족합니다'); return; }
+    st.chips -= p; sk.gear = sk.stage = sk.gMax = sk.sMax = g; SFX.cash();
+    if(st.active === sel){ st.active = null; st.carry = 0; }   // 새 던전에 들어가 새 장비를 든 채 멈춰 있는다. 시작을 눌러야 캔다
+    rpgToast(`${TIERS[g-1].n} ${SKILLS[sel].tool} · ${SKILLS[sel].stages[g-1][0]} 입장`);
+  }
   rpgSave(); chipFix(); render();
 }
 // 시작: 꺼 둔 동안 쌓인 몫을 받고, 이후 0.25초마다 흐름 처리
@@ -3856,7 +4305,8 @@ document.addEventListener('click', e => {
     case 'help': $modal.innerHTML = helpHTML(); $modal.hidden = false; break;
     case 'closeModal': $modal.hidden = true; break;
     case 'tab': show(b.dataset.t === 'rpg' ? 'rpg' : 'home'); break;
-    case 'rpgSel': case 'rpgGo': case 'rpgBuyG': case 'rpgEqG': case 'rpgBuyS': case 'rpgEqS': rpgAct(a, b); break;
+    case 'rpgSel': case 'rpgGo': case 'rpgBuy': case 'rpgSkill': rpgAct(a, b); break;
+    case 'rpgTable': { $modal.innerHTML = rpgTableHTML(); $modal.hidden = false; const c = $modal.querySelector('tr.cur'); if(c) c.scrollIntoView({block:'center'}); break; }
     case 'secret': {   // 제목을 2.5초 안에 5번 누르면 숨김 메뉴
       const now = Date.now(); UI.secretTaps = (UI.secretTaps || []).filter(x => now - x < 2500); UI.secretTaps.push(now);
       if(UI.secretTaps.length >= 5){ UI.secretTaps = []; $modal.innerHTML = secretMenuHTML(); $modal.hidden = false; }
@@ -3871,6 +4321,7 @@ document.addEventListener('click', e => {
     case 'drill': { const k = b.dataset.d; $modal.hidden = true; startGame(DRILLS[k].mode, null, true, k); break; }
     case 'tsumo': if(pd) pd.resolve({type:'tsumo'}); break;
     case 'pickWind': if(UI.windPick && UI.windPick.picked == null){ UI.windPick.picked = +b.dataset.i; UI.windPick.done(); } break;
+    case 'toggleBgm': settings.bgm = settings.bgm === false; store.set(KEY.set, settings); SFX.unlock(); render(); break;
     case 'toggleSound': settings.sound = settings.sound === false; store.set(KEY.set, settings); if(settings.sound) SFX.unlock(); render(); break;
     case 'takeDraw': if(settings.phone) flyIn(); break;   // 쯔모: 데스크톱은 끌어 오고, 폰 모드는 눌러서
     case 'dama': break;      // 가로로 놓은 패는 무르지 않는다: 반드시 리치
@@ -3895,6 +4346,8 @@ document.addEventListener('click', e => {
     case 'selfkan': if(pd && pd.kind === 'action') choose(pd.ctx.kanOptions[+b.dataset.i]); break;
     case 'rkan': if(pd && pd.kind === 'riichiKan') choose(pd.opts[+b.dataset.i]); break;
     case 'kyuushu': if(pd && pd.kind === 'action') choose({type:'kyuushu'}); break;
+    case 'uraTry': uraTry(+b.dataset.i || 0); break;
+    case 'pruneMode': if(pruneReady()){ UI.pruneMode = !UI.pruneMode; render(); } break;
     case 'chi': if(pd) choose({type:'chi', kinds: pd.opts.chi[+b.dataset.i]}); break;
     case 'reviewLast': UI.reviewOf = UI.last; UI.reviewAll = false; show('review'); break;
     case 'review': UI.reviewOf = b.dataset.id; UI.reviewAll = false; show('review'); break;
@@ -4173,6 +4626,10 @@ document.addEventListener('pointerdown', e => {
     if(!ev.deltaY || Date.now() - lastWheel < 90) return;
     const t = flipper(); if(!t) return;
     lastWheel = Date.now();
+    if(id != null){   // 살기 감지(전투 스킬): 잡은 패를 휠로 굴리는 순간 판정 (우클릭 상하 정리와 겹치지 않게)
+      const sr = trySense(id);
+      if(sr) ghost.querySelectorAll('.tile:not(.facedown)').forEach(gt => { gt.classList.remove('sn-fail', 'sn-red', 'sn-green'); gt.classList.add('sn-' + sr); });
+    }
     ang += (ev.deltaY < 0 ? 1 : -1) * 360;   // 휠 위 = 패가 위쪽으로 한 바퀴(도는 중 배면이 보임), 휠 아래 = 아래쪽으로 한 바퀴
     t.style.transition = 'transform .45s cubic-bezier(.25,.8,.3,1)';
     t.style.transform = `perspective(560px) rotateX(${ang}deg)`;
@@ -4203,6 +4660,10 @@ document.addEventListener('pointerdown', e => {
         SFX.draw(); render(); return;
       }
     }
+    if(id != null && pruneReady()){
+      const fr = [...document.querySelectorAll('.wallsc .sk')].some(el => inRect(inflate(el.getBoundingClientRect(), 4), x, y));
+      if(fr){ doPrune(id); return; }
+    }
     if(mode === 'play') return;
     if(mode === 'draw' || mode === 'deal' || mode === 'passdraw'){
       const hw = document.querySelector('.handwrap'); const r = hw && hw.getBoundingClientRect();
@@ -4229,6 +4690,7 @@ document.addEventListener('pointerdown', e => {
       if(kak && !nukiFirst && inMeldZone(x, y)){ UI.flipFrom = {key:'h' + id, pt:{x, y}}; choose(kak); return; }
     }
     if(mode.includes('nuki') && inRect(nukiZoneRect(), x, y)){
+      if(flips % 2 === 1){ if(!UI.inv) UI.inv = new Set(); if(UI.inv.has(id)) UI.inv.delete(id); else UI.inv.add(id); }   // 끄는 중 돌린 모양 그대로 놓는다
       UI.flipFrom = {key:'h' + id, pt:{x, y}};
       if(q.kind === 'riichiNuki') choose(true); else choose({type:'nuki', id});
       return;
@@ -4272,7 +4734,7 @@ document.addEventListener('contextmenu', e => {
   const pd = UI.pending, g = UI.game;
   if(pd && pd.kind === 'action' && UI.riichiDiscard != null) return;   // 리치 선언패를 눕혔으면 점봉만 던질 수 있다
   if(!pd || UI.confirm) return;
-  // 넘기기는 버튼 없이 우클릭으로만: 치·퐁·깡, 리치 중 암깡, 론·쯔모
+  // 넘기기는 버튼 없이 우클릭으로만: 치·퐁·깡, 리치 중 안깡, 론·쯔모
   if(pd.kind === 'call' && callFromKami()){   // 상가 패: 넘기기는 패산에서 쯔모하는 것 — 우클릭해도 패산에서 쯔모해 온다
     if(UI.callStage) return;
     const w = document.querySelector('.wnext'), r = w && w.getBoundingClientRect();
@@ -4287,7 +4749,7 @@ document.addEventListener('contextmenu', e => {
   if(!g.players[0].hand.includes(id)) return;
   const k = kindOf(id);
   if(UI.riichiMode && !pd.ctx.riichiOptions.includes(k)) return;
-  if(pd.ctx.riichiOptions.includes(k)){ UI.riichiDiscard = id; render(); return; }
+  if(pd.ctx.riichiOptions.includes(k)){ setRiichiDiscard(id); return; }
   choose({type:'discard', id, riichi:false});
 });
 document.addEventListener('keydown', e => {

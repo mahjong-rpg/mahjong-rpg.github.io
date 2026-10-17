@@ -21,9 +21,10 @@
   color-scheme: dark;
 }
 [hidden]{display:none!important}
-html,body{height:100%}
+html{min-height:100%;background:var(--felt)}
+body{min-height:100%}
 body{margin:0;background:var(--felt);color:var(--ink);font:15px/1.5 var(--f-ui);
-  background-image:radial-gradient(ellipse at 50% 30%, var(--felt-2), var(--felt) 70%);
+  background-image:radial-gradient(ellipse at 50% 30%, var(--felt-2), var(--felt) 70%);background-repeat:no-repeat;background-attachment:fixed;
   padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:12px;}
 *{box-sizing:border-box}
 button{font:inherit;color:inherit;cursor:pointer}
@@ -492,8 +493,8 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .xpt tr.cur td{background:rgba(216,180,90,.22);color:#fff;font-weight:800}
 .skbs{display:inline-flex;gap:4px}
 @media (max-width:520px){.topbar .row > .muted{display:none}.skb{padding:4px 5px;font-size:12px}}   /* 좁은 화면: 모드 이름 대신 스킬 표시를 남긴다 */
-.skb{display:inline-flex;align-items:baseline;gap:1px;font-size:13px;line-height:1;padding:4px 6px;border-radius:99px;background:rgba(0,0,0,.35);box-shadow:0 0 0 1px var(--gc),0 0 6px var(--gc)}
-.skb small{font:700 10px var(--f-num);color:#fff}
+.skb{display:inline-flex;align-items:center;gap:2px;height:28px;box-sizing:border-box;font-size:13px;line-height:1;padding:0 7px;border-radius:8px;border:1px solid var(--felt-line);background:var(--panel-2);color:var(--ink)}   /* 스피커·?·X 버튼과 같은 모양 */
+.skb small{font:700 11px var(--f-num);color:var(--ink)}
 .hand .tile.sn-red,.dragghost .tile.sn-red{box-shadow:inset 0 0 0 1px var(--ivory-edge),0 0 0 3px #ff3b30,0 0 16px 5px rgba(255,40,30,.95)}
 .hand .tile.sn-green,.dragghost .tile.sn-green{box-shadow:inset 0 0 0 1px var(--ivory-edge),0 0 0 3px #2fe06a,0 0 16px 5px rgba(40,230,100,.9)}
 .hand .tile.sn-fail,.dragghost .tile.sn-fail{filter:brightness(.38);box-shadow:inset 0 0 0 1px #000,0 0 0 3px #000,0 0 12px 4px rgba(0,0,0,.9)}
@@ -535,6 +536,33 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .mjsk{background:var(--panel);border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .rpg .mjsk .t{font-weight:800}.rpg .mjsk .t b{color:var(--gc)}
 .rpg .mjsk .d{font-size:12px;color:var(--ink-dim);flex:1 1 260px}
+/* RPG 화면 컴팩트: 시작·스킬 버튼은 장면 오른쪽 아래, 켜진 스킬은 오른쪽 위 */
+/* 켜진 마작 스킬: 마작 화면처럼 오른쪽 위에 배지로 */
+.rpg .shead .skbs{background:none!important;padding:0!important;display:inline-flex;gap:4px}
+.rpg .shead .skbs .skb{background:rgba(0,0,0,.45);color:var(--ink);padding:0 7px;font-size:13px;border-radius:8px;border:1px solid var(--felt-line);backdrop-filter:none}
+.rpg .sfoot{position:absolute;left:8px;right:8px;bottom:12px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px;pointer-events:none}
+.rpg .sfoot > *{pointer-events:auto}
+.rpg .srate{background:rgba(0,0,0,.45);color:#fff;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:700}
+.rpg .srate b{color:var(--led)}
+.rpg .sbtns{display:flex;gap:6px}
+.rpg .sbtns .btn{box-shadow:0 3px 10px rgba(0,0,0,.45)}
+.rpg .gobtn{width:7.6em;text-align:center;white-space:nowrap}   /* 시작·그만하기 버튼 크기 고정 */
+.rpg .sktg{--gc:var(--brass);width:8.4em;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;background:rgba(0,0,0,.55);color:var(--ink-dim)}
+.rpg .sktg .swt{position:relative;flex:none;width:30px;height:16px;border-radius:99px;background:#555c5f;transition:background .15s}
+.rpg .sktg .swt i{position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.5);transition:left .15s}
+.rpg .sktg.on{color:#fff;border-color:var(--gc);box-shadow:0 0 0 1px var(--gc),0 0 8px var(--gc),0 3px 10px rgba(0,0,0,.45)}
+.rpg .sktg.on .swt{background:var(--gc)}
+.rpg .sktg.on .swt i{left:16px}
+.rpg .items .it{flex-direction:row;align-items:center;justify-content:space-between;gap:6px;padding:6px 8px;text-align:left}
+.rpg .items .it .n,.rpg .items .it .d,.rpg .items .it .btn{white-space:nowrap}
+.rpg .items .it .n{display:block;font-size:13px;min-width:0;line-height:1.25}
+.rpg .items .it .n i{flex:none;vertical-align:-1px;margin-right:5px}
+.rpg .items .it .n small{display:block;margin:1px 0 0 17px}
+.rpg .items .it .btn{padding:4px 8px;flex:none}
+.chipi{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;vertical-align:-1px;background:radial-gradient(circle at 35% 35%,#fff6c8,#e6b422 55%,#a87a10);box-shadow:0 0 0 1.5px rgba(0,0,0,.25) inset}
+.rpg .it.lock .chipi{filter:grayscale(.6) brightness(.8)}
+.rpg .items .it .n small{font-weight:600;color:var(--ink-dim);font-size:11px;margin-left:4px}
+.rpg .items{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
 .rpg .ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 .rpg .rate{font-size:13px;color:var(--ink-dim)}
 .rpg .shop{background:var(--panel);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px}
@@ -2310,13 +2338,13 @@ const SFX = (() => {
 // 잠들 때 틀어 둬도 거슬리지 않게: 아주 작은 소리의 느린 화음 패드 + 바람·물결 같은 갈색 잡음 + 이따금 새소리·물방울 같은 작은 소리
 const BGM_ENV = {   // [분위기, 바탕 소리, 이따금 나는 소리들] — 행동별 9단계
   combat: [['calm','breeze',['bird']], ['calm','breeze',['bird']], ['calm','marsh',['frog','drop']], ['calm','wind',[]], ['calm','wind',[]],
-           ['dark','wind',['drop','bell']], ['dark','rumble',['crackle']], ['dark','wind',['bell']], ['dark','rumble',['crackle']]],
+           ['dark','wind',['drop','bell']], ['dark','rumble',['crackle']], ['dark','wind',['bell']], ['dark','rumble',['crackle']], ['dark','deep',['chime']]],
   wood:   [['calm','breeze',['bird']], ['calm','breeze',['bird']], ['calm','breeze',['bird','owl']], ['calm','breeze',['bird']], ['calm','breeze',['bird','insect']],
-           ['calm','wind',['owl']], ['calm','breeze',['bird','owl']], ['dark','none',['chime']], ['calm','breeze',['bird','chime']]],
+           ['calm','wind',['owl']], ['calm','breeze',['bird','owl']], ['dark','none',['chime']], ['calm','breeze',['bird','chime']], ['dark','deep',['chime']]],
   mine:   [['calm','cave',['drop']], ['calm','cave',['drop']], ['calm','cave',['drop']], ['calm','cave',['drop','chime']], ['calm','cave',['drop','chime']],
-           ['calm','cave',['drop','chime']], ['dark','rumble',['crackle','drop']], ['dark','cave',['drop','chime']], ['dark','deep',['drop']]],
+           ['calm','cave',['drop','chime']], ['dark','rumble',['crackle','drop']], ['dark','cave',['drop','chime']], ['dark','rumble',['crackle']], ['dark','deep',['drop','chime']]],
   fish:   [['calm','brook',['bird']], ['calm','lake',['bird']], ['calm','brook',['bird']], ['calm','waves',['bird']], ['dark','deep',['bubble']],
-           ['calm','waves',['chime']], ['dark','rain',[]], ['dark','rumble',['crackle']], ['dark','rumble',['crackle']]]
+           ['calm','waves',['chime']], ['dark','rain',[]], ['dark','rumble',['crackle']], ['dark','rumble',['crackle']], ['dark','deep',['chime']]]
 };
 const BGM = (() => {
   let cur = null;   // { key, master, nodes, timers, chordIdx }
@@ -2487,7 +2515,7 @@ function flyIn(dropAt){
   }catch(e){ done(); }
 }
 // ---------- RPG 행동별 마작 스킬 ----------
-// 실버(2등급) 장비부터 20%, 한 등급마다 +10%, 옵시디언 90%. RPG 화면에서 행동마다 켜고 끌 수 있다(연습 모드에서는 꺼짐)
+// 실버(2등급) 장비부터 20%, 한 등급마다 +10%, 옵시디언 100%. RPG 화면에서 행동마다 켜고 끌 수 있다(연습 모드에서는 꺼짐)
 const MJSK = {
   combat: { icon:'⚔', n:'살기 감지', d:'손패를 잡고 휠을 위나 아래로 굴리면 그 패가 CPU의 론 대기패인지 알려 줘요. 내 차례 한 번에 패 1장, 1회. 실패 검정 · 방총 빨강 · 안전 초록' },
   fish:   { icon:'🎣', n:'입질', d:'내 차례에 발동하면 다음에 내가 뽑을 패산의 패가 그 자리에서 앞면으로 보여요 (울기로 순서가 바뀌면 따라 바뀌어요)' },
@@ -2498,7 +2526,7 @@ function mjSkillPct(k){
   if(UI.drill || typeof RPG === 'undefined') return 0;
   const sk = RPG.st.sk[k];
   if(!sk || sk.skillOn === false || sk.gear < 2) return 0;
-  return Math.min(90, sk.gear * 10);
+  return Math.min(100, sk.gear * 10);
 }
 function mjSkillRoll(k){   // 켜져 있지 않으면 null, 켜져 있으면 성공 여부
   const p = mjSkillPct(k);
@@ -2599,7 +2627,7 @@ function uraTry(i){
   render();
 }
 function skillBadges(){
-  return SK_KEYS.map(k => { const p = mjSkillPct(k); return p ? `<span class="skb" style="--gc:${mjSkillColor(k)}" title="${MJSK[k].n} ${p}%">${MJSK[k].icon}<small>${p}</small></span>` : ''; }).join('');
+  return SK_KEYS.map(k => { const p = mjSkillPct(k); return p ? `<span class="skb" style="--gc:${mjSkillColor(k)}" title="${MJSK[k].n} ${p}%">${MJSK[k].icon}<small>${p}%</small></span>` : ''; }).join('');
 }
 const Human = {
   async chooseAction(g,s,ctx){ await takeDraw(); if(!UI.drill){ rollPeek(g); rollPrune(g, ctx); } return ask({kind:'action', ctx}); },
@@ -3513,7 +3541,7 @@ function gameHTML(){
     if(fx.cnt && walls[fx.cseat]){ const w = walls[fx.cseat]; for(let k = 0; k < fx.cnt && k < w.length; k++){ const sl = w[w.length - 1 - k]; sl.cnt = true; sl.out = !!fx.split; } }
   }
   return `<div class="game">
-  <div class="topbar"><span></span><span class="row" style="gap:6px;align-items:center"><span class="muted">${UI.drill ? '연습모드' : modeName(UI.mode) + (UI.usedHint ? ' · 힌트 사용 판' : '') + (UI.usedSkill ? ' · 스킬 사용 판' : '')}</span>${UI.drill ? '' : `<span class="skbs">${skillBadges()}</span>`}<button class="btn small spk ${settings.sound!==false?'on':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button><button class="btn small hbtn" data-act="help" aria-label="조작 설명" title="조작 설명">?</button><button class="btn small xbtn" data-act="quit" aria-label="나가기" title="나가기">✕</button></span></div>
+  <div class="topbar"><span></span><span class="row" style="gap:6px;align-items:center"><span class="muted">${UI.drill ? '연습모드' : modeName(UI.mode) + (UI.usedHint ? ' · 힌트 사용 판' : '')}</span>${UI.drill ? '' : `<span class="skbs">${skillBadges()}</span>`}<button class="btn small spk ${settings.sound!==false?'on':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button><button class="btn small hbtn" data-act="help" aria-label="조작 설명" title="조작 설명">?</button><button class="btn small xbtn" data-act="quit" aria-label="나가기" title="나가기">✕</button></span></div>
   ${drillBarHTML()}
   <div class="table ${walls?'withwall':''} ${Date.now() < (UI.diffUntil || 0) ? 'showdiff' : ''}" aria-label="마작 탁자">
     ${consoleHTML(!!UI.diceShow, UI.lastDice || g.diceVals, !!UI.rollWait, UI.autoDeal)}
@@ -3696,7 +3724,7 @@ function helpHTML(){
       <li>패산에서 빛나는 패(4장씩, 마지막 1장·친은 2장)를 손패로 <kbd>끌어오기</kbd> 또는 <kbd>우클릭</kbd>(바로 가져오기)</li>
       <li>자리 정하기는 바람패를 클릭, 주사위는 가운데로 끌어 놓기</li>
     </ul>
-    <h3>RPG 스킬 (실버 장비부터 20% · 옵시디언 90%)</h3>
+    <h3>RPG 스킬 (실버 장비부터 20% · 옵시디언 100%)</h3>
     <ul>${SK_KEYS.map(k => `<li><b>${MJSK[k].icon} ${MJSK[k].n}</b>(${SKILLS[k].name}): ${esc(MJSK[k].d)}</li>`).join('')}</ul>
     <h3>패놀음 · 상하 정리</h3>
     <ul>
@@ -3901,7 +3929,7 @@ function importCode(txt){
 const RPG_KEY = 'rm.rpg.v1';
 const TIERS = [
   {n:'브론즈', c:'#9a5a2c'}, {n:'실버', c:'#cdd5dd'}, {n:'골드', c:'#f5cc35'}, {n:'아이언', c:'#7b8087'}, {n:'스틸', c:'#c9ced4'},
-  {n:'미스릴', c:'#3a78ff', gl:'#6fa0ff'}, {n:'아다만트', c:'#2db84c', gl:'#5cff7c'}, {n:'룬', c:'#3fd2bd', gl:'#6fffe8'}, {n:'옵시디언', c:'#120a1c', gl:'#b04dff'}
+  {n:'미스릴', c:'#3a78ff', gl:'#6fa0ff'}, {n:'아다만트', c:'#2db84c', gl:'#5cff7c'}, {n:'룬', c:'#3fd2bd', gl:'#6fffe8'}, {n:'드래곤', c:'#c8102e', gl:'#ff3a4a'}, {n:'옵시디언', c:'#120a1c', gl:'#b04dff'}
 ];
 // 단계: 이름, 하늘 위/아래, 땅, 주색(물·잎·바위·몬스터), 보조색(광석·몬스터 종류), 날씨
 const SKILLS = {
@@ -3914,7 +3942,8 @@ const SKILLS = {
     ['고대 폐허', '#5c6a7d','#a3a9b5','#7b7466','#e8e3d0','skeleton', null],
     ['화산', '#3b1d1d','#a8432a','#4a2a22','#8b6f5a','golem', 'ember'],
     ['마왕성', '#1c1530','#4a2d5e','#3a3346','#c2263a','demon', null],
-    ['지옥', '#1a0000','#7a0d0d','#2b0b0b','#e0531f','dragon', 'ember'] ] },
+    ['지옥', '#1a0000','#7a0d0d','#2b0b0b','#e0531f','dragon', 'ember'],
+    ['공허', '#020104','#140a24','#0a0610','#2a1446','demon', 'glint'] ] },
   wood: { name:'나무베기', tool:'도끼', stages:[
     ['동네 숲', '#8fd3ff','#dff4ff','#6cbf4f','#4fae46','oak', null],
     ['자작나무 숲', '#a9dcff','#eaf7ff','#7fc562','#9ad25a','birch', null],
@@ -3924,7 +3953,8 @@ const SKILLS = {
     ['설원 침엽수림', '#b8d4ee','#f2f8ff','#eef4f8','#2e6b4b','pine', 'snow'],
     ['거목의 숲', '#5e8f6a','#a9c9a0','#3b5e2e','#2c6e2c','giant', null],
     ['수정 숲', '#2a2f5a','#6a7bd0','#3a3f6b','#7ff0ff','crystal', 'glint'],
-    ['세계수', '#ffd88a','#fff4d0','#8c7a3a','#e8c03a','giant', 'glint'] ] },
+    ['세계수', '#ffd88a','#fff4d0','#8c7a3a','#e8c03a','giant', 'glint'],
+    ['공허의 숲', '#020104','#140a24','#0a0610','#6a30e0','crystal', 'glint'] ] },
   mine: { name:'광질', tool:'곡괭이', stages:[
     ['동굴 입구', '#5b6b78','#8e9aa3','#6e6458','#8a8178','#b5b0a8', null],
     ['구리 광맥', '#3f3a36','#6b5d52','#5a4a3e','#7a6a5a','#d77a3a', null],
@@ -3934,7 +3964,8 @@ const SKILLS = {
     ['보석 동굴', '#251f3a','#4f3f7a','#3c3358','#5d4f86','#ff5fa8', 'glint'],
     ['용암 광산', '#2a0f08','#7a2a12','#3a1a12','#5a2a1e','#ff7a2a', 'ember'],
     ['미스릴 심층', '#0f1a2e','#2a4470','#1e2c44','#34486a','#a8c8ff', 'glint'],
-    ['심연', '#07040f','#2a0f3a','#14081f','#2e1446','#c06bff', 'ember'] ] },
+    ['용의 광맥', '#200404','#6a140e','#2e0e0a','#4a1812','#ff3a3a', 'ember'],
+    ['공허의 심연', '#020104','#120820','#0a0610','#160c24','#b06bff', 'glint'] ] },
   fish: { name:'낚시', tool:'낚싯대', stages:[
     ['개울', '#9fdcff','#e6f7ff','#6cbf4f','#5fb7e8','#9be0ff', null],
     ['호수', '#8fcff5','#dff2ff','#5aa84a','#3f97d6','#8fd0ff', null],
@@ -3944,27 +3975,28 @@ const SKILLS = {
     ['빙하 바다', '#bcd8f0','#f2f9ff','#f2f7fb','#6fb6e0','#dff4ff', 'snow'],
     ['폭풍 바다', '#3d4652','#7d8894','#5a6066','#2f4f66','#8fa6b8', 'rain'],
     ['용암 바다', '#2a0f08','#8a3512','#3a2a26','#e0531f','#ffb24a', 'ember'],
-    ['지옥 바다', '#0d0000','#4a0606','#1e1212','#b0101a','#ff4a4a', 'ember'] ] },
+    ['지옥 바다', '#0d0000','#4a0606','#1e1212','#b0101a','#ff4a4a', 'ember'],
+    ['공허의 바다', '#020104','#120820','#0e0818','#0a0614','#7a3cff', 'glint'] ] },
 };
 const SK_KEYS = ['combat', 'wood', 'mine', 'fish'];
 // 등급 g(장비 + 같은 등급 던전)를 사는 값. 하루에 마작 2~3판 → 축의 하루 약 10개로 보고,
 //  앞 등급이 상한까지 가는 실제 시간(6등급 11h · 7등급 28h · 8등급 72h)에 하루치 축의가 맞도록 정했다
-const GRADE_PRICE = [0, 1, 2, 2, 3, 5, 8, 15, 30];
+const GRADE_PRICE = [0, 1, 2, 2, 3, 8, 15, 30, 55, 100];   // 스틸까지는 금방, 미스릴부터 점점 늘어 옵시디언 100개
 // 레벨 상한: 1등급 19 · 2등급 29 … 8등급 89, 옵시디언은 99 이후로도 끝없이. 상한에 닿으면 경험치도 더 쌓이지 않는다(저축 없음)
-const LV_CAP = g => g >= 9 ? Infinity : 10 * g + 9;
-const EXP_CAP = g => g >= 9 ? Infinity : CUM[LV_CAP(g) + 1] - 1;   // 상한 레벨의 막대가 꽉 찬 지점
+const LV_CAP = g => g >= 10 ? Infinity : 10 * g + 9;   // 브론즈 19 … 룬 89 · 드래곤 99 · 옵시디언 100(이후 경험치는 끝없이)
+const EXP_CAP = g => g >= 10 ? Infinity : CUM[LV_CAP(g) + 1] - 1;   // 상한 레벨의 막대가 꽉 찬 지점
 const capped = sk => sk.exp >= EXP_CAP(sk.gear);   // 등급 g(장비 + 같은 등급 던전)를 사는 값. 1등급은 처음부터
 const OFFLINE_CAP = 24 * 3600 * 1000;                         // 꺼 둔 동안은 최대 24시간까지 쌓인다
 // 레벨 L까지 누적 경험치 = ⌊¼ × Σ(l=1..L-1) ⌊l + 300·2^(l/7)⌋⌋ (Lv2 83 · Lv50 101,333 · Lv92 6,517,253 · Lv99 13,034,431)
-const CUM = [0, 0]; { let pts = 0; for(let L = 2; L <= 99; L++){ pts += Math.floor((L - 1) + 300 * Math.pow(2, (L - 1) / 7)); CUM[L] = Math.floor(pts / 4); } }
-const NEED = [0]; for(let L = 1; L < 99; L++) NEED[L] = CUM[L+1] - CUM[L];
+const CUM = [0, 0]; { let pts = 0; for(let L = 2; L <= 100; L++){ pts += Math.floor((L - 1) + 300 * Math.pow(2, (L - 1) / 7)); CUM[L] = Math.floor(pts / 4); } }
+const NEED = [0]; for(let L = 1; L < 100; L++) NEED[L] = CUM[L+1] - CUM[L];
 // 예전 버전(37×1.19^(L-1)) 경험치 → 레벨·진행률을 유지한 채 새 표로 옮길 때 쓴다
 const OLD_CUM = [0, 0]; for(let L = 2; L <= 99; L++) OLD_CUM[L] = OLD_CUM[L-1] + Math.round(37 * Math.pow(1.19, L - 2));
-const MAXEXP = CUM[99];   // Lv 99가 되는 경험치. 그 뒤로는 레벨은 그대로지만 경험치는 끝없이 쌓인다
-const lvOf = e => { let L = 1; while(L < 99 && e >= CUM[L+1]) L++; return L; };
+const MAXEXP = CUM[100];   // Lv 100(만렙)이 되는 경험치. 그 뒤로는 레벨은 그대로지만 경험치는 끝없이 쌓인다
+const lvOf = e => { let L = 1; while(L < 100 && e >= CUM[L+1]) L++; return L; };
 // 틱은 3.6초(시간당 1000틱). 던전(등급)별 시간당 경험치: 13K·25K·30K·34K·37K·41K·44K·47K·50K
 const tickMs = () => 3600;
-const XP_PER_HOUR = [13000, 25000, 30000, 34000, 37000, 41000, 44000, 47000, 50000];
+const XP_PER_HOUR = [13000, 25000, 30000, 34000, 37000, 41000, 44000, 47000, 50000, 53000];
 const expPer = s => XP_PER_HOUR[s - 1] / 1000;
 const fmtDur = ms => { const s = ms / 1000; return s < 60 ? `${s.toFixed(s < 10 ? 1 : 0)}초` : s < 3600 ? `${Math.floor(s/60)}분 ${Math.round(s%60)}초` : `${Math.floor(s/3600)}시간 ${Math.round(s%3600/60)}분`; };
 const fmtNum = n => n >= 1e9 ? (n/1e9).toFixed(n >= 1e11 ? 0 : 2) + 'B' : n >= 1e6 ? (n/1e6).toFixed(n >= 1e8 ? 0 : 1) + 'M' : n >= 1e4 ? (n/1e3).toFixed(n >= 1e6 ? 0 : 1) + 'K' : Math.floor(n).toLocaleString();
@@ -3975,7 +4007,7 @@ function rpgLoad(){
 }
 // 행동마다 장비와 던전은 한 등급(grade)으로 묶인다. 예전 저장(장비·단계 따로, 옛 경험치 표)은 여기서 옮긴다
 function rpgNorm(st){
-  const old = st.xv !== 2;
+  const old = !st.xv || st.xv < 2;
   for(const k of SK_KEYS){
     const sk = Object.assign({ exp:0, gear:1, stage:1, gMax:1, sMax:1 }, st.sk[k] || {});
     if(old){
@@ -3983,12 +4015,12 @@ function rpgNorm(st){
       const f = L >= 99 ? 0 : (sk.exp - OLD_CUM[L]) / (OLD_CUM[L+1] - OLD_CUM[L]);
       sk.exp = L >= 99 ? CUM[99] : Math.floor(CUM[L] + f * NEED[L]);
     }
-    const g = Math.max(1, Math.min(9, Math.max(+sk.gMax || 1, +sk.sMax || 1)));   // 예전에 사 둔 장비·단계 중 높은 등급으로
+    const g = Math.max(1, Math.min(10, Math.max(+sk.gMax || 1, +sk.sMax || 1)));   // 예전에 사 둔 장비·단계 중 높은 등급으로
     sk.gear = sk.stage = sk.gMax = sk.sMax = g;
     sk.exp = Math.max(0, +sk.exp || 0);
     st.sk[k] = sk;
   }
-  st.xv = 2;
+  st.xv = 3;
   return st;
 }
 const RPG = { st: rpgLoad(), away: null, events: [] };
@@ -4045,10 +4077,10 @@ function rpgLive(){
   const st = RPG.st;
   for(const k of SK_KEYS){
     const sk = st.sk[k], L = lvOf(sk.exp), el = document.querySelector(`.rpg .skc[data-s="${k}"]`); if(!el) continue;
-    const into = sk.exp - CUM[L], need = L >= 99 ? 1 : NEED[L];
+    const into = sk.exp - CUM[L], need = L >= 100 ? 1 : NEED[L];
     el.querySelector('.lv').textContent = 'Lv ' + L;
-    el.querySelector('.xpbar b').style.width = (L >= 99 ? 100 : Math.min(100, into / need * 100)) + '%';
-    el.querySelector('.xp').textContent = L >= 99 ? `MAX · 총 ${fmtNum(sk.exp)}` : (capped(sk) ? `${fmtNum(need)} / ${fmtNum(need)} · 상한` : `${fmtNum(into)} / ${fmtNum(need)}`);
+    el.querySelector('.xpbar b').style.width = (L >= 100 ? 100 : Math.min(100, into / need * 100)) + '%';
+    el.querySelector('.xp').textContent = L >= 100 ? `MAX · 총 ${fmtNum(sk.exp)}` : (capped(sk) ? `${fmtNum(need)} / ${fmtNum(need)} · 상한` : `${fmtNum(into)} / ${fmtNum(need)}`);
   }
   const tb = document.querySelector('.rpg .tickbar b');
   if(tb){ const a = st.active === st.sel ? st.active : null; tb.style.width = a ? Math.min(100, (st.carry + (Date.now() - st.last)) / tickMs(st.sk[a].stage, st.sk[a].gear) * 100) + '%' : '0%'; }
@@ -4209,41 +4241,47 @@ function appTabs(on){
 function rpgHTML(){
   const st = RPG.st, sel = st.sel || 'fish', S = SKILLS[sel], sk = st.sk[sel];
   const stg = S.stages[sk.stage - 1], tier = TIERS[sk.gear - 1];
-  const T = tickMs(sk.stage, sk.gear), X = expPer(sk.stage);
+  const X = expPer(sk.stage);
   const cards = SK_KEYS.map(k => {
-    const s = st.sk[k], L = lvOf(s.exp), into = s.exp - CUM[L], need = L >= 99 ? 1 : NEED[L];
+    const s = st.sk[k], L = lvOf(s.exp), into = s.exp - CUM[L], need = L >= 100 ? 1 : NEED[L];
     return `<button class="skc ${k===sel?'sel':''}" data-act="rpgSel" data-s="${k}">${st.active===k?'<span class="on">진행 중</span>':''}
       <span class="t">${SKILLS[k].name}<small class="lv">Lv ${L}</small></span>
-      <span class="xpbar"><b style="width:${L>=99?100:Math.min(100, into/need*100)}%"></b></span>
-      <span class="m"><span class="xp">${L>=99?`MAX · 총 ${fmtNum(s.exp)}`:(capped(s) ? `${fmtNum(need)} / ${fmtNum(need)} · 상한` : `${fmtNum(into)} / ${fmtNum(need)}`)}</span><br>${esc(SKILLS[k].stages[s.stage-1][0])} · ${TIERS[s.gear-1].n} ${SKILLS[k].tool}</span></button>`;
+      <span class="xpbar"><b style="width:${L>=100?100:Math.min(100, into/need*100)}%"></b></span>
+      <span class="m"><span class="xp">${L>=100?`MAX · 총 ${fmtNum(s.exp)}`:(capped(s) ? `${fmtNum(need)} / ${fmtNum(need)} · 상한` : `${fmtNum(into)} / ${fmtNum(need)}`)}</span></span></button>`;
   }).join('');
-  // 등급 하나 = 장비 + 같은 등급 던전. 사면 다음 던전으로 옮겨 새 장비를 든 채 멈춰 있고, 지난 등급으로는 돌아갈 수 없다
+  // 상점: 등급(장비 + 같은 등급 던전). 산 등급으로 바로 옮기고, 지난 등급으로는 돌아갈 수 없다
   const gradeItems = TIERS.map((t, i) => {
-    const g = i + 1, s0 = S.stages[i], past = g < sk.gear, cur = g === sk.gear, next = g === sk.gear + 1;
-    const btn = cur ? '<span class="d">지금 등급</span>' : past ? '<span class="d">지나온 등급</span>' : next ? `<button class="btn small buy" data-act="rpgBuy" data-g="${g}">축의 ${GRADE_PRICE[i]}개</button>` : `<span class="d">축의 ${GRADE_PRICE[i]}개</span>`;
-    return `<div class="it ${cur?'eq':''} ${past || (!cur && !next) ? 'lock' : ''}"><span class="n"><i class="${t.gl ? 'glow' : ''}" style="background:${t.c};${t.gl ? '--gl:' + t.gl : ''}"></i>${g}. ${t.n} ${S.tool}</span><span class="d"><i style="display:inline-block;width:9px;height:9px;border-radius:2px;vertical-align:-1px;background:linear-gradient(${s0[1]},${s0[3]})"></i> ${esc(s0[0])} · 시간당 ${fmtNum(XP_PER_HOUR[i])} exp · ${g >= 9 ? 'Lv 99+' : 'Lv ' + LV_CAP(g) + '까지'}</span>${btn}</div>`;
+    const g = i + 1, past = g < sk.gear, cur = g === sk.gear, next = g === sk.gear + 1, needLv = g >= 2 ? LV_CAP(g - 1) : 1, need99 = lvOf(sk.exp) < needLv;   // 다음 등급은 지금 등급의 상한 레벨(19·29…99)에 닿아야 살 수 있다
+    const btn = cur ? '<span class="d">사용 중</span>' : past ? '<span class="d">✓</span>'
+      : next && !need99 ? `<button class="btn small buy" data-act="rpgBuy" data-g="${g}" aria-label="축의칩 ${GRADE_PRICE[i]}개"><i class="chipi"></i>${GRADE_PRICE[i]}</button>`
+      : `<span class="d">${need99 ? 'Lv' + needLv + ' 필요' : '<i class="chipi"></i>' + GRADE_PRICE[i]}</span>`;
+    return `<div class="it ${cur?'eq':''} ${past || (!cur && !next) || need99 ? 'lock' : ''}"><span class="n"><i class="${t.gl ? 'glow' : ''}" style="background:${t.c};${t.gl ? '--gl:' + t.gl : ''}"></i>${t.n}<small>${g >= 10 ? 'Lv 100' : '~Lv ' + LV_CAP(g)}</small></span>${btn}</div>`;
   }).join('');
   const away = RPG.away; RPG.away = null;
+  const M = MJSK[sel], on = sk.skillOn !== false, ok = sk.gear >= 2, gc = tier.gl || tier.c;
+  const rate = capped(sk) ? `<b>Lv ${LV_CAP(sk.gear)} 상한</b>` : `시간당 ${fmtNum(X * 1000)} · ${sk.gear >= 10 ? '만렙' : '~Lv ' + LV_CAP(sk.gear)}`;
   return `<div class="rpg">${appTabs('rpg')}
-    ${away ? `<div class="welcome">자리를 비운 동안 ${esc(SKILLS[away.k].name)} +${fmtNum(away.gain)} exp${away.after > away.before ? ` · Lv ${away.before} → ${away.after}` : ''}${away.cap ? ' · 레벨 상한에 닿아 멈췄어요' : ''}</div>` : ''}
-    <div class="scene ${st.active === sel ? '' : 'idle'}">${rpgScene(sel)}<div class="shead"><span>${esc(S.name)} · ${esc(stg[0])}</span><span>${tier.n} ${S.tool}</span></div><div class="tickbar"><b></b></div></div>
-    <div class="ctl"><span class="rate">${capped(sk) ? `<b style="color:var(--led)">Lv ${LV_CAP(sk.gear)} 상한</b> · 다음 장비를 사면 이어서 올라요` : `${fmtDur(T)}마다 +${fmtNum(X)} exp · 시간당 ${fmtNum(X * 1000)} · ${sk.gear >= 9 ? '상한 없음' : 'Lv ' + LV_CAP(sk.gear) + '까지'}`}</span>
-      <span class="row" style="gap:8px"><button class="btn" data-act="rpgTable">경험치 테이블</button>${st.active === sel ? `<button class="btn" data-act="rpgGo">그만하기</button>` : `<button class="btn primary" data-act="rpgGo">${esc(S.name)} 시작</button>`}</span></div>
-    ${(() => { const M = MJSK[sel], on = sk.skillOn !== false, ok = sk.gear >= 2, gc = TIERS[sk.gear-1].gl || TIERS[sk.gear-1].c;
-      return `<div class="mjsk" style="--gc:${gc}"><span class="t">${M.icon} 마작 스킬 · <b>${M.n}</b> ${ok ? `· 발동률 ${Math.min(90, sk.gear * 10)}%` : ''}</span><span class="d">${esc(M.d)}${ok ? '' : ' · 실버 장비부터 쓸 수 있어요'}</span>${ok ? `<button class="btn small ${on ? 'primary' : ''}" data-act="rpgSkill" aria-pressed="${on}">${on ? 'ON' : 'OFF'}</button>` : ''}</div>`; })()}
+    ${away ? `<div class="welcome">자리 비운 동안 ${esc(SKILLS[away.k].name)} +${fmtNum(away.gain)} exp${away.after > away.before ? ` · Lv ${away.before}→${away.after}` : ''}${away.cap ? ' · 상한' : ''}</div>` : ''}
+    <div class="scene ${st.active === sel ? '' : 'idle'}">${rpgScene(sel)}
+      <div class="shead"><span>${esc(stg[0])} · ${tier.n} ${S.tool}</span><span class="skbs">${skillBadges()}</span></div>
+      <div class="sfoot"><span class="srate">${rate}</span><span class="sbtns">
+        ${ok ? `<button class="btn small sktg ${on ? 'on' : ''}" data-act="rpgSkill" aria-pressed="${on}" title="마작 스킬 · ${M.n} ${Math.min(100, sk.gear * 10)}%"><span class="swt"><i></i></span>${on ? 'Skill ON' : 'Skill OFF'}</button>` : ''}
+        ${st.active === sel ? `<button class="btn small gobtn" data-act="rpgGo">그만하기</button>` : `<button class="btn small primary gobtn" data-act="rpgGo">${esc(S.name)} 시작</button>`}
+      </span></div>
+      <div class="tickbar"><b></b></div></div>
     <div class="skills">${cards}</div>
-    <div class="shop"><h3>상점 · ${esc(S.name)} 장비</h3><div class="items">${gradeItems}</div></div>
+    <div class="shop"><h3>${esc(S.name)} 장비</h3><div class="items">${gradeItems}</div></div>
   </div>`;
 }
 // 경험치 테이블: 레벨별 누적 경험치와 다음 레벨까지 필요한 양. 지금 고른 행동의 레벨을 강조한다
 function rpgTableHTML(){
   const st = RPG.st, sel = st.sel || 'fish', sk = st.sk[sel], L = lvOf(sk.exp);
-  const left = L >= 99 ? 0 : CUM[L+1] - sk.exp;
+  const left = L >= 100 ? 0 : CUM[L+1] - sk.exp;
   const rows = [];
-  for(let l = 1; l <= 99; l++) rows.push(`<tr class="${l === L ? 'cur' : ''} ${l === LV_CAP(sk.gear) ? 'cap' : ''}"><td class="num">${l}</td><td class="num">${CUM[l].toLocaleString()}</td><td class="num">${l < 99 ? NEED[l].toLocaleString() : '–'}</td></tr>`);
+  for(let l = 1; l <= 100; l++) rows.push(`<tr class="${l === L ? 'cur' : ''} ${l === LV_CAP(sk.gear) ? 'cap' : ''}"><td class="num">${l}</td><td class="num">${CUM[l].toLocaleString()}</td><td class="num">${l < 100 ? NEED[l].toLocaleString() : '–'}</td></tr>`);
   return `<div class="sheet xptab" role="dialog" aria-modal="true"><h2>경험치 테이블</h2>
-    <p class="muted" style="margin:0">${esc(SKILLS[sel].name)} Lv ${L} · ${capped(sk) ? `<b style="color:var(--led)">${TIERS[sk.gear-1].n} 장비 상한(Lv ${LV_CAP(sk.gear)})</b> · 다음 장비를 사야 더 올라요` : L >= 99 ? `최고 레벨 · 총 ${sk.exp.toLocaleString()} exp` : `다음 레벨까지 <b style="color:var(--led)">${left.toLocaleString()}</b> exp (약 ${fmtDur(left / expPer(sk.stage) * tickMs())})`}</p>
-    ${sk.gear < 9 && !capped(sk) ? `<p class="muted" style="margin:0">${TIERS[sk.gear-1].n} 장비 상한 Lv ${LV_CAP(sk.gear)}까지 ${(EXP_CAP(sk.gear) + 1 - sk.exp).toLocaleString()} exp (약 ${fmtDur((EXP_CAP(sk.gear) + 1 - sk.exp) / expPer(sk.stage) * tickMs())})</p>` : ''}
+    <p class="muted" style="margin:0">${esc(SKILLS[sel].name)} Lv ${L} · ${capped(sk) ? `<b style="color:var(--led)">${TIERS[sk.gear-1].n} 장비 상한(Lv ${LV_CAP(sk.gear)})</b> · 다음 장비를 사야 더 올라요` : L >= 100 ? `최고 레벨 · 총 ${sk.exp.toLocaleString()} exp` : `다음 레벨까지 <b style="color:var(--led)">${left.toLocaleString()}</b> exp (약 ${fmtDur(left / expPer(sk.stage) * tickMs())})`}</p>
+    ${sk.gear < 10 && !capped(sk) ? `<p class="muted" style="margin:0">${TIERS[sk.gear-1].n} 장비 상한 Lv ${LV_CAP(sk.gear)}까지 ${(EXP_CAP(sk.gear) + 1 - sk.exp).toLocaleString()} exp (약 ${fmtDur((EXP_CAP(sk.gear) + 1 - sk.exp) / expPer(sk.stage) * tickMs())})</p>` : ''}
     <div class="xpwrap"><table class="xpt"><thead><tr><th>레벨</th><th>누적 경험치</th><th>다음 레벨까지</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>
     <div class="row"><button class="btn primary" data-act="closeModal">닫기</button></div></div>`;
 }
@@ -4262,6 +4300,7 @@ function rpgAct(a, b){
   else if(a === 'rpgBuy'){
     const g = +b.dataset.g, p = GRADE_PRICE[g-1];
     if(g !== sk.gear + 1) return;
+    if(lvOf(sk.exp) < LV_CAP(g - 1)){ rpgToast(`${TIERS[g-1].n}은(는) Lv ${LV_CAP(g - 1)}를 달성해야 살 수 있어요`); return; }
     if(st.chips < p){ rpgToast('축의칩이 부족합니다'); return; }
     st.chips -= p; sk.gear = sk.stage = sk.gMax = sk.sMax = g; SFX.cash();
     if(st.active === sel){ st.active = null; st.carry = 0; }   // 새 던전에 들어가 새 장비를 든 채 멈춰 있는다. 시작을 눌러야 캔다

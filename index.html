@@ -399,6 +399,7 @@ h1,h2,h3{margin:0;text-wrap:balance}
   padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .sheet{background:var(--felt-2);border:1px solid var(--felt-line);border-radius:14px;padding:16px;max-width:560px;width:100%;max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:12px}
 .sheet h2{font-size:20px}
+.sheet.help h2{word-break:keep-all;max-width:none;width:auto;margin-top:6px}
 table.y{width:100%;border-collapse:collapse;font-size:14px}
 table.y td{padding:4px 0;border-bottom:1px dashed var(--felt-line)}
 table.y td:last-child{text-align:right}
@@ -527,7 +528,13 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .sk.urahost{pointer-events:none}
 .ura-v0{bottom:calc(100% + var(--ww)*.45)}.ura-v2{top:calc(100% + var(--ww)*.12)}
 .sk.v.side1 .ura-v1{left:auto;right:calc(100% + var(--ww)*.12)}.sk.v.side3 .ura-v3{left:calc(100% + var(--ww)*.12)}
-.sk .tf.uratap{pointer-events:auto;cursor:pointer;box-shadow:0 0 0 .5px rgba(0,0,0,.6),0 calc(var(--ww)*.3) 0 #e2ddcd,0 0 0 1.5px var(--gc);animation:skpulse 1.2s ease-in-out infinite alternate}
+.sk .tf.uratap{pointer-events:auto;cursor:pointer;box-shadow:0 0 0 .5px rgba(0,0,0,.6),0 calc(var(--ww)*.3) 0 #e2ddcd,0 0 0 1.5px var(--gc);animation:uraflash 2.4s ease-out infinite}
+/* 광맥 탐지를 쓸 수 있는 도라 표시패: 2.4초마다 번쩍 */
+@keyframes uraflash{
+  0%,62%,100%{filter:brightness(1);box-shadow:0 0 0 .5px rgba(0,0,0,.6),0 calc(var(--ww)*.3) 0 #e2ddcd,0 0 0 1.5px var(--gc)}
+  70%{filter:brightness(1.45);box-shadow:0 0 0 .5px rgba(0,0,0,.6),0 calc(var(--ww)*.3) 0 #e2ddcd,0 0 0 2.5px #fff,0 0 calc(var(--ww)*.9) calc(var(--ww)*.25) var(--gc)}
+  80%{filter:brightness(1.15);box-shadow:0 0 0 .5px rgba(0,0,0,.6),0 calc(var(--ww)*.3) 0 #e2ddcd,0 0 0 2px var(--gc),0 0 calc(var(--ww)*.5) var(--gc)}}
+@media (prefers-reduced-motion: reduce){.sk .tf.uratap{animation:none}}
 .sk .tf.pkb{bottom:0;z-index:0}
 .sk.h .tf.pkb{height:calc(var(--ww)*1.0)}
 .sk.v .tf.pkb{bottom:calc(var(--ww)*.3)}
@@ -548,7 +555,7 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .sbtns{display:flex;gap:6px}
 .rpg .sbtns .btn{box-shadow:0 3px 10px rgba(0,0,0,.45)}
 .rpg .gobtn{width:7.6em;text-align:center;white-space:nowrap}   /* 시작·그만하기 버튼 크기 고정 */
-.rpg .sktg{--gc:var(--brass);width:8.4em;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;background:rgba(0,0,0,.55);color:var(--ink-dim)}
+.rpg .sktg{--gc:var(--brass);width:8.8em;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;background:rgba(0,0,0,.55);color:var(--ink-dim)}
 .rpg .sktg .swt{position:relative;flex:none;width:30px;height:16px;border-radius:99px;background:#555c5f;transition:background .15s}
 .rpg .sktg .swt i{position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.5);transition:left .15s}
 .rpg .sktg.on{color:#fff;border-color:var(--gc);box-shadow:0 0 0 1px var(--gc),0 0 8px var(--gc),0 3px 10px rgba(0,0,0,.45)}
@@ -601,6 +608,9 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 @keyframes swing{0%{transform:rotate(140deg)}38%{transform:rotate(150deg)}55%{transform:rotate(300deg)}64%{transform:rotate(290deg)}100%{transform:rotate(140deg)}}
 .rpg .hero.fish .arm{animation:rod 3.2s ease-in-out infinite}
 @keyframes rod{0%,100%{transform:rotate(-70deg)}50%{transform:rotate(-65deg)}}
+.rpg .hero .cape{transform-box:fill-box;transform-origin:80% 0;animation:cape 3s ease-in-out infinite}
+@keyframes cape{0%,100%{transform:skewX(0deg)}50%{transform:skewX(-4deg)}}
+.rpg .scene.idle .cape{animation:none}
 .rpg .hero .body{animation:breathe 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
 @keyframes breathe{50%{transform:scaleY(1.02)}}
 .rpg .target{transform-box:fill-box;transform-origin:50% 100%;animation:hit 1.15s infinite}
@@ -2282,9 +2292,9 @@ const SFX = (() => {
     o.connect(g); g.connect(c.destination); o.start(t0); o.stop(t0 + dur + 0.02);
   }
   let vi = 0;
-  function clack(kind, gain){
+  function clack(kind, gain, rate){
     const c = ac(); if(!c) return;
-    const src = c.createBufferSource(); src.buffer = clackBuffer(c, kind, 0);
+    const src = c.createBufferSource(); src.buffer = clackBuffer(c, kind, 0); if(rate) src.playbackRate.value = rate;   // rate: 음높이(1 = 그대로)
     const g = c.createGain(); g.gain.value = gain;
     src.connect(g); g.connect(c.destination); src.start(c.currentTime + base);
   }
@@ -2298,10 +2308,27 @@ const SFX = (() => {
     dice(){ const c = ac(); if(!c) return; [0,.07,.15,.26].forEach((d,i) => setTimeout(() => clack('draw', .5 - i*.08), d*1000)); },
     win(){ [523, 659, 784, 1047].forEach((f, i) => tone(f, .4, .16, 'triangle', i * .09)); },
     // ---- RPG 행동 효과음(짧게) ----
-    combat(){ noise(.11, 2600, 1.2, .25, 0); noise(.16, 1300, .8, .16, .05); clack('discard', .17); blip(190, 65, .12, .08, .07, 'sawtooth'); },   // 휙! 베고 퍽 (피치 낮추고 음량 절반)   // 휙! 베고 퍽
-    wood(){ blip(170, 70, .16, .38, 0, 'triangle'); noise(.08, 750, 1.4, .5, 0); clack('discard', .8); noise(.05, 2600, 2, .18, .06); },       // 퍽! 도끼가 나무에 박힘
-    mine(){ noise(.04, 3200, 2, .55, 0); tone(1760, .2, .13, 'triangle', .005); tone(2637, .13, .07, 'sine', .015); clack('discard', .4); },       // 쨍! 곡괭이가 바위를 침
-    fish(){ noise(.26, 900, .7, .42, 0); noise(.2, 2400, 1, .22, .05); blip(620, 300, .14, .12, .02, 'sine'); blip(820, 420, .1, .08, .12, 'sine'); }, // 첨벙
+    combat(){ noise(.11, 2600, 1.2, .25, 0); noise(.16, 1300, .8, .16, .05); clack('discard', .17); },
+    // 전투 타격음: 휙 베는 소리는 같고, 맞는 소리는 몬스터 재질에 따라 다르다
+    hit(type){
+      noise(.1, 2600, 1.2, .2, 0);                                                         // 휙
+      const d = .05;
+      ({
+        slime:    () => { blip(420, 150, .14, .1, d, 'sine'); noise(.09, 700, 1.4, .14, d); noise(.05, 1600, 2, .06, d + .06); },   // 철퍽 (젤리)
+        wolf:     () => { noise(.08, 900, .8, .18, d); clack('discard', .1); },                                                       // 퍽 (털·살)
+        lizard:   () => { noise(.06, 1900, 1.6, .2, d); clack('discard', .12); },                                                     // 찰싹 (비늘 가죽)
+        scorpion: () => { noise(.09, 1100, 1, .1, d); noise(.04, 3000, 1.6, .15, d); noise(.06, 2200, 1.2, .1, d + .05); },   // 쿠샥 (갑각을 으깨는 크런치, 두어 번만)
+        yeti:     () => { noise(.12, 550, .7, .2, d); noise(.06, 3200, 2, .06, d + .03); },                                          // 툭·사각 (두꺼운 털·눈)
+        skeleton: () => { const p = [.84, 1, 1.2][Math.floor(Math.random() * 3)];   // 딱딱·달그락 (뼈) — 높낮이 3가지 중 하나가 무작위로
+          clack('discard', .3, p); tone(1400 * p, .05, .05, 'triangle', d); noise(.03, 3000 * p, 3, .1, d + .07); tone(1150 * p, .04, .035, 'triangle', d + .08); },
+        golem:    () => { clack('discard', .22); tone(1800, .18, .045, 'triangle', d); tone(2700, .14, .025, 'sine', d + .01); },   // 챙 (아다만트 던전 · 드래곤 소리와 맞바꿈)
+        demon:    () => { noise(.09, 700, .8, .2, d); clack('discard', .12); },                                                       // 퍽 (단단한 살)
+        dragon:   () => { noise(.05, 1100, 2, .28, d); clack('discard', .35); noise(.18, 2200, 1, .08, d + .05); }                  // 쩍·우수수 (드래곤 던전 · 골렘 소리와 맞바꿈)
+      }[type] || (() => { noise(.16, 1300, .8, .16, d); clack('discard', .17); }))();
+    },   // 휙! 베고 퍽 (낮게 깔리던 '두' 하는 울음 같은 소리는 뺐다)
+    wood(){ blip(170, 70, .16, .14, 0, 'triangle'); noise(.08, 750, 1.4, .19, 0); clack('discard', .3); noise(.05, 2600, 2, .07, .06); },       // 퍽! 도끼가 나무에 박힘
+    mine(){ noise(.04, 3200, 2, .2, 0); tone(1760, .2, .049, 'triangle', .005); tone(2637, .13, .026, 'sine', .015); clack('discard', .15); },       // 쨍! 곡괭이가 바위를 침
+    fish(){ noise(.26, 900, .7, .21, 0); noise(.2, 2400, 1, .11, .05); blip(620, 300, .14, .06, .02, 'sine'); blip(820, 420, .1, .04, .12, 'sine'); }, // 첨벙
     lvup(){ [659, 784, 988, 1319].forEach((f, i) => tone(f, .28, .14, 'triangle', .12 + i * .08)); },
     // ---- 마작 스킬 ----
     skFail(){   // 치익~ 달군 쇠를 물에 담그는 소리: 높은 쉬익 잡음이 서서히 잦아들고, 끝에 작은 보글
@@ -2331,7 +2358,7 @@ const SFX = (() => {
     }
   };
   api.ctx = ac;
-  api.at = (name, sec) => { base = Math.max(0, sec || 0); try{ api[name](); } finally { base = 0; } };   // name 소리를 sec초 뒤에 정확히 내도록 예약
+  api.at = (name, sec, arg) => { base = Math.max(0, sec || 0); try{ api[name](arg); } finally { base = 0; } };   // name 소리를 sec초 뒤에 정확히 내도록 예약
   return api;
 })();
 
@@ -2343,7 +2370,7 @@ const BGM_ENV = {   // [분위기, 바탕 소리, 이따금 나는 소리들] �
   wood:   [['calm','breeze',['bird']], ['calm','breeze',['bird']], ['calm','breeze',['bird','owl']], ['calm','breeze',['bird']], ['calm','breeze',['bird','insect']],
            ['calm','wind',['owl']], ['calm','breeze',['bird','owl']], ['dark','none',['chime']], ['calm','breeze',['bird','chime']], ['dark','deep',['chime']]],
   mine:   [['calm','cave',['drop']], ['calm','cave',['drop']], ['calm','cave',['drop']], ['calm','cave',['drop','chime']], ['calm','cave',['drop','chime']],
-           ['calm','cave',['drop','chime']], ['dark','rumble',['crackle','drop']], ['dark','cave',['drop','chime']], ['dark','rumble',['crackle']], ['dark','deep',['drop','chime']]],
+           ['calm','cave',['drop','chime']], ['calm','cave',['drop','chime']], ['dark','cave',['drop','chime']], ['dark','rumble',['crackle']], ['dark','deep',['drop','chime']]],   // 7단계는 이제 아다만트 광산(용암 아님)
   fish:   [['calm','brook',['bird']], ['calm','lake',['bird']], ['calm','brook',['bird']], ['calm','waves',['bird']], ['dark','deep',['bubble']],
            ['calm','waves',['chime']], ['dark','rain',[]], ['dark','rumble',['crackle']], ['dark','rumble',['crackle']], ['dark','deep',['chime']]]
 };
@@ -2363,10 +2390,10 @@ const BGM = (() => {
   const later = (fn, ms) => { const id = setTimeout(fn, ms); if(cur) cur.timers.push(id); return id; };
   // 바탕 소리: 갈색 잡음 반복 + 필터 + 아주 느린 숨결(LFO)
   function bed(o, type){
-    const c = o.c, P = {
-      breeze:[ 'bandpass', 420, .7, .035, .015, 11], wind:[ 'bandpass', 520, .9, .05, .022, 13], cave:[ 'lowpass', 160, .7, .045, .01, 17],
-      brook:[ 'bandpass', 1300, .6, .08, .03, 3.2], lake:[ 'lowpass', 520, .7, .10, .05, 9], waves:[ 'lowpass', 650, .7, .14, .10, 10],
-      rain:[ 'highpass', 1400, .6, .07, .015, 7], rumble:[ 'lowpass', 95, .8, .09, .02, 15], deep:[ 'lowpass', 130, .8, .075, .025, 14], marsh:[ 'lowpass', 380, .7, .08, .03, 12]
+    const c = o.c, P = {   // [필터, 주파수, Q, 음량, 숨결 폭, 숨결 주기] — 저음 드론은 없음(cave·rumble·deep은 바탕 소리 없이 작은 소리만)
+      breeze:[ 'bandpass', 900, .6, .03, .012, 11], wind:[ 'bandpass', 1000, .7, .04, .015, 13],
+      brook:[ 'bandpass', 1800, .6, .06, .02, 3.2], lake:[ 'bandpass', 1100, .5, .035, .012, 9], waves:[ 'bandpass', 1000, .5, .05, .02, 10],
+      rain:[ 'highpass', 1400, .6, .07, .015, 7], marsh:[ 'bandpass', 1200, .6, .03, .01, 12]
     }[type];
     if(!P) return;
     const src = c.createBufferSource(); src.buffer = brownBuf(c); src.loop = true;
@@ -2396,14 +2423,14 @@ const BGM = (() => {
   const EV = {
     bird(o, t){ const n = 2 + Math.floor(Math.random() * 3), base = 2600 + Math.random() * 1200;
       for(let i = 0; i < n; i++) sweep(o, base, base * (1.3 + Math.random() * .3), .07, .018, t + i * (.12 + Math.random() * .06)); },
-    owl(o, t){ [0, .55].forEach((d, i) => sweep(o, 390 - i * 20, 350 - i * 20, .45, .03, t + d, 'sine', .12)); },
+    owl(o, t){ [0, .55].forEach((d, i) => sweep(o, 620 - i * 30, 560 - i * 30, .4, .018, t + d, 'sine', .12)); },
     insect(o, t){ for(let i = 0; i < 8; i++) sweep(o, 4600, 4500, .035, .006, t + i * .06); },
     drop(o, t){ const f = 900 + Math.random() * 700; sweep(o, f, f * .45, .14, .035, t, 'sine', .004); sweep(o, f * .9, f * .4, .14, .012, t + .23, 'sine', .004); sweep(o, f * .85, f * .4, .14, .005, t + .46, 'sine', .004); },
     chime(o, t){ const notes = [1318.5, 1568, 1760, 2093, 2349]; for(let i = 0; i < 2; i++) ring(o, notes[Math.floor(Math.random() * notes.length)], 2.4, .012, t + i * .4); },
     crackle(o, t){ for(let i = 0; i < 6; i++) click(o, t + Math.random() * 1.2, .02); },
-    frog(o, t){ for(let i = 0; i < 2; i++) croak(o, t + i * .35); },
+    frog(o, t){ EV.insect(o, t); },   // 낮은 개구리 울음 대신 풀벌레
     bubble(o, t){ for(let i = 0; i < 3; i++) sweep(o, 280 + Math.random() * 80, 640, .08, .02, t + i * .13, 'sine', .01); },
-    bell(o, t){ ring(o, 196, 5, .025, t); ring(o, 196 * 2.76, 3, .008, t); ring(o, 196 * 5.4, 2, .004, t); }
+    bell(o, t){ EV.chime(o, t); }   // 낮은 종 대신 맑은 풍경
   };
   function sweep(o, f0, f1, dur, gain, t, type, att){
     const c = o.c, os = c.createOscillator(); os.type = type || 'sine';
@@ -2449,8 +2476,9 @@ const BGM = (() => {
     stop();
     const c = SFX.ctx(); if(!c) return;
     const master = c.createGain(); master.gain.setValueAtTime(0, c.currentTime); master.gain.linearRampToValueAtTime(.55, c.currentTime + 4);   // 천천히 커진다
-    const comp = c.createDynamicsCompressor(); comp.threshold.value = -30; comp.ratio.value = 4;   // 갑자기 큰 소리가 나지 않게
-    master.connect(comp); comp.connect(c.destination);
+    const comp = c.createDynamicsCompressor(); comp.threshold.value = -34; comp.ratio.value = 6;   // 갑자기 큰 소리가 나지 않게
+    const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 300; hp.Q.value = .7;   // 저주파(웅웅거림)는 통째로 잘라 낸다
+    master.connect(hp); hp.connect(comp); comp.connect(c.destination);
     const fx = c.createGain(); fx.gain.value = 1;
     // 작은 소리들에는 짧은 잔향(동굴이면 길게)
     const dl = c.createDelay(1); dl.delayTime.value = conf[1] === 'cave' || conf[1] === 'deep' ? .33 : .18;
@@ -2458,7 +2486,7 @@ const BGM = (() => {
     fx.connect(master); fx.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(master);
     const o = { key, c, master, fx, nodes: [], timers: [], mood: conf[0], ev: conf[2], chordIdx: 0 };
     cur = o;
-    bed(o, conf[1]); pad(o); later(() => cur === o && events(o), 2500);
+    bed(o, conf[1]); later(() => cur === o && events(o), 2500);   // 낮게 깔리던 화음 패드는 쓰지 않는다
   }
   return {
     sync(){   // 화면이 바뀔 때마다 부른다: RPG 화면이고 소리·BGM이 켜져 있으면 지금 던전의 BGM
@@ -3159,10 +3187,14 @@ function layerHTML(g, s, walls){
   const dealer = g.dealer === s;
   const last = g.log.length ? g.log[g.log.length-1] : null;
   const cpd = UI.pending && UI.pending.kind === 'call' && !UI.confirm && UI.pending.opts.from === s ? UI.pending : null;
+  // 리치 표시: 선언패가 울려 가면 그 뒤 리치자의 첫 타패를 가로로(그것도 울려 가면 또 다음 타패). 강에 가로 패는 늘 1장
+  const shownD = d => !d.called || (UI.claim && UI.claim.id === d.id);
+  const ri0 = p.discards.findIndex(d => d.riichi);
+  const riSide = ri0 < 0 ? -1 : p.discards.findIndex((d, i) => i >= ri0 && shownD(d));
   const river = p.discards.map((d,i) => {
     if(d.called && !(UI.claim && UI.claim.id === d.id)) return '';   // 울려 간 패는 강에서 사라진다
     const callme = cpd && i === p.discards.length-1;
-    return tileId(d.id, {size:'rv', cls:[d.riichi?'rii':'', d.tsumogiri && !(i === 0 && s === g.dealer) ? 'tg' : '', (last && last.seat===s && i===p.discards.length-1 && !d.called)?'last':'', callme?'callme':'', UI.inv && UI.inv.has(d.id) ? 'inv' : ''].join(' '), attrs: callme ? 'data-act="callTile" role="button" aria-label="이 패로 울기"' : ''});
+    return tileId(d.id, {size:'rv', cls:[i === riSide?'rii':'', d.tsumogiri && !(i === 0 && s === g.dealer) ? 'tg' : '', (last && last.seat===s && i===p.discards.length-1 && !d.called)?'last':'', callme?'callme':'', UI.inv && UI.inv.has(d.id) ? 'inv' : ''].join(' '), attrs: callme ? 'data-act="callTile" role="button" aria-label="이 패로 울기"' : ''});
   }).concat(s === 0 && UI.riichiDiscard != null ? [tileId(UI.riichiDiscard, {size:'rv', cls:'rii pendrii' + (UI.inv && UI.inv.has(UI.riichiDiscard) ? ' inv' : '')})] : []);
   const co = UI.callouts[s];
   const coNew = co && Date.now() - (UI.calloutAt[s] || 0) < 300;
@@ -3280,8 +3312,10 @@ function drillMenuHTML(){
     <div class="row"><button class="btn" data-act="closeModal">닫기</button></div></div>`;
 }
 function secretMenuHTML(){
-  return `<div class="sheet"><h2>축의칩</h2>
-    <div class="row"><button class="btn" data-act="chipCheat" data-n="9999">축의 +9999</button><button class="btn" data-act="chipCheat" data-n="-9999">축의 -9999</button></div>
+  const on = !!settings.admin;
+  return `<div class="sheet"><h2>운영자 모드</h2>
+    <p class="muted" style="margin:0">켜면 RPG 상점의 모든 장비를 축의칩·레벨 없이 눌러서 바로 착용해요 (낮은 등급으로도). 레벨 상한도 걸리지 않아요.</p>
+    <div class="row"><button class="btn ${on ? 'primary' : ''}" data-act="adminToggle" aria-pressed="${on}">운영자 모드 ${on ? 'ON' : 'OFF'}</button></div>
     <div class="row"><button class="btn" data-act="closeModal">닫기</button></div></div>`;
 }
 const DRILL_RINSHAN = ['minkan', 'ankan', 'kakan', 'nuki'];   // 깡·북 빼기: 영상패를 뽑고 타패까지 해야 완료
@@ -3542,7 +3576,7 @@ function gameHTML(){
     if(fx.cnt && walls[fx.cseat]){ const w = walls[fx.cseat]; for(let k = 0; k < fx.cnt && k < w.length; k++){ const sl = w[w.length - 1 - k]; sl.cnt = true; sl.out = !!fx.split; } }
   }
   return `<div class="game">
-  <div class="topbar"><span></span><span class="row" style="gap:6px;align-items:center"><span class="muted">${UI.drill ? '연습모드' : modeName(UI.mode) + (UI.usedHint ? ' · 힌트 사용 판' : '')}</span>${UI.drill ? '' : `<span class="skbs">${skillBadges()}</span>`}<button class="btn small spk ${settings.sound!==false?'on':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button><button class="btn small hbtn" data-act="help" aria-label="조작 설명" title="조작 설명">?</button><button class="btn small xbtn" data-act="quit" aria-label="나가기" title="나가기">✕</button></span></div>
+  <div class="topbar"><span></span><span class="row" style="gap:6px;align-items:center"><span class="muted">${UI.drill ? '연습모드' : modeName(UI.mode) + (UI.usedHint ? ' · 힌트 사용 판' : '')}</span>${UI.drill ? '' : `<span class="skbs">${skillBadges()}</span>`}<button class="btn small spk ${settings.sound!==false?'on':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button><button class="btn small hbtn" data-act="help" aria-label="도움말" title="도움말">?</button><button class="btn small xbtn" data-act="quit" aria-label="나가기" title="나가기">✕</button></span></div>
   ${drillBarHTML()}
   <div class="table ${walls?'withwall':''} ${Date.now() < (UI.diffUntil || 0) ? 'showdiff' : ''}" aria-label="마작 탁자">
     ${consoleHTML(!!UI.diceShow, UI.lastDice || g.diceVals, !!UI.rollWait, UI.autoDeal)}
@@ -3706,7 +3740,7 @@ function gameEnd(fin, g){
   UI.token++; show('home');
 }
 function helpHTML(){
-  return `<div class="sheet help" role="dialog" aria-modal="true"><h2>조작</h2>
+  return `<div class="sheet help" role="dialog" aria-modal="true"><h2>도움말</h2>
     <ul>
       <li><b>쯔모</b> 빛나는 패산 패를 손패로 <kbd>좌클릭 드래그</kbd> · <kbd>우클릭</kbd></li>
       <li><b>타패</b> 손패를 강으로 <kbd>좌클릭 드래그</kbd> · 쯔모 직후 <kbd>우클릭</kbd> = 쯔모기리</li>
@@ -3717,11 +3751,11 @@ function helpHTML(){
       <li><b>패 돌리기</b> <kbd>좌클릭 드래그</kbd> 중 <kbd>휠</kbd> · <kbd>우클릭</kbd> 180°</li>
       <li><b>폰</b> <kbd>드래그</kbd> 중 패를 점봉 케이스에 담그기: 왼쪽 <kbd>휠</kbd>↑ · 가운데 <kbd>우클릭</kbd> · 오른쪽 <kbd>휠</kbd>↓</li>
     </ul>
-    <h3>스킬 (실버 20% → 옵시디언 100%)</h3>
+    <h2>장비 레벨에 따라 발동확률을 가진 스킬</h2>
     <ul>
-      <li>⚔ 살기 감지 — <kbd>좌클릭 드래그</kbd> 중 <kbd>휠</kbd>: 론 대기패인지 (초록 안전 · 빨강 방총)</li>
-      <li>🪓 바꿔치기 — 손패를 패산으로 <kbd>좌클릭 드래그</kbd>해 2장까지 교체</li>
-      <li>⛏ 광맥 탐지 — 도라 표시패 <kbd>좌클릭</kbd>: 뒷도라</li>
+      <li>⚔ 살기 감지 — <kbd>좌클릭 드래그</kbd> 중 <kbd>휠</kbd>: 방총 감지 (초록 안전 · 빨강 방총)</li>
+      <li>🪓 바꿔치기 — 손패를 패산으로 <kbd>좌클릭 드래그</kbd>해 2장까지 바꿔치기</li>
+      <li>⛏ 광맥 탐지 — 도라 표시패 <kbd>좌클릭</kbd>: 뒷도라가 보임</li>
       <li>🎣 입질 — 다음 쯔모 패가 패산에 보임</li>
     </ul>
     <div class="row"><button class="btn primary" data-act="closeModal">닫기</button></div></div>`;
@@ -3804,7 +3838,8 @@ function boardHTML(d){
   const seen = new Set([...(d.me.uk||[]), ...(d.ai.uk||[])].map(x => x[0]));
   const mark = k => seen.has(k) ? 'seen' : '';
   const layer = s => {
-    const rv = b.rivers[s].map(v => { const k = v & 63; return tile(k, {size:'rv', cls:[(v&64)?'rii':'', (v&128)?'gone':'', mark(k)].join(' ')}); });
+    const rr = b.rivers[s], r0 = rr.findIndex(v => v & 64), rSide = r0 < 0 ? -1 : rr.findIndex((v, i) => i >= r0 && !(v & 128));   // 선언패가 울려 가면 다음 타패를 가로로
+    const rv = rr.map((v, i) => { const k = v & 63; return tile(k, {size:'rv', cls:[i === rSide ? 'rii' : '', (v&128)?'gone':'', mark(k)].join(' ')}); });
     let edge = '';
     if(s !== 0){
       const n = b.handN ? b.handN[s] : 13 - 3*b.melds[s].length;
@@ -3918,7 +3953,7 @@ function importCode(txt){
 // 단계가 오를수록 한 틱의 exp는 커지지만 틱이 느려지고, 장비 등급이 그 틱을 줄여 준다. 장비·단계는 마작 축의칩으로 산다.
 const RPG_KEY = 'rm.rpg.v1';
 const TIERS = [
-  {n:'브론즈', c:'#9a5a2c'}, {n:'실버', c:'#cdd5dd'}, {n:'골드', c:'#f5cc35'}, {n:'아이언', c:'#7b8087'}, {n:'스틸', c:'#c9ced4'},
+  {n:'브론즈', c:'#9a5a2c'}, {n:'실버', c:'#aeb7c1'}, {n:'골드', c:'#f5cc35'}, {n:'아이언', c:'#7b8087'}, {n:'스틸', c:'#ffffff'},
   {n:'미스릴', c:'#3a78ff', gl:'#6fa0ff'}, {n:'아다만트', c:'#2db84c', gl:'#5cff7c'}, {n:'룬', c:'#3fd2bd', gl:'#6fffe8'}, {n:'드래곤', c:'#c8102e', gl:'#ff3a4a'}, {n:'옵시디언', c:'#120a1c', gl:'#b04dff'}
 ];
 // 단계: 이름, 하늘 위/아래, 땅, 주색(물·잎·바위·몬스터), 보조색(광석·몬스터 종류), 날씨
@@ -3929,7 +3964,7 @@ const SKILLS = {
     ['늪', '#7d9a86','#b9c9a8','#4c5d36','#5d8f4b','lizard', null],
     ['사막', '#f7c46c','#ffe6b0','#e2b56a','#b0603a','scorpion', null],
     ['설산', '#b8d4ee','#eef6ff','#e9f1f7','#f4f8ff','yeti', 'snow'],
-    ['고대 폐허', '#5c6a7d','#a3a9b5','#7b7466','#e8e3d0','skeleton', null],
+    ['폐허', '#5c6a7d','#a3a9b5','#7b7466','#e8e3d0','skeleton', null],
     ['화산', '#3b1d1d','#a8432a','#4a2a22','#8b6f5a','golem', 'ember'],
     ['마왕성', '#1c1530','#4a2d5e','#3a3346','#c2263a','demon', null],
     ['지옥', '#1a0000','#7a0d0d','#2b0b0b','#e0531f','dragon', 'ember'],
@@ -3940,22 +3975,22 @@ const SKILLS = {
     ['삼나무 숲', '#7cb7d8','#cfe7ea','#4f8f45','#2f7a3e','pine', null],
     ['단풍 숲', '#ffcf8f','#ffe9c7','#b98a4a','#e8582a','oak', 'leaf'],
     ['정글', '#7fd0a8','#d6f5d0','#3e7d2f','#1f9a4a','palm', null],
-    ['설원 침엽수림', '#b8d4ee','#f2f8ff','#eef4f8','#2e6b4b','pine', 'snow'],
-    ['거목의 숲', '#5e8f6a','#a9c9a0','#3b5e2e','#2c6e2c','giant', null],
+    ['설원', '#b8d4ee','#f2f8ff','#eef4f8','#2e6b4b','pine', 'snow'],
+    ['거목 숲', '#5e8f6a','#a9c9a0','#3b5e2e','#2c6e2c','giant', null],
     ['수정 숲', '#2a2f5a','#6a7bd0','#3a3f6b','#7ff0ff','crystal', 'glint'],
     ['세계수', '#ffd88a','#fff4d0','#8c7a3a','#e8c03a','giant', 'glint'],
-    ['공허의 숲', '#020104','#140a24','#0a0610','#6a30e0','crystal', 'glint'] ] },
-  mine: { name:'광질', tool:'곡괭이', stages:[
-    ['동굴 입구', '#5b6b78','#8e9aa3','#6e6458','#8a8178','#b5b0a8', null],
-    ['구리 광맥', '#3f3a36','#6b5d52','#5a4a3e','#7a6a5a','#d77a3a', null],
-    ['철 광산', '#33363b','#5d636b','#4a4d52','#6d7178','#c8ccd2', null],
+    ['공허 숲', '#020104','#140a24','#0a0610','#6a30e0','crystal', 'glint'] ] },
+  mine: { name:'광질', tool:'곡괭이', stages:[   // 장비 등급과 같은 광산·광석 (브론즈=구리, 실버=은, 골드=금 …)
+    ['구리 광산', '#3f3a36','#6b5d52','#5a4a3e','#7a6a5a','#d77a3a', null],
     ['은 광산', '#2c3340','#56606f','#454c58','#69727f','#eef3fa', 'glint'],
     ['금 광산', '#3a2f1c','#6e5a33','#5a4a2c','#7a6640','#ffd34a', 'glint'],
-    ['보석 동굴', '#251f3a','#4f3f7a','#3c3358','#5d4f86','#ff5fa8', 'glint'],
-    ['용암 광산', '#2a0f08','#7a2a12','#3a1a12','#5a2a1e','#ff7a2a', 'ember'],
-    ['미스릴 심층', '#0f1a2e','#2a4470','#1e2c44','#34486a','#a8c8ff', 'glint'],
-    ['용의 광맥', '#200404','#6a140e','#2e0e0a','#4a1812','#ff3a3a', 'ember'],
-    ['공허의 심연', '#020104','#120820','#0a0610','#160c24','#b06bff', 'glint'] ] },
+    ['철 광산', '#33363b','#5d636b','#4a4d52','#6d7178','#9aa0a8', null],
+    ['강철 광산', '#2a2e33','#4f565e','#3e444b','#5d646c','#ffffff', 'glint'],
+    ['미스릴 광산', '#0f1a2e','#2a4470','#1e2c44','#34486a','#6fa0ff', 'glint'],
+    ['아다만트 광산', '#0e2214','#1f5a30','#1a3a22','#2c5a36','#5cff7c', 'glint'],
+    ['룬 광산', '#0e2428','#1f5a5e','#173a3e','#2a5458','#6fffe8', 'glint'],
+    ['드래곤 광산', '#200404','#6a140e','#2e0e0a','#4a1812','#ff3a3a', 'ember'],
+    ['옵시디언 광산', '#020104','#120820','#0a0610','#160c24','#b06bff', 'glint'] ] },
   fish: { name:'낚시', tool:'낚싯대', stages:[
     ['개울', '#9fdcff','#e6f7ff','#6cbf4f','#5fb7e8','#9be0ff', null],
     ['호수', '#8fcff5','#dff2ff','#5aa84a','#3f97d6','#8fd0ff', null],
@@ -3966,16 +4001,18 @@ const SKILLS = {
     ['폭풍 바다', '#3d4652','#7d8894','#5a6066','#2f4f66','#8fa6b8', 'rain'],
     ['용암 바다', '#2a0f08','#8a3512','#3a2a26','#e0531f','#ffb24a', 'ember'],
     ['지옥 바다', '#0d0000','#4a0606','#1e1212','#b0101a','#ff4a4a', 'ember'],
-    ['공허의 바다', '#020104','#120820','#0e0818','#0a0614','#7a3cff', 'glint'] ] },
+    ['공허 바다', '#020104','#120820','#0e0818','#0a0614','#7a3cff', 'glint'] ] },
 };
 const SK_KEYS = ['combat', 'wood', 'mine', 'fish'];
 // 등급 g(장비 + 같은 등급 던전)를 사는 값. 하루에 마작 2~3판 → 축의 하루 약 10개로 보고,
 //  앞 등급이 상한까지 가는 실제 시간(6등급 11h · 7등급 28h · 8등급 72h)에 하루치 축의가 맞도록 정했다
 const GRADE_PRICE = [0, 1, 2, 2, 3, 8, 15, 30, 55, 100];   // 스틸까지는 금방, 미스릴부터 점점 늘어 옵시디언 100개
 // 레벨 상한: 1등급 19 · 2등급 29 … 8등급 89, 옵시디언은 99 이후로도 끝없이. 상한에 닿으면 경험치도 더 쌓이지 않는다(저축 없음)
-const LV_CAP = g => g >= 10 ? Infinity : 10 * g + 9;   // 브론즈 19 … 룬 89 · 드래곤 99 · 옵시디언 100(이후 경험치는 끝없이)
-const EXP_CAP = g => g >= 10 ? Infinity : CUM[LV_CAP(g) + 1] - 1;   // 상한 레벨의 막대가 꽉 찬 지점
-const capped = sk => sk.exp >= EXP_CAP(sk.gear);   // 등급 g(장비 + 같은 등급 던전)를 사는 값. 1등급은 처음부터
+// 착용 레벨: 실버 20 · 골드 30 … 드래곤 90 · 옵시디언 100. 상한은 다음 등급의 착용 레벨(브론즈 20 … 드래곤 100), 그 레벨에 닿는 순간 멈춘다
+const REQ_LV = g => g >= 2 ? 10 * g : 1;
+const LV_CAP = g => g >= 10 ? Infinity : 10 * g + 10;
+const EXP_CAP = g => g >= 10 ? Infinity : CUM[LV_CAP(g)];
+const capped = sk => !settings.admin && sk.exp >= EXP_CAP(sk.gear);   // 등급 g(장비 + 같은 등급 던전)를 사는 값. 1등급은 처음부터
 const OFFLINE_CAP = 24 * 3600 * 1000;                         // 꺼 둔 동안은 최대 24시간까지 쌓인다
 // 레벨 L까지 누적 경험치 = ⌊¼ × Σ(l=1..L-1) ⌊l + 300·2^(l/7)⌋⌋ (Lv2 83 · Lv50 101,333 · Lv92 6,517,253 · Lv99 13,034,431)
 const CUM = [0, 0]; { let pts = 0; for(let L = 2; L <= 100; L++){ pts += Math.floor((L - 1) + 300 * Math.pow(2, (L - 1) / 7)); CUM[L] = Math.floor(pts / 4); } }
@@ -4005,12 +4042,19 @@ function rpgNorm(st){
       const f = L >= 99 ? 0 : (sk.exp - OLD_CUM[L]) / (OLD_CUM[L+1] - OLD_CUM[L]);
       sk.exp = L >= 99 ? CUM[99] : Math.floor(CUM[L] + f * NEED[L]);
     }
-    const g = Math.max(1, Math.min(10, Math.max(+sk.gMax || 1, +sk.sMax || 1)));   // 예전에 사 둔 장비·단계 중 높은 등급으로
-    sk.gear = sk.stage = sk.gMax = sk.sMax = g;
+    if(!st.xv || st.xv < 4){   // 예전 저장: 사 둔 장비·단계 중 높은 등급을 착용한 것으로
+      const g = Math.max(1, Math.min(10, Math.max(+sk.gMax || 1, +sk.sMax || 1)));
+      sk.gear = sk.stage = sk.gMax = sk.sMax = g;
+    } else {   // 사면 곧 착용: 사 두고 못 입은 등급이 있으면 그 값을 축의칩으로 돌려준다
+      sk.gear = sk.stage = Math.max(1, Math.min(10, +sk.gear || 1));
+      const gm = Math.max(sk.gear, Math.min(10, +sk.gMax || 1));
+      for(let g = sk.gear + 1; g <= gm; g++) st.chips = (+st.chips || 0) + GRADE_PRICE[g - 1];
+      sk.gMax = sk.sMax = sk.gear;
+    }
     sk.exp = Math.max(0, +sk.exp || 0);
     st.sk[k] = sk;
   }
-  st.xv = 3;
+  st.xv = 5;
   return st;
 }
 const RPG = { st: rpgLoad(), away: null, events: [] };
@@ -4035,7 +4079,7 @@ function rpgAdvance(offline){
   if(n <= 0) return null;
   st.carry -= n * T;
   const before = lvOf(sk.exp);
-  const gain = Math.max(0, Math.min(n * expPer(sk.stage), EXP_CAP(sk.gear) - sk.exp));
+  const gain = Math.max(0, Math.min(n * expPer(sk.stage), (settings.admin ? Infinity : EXP_CAP(sk.gear)) - sk.exp));
   sk.exp += gain;
   const after = lvOf(sk.exp);
   const cap = capped(sk);
@@ -4055,7 +4099,7 @@ function rpgFx(r){
   const pos = { combat:[70,40], wood:[56,36], mine:[60,46], fish:[66,52] }[r.k] || [60,40];
   f.style.left = pos[0] + '%'; f.style.top = pos[1] + '%';
   f.textContent = `+${fmtNum(r.gain)} exp`; sc.appendChild(f); setTimeout(() => f.remove(), 1200);
-  if(SFX[r.k] && (r.k === 'fish' || !swingAnim())) SFX[r.k]();   // 낚시는 틱(물고기 점프)에, 나머지는 휘두르는 타이밍(rpgFrame)에 소리가 난다. 애니메이션이 없는 환경(모션 줄이기)이면 틱에
+  if(SFX[r.k] && (r.k === 'fish' || !swingAnim())){ if(r.k === 'combat') SFX.hit(SKILLS.combat.stages[RPG.st.sk.combat.stage - 1][5]); else SFX[r.k](); }   // 낚시는 틱(물고기 점프)에, 나머지는 휘두르는 타이밍(rpgFrame)에 소리가 난다. 애니메이션이 없는 환경(모션 줄이기)이면 틱에
   if(r.after > r.before){
     const l = document.createElement('div'); l.className = 'lvup'; l.textContent = `LEVEL UP! Lv ${r.after}`;
     sc.appendChild(l); setTimeout(() => l.remove(), 1900); SFX.lvup();
@@ -4102,7 +4146,10 @@ function rpgSwingSfx(){
     if(Math.abs(d) > .07) SWING.nextA = actual;                   // 70ms 넘게 어긋나면 재동기
   }
   while(SWING.nextA - now < .3){                                  // 0.3초 앞까지만 미리 예약
-    if(SWING.nextA >= now - .02) SFX.at(st.active, SWING.nextA - now);
+    if(SWING.nextA >= now - .02){
+      if(st.active === 'combat') SFX.at('hit', SWING.nextA - now, SKILLS.combat.stages[st.sk.combat.stage - 1][5]);   // 몬스터 재질별 타격음
+      else SFX.at(st.active, SWING.nextA - now);
+    }
     SWING.nextA += period;
   }
 }
@@ -4113,10 +4160,10 @@ function rpgPerson(k, tierC){
   const X = k === 'fish' ? 70 : k === 'combat' ? 150 : k === 'mine' ? 112 : 112, Y = 170, sh = [X + 4, Y - 58];
   const tool = {
     // 손(아래 끝)에서 바깥으로 뻗고, 날은 휘두르는 쪽(-x)을 향한다
-    wood:   `<line x1="0" y1="16" x2="0" y2="60" stroke="#7a4a22" stroke-width="4" stroke-linecap="round"/><path d="M1 44 L-15 38 Q-21 49 -15 61 L1 56 Z" fill="${tierC}" class="tc" stroke="rgba(0,0,0,.45)" stroke-width="1"/>`,
-    mine:   `<line x1="0" y1="16" x2="0" y2="58" stroke="#7a4a22" stroke-width="4" stroke-linecap="round"/><path d="M-19 48 Q0 64 19 48 L17 45 Q0 57 -17 45 Z" fill="${tierC}" class="tc" stroke="rgba(0,0,0,.45)" stroke-width="1"/>`,
-    combat: `<rect x="-2" y="18" width="4" height="11" rx="1.5" fill="#5a3a1a"/><rect x="-8" y="28" width="16" height="4" rx="2" fill="#6b5a3a"/><path d="M-3 32 L-3 74 L0 81 L3 74 L3 32 Z" fill="${tierC}" class="tc" stroke="rgba(0,0,0,.45)" stroke-width="1"/>`,
-    fish:   `<g class="rodA"><line x1="-12" y1="22" x2="104" y2="63" stroke="${tierC}" class="tc" stroke-width="3" stroke-linecap="round"/><line x1="-12" y1="22" x2="10" y2="30" stroke="#5a3a1a" stroke-width="5" stroke-linecap="round"/></g>`
+    wood:   `<rect x="-2.3" y="15" width="4.6" height="47" rx="2" fill="url(#hWood)" stroke="rgba(30,16,6,.6)" stroke-width=".8"/><path d="M-2.3 20 h4.6 M-2.3 23 h4.6 M-2.3 26 h4.6" stroke="#2a180a" stroke-width=".8"/><rect x="-3.4" y="40" width="6.8" height="7" rx="1" fill="#5a4a3a" stroke="rgba(0,0,0,.5)" stroke-width=".7"/><path d="M2 41 L-12 35 Q-23 48 -15 63 L2 55 Z" fill="${tierC}" class="tc" stroke="rgba(0,0,0,.5)" stroke-width="1"/><path d="M-12.5 36.5 Q-21 48 -14.5 61" stroke="rgba(255,255,255,.6)" stroke-width="1.3" fill="none"/><path d="M0 43 L-9 39 Q-14 48 -10 57 L0 53" fill="rgba(0,0,0,.18)"/>`,
+    mine:   `<rect x="-2.3" y="15" width="4.6" height="44" rx="2" fill="url(#hWood)" stroke="rgba(30,16,6,.6)" stroke-width=".8"/><path d="M-2.3 20 h4.6 M-2.3 23 h4.6 M-2.3 26 h4.6" stroke="#2a180a" stroke-width=".8"/><path d="M-21 49 Q0 66 21 49 L18 45 Q0 58 -18 45 Z" fill="${tierC}" class="tc" stroke="rgba(0,0,0,.5)" stroke-width="1"/><path d="M-18 47 Q0 60 18 47" stroke="rgba(255,255,255,.55)" stroke-width="1" fill="none"/><rect x="-4" y="47" width="8" height="8" rx="1.5" fill="#5a4a3a" stroke="rgba(0,0,0,.5)" stroke-width=".7"/><circle cx="0" cy="51" r="1.1" fill="#c9a24a"/>`,
+    combat: `<circle cx="0" cy="17" r="2.6" fill="#e2b84a" stroke="#7a5a18" stroke-width=".8"/><rect x="-2" y="18" width="4" height="11" rx="1.5" fill="#4a2a14"/><path d="M-1.6 20 h3.2 M-1.6 23 h3.2 M-1.6 26 h3.2" stroke="#2a180a" stroke-width=".7"/><path d="M-10 28 Q0 31 10 28 L9 32 Q0 34 -9 32 Z" fill="#e2b84a" stroke="#7a5a18" stroke-width=".8"/><path d="M-3.2 32 L-3.2 74 L0 82 L3.2 74 L3.2 32 Z" fill="${tierC}" class="tc" stroke="rgba(0,0,0,.5)" stroke-width="1"/><path d="M0 34 L0 74" stroke="rgba(255,255,255,.55)" stroke-width="1"/><path d="M-1.6 34 L-1.6 72" stroke="rgba(0,0,0,.2)" stroke-width=".8"/>`,
+    fish:   `<g class="rodA"><line x1="-12" y1="22" x2="104" y2="63" stroke="${tierC}" class="tc" stroke-width="3" stroke-linecap="round"/><line x1="-12" y1="21.2" x2="104" y2="62.2" stroke="rgba(255,255,255,.45)" stroke-width=".8" stroke-linecap="round"/>${[30, 55, 80].map(t => `<circle cx="${-12 + 116 * t / 100}" cy="${22 + 41 * t / 100 + 2.2}" r="1.6" fill="none" stroke="#c9ccd2" stroke-width=".8"/>`).join('')}<line x1="-12" y1="22" x2="10" y2="30" stroke="#b8865a" stroke-width="5.5" stroke-linecap="round"/><path d="M-9 23 l2 1 M-5 24.4 l2 1 M-1 25.8 l2 1 M3 27.2 l2 1" stroke="#7a5230" stroke-width=".8"/><circle cx="4" cy="34" r="4.2" fill="#9aa3ad" stroke="rgba(0,0,0,.55)" stroke-width=".9"/><circle cx="4" cy="34" r="1.5" fill="#5a636d"/><path d="M4 34 l4 3" stroke="#3a3f45" stroke-width="1.2" stroke-linecap="round"/></g>`
   }[k];
   const seated = k === 'fish';
   const gl0 = (TIERS.find(t => t.c === tierC) || {}).gl;
@@ -4128,23 +4175,67 @@ function rpgPerson(k, tierC){
       <rect x="${X-14}" y="${Y-14}" width="32" height="5" rx="2" fill="#9a6232"/>
     </g>` : '';
   const gl = (TIERS.find(t => t.c === tierC) || {}).gl;   // 미스릴·아다만트·룬·옵시디언: 제 색으로 빛난다
+  const sd = seated, T = Y - (sd ? 56 : 64), HY = Y - (sd ? 72 : 80) + 4;   // 몸통 위·머리 중심
+  // 용사: 은빛 흉갑 · 붉은 망토 · 가죽 장화 · 머리띠. 명암은 그라데이션으로
+  const defs = `<defs>
+    <linearGradient id="hArm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f7fa"/><stop offset=".45" stop-color="#b9c3cd"/><stop offset="1" stop-color="#6c7885"/></linearGradient>
+    <linearGradient id="hCape" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b3212b"/><stop offset="1" stop-color="#6a0f16"/></linearGradient>
+    <linearGradient id="hBoot" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a4426"/><stop offset="1" stop-color="#3a2414"/></linearGradient>
+    <linearGradient id="hLeg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a3346"/><stop offset="1" stop-color="#3d4a63"/></linearGradient>
+    <linearGradient id="hWood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a3418"/><stop offset=".45" stop-color="#9a6634"/><stop offset="1" stop-color="#4a2a12"/></linearGradient>
+  </defs>`;
+  const OL = 'stroke="rgba(20,16,12,.55)" stroke-width="1" stroke-linejoin="round"';
+  const cape = sd
+    ? `<path class="cape" d="M${X-9} ${T+2} Q${X-18} ${T+16} ${X-17} ${Y-14} L${X-6} ${Y-16} Q${X-6} ${T+20} ${X+2} ${T+2} Z" fill="url(#hCape)" ${OL}/>`
+    : `<path class="cape" d="M${X-8} ${T+1} Q${X-20} ${T+22} ${X-26} ${Y-6} Q${X-16} ${Y-2} ${X-8} ${Y-8} Q${X-12} ${T+26} ${X+2} ${T+1} Z" fill="url(#hCape)" ${OL}/>
+       <path d="M${X-14} ${T+18} Q${X-20} ${T+34} ${X-22} ${Y-10}" stroke="rgba(0,0,0,.25)" stroke-width="1.2" fill="none"/>`;
+  const legs = sd
+    ? `<rect x="${X-6}" y="${Y-22}" width="26" height="9" rx="4" fill="url(#hLeg)" ${OL}/><rect x="${X+14}" y="${Y-22}" width="9" height="13" rx="3" fill="url(#hLeg)" ${OL}/>
+       <path d="M${X+13} ${Y-11} L${X+24} ${Y-11} L${X+24} ${Y-4} L${X+28} ${Y-3} Q${X+29} ${Y+1} ${X+26} ${Y+1} L${X+13} ${Y+1} Z" fill="url(#hBoot)" ${OL}/>`
+    : `<rect x="${X-9}" y="${Y-30}" width="8" height="19" rx="3" fill="url(#hLeg)" ${OL}/><rect x="${X+2}" y="${Y-30}" width="8" height="19" rx="3" fill="url(#hLeg)" ${OL}/>
+       <path d="M${X-10} ${Y-13} L${X} ${Y-13} L${X} ${Y-4} L${X+3} ${Y-3} Q${X+4} ${Y+1} ${X+1} ${Y+1} L${X-10} ${Y+1} Z" fill="url(#hBoot)" ${OL}/>
+       <path d="M${X+1} ${Y-13} L${X+11} ${Y-13} L${X+11} ${Y-4} L${X+14} ${Y-3} Q${X+15} ${Y+1} ${X+12} ${Y+1} L${X+1} ${Y+1} Z" fill="url(#hBoot)" ${OL}/>
+       <path d="M${X-10} ${Y-13} h10 M${X+1} ${Y-13} h10" stroke="#c9a24a" stroke-width="1.2"/>`;
+  const torso = `
+      <path d="M${X-11} ${T+6} Q${X-12} ${T} ${X-5} ${T-1} L${X+7} ${T-1} Q${X+13} ${T} ${X+12} ${T+6} L${X+11} ${T+28} L${X-10} ${T+28} Z" fill="url(#hArm)" ${OL}/>
+      <path d="M${X+1} ${T+2} L${X+1} ${T+26}" stroke="rgba(255,255,255,.55)" stroke-width="1"/>
+      <path d="M${X-8} ${T+10} Q${X+1} ${T+14} ${X+10} ${T+10}" stroke="rgba(60,70,80,.45)" stroke-width="1" fill="none"/>
+      <rect x="${X-11}" y="${T+26}" width="23" height="5" rx="1.5" fill="#5a3418" ${OL}/><rect x="${X-1}" y="${T+26}" width="5" height="5" rx="1" fill="#e2b84a" stroke="#8a6a1e" stroke-width=".8"/>
+      <path d="M${X-11} ${T+31} L${X-9} ${T+37} L${X-2} ${T+37} L${X} ${T+31} Z M${X+1} ${T+31} L${X+3} ${T+37} L${X+10} ${T+37} L${X+12} ${T+31} Z" fill="url(#hArm)" ${OL}/>`;
+  // 얼굴을 완전히 덮는 중세 대투구(그레이트 헬름): 갑옷과 같은 강철, 눈 틈은 가운데 능선 오른쪽(바라보는 쪽)에만, 숨구멍·리벳
+  const head = `
+      <rect x="${X-4}" y="${HY+8}" width="10" height="6" rx="2" fill="url(#hArm)" ${OL}/>
+      <path d="M${X-9} ${HY+11} Q${X-12.5} ${HY+3} ${X-11} ${HY-6} Q${X-10} ${HY-14} ${X+1} ${HY-14} Q${X+12} ${HY-14} ${X+13} ${HY-6} L${X+13} ${HY+11} Q${X+2} ${HY+14} ${X-9} ${HY+11} Z" fill="url(#hArm)" ${OL}/>
+      <path d="M${X-4} ${HY-14.2} L${X-4.2} ${HY-15.8} M${X+5} ${HY-14.2} L${X+5} ${HY-16.2}" stroke="#1d1f24" stroke-width="2" stroke-linecap="round"/>
+      <path d="M${X-11} ${HY-14.6} Q${X} ${HY-18.6} ${X+10} ${HY-16.1}" stroke="#1d1f24" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      <path d="M${X-10} ${HY-15.4} Q${X} ${HY-19.2} ${X+9} ${HY-16.8}" stroke="rgba(255,255,255,.25)" stroke-width=".7" fill="none"/>
+      <path class="crest" d="M${X+11} ${HY-17.1} Q${X+13} ${HY-27.6} ${X-1} ${HY-27.6} Q${X-15} ${HY-27.6} ${X-13} ${HY-16.1} Q${X} ${HY-20.6} ${X+11} ${HY-17.1} Z" fill="url(#hCape)" ${OL}/>
+      ${[-10,-6.5,-3,0,3,6.5,9.5].map(dx => `<path d="M${X-1 + dx*.3} ${HY-19.4} L${X-1 + dx} ${HY-26.2 + Math.pow(dx / 12, 2) * 8}" stroke="rgba(60,0,8,.45)" stroke-width=".8" stroke-linecap="round"/>`).join('')}
+      <path d="M${X-6} ${HY-26.2} Q${X+2} ${HY-27.6} ${X+8} ${HY-23.6}" stroke="rgba(255,190,190,.55)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <path d="M${X+3} ${HY-14} L${X+3} ${HY+12}" stroke="rgba(255,255,255,.6)" stroke-width="1"/>
+      <path d="M${X+4} ${HY-13} L${X+4} ${HY+12}" stroke="rgba(40,50,60,.35)" stroke-width="1"/>
+      <path d="M${X+4} ${HY-3} L${X+13} ${HY-3} L${X+13} ${HY+.5} L${X+4} ${HY+.5} Z" fill="#1a1d22"/>
+      <path d="M${X+4} ${HY-3.6} L${X+13} ${HY-3.6}" stroke="#e6ebf0" stroke-width=".8"/>
+      <path d="M${X-10} ${HY+5} L${X+13} ${HY+5}" stroke="rgba(40,50,60,.5)" stroke-width="1"/>
+      ${[0,1,2].map(i => [0,1].map(j => `<circle cx="${X+7+j*3}" cy="${HY+7.5+i*2}" r=".6" fill="#1a1d22"/>`).join('')).join('')}
+      ${[-7,-1,9].map(dx => `<circle cx="${X+dx}" cy="${HY+9.5}" r=".9" fill="#e2b84a" stroke="#7a5a18" stroke-width=".4"/>`).join('')}
+      <path d="M${X-9} ${HY-9} Q${X-4} ${HY-12} ${X} ${HY-12}" stroke="rgba(255,255,255,.7)" stroke-width="1.2" fill="none" stroke-linecap="round"/>`;
   return `<g class="hero ${k} ${gl ? 'glow' : ''}" ${gl ? `style="--gl:${gl}"` : ''}>
+    ${defs}
+    ${sd ? '' : `<ellipse cx="${X+1}" cy="${Y+1}" rx="16" ry="3" fill="rgba(0,0,0,.25)"/>`}
     ${chair}
     <g class="body">
-      ${seated ? `<rect x="${X-6}" y="${Y-22}" width="26" height="9" rx="4" fill="#2f3a52"/><rect x="${X+14}" y="${Y-22}" width="9" height="22" rx="4" fill="#2f3a52"/><rect x="${X+12}" y="${Y-4}" width="14" height="5" rx="2" fill="#3a2a1a"/>`
-               : `<rect x="${X-9}" y="${Y-30}" width="8" height="30" rx="3" fill="#2f3a52"/><rect x="${X+2}" y="${Y-30}" width="8" height="30" rx="3" fill="#2f3a52"/><rect x="${X-10}" y="${Y-3}" width="10" height="4" rx="2" fill="#3a2a1a"/><rect x="${X+1}" y="${Y-3}" width="11" height="4" rx="2" fill="#3a2a1a"/>`}
-      <rect x="${X-11}" y="${Y-(seated?56:64)}" width="23" height="${seated?36:36}" rx="8" fill="#3d73c4"/>
-      <rect x="${X-3}" y="${Y-(seated?64:72)}" width="8" height="10" rx="2" fill="#e9b88f"/>
-      <g transform="translate(0 4)">
-      <circle cx="${X+1}" cy="${Y-(seated?72:80)}" r="11" fill="#f1c7a0"/>
-      <path d="M${X-11} ${Y-(seated?74:82)} Q${X-8} ${Y-(seated?88:96)} ${X+4} ${Y-(seated?86:94)} Q${X+13} ${Y-(seated?84:92)} ${X+12} ${Y-(seated?76:84)} Q${X+4} ${Y-(seated?80:88)} ${X-11} ${Y-(seated?74:82)} Z" fill="#4a2d1a"/>
-      <circle cx="${X+6}" cy="${Y-(seated?72:80)}" r="1.4" fill="#2a1a10"/>
-      </g>
+      ${cape}
+      ${legs}
+      ${torso}
+      <g transform="translate(0 0)">${head}</g>
     </g>
     ${seated ? glowify(`<g class="rodS"><line x1="${X+30}" y1="${Y-34}" x2="${X-48}" y2="${Y-118}" stroke="${tierC}" class="tc" stroke-width="3" stroke-linecap="round"/><line x1="${X+30}" y1="${Y-34}" x2="${X+14}" y2="${Y-52}" stroke="#5a3a1a" stroke-width="5" stroke-linecap="round"/></g>`) : ''}
     <g class="arm" style="transform-origin:${sh[0]}px ${seated ? sh[1] + 8 : sh[1]}px">
       <g transform="translate(${sh[0]} ${seated ? sh[1] + 8 : sh[1]})">
-        <rect x="-4" y="-2" width="8" height="26" rx="4" fill="#e9b88f"/>
+        <rect x="-4" y="-2" width="8" height="18" rx="4" fill="#2f3a52" ${OL}/>
+        <rect x="-4.5" y="13" width="9" height="12" rx="3.5" fill="url(#hArm)" ${OL}/>
+        <path d="M-6 -4 Q0 -9 6 -4 L5 4 Q0 6 -5 4 Z" fill="url(#hArm)" ${OL}/>
         <g transform="translate(0 2)">${glowify(tool)}</g>
       </g>
     </g>
@@ -4152,19 +4243,168 @@ function rpgPerson(k, tierC){
 }
 function rpgMonster(type, c){
   const X = 252, Y = 170;
-  const eye = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r||3}" fill="#fff"/><circle cx="${x+1}" cy="${y}" r="${(r||3)/2}" fill="#111"/>`;
-  const m = {
-    slime: `<path d="M${X-30} ${Y} Q${X-34} ${Y-34} ${X} ${Y-42} Q${X+34} ${Y-34} ${X+30} ${Y} Z" fill="${c}"/><ellipse cx="${X-10}" cy="${Y-30}" rx="7" ry="4" fill="rgba(255,255,255,.45)"/>${eye(X-8,Y-20)}${eye(X+8,Y-20)}`,
-    wolf: `<ellipse cx="${X+6}" cy="${Y-26}" rx="30" ry="15" fill="${c}"/><rect x="${X-14}" y="${Y-16}" width="7" height="16" fill="${c}"/><rect x="${X+20}" y="${Y-16}" width="7" height="16" fill="${c}"/><path d="M${X-30} ${Y-32} L${X-14} ${Y-44} L${X-8} ${Y-26} Z" fill="${c}"/><path d="M${X-36} ${Y-30} L${X-22} ${Y-50} L${X-18} ${Y-36} Z" fill="${c}"/><path d="M${X+34} ${Y-30} Q${X+48} ${Y-40} ${X+46} ${Y-22}" stroke="${c}" stroke-width="6" fill="none"/>${eye(X-24,Y-36,2.5)}`,
-    lizard: `<rect x="${X-12}" y="${Y-56}" width="24" height="40" rx="10" fill="${c}"/><ellipse cx="${X-10}" cy="${Y-62}" rx="14" ry="9" fill="${c}"/><rect x="${X-10}" y="${Y-18}" width="8" height="18" fill="${c}"/><rect x="${X+3}" y="${Y-18}" width="8" height="18" fill="${c}"/><path d="M${X+10} ${Y-20} Q${X+40} ${Y-6} ${X+44} ${Y-2}" stroke="${c}" stroke-width="7" fill="none" stroke-linecap="round"/><line x1="${X-20}" y1="${Y-44}" x2="${X-26}" y2="${Y-78}" stroke="#7a6a4a" stroke-width="3"/>${eye(X-16,Y-64,2.5)}`,
-    scorpion: `<ellipse cx="${X}" cy="${Y-12}" rx="30" ry="11" fill="${c}"/><path d="M${X+24} ${Y-14} Q${X+46} ${Y-40} ${X+22} ${Y-56} Q${X+10} ${Y-60} ${X+8} ${Y-48}" stroke="${c}" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M${X+4} ${Y-50} l-6 -6 l10 0 z" fill="#3a1a10"/><circle cx="${X-34}" cy="${Y-16}" r="7" fill="${c}"/>${[0,1,2].map(i=>`<line x1="${X-14+i*12}" y1="${Y-6}" x2="${X-20+i*12}" y2="${Y}" stroke="${c}" stroke-width="3"/>`).join('')}${eye(X-20,Y-16,2)}`,
-    yeti: `<ellipse cx="${X}" cy="${Y-34}" rx="26" ry="34" fill="${c}" stroke="#c9d6e2" stroke-width="2"/><circle cx="${X-4}" cy="${Y-66}" r="15" fill="${c}" stroke="#c9d6e2" stroke-width="2"/><ellipse cx="${X-8}" cy="${Y-64}" rx="9" ry="7" fill="#7a8fa6"/>${eye(X-12,Y-66,2.2)}${eye(X-2,Y-66,2.2)}<rect x="${X-34}" y="${Y-50}" width="12" height="30" rx="6" fill="${c}" stroke="#c9d6e2" stroke-width="2"/>`,
-    skeleton: `<circle cx="${X}" cy="${Y-70}" r="12" fill="${c}"/><circle cx="${X-4}" cy="${Y-71}" r="3" fill="#222"/><circle cx="${X+5}" cy="${Y-71}" r="3" fill="#222"/>${[0,1,2,3].map(i=>`<rect x="${X-11}" y="${Y-54+i*8}" width="22" height="4" rx="2" fill="${c}"/>`).join('')}<rect x="${X-2}" y="${Y-58}" width="4" height="38" fill="${c}"/><rect x="${X-8}" y="${Y-22}" width="4" height="22" fill="${c}"/><rect x="${X+4}" y="${Y-22}" width="4" height="22" fill="${c}"/><rect x="${X-30}" y="${Y-60}" width="4" height="34" fill="#9aa3ad" transform="rotate(-20 ${X-28} ${Y-44})"/>`,
-    golem: `<rect x="${X-24}" y="${Y-62}" width="48" height="44" rx="6" fill="${c}"/><rect x="${X-14}" y="${Y-84}" width="28" height="24" rx="5" fill="${c}"/><rect x="${X-38}" y="${Y-58}" width="14" height="36" rx="4" fill="${c}"/><rect x="${X+24}" y="${Y-58}" width="14" height="36" rx="4" fill="${c}"/><rect x="${X-18}" y="${Y-18}" width="14" height="18" fill="${c}"/><rect x="${X+4}" y="${Y-18}" width="14" height="18" fill="${c}"/><circle cx="${X-6}" cy="${Y-73}" r="3" fill="#ffb24a"/><circle cx="${X+6}" cy="${Y-73}" r="3" fill="#ffb24a"/><path d="M${X-20} ${Y-40} l10 6 l8 -8 l12 4" stroke="#ff7a2a" stroke-width="2" fill="none"/>`,
-    demon: `<rect x="${X-16}" y="${Y-62}" width="32" height="44" rx="10" fill="${c}"/><circle cx="${X}" cy="${Y-74}" r="13" fill="${c}"/><path d="M${X-10} ${Y-84} L${X-18} ${Y-100} L${X-4} ${Y-86} Z M${X+10} ${Y-84} L${X+18} ${Y-100} L${X+4} ${Y-86} Z" fill="#2a1a1a"/><circle cx="${X-5}" cy="${Y-75}" r="2.5" fill="#ffe14a"/><circle cx="${X+5}" cy="${Y-75}" r="2.5" fill="#ffe14a"/><rect x="${X-12}" y="${Y-20}" width="9" height="20" fill="${c}"/><rect x="${X+3}" y="${Y-20}" width="9" height="20" fill="${c}"/><path d="M${X+14} ${Y-56} Q${X+44} ${Y-80} ${X+40} ${Y-40} Q${X+30} ${Y-50} ${X+14} ${Y-40} Z" fill="#5a1020"/><path d="M${X-14} ${Y-56} Q${X-44} ${Y-80} ${X-40} ${Y-40} Q${X-30} ${Y-50} ${X-14} ${Y-40} Z" fill="#5a1020"/>`,
-    dragon: `<path d="M${X-6} ${Y-40} Q${X+40} ${Y-110} ${X+80} ${Y-70} Q${X+40} ${Y-74} ${X+20} ${Y-40} Z" fill="#7a1a10"/><ellipse cx="${X+16}" cy="${Y-30}" rx="40" ry="22" fill="${c}"/><path d="M${X-16} ${Y-40} Q${X-30} ${Y-70} ${X-40} ${Y-74}" stroke="${c}" stroke-width="14" fill="none" stroke-linecap="round"/><ellipse cx="${X-46}" cy="${Y-76}" rx="16" ry="10" fill="${c}"/><path d="M${X-52} ${Y-84} l-6 -12 l10 8 z" fill="#3a0a0a"/>${eye(X-50,Y-79,2.6)}<rect x="${X-6}" y="${Y-14}" width="10" height="14" fill="${c}"/><rect x="${X+26}" y="${Y-14}" width="10" height="14" fill="${c}"/><path d="M${X+54} ${Y-28} Q${X+90} ${Y-20} ${X+96} ${Y-4}" stroke="${c}" stroke-width="9" fill="none" stroke-linecap="round"/>`,
-  }[type] || '';
-  return `<g class="mon">${m}</g>`;
+  const hx = h => { h = h.replace('#', ''); if(h.length === 3) h = h.split('').map(x => x + x).join(''); return [0,2,4].map(i => parseInt(h.slice(i, i + 2), 16)); };
+  const mix = (a, b, t) => { const A = hx(a), B = hx(b); return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join(''); };
+  const dk = (t) => mix(c, '#000000', t), lt = (t) => mix(c, '#ffffff', t);
+  const OL = 'stroke="rgba(15,10,8,.6)" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"';
+  // 입체감: 같은 모양 위에 '왼쪽 위 밝음 → 오른쪽 아래 어두움' 그라데이션을 한 겹 더
+  const V = (d, f) => `<path d="${d}" fill="${f || c}" ${OL}/><path d="${d}" fill="url(#mVol)"/>`;
+  const E = (cx, cy, rx, ry) => `M${cx - rx} ${cy} a${rx} ${ry} 0 1 0 ${2 * rx} 0 a${rx} ${ry} 0 1 0 ${-2 * rx} 0 Z`;
+  const eyeG = (x, y, r, col) => `<circle cx="${x}" cy="${y}" r="${r * 2.2}" fill="${col}" opacity=".25"/><circle cx="${x}" cy="${y}" r="${r}" fill="${col}"/><circle cx="${x - r * .3}" cy="${y - r * .3}" r="${r * .35}" fill="#fff" opacity=".85"/>`;
+  const defs = `<defs><linearGradient id="mVol" x1="0" y1="0" x2=".7" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".32"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".45"/></linearGradient>
+    <radialGradient id="mGel" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="${lt(.45)}"/><stop offset=".55" stop-color="${c}"/><stop offset="1" stop-color="${dk(.35)}"/></radialGradient>
+    <linearGradient id="mLava" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2a8"/><stop offset=".5" stop-color="#ff9a2a"/><stop offset="1" stop-color="#e0401a"/></linearGradient></defs>`;
+  const shadow = (rx) => `<ellipse cx="${X + 4}" cy="${Y + 1}" rx="${rx}" ry="${rx * .13}" fill="rgba(0,0,0,.3)"/>`;
+  let m = '', sw = 34;
+  if(type === 'slime'){
+    sw = 34;
+    // 모양을 유지한 반투명 초록 액체: 뒤 배경이 비치고, 속에 떠다니는 기포와 흐린 핵, 테두리는 빛을 받아 밝다
+    const d = `M${X-32} ${Y} Q${X-38} ${Y-26} ${X-14} ${Y-40} Q${X} ${Y-50} ${X+14} ${Y-40} Q${X+38} ${Y-26} ${X+32} ${Y} Q${X} ${Y+3} ${X-32} ${Y} Z`;
+    m = `<path d="${d}" fill="url(#mGel)" opacity=".55"/>
+      <path d="M${X+8} ${Y-8} Q${X+12} ${Y-17} ${X+20} ${Y-14} Q${X+25} ${Y-8} ${X+19} ${Y-4} Q${X+12} ${Y-2} ${X+8} ${Y-8} Z" fill="${dk(.5)}" opacity=".22"/>
+      <path d="${d}" fill="none" stroke="${lt(.55)}" stroke-width="2.4" opacity=".45"/>
+      <path d="${d}" fill="none" ${OL}/>
+      <path d="M${X-24} ${Y-22} Q${X-20} ${Y-36} ${X-6} ${Y-40}" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".55"/>
+      <ellipse cx="${X-14}" cy="${Y-33}" rx="3" ry="1.6" fill="#fff" opacity=".8" transform="rotate(-25 ${X-14} ${Y-33})"/>
+      <path d="M${X-26} ${Y-2} Q${X} ${Y+2} ${X+26} ${Y-2}" stroke="${dk(.3)}" stroke-width="2.4" fill="none" opacity=".35"/>
+      ${eyeG(X-9, Y-24, 1.9, '#f2ff7a')}${eyeG(X+7, Y-24, 1.9, '#f2ff7a')}`;
+  } else if(type === 'wolf'){
+    sw = 40;
+    const fur = dk(.15), back = dk(.45), belly = lt(.35);
+    m = `<path d="M${X+34} ${Y-34} Q${X+50} ${Y-40} ${X+54} ${Y-54} Q${X+56} ${Y-42} ${X+46} ${Y-30} Z" fill="${fur}" ${OL}/>
+      ${V(`M${X+22} ${Y-26} L${X+28} ${Y-6} L${X+26} ${Y} L${X+32} ${Y} L${X+34} ${Y-8} L${X+32} ${Y-28} Z`, back)}
+      ${V(`M${X-16} ${Y-24} L${X-18} ${Y-4} L${X-20} ${Y} L${X-13} ${Y} L${X-11} ${Y-6} L${X-8} ${Y-26} Z`, back)}
+      ${V(`M${X-26} ${Y-36} Q${X-14} ${Y-50} ${X+10} ${Y-46} Q${X+34} ${Y-44} ${X+38} ${Y-30} Q${X+38} ${Y-18} ${X+26} ${Y-18} Q${X+4} ${Y-14} ${X-14} ${Y-20} Q${X-28} ${Y-24} ${X-26} ${Y-36} Z`)}
+      <path d="M${X-20} ${Y-40} Q${X} ${Y-50} ${X+30} ${Y-42}" stroke="${back}" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/>
+      <path d="M${X-12} ${Y-20} Q${X+6} ${Y-15} ${X+24} ${Y-19}" stroke="${belly}" stroke-width="3" fill="none" opacity=".6"/>
+      ${V(`M${X+12} ${Y-22} L${X+16} ${Y-4} L${X+14} ${Y} L${X+21} ${Y} L${X+22} ${Y-8} L${X+22} ${Y-24} Z`)}
+      ${V(`M${X-24} ${Y-26} L${X-28} ${Y-6} L${X-30} ${Y} L${X-23} ${Y} L${X-21} ${Y-6} L${X-16} ${Y-26} Z`)}
+      ${V(`M${X-22} ${Y-34} Q${X-26} ${Y-50} ${X-38} ${Y-48} L${X-50} ${Y-42} Q${X-56} ${Y-40} ${X-56} ${Y-36} L${X-50} ${Y-31} Q${X-40} ${Y-28} ${X-32} ${Y-26} Q${X-22} ${Y-24} ${X-22} ${Y-34} Z`)}
+      <path d="M${X-34} ${Y-46} L${X-36} ${Y-60} L${X-26} ${Y-48} Z" fill="${fur}" ${OL}/><path d="M${X-33} ${Y-48} L${X-34} ${Y-56} L${X-29} ${Y-49} Z" fill="#c98b8b" opacity=".7"/>
+      <path d="M${X-28} ${Y-44} L${X-28} ${Y-58} L${X-20} ${Y-44} Z" fill="${back}" ${OL}/>
+      <circle cx="${X-56}" cy="${Y-38}" r="2" fill="#1a1010"/>
+      <path d="M${X-54} ${Y-33} L${X-40} ${Y-30}" stroke="#1a1010" stroke-width="1.3"/>
+      <path d="M${X-50} ${Y-33} l1.5 3 l1.5 -3 M${X-45} ${Y-32} l1.5 3 l1.5 -3" fill="#fff" stroke="#fff" stroke-width=".6"/>
+      ${eyeG(X-40, Y-41, 1.8, '#ffd23a')}`;
+  } else if(type === 'lizard'){
+    sw = 34;
+    const belly = mix(c, '#e8dca0', .55), dark = dk(.35);
+    m = `${V(`M${X+8} ${Y-24} Q${X+34} ${Y-16} ${X+46} ${Y-2} Q${X+30} ${Y-6} ${X+6} ${Y-14} Z`, dark)}
+      <line x1="${X-26}" y1="${Y-8}" x2="${X-30}" y2="${Y-96}" stroke="#6a5030" stroke-width="3" stroke-linecap="round"/><path d="M${X-30} ${Y-96} l-4 -12 l7 9 Z" fill="#b8c0c8" ${OL}/>
+      ${V(`M${X-8} ${Y-22} L${X-12} ${Y-10} L${X-16} ${Y} L${X-6} ${Y} L${X-3} ${Y-12} L${X} ${Y-22} Z`, dark)}
+      ${V(`M${X+2} ${Y-22} L${X+6} ${Y-10} L${X+2} ${Y} L${X+12} ${Y} L${X+13} ${Y-12} L${X+10} ${Y-22} Z`)}
+      ${V(`M${X-13} ${Y-24} Q${X-16} ${Y-46} ${X-8} ${Y-58} Q${X+6} ${Y-64} ${X+12} ${Y-52} Q${X+16} ${Y-36} ${X+12} ${Y-20} Q${X} ${Y-16} ${X-13} ${Y-24} Z`)}
+      <path d="M${X-8} ${Y-54} Q${X-12} ${Y-40} ${X-8} ${Y-24}" stroke="${belly}" stroke-width="6" fill="none" stroke-linecap="round" opacity=".85"/>
+      ${[0,1,2,3].map(i => `<path d="M${X-12} ${Y-50 + i*7} q4 2 8 0" stroke="${dk(.3)}" stroke-width=".8" fill="none" opacity=".6"/>`).join('')}
+      ${V(`M${X-10} ${Y-56} Q${X-8} ${Y-70} ${X-20} ${Y-72} L${X-34} ${Y-68} Q${X-38} ${Y-64} ${X-32} ${Y-61} L${X-20} ${Y-58} Z`)}
+      <path d="M${X-12} ${Y-70} l4 -8 l2 6 l4 -6 l1 8" fill="${dark}" ${OL}/>
+      <path d="M${X-34} ${Y-63} L${X-20} ${Y-61}" stroke="#1a1410" stroke-width="1"/>
+      ${eyeG(X-22, Y-67, 1.6, '#e8f04a')}
+      ${V(`M${X-6} ${Y-50} Q${X-18} ${Y-46} ${X-24} ${Y-40} L${X-28} ${Y-42} Q${X-22} ${Y-52} ${X-8} ${Y-56} Z`)}`;
+  } else if(type === 'scorpion'){
+    sw = 40;
+    const dark = dk(.35);
+    const seg = [[X+26, Y-18, 7], [X+34, Y-30, 6.5], [X+36, Y-44, 6], [X+30, Y-56, 5.5], [X+20, Y-62, 5]];
+    m = `${[0,1,2].map(i => `<path d="M${X-14+i*12} ${Y-12} Q${X-22+i*12} ${Y-14} ${X-26+i*12} ${Y}" stroke="${dark}" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M${X-8+i*12} ${Y-12} Q${X-2+i*12} ${Y-14} ${X+2+i*12} ${Y}" stroke="${dark}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`).join('')}
+      ${V(E(X, Y-14, 30, 10))}
+      ${[0,1,2,3].map(i => `<path d="M${X-18+i*11} ${Y-23} q2 9 0 18" stroke="${dark}" stroke-width=".9" fill="none" opacity=".7"/>`).join('')}
+      <path d="M${X+18} ${Y-14} ${seg.map(([x, y]) => `L${x} ${y}`).join(' ')}" stroke="${dark}" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      ${seg.map(([x, y, r]) => V(E(x, y, r, r * .9))).join('')}
+      ${V(`M${X+16} ${Y-64} Q${X+6} ${Y-66} ${X+6} ${Y-56} L${X+10} ${Y-58} Q${X+12} ${Y-62} ${X+16} ${Y-60} Z`, '#3a1a10')}
+      <circle cx="${X+7}" cy="${Y-55}" r="1.3" fill="#c6ff4a" opacity=".9"/>
+      ${V(`M${X-26} ${Y-18} Q${X-36} ${Y-26} ${X-44} ${Y-22} L${X-42} ${Y-18} Q${X-36} ${Y-20} ${X-30} ${Y-14} Z`)}
+      ${V(`M${X-44} ${Y-26} Q${X-56} ${Y-30} ${X-58} ${Y-22} Q${X-52} ${Y-24} ${X-48} ${Y-20} Q${X-56} ${Y-16} ${X-56} ${Y-12} Q${X-46} ${Y-12} ${X-42} ${Y-20} Z`)}
+      ${eyeG(X-22, Y-20, 1.3, '#1a0a05')}${eyeG(X-17, Y-21, 1.3, '#1a0a05')}`;
+  } else if(type === 'yeti'){
+    sw = 34;
+    const fur = c, shade = mix(c, '#7f97b0', .55);
+    const body = `M${X-26} ${Y-8} L${X-30} ${Y-30} L${X-26} ${Y-34} L${X-28} ${Y-50} L${X-22} ${Y-56} L${X-20} ${Y-70} L${X-10} ${Y-80} L${X+2} ${Y-82} L${X+14} ${Y-76} L${X+20} ${Y-62} L${X+26} ${Y-54} L${X+24} ${Y-40} L${X+30} ${Y-30} L${X+26} ${Y-8} Q${X} ${Y-2} ${X-26} ${Y-8} Z`;
+    m = `${V(`M${X-12} ${Y-12} L${X-14} ${Y} L${X-2} ${Y} L${X-2} ${Y-12} Z M${X+4} ${Y-12} L${X+4} ${Y} L${X+16} ${Y} L${X+14} ${Y-12} Z`, shade)}
+      ${V(`M${X+22} ${Y-54} Q${X+38} ${Y-46} ${X+40} ${Y-24} L${X+34} ${Y-20} Q${X+30} ${Y-38} ${X+18} ${Y-44} Z`, shade)}
+      <path d="M${X+40} ${Y-24} l2 5 M${X+37} ${Y-22} l1 6" stroke="#3a3a40" stroke-width="1.4" stroke-linecap="round"/>
+      ${V(body, fur)}
+      ${[[-16,-60],[-6,-44],[8,-52],[-12,-30],[12,-30],[0,-20]].map(([dx,dy]) => `<path d="M${X+dx} ${Y+dy} l3 6 l3 -6" stroke="${shade}" stroke-width="1" fill="none" opacity=".8"/>`).join('')}
+      ${V(`M${X-16} ${Y-72} Q${X-16} ${Y-56} ${X-4} ${Y-54} Q${X+8} ${Y-56} ${X+8} ${Y-70} Q${X-4} ${Y-76} ${X-16} ${Y-72} Z`, '#8aa0b8')}
+      <path d="M${X-14} ${Y-74} L${X-20} ${Y-90} L${X-8} ${Y-78} Z M${X+4} ${Y-76} L${X+8} ${Y-92} L${X+12} ${Y-74} Z" fill="#e8e2d0" ${OL}/>
+      ${eyeG(X-10, Y-67, 1.8, '#2ad0ff')}${eyeG(X+2, Y-67, 1.8, '#2ad0ff')}
+      <path d="M${X-11} ${Y-60} Q${X-4} ${Y-56} ${X+4} ${Y-60}" stroke="#2a3040" stroke-width="2" fill="none"/>
+      <path d="M${X-8} ${Y-60} l1.5 4 l1.5 -4 M${X} ${Y-60} l1.5 4 l1.5 -4" fill="#fff" stroke="#fff" stroke-width=".5"/>
+      ${V(`M${X-24} ${Y-54} Q${X-40} ${Y-46} ${X-42} ${Y-24} L${X-36} ${Y-20} Q${X-32} ${Y-38} ${X-20} ${Y-44} Z`, fur)}
+      <path d="M${X-44} ${Y-24} l-2 5 M${X-40} ${Y-22} l-1 6 M${X-36} ${Y-21} l0 6" stroke="#3a3a40" stroke-width="1.4" stroke-linecap="round"/>`;
+  } else if(type === 'skeleton'){
+    sw = 22;
+    const bone = c, dbone = mix(c, '#5a5040', .4);
+    m = `${V(E(X+20, Y-46, 13, 15), '#6a4a28')}<circle cx="${X+20}" cy="${Y-46}" r="5" fill="#8a8a8a" ${OL}/><path d="M${X+9} ${Y-46} h22 M${X+20} ${Y-60} v28" stroke="#4a3018" stroke-width="1.2"/>
+      <path d="M${X-6} ${Y-24} L${X-8} ${Y} M${X+6} ${Y-24} L${X+8} ${Y}" stroke="${bone}" stroke-width="4" stroke-linecap="round"/>
+      <path d="M${X-6} ${Y-24} L${X-8} ${Y} M${X+6} ${Y-24} L${X+8} ${Y}" stroke="rgba(0,0,0,.25)" stroke-width="1" stroke-linecap="round"/>
+      ${V(`M${X-10} ${Y-28} Q${X} ${Y-34} ${X+10} ${Y-28} L${X+8} ${Y-22} L${X-8} ${Y-22} Z`, dbone)}
+      <path d="M${X} ${Y-30} L${X} ${Y-62}" stroke="${bone}" stroke-width="3.4" stroke-linecap="round"/>
+      ${[0,1,2,3].map(i => `<path d="M${X} ${Y-58+i*7} Q${X-14+i} ${Y-60+i*7} ${X-11+i} ${Y-52+i*7} M${X} ${Y-58+i*7} Q${X+14-i} ${Y-60+i*7} ${X+11-i} ${Y-52+i*7}" stroke="${bone}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`).join('')}
+      <path d="M${X-12} ${Y-64} L${X+12} ${Y-64}" stroke="${bone}" stroke-width="3" stroke-linecap="round"/>
+      ${V(`M${X-11} ${Y-74} Q${X-12} ${Y-88} ${X} ${Y-88} Q${X+12} ${Y-88} ${X+11} ${Y-74} Q${X+10} ${Y-68} ${X+6} ${Y-67} L${X-6} ${Y-67} Q${X-10} ${Y-68} ${X-11} ${Y-74} Z`, bone)}
+      ${V(`M${X-6} ${Y-68} L${X+6} ${Y-68} L${X+5} ${Y-63} L${X-5} ${Y-63} Z`, dbone)}
+      <path d="M${X-4} ${Y-68} v4 M${X-1.3} ${Y-68} v4 M${X+1.3} ${Y-68} v4 M${X+4} ${Y-68} v4" stroke="#2a2418" stroke-width=".7"/>
+      <ellipse cx="${X-5}" cy="${Y-77}" rx="3.4" ry="3.8" fill="#1a1410"/><ellipse cx="${X+5}" cy="${Y-77}" rx="3.4" ry="3.8" fill="#1a1410"/>
+      ${eyeG(X-5, Y-77, 1.2, '#ff4a3a')}${eyeG(X+5, Y-77, 1.2, '#ff4a3a')}
+      <path d="M${X} ${Y-73} l-1.5 3 h3 Z" fill="#1a1410"/>
+      <path d="M${X-12} ${Y-62} Q${X-22} ${Y-50} ${X-26} ${Y-44}" stroke="${bone}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <g transform="rotate(-28 ${X-27} ${Y-44})"><rect x="${X-29}" y="${Y-80}" width="5" height="34" fill="#8a7f70" ${OL}/><path d="M${X-29} ${Y-80} l2.5 -6 l2.5 6 Z" fill="#8a7f70" ${OL}/><rect x="${X-33}" y="${Y-47}" width="13" height="3" fill="#5a4030"/><path d="M${X-27} ${Y-78} v26" stroke="rgba(255,255,255,.3)"/><circle cx="${X-26}" cy="${Y-62}" r="1.5" fill="#7a4a20" opacity=".8"/></g>`;
+  } else if(type === 'golem'){
+    sw = 40;
+    const rock = c, d1 = dk(.25), d2 = dk(.5);
+    const crack = (d) => `<path d="${d}" stroke="#ff7a1a" stroke-width="4" fill="none" opacity=".45" stroke-linecap="round"/><path d="${d}" stroke="url(#mLava)" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;
+    m = `${V(`M${X-20} ${Y-18} L${X-22} ${Y} L${X-4} ${Y} L${X-6} ${Y-18} Z`, d1)}${V(`M${X+4} ${Y-18} L${X+6} ${Y} L${X+22} ${Y} L${X+20} ${Y-18} Z`, d1)}
+      ${V(`M${X-26} ${Y-60} L${X-12} ${Y-68} L${X+14} ${Y-66} L${X+28} ${Y-56} L${X+26} ${Y-22} L${X+12} ${Y-14} L${X-14} ${Y-16} L${X-28} ${Y-26} Z`, rock)}
+      <path d="M${X-12} ${Y-68} L${X-4} ${Y-44} L${X+14} ${Y-66} M${X-28} ${Y-26} L${X-4} ${Y-44} L${X+26} ${Y-22}" stroke="${d2}" stroke-width="1" fill="none" opacity=".6"/>
+      ${crack(`M${X-18} ${Y-54} L${X-8} ${Y-44} L${X-12} ${Y-34} L${X-2} ${Y-24}`)}${crack(`M${X+18} ${Y-58} L${X+10} ${Y-46} L${X+16} ${Y-36}`)}
+      ${V(`M${X-14} ${Y-68} L${X-12} ${Y-86} L${X+2} ${Y-92} L${X+14} ${Y-84} L${X+14} ${Y-68} Z`, d1)}
+      <path d="M${X-8} ${Y-78} h7 M${X+3} ${Y-78} h7" stroke="#ffcf4a" stroke-width="3" stroke-linecap="round"/><path d="M${X-8} ${Y-78} h7 M${X+3} ${Y-78} h7" stroke="#ff8a1a" stroke-width="7" stroke-linecap="round" opacity=".3"/>
+      ${V(`M${X-28} ${Y-60} L${X-44} ${Y-54} L${X-46} ${Y-24} L${X-36} ${Y-18} L${X-30} ${Y-30} Z`, d1)}
+      ${V(`M${X+28} ${Y-58} L${X+42} ${Y-50} L${X+44} ${Y-22} L${X+34} ${Y-18} L${X+28} ${Y-28} Z`, d1)}
+      ${crack(`M${X-40} ${Y-48} L${X-38} ${Y-34}`)}`;
+  } else if(type === 'demon'){
+    sw = 30;
+    const skin = c, dark = dk(.45), wing = mix(c, '#200008', .55);
+    const wingL = `M${X-10} ${Y-60} Q${X-40} ${Y-96} ${X-62} ${Y-80} L${X-54} ${Y-70} L${X-50} ${Y-56} L${X-40} ${Y-58} L${X-34} ${Y-44} L${X-22} ${Y-48} Z`;
+    const wingR = `M${X+10} ${Y-60} Q${X+40} ${Y-96} ${X+62} ${Y-80} L${X+54} ${Y-70} L${X+50} ${Y-56} L${X+40} ${Y-58} L${X+34} ${Y-44} L${X+22} ${Y-48} Z`;
+    m = `${V(wingL, wing)}${V(wingR, wing)}
+      <path d="M${X-12} ${Y-60} L${X-60} ${Y-80} M${X-14} ${Y-58} L${X-50} ${Y-56} M${X-14} ${Y-54} L${X-34} ${Y-44} M${X+12} ${Y-60} L${X+60} ${Y-80} M${X+14} ${Y-58} L${X+50} ${Y-56} M${X+14} ${Y-54} L${X+34} ${Y-44}" stroke="${dark}" stroke-width="1.6" opacity=".9"/>
+      <path d="M${X+10} ${Y-20} Q${X+34} ${Y-14} ${X+40} ${Y-34}" stroke="${dark}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M${X+40} ${Y-34} l-5 -2 l7 -6 l1 9 Z" fill="${dark}"/>
+      ${V(`M${X-11} ${Y-24} L${X-14} ${Y-8} L${X-17} ${Y} L${X-6} ${Y} L${X-4} ${Y-10} L${X-2} ${Y-24} Z`, dark)}${V(`M${X+2} ${Y-24} L${X+4} ${Y-10} L${X+6} ${Y} L${X+17} ${Y} L${X+14} ${Y-8} L${X+11} ${Y-24} Z`, dark)}
+      ${V(`M${X+16} ${Y-58} Q${X+30} ${Y-46} ${X+32} ${Y-32} L${X+26} ${Y-30} Q${X+24} ${Y-42} ${X+12} ${Y-50} Z`, dk(.2))}
+      <path d="M${X+32} ${Y-32} l2 4 M${X+29} ${Y-30} l1 5" stroke="#1a0808" stroke-width="1.3" stroke-linecap="round"/>
+      ${V(`M${X-18} ${Y-60} Q${X-22} ${Y-40} ${X-12} ${Y-22} L${X+12} ${Y-22} Q${X+22} ${Y-40} ${X+18} ${Y-60} Q${X} ${Y-66} ${X-18} ${Y-60} Z`, skin)}
+      <path d="M${X} ${Y-58} L${X} ${Y-30} M${X-10} ${Y-46} Q${X-4} ${Y-42} ${X} ${Y-46} Q${X+4} ${Y-42} ${X+10} ${Y-46} M${X-8} ${Y-36} h16" stroke="${dark}" stroke-width="1" fill="none" opacity=".6"/>
+      ${V(`M${X-12} ${Y-26} h24 v4 h-24 Z`, '#2a1810')}
+      ${V(`M${X-11} ${Y-70} Q${X-12} ${Y-86} ${X} ${Y-87} Q${X+12} ${Y-86} ${X+11} ${Y-70} Q${X+8} ${Y-62} ${X} ${Y-61} Q${X-8} ${Y-62} ${X-11} ${Y-70} Z`, skin)}
+      <path d="M${X-9} ${Y-82} Q${X-20} ${Y-90} ${X-16} ${Y-104} Q${X-14} ${Y-92} ${X-5} ${Y-86} Z M${X+9} ${Y-82} Q${X+20} ${Y-90} ${X+16} ${Y-104} Q${X+14} ${Y-92} ${X+5} ${Y-86} Z" fill="#e8dcc0" ${OL}/>
+      <path d="M${X-8} ${Y-77} l6 2 M${X+8} ${Y-77} l-6 2" stroke="${dark}" stroke-width="1.6" stroke-linecap="round"/>
+      ${eyeG(X-5, Y-73, 1.7, '#ffe14a')}${eyeG(X+5, Y-73, 1.7, '#ffe14a')}
+      <path d="M${X-5} ${Y-66} Q${X} ${Y-63} ${X+5} ${Y-66}" stroke="#1a0808" stroke-width="1.3" fill="none"/><path d="M${X-3} ${Y-66} l1 2.5 l1 -2.5 M${X+1} ${Y-66} l1 2.5 l1 -2.5" fill="#fff" stroke="#fff" stroke-width=".4"/>
+      ${V(`M${X-18} ${Y-58} Q${X-30} ${Y-46} ${X-32} ${Y-32} L${X-26} ${Y-30} Q${X-24} ${Y-42} ${X-14} ${Y-50} Z`, skin)}
+      <path d="M${X-33} ${Y-32} l-2 4 M${X-30} ${Y-30} l-1 5 M${X-27} ${Y-30} l0 5" stroke="#1a0808" stroke-width="1.3" stroke-linecap="round"/>`;
+  } else if(type === 'dragon'){
+    sw = 50;
+    const scale = c, dark = dk(.4), belly = mix(c, '#f0c060', .55), wing = dk(.55);
+    m = `${V(`M${X+2} ${Y-44} Q${X+20} ${Y-112} ${X+70} ${Y-96} L${X+62} ${Y-82} L${X+70} ${Y-70} L${X+54} ${Y-66} L${X+58} ${Y-52} L${X+40} ${Y-52} L${X+22} ${Y-40} Z`, wing)}
+      <path d="M${X+4} ${Y-46} L${X+68} ${Y-94} M${X+12} ${Y-48} L${X+68} ${Y-70} M${X+18} ${Y-44} L${X+56} ${Y-52}" stroke="${dk(.7)}" stroke-width="1.6"/>
+      <path d="M${X+52} ${Y-26} Q${X+84} ${Y-22} ${X+94} ${Y-4}" stroke="${scale}" stroke-width="10" fill="none" stroke-linecap="round"/><path d="M${X+52} ${Y-26} Q${X+84} ${Y-22} ${X+94} ${Y-4}" stroke="rgba(0,0,0,.3)" stroke-width="3" fill="none" stroke-linecap="round" transform="translate(0 3)"/>
+      <path d="M${X+94} ${Y-4} l6 -8 l2 12 l-10 2 Z" fill="${dark}" ${OL}/>
+      ${V(`M${X+26} ${Y-18} L${X+28} ${Y-4} L${X+24} ${Y} L${X+38} ${Y} L${X+38} ${Y-6} L${X+40} ${Y-20} Z`, dark)}
+      ${V(E(X+18, Y-30, 38, 20), scale)}
+      <path d="M${X-6} ${Y-14} Q${X+16} ${Y-8} ${X+40} ${Y-14}" stroke="${belly}" stroke-width="7" fill="none" opacity=".85"/>
+      ${[0,1,2,3,4].map(i => `<path d="M${X-4+i*10} ${Y-17+Math.abs(i-2)} v6" stroke="${dk(.3)}" stroke-width=".8" opacity=".6"/>`).join('')}
+      ${V(`M${X-2} ${Y-18} L${X-2} ${Y-4} L${X-6} ${Y} L${X+8} ${Y} L${X+8} ${Y-6} L${X+10} ${Y-20} Z`, scale)}
+      <path d="M${X-6} ${Y} l-2 2 M${X-2} ${Y} l-1 2.4 M${X+2} ${Y} l0 2.4" stroke="#e8dcc0" stroke-width="1.2" stroke-linecap="round"/>
+      ${V(`M${X-14} ${Y-40} Q${X-28} ${Y-60} ${X-30} ${Y-72} L${X-20} ${Y-76} Q${X-14} ${Y-58} ${X+2} ${Y-46} Z`, scale)}
+      <path d="M${X-16} ${Y-44} Q${X-24} ${Y-58} ${X-26} ${Y-70}" stroke="${belly}" stroke-width="4" fill="none" opacity=".8"/>
+      ${V(`M${X-18} ${Y-80} Q${X-30} ${Y-90} ${X-44} ${Y-84} L${X-60} ${Y-80} Q${X-64} ${Y-76} ${X-60} ${Y-72} L${X-42} ${Y-70} Q${X-28} ${Y-66} ${X-20} ${Y-70} Z`, scale)}
+      <path d="M${X-60} ${Y-74} L${X-40} ${Y-72}" stroke="#1a0808" stroke-width="1.2"/><path d="M${X-56} ${Y-74} l1.5 3 l1.5 -3 M${X-50} ${Y-73} l1.5 3 l1.5 -3" fill="#fff" stroke="#fff" stroke-width=".5"/>
+      <path d="M${X-26} ${Y-86} Q${X-24} ${Y-100} ${X-12} ${Y-104} Q${X-20} ${Y-96} ${X-20} ${Y-86} Z M${X-34} ${Y-88} Q${X-36} ${Y-98} ${X-28} ${Y-102} Q${X-32} ${Y-96} ${X-28} ${Y-88} Z" fill="#e8dcc0" ${OL}/>
+      <circle cx="${X-60}" cy="${Y-79}" r="1.2" fill="#1a0808"/>
+      ${eyeG(X-42, Y-80, 1.9, '#ffd23a')}`;
+  }
+  return `${defs}${shadow(sw)}${type === 'slime' ? `<ellipse cx="${X+2}" cy="${Y}" rx="26" ry="3" fill="${c}" opacity=".35"/>` : ''}<g class="mon">${m}</g>`;
 }
 function rpgParticles(kind){
   if(!kind) return '';
@@ -4180,39 +4420,73 @@ function rpgParticles(kind){
   }
   return `<g pointer-events="none">${out}</g>`;
 }
+const mixHex = (a, b, t) => { const h = v => { v = v.replace('#', ''); if(v.length === 3) v = v.split('').map(x => x + x).join(''); return [0,2,4].map(i => parseInt(v.slice(i, i + 2), 16)); }; const A = h(a), B = h(b); return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join(''); };
 function rpgTree(type, leaf, x, y, s){
   s = s || 1;
-  const T = (w, h) => `<rect x="${x - w/2}" y="${y - h}" width="${w}" height="${h}" fill="#6b4423"/>`;
-  if(type === 'pine') return T(10*s, 30*s) + [0,1,2].map(i => `<path d="M${x - (34 - i*8)*s} ${y - (22 + i*22)*s} L${x} ${y - (66 + i*22)*s} L${x + (34 - i*8)*s} ${y - (22 + i*22)*s} Z" fill="${leaf}"/>`).join('');
-  if(type === 'birch') return `<rect x="${x - 6*s}" y="${y - 70*s}" width="${12*s}" height="${70*s}" fill="#f2efe6"/>` + [1,2,3,4].map(i => `<rect x="${x - 6*s}" y="${y - i*15*s}" width="${7*s}" height="${3*s}" fill="#333"/>`).join('') + `<ellipse cx="${x}" cy="${y - 84*s}" rx="${30*s}" ry="${26*s}" fill="${leaf}"/>`;
-  if(type === 'palm') return `<path d="M${x - 4*s} ${y} Q${x + 6*s} ${y - 50*s} ${x} ${y - 90*s}" stroke="#7a5a2a" stroke-width="${9*s}" fill="none"/>` + [-1, -.4, .3, 1].map(a => `<path d="M${x} ${y - 90*s} Q${x + a*40*s} ${y - 110*s} ${x + a*56*s} ${y - 78*s}" stroke="${leaf}" stroke-width="${8*s}" fill="none" stroke-linecap="round"/>`).join('');
-  if(type === 'crystal') return [[-14,52],[0,78],[14,58]].map(([dx,h]) => `<path d="M${x + dx*s - 9*s} ${y} L${x + dx*s - 6*s} ${y - h*s} L${x + dx*s} ${y - (h+12)*s} L${x + dx*s + 6*s} ${y - h*s} L${x + dx*s + 9*s} ${y} Z" fill="${leaf}" opacity=".9" stroke="#fff" stroke-opacity=".5"/>`).join('');
-  if(type === 'giant') return T(30*s, 70*s) + `<ellipse cx="${x}" cy="${y - 96*s}" rx="${56*s}" ry="${42*s}" fill="${leaf}"/><ellipse cx="${x - 30*s}" cy="${y - 78*s}" rx="${30*s}" ry="${22*s}" fill="${leaf}"/><ellipse cx="${x + 32*s}" cy="${y - 80*s}" rx="${30*s}" ry="${22*s}" fill="${leaf}"/>`;
-  return T(14*s, 46*s) + `<circle cx="${x}" cy="${y - 64*s}" r="${30*s}" fill="${leaf}"/><circle cx="${x - 20*s}" cy="${y - 52*s}" r="${18*s}" fill="${leaf}"/><circle cx="${x + 20*s}" cy="${y - 54*s}" r="${18*s}" fill="${leaf}"/>`;
+  const dk = mixHex(leaf, '#000000', .35), lt = mixHex(leaf, '#ffffff', .3);
+  const OL = 'stroke="rgba(10,20,10,.35)" stroke-width="1" stroke-linejoin="round"';
+  const V = (el) => el + el.replace(/fill="[^"]*"/, 'fill="url(#sVol)"').replace(/stroke="[^"]*"/, '');
+  // 나무줄기: 밑동이 퍼지고, 결이 보이고, 오른쪽이 그늘
+  const trunk = (w, h, col1, col2) => `<path d="M${x - w/2} ${y - h} L${x + w/2} ${y - h} L${x + w/2 + 1*s} ${y - 6*s} Q${x + w/2 + 6*s} ${y} ${x + w/2 + 9*s} ${y + 1} L${x - w/2 - 9*s} ${y + 1} Q${x - w/2 - 6*s} ${y} ${x - w/2 - 1*s} ${y - 6*s} Z" fill="${col1 || 'url(#sBark)'}" ${OL}/>`
+    + [.2, .5, .78].map(f => `<path d="M${x - w/2 + w*f} ${y - h + 4*s} Q${x - w/2 + w*f + 1.5*s} ${y - h/2} ${x - w/2 + w*f} ${y - 6*s}" stroke="${col2 || 'rgba(30,15,5,.45)'}" stroke-width="${.9*s}" fill="none"/>`).join('');
+  const blob = (cx, cy, r, f) => V(`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${f || leaf}" ${OL}/>`);
+  const hl = (cx, cy, r) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${lt}" opacity=".45"/>`;
+  if(type === 'pine') return trunk(9*s, 30*s) + [0,1,2].map(i => {
+      const w = (36 - i*9)*s, by = y - (22 + i*21)*s, ty = y - (68 + i*21)*s;
+      return `<path d="M${x - w} ${by} L${x - w*.62} ${by - 5*s} L${x - w*.78} ${by - 4*s} L${x} ${ty} L${x + w*.78} ${by - 4*s} L${x + w*.62} ${by - 5*s} L${x + w} ${by} Q${x} ${by + 6*s} ${x - w} ${by} Z" fill="${dk}" ${OL}/><path d="M${x - w} ${by} L${x - w*.62} ${by - 5*s} L${x - w*.78} ${by - 4*s} L${x} ${ty} L${x} ${by + 3*s} Q${x - w*.5} ${by + 3*s} ${x - w} ${by} Z" fill="${leaf}"/><path d="M${x - w*.4} ${by - 8*s} L${x - 2*s} ${ty + 8*s}" stroke="${lt}" stroke-width="${1.2*s}" opacity=".5"/>`;
+    }).join('');
+  if(type === 'birch') return trunk(11*s, 72*s, '#f2efe6', 'rgba(60,60,60,.25)') + [1,2,3,4,5].map(i => `<path d="M${x - 5.5*s} ${y - i*13*s} q${3*s} ${-1.5*s} ${6*s} 0" stroke="#2a2a2a" stroke-width="${2*s}" fill="none"/>`).join('') + `<rect x="${x + 1*s}" y="${y - 72*s}" width="${4.5*s}" height="${66*s}" fill="rgba(0,0,0,.08)"/>`
+      + blob(x - 16*s, y - 80*s, 18*s, dk) + blob(x + 16*s, y - 82*s, 18*s, dk) + blob(x, y - 92*s, 22*s) + blob(x - 10*s, y - 74*s, 15*s) + blob(x + 12*s, y - 72*s, 14*s) + hl(x - 8*s, y - 100*s, 6*s) + hl(x - 18*s, y - 84*s, 4*s);
+  if(type === 'palm') return `<path d="M${x - 5*s} ${y} Q${x + 8*s} ${y - 50*s} ${x} ${y - 90*s}" stroke="#6a4a22" stroke-width="${10*s}" fill="none" stroke-linecap="round"/><path d="M${x - 6.5*s} ${y} Q${x + 6.5*s} ${y - 50*s} ${x - 1.5*s} ${y - 90*s}" stroke="#9a7040" stroke-width="${5*s}" fill="none" stroke-linecap="round"/>`
+      + [10,22,34,46,58,70,80].map(t => `<path d="M${x - 4*s + t*.06*s} ${y - t*s} q${5*s} ${-2*s} ${9*s} 0" stroke="#4a3018" stroke-width="${1.1*s}" fill="none"/>`).join('')
+      + `<circle cx="${x - 4*s}" cy="${y - 86*s}" r="${4*s}" fill="#6a4a1a" ${OL}/><circle cx="${x + 4*s}" cy="${y - 85*s}" r="${4*s}" fill="#5a3a12" ${OL}/>`
+      + [[-1, -.2], [-.5, -.6], [.2, -.7], [.8, -.3], [1, .1], [-.9, .2]].map(([a, b]) => { const ex = x + a*56*s, ey = y - 90*s - b*26*s + 18*s; return `<path d="M${x} ${y - 92*s} Q${x + a*30*s} ${y - 118*s - b*10*s} ${ex} ${ey} Q${x + a*26*s} ${y - 104*s - b*6*s} ${x} ${y - 88*s} Z" fill="${a < 0 ? leaf : dk}" ${OL}/><path d="M${x} ${y - 90*s} Q${x + a*30*s} ${y - 114*s - b*10*s} ${ex} ${ey}" stroke="${lt}" stroke-width="${.8*s}" fill="none" opacity=".6"/>`; }).join('');
+  if(type === 'crystal') return `<ellipse cx="${x}" cy="${y - 30*s}" rx="${34*s}" ry="${40*s}" fill="${leaf}" opacity=".12"/>` + [[-16,50],[16,58],[0,80]].map(([dx, h]) => { const cx = x + dx*s, w = 9*s;
+      return `<path d="M${cx - w} ${y} L${cx - w*.7} ${y - h*s} L${cx} ${y - (h + 13)*s} L${cx + w*.7} ${y - h*s} L${cx + w} ${y} Z" fill="${leaf}" opacity=".88" stroke="#fff" stroke-opacity=".55" stroke-width="1"/><path d="M${cx} ${y - (h + 13)*s} L${cx + w*.7} ${y - h*s} L${cx + w} ${y} L${cx} ${y} Z" fill="rgba(0,0,0,.22)"/><path d="M${cx - w*.45} ${y - 6*s} L${cx - w*.35} ${y - (h - 4)*s}" stroke="#fff" stroke-width="${1.4*s}" opacity=".7"/>`; }).join('');
+  if(type === 'giant') return trunk(32*s, 72*s) + `<path d="M${x - 18*s} ${y} Q${x - 30*s} ${y - 2*s} ${x - 34*s} ${y + 2} M${x + 18*s} ${y} Q${x + 30*s} ${y - 2*s} ${x + 36*s} ${y + 2}" stroke="#5a3418" stroke-width="${5*s}" fill="none" stroke-linecap="round"/>`
+      + blob(x - 38*s, y - 78*s, 26*s, dk) + blob(x + 38*s, y - 80*s, 26*s, dk) + blob(x - 22*s, y - 104*s, 32*s) + blob(x + 24*s, y - 106*s, 32*s) + blob(x, y - 122*s, 30*s) + blob(x, y - 84*s, 28*s)
+      + hl(x - 26*s, y - 116*s, 9*s) + hl(x + 4*s, y - 132*s, 7*s) + hl(x - 40*s, y - 86*s, 5*s);
+  return trunk(14*s, 46*s) + blob(x - 22*s, y - 54*s, 18*s, dk) + blob(x + 22*s, y - 56*s, 18*s, dk) + blob(x - 12*s, y - 74*s, 22*s) + blob(x + 14*s, y - 72*s, 21*s) + blob(x, y - 60*s, 22*s)
+      + hl(x - 14*s, y - 82*s, 6*s) + hl(x + 6*s, y - 80*s, 4*s) + hl(x - 24*s, y - 60*s, 4*s);
 }
 function rpgScene(k){
   const st = RPG.st, sk = st.sk[k], S = SKILLS[k].stages[sk.stage - 1], tierC = TIERS[sk.gear - 1].c;
   const [nm, sky1, sky2, ground, acc, aux, wx] = S;
   const gid = 'g' + k + sk.stage;
-  let bg = `<defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky1}"/><stop offset="1" stop-color="${sky2}"/></linearGradient></defs><rect width="360" height="210" fill="url(#${gid})"/>`;
+  const wC = k === 'fish' ? acc : '#3f97d6';
+  let bg = `<defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky1}"/><stop offset="1" stop-color="${sky2}"/></linearGradient>
+    <linearGradient id="sVol" x1="0" y1="0" x2=".7" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".3"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".42"/></linearGradient>
+    <linearGradient id="sBark" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a5230"/><stop offset=".5" stop-color="#6b4423"/><stop offset="1" stop-color="#3e2510"/></linearGradient>
+    <linearGradient id="sWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mixHex(wC, '#ffffff', .18)}"/><stop offset="1" stop-color="${mixHex(wC, '#000000', .35)}"/></linearGradient>
+    <radialGradient id="sBob" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ff9a9a"/><stop offset=".6" stop-color="#e01e1e"/><stop offset="1" stop-color="#7a0808"/></radialGradient>
+    <linearGradient id="sFish" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a7a9a"/><stop offset=".55" stop-color="#cfe2ee"/><stop offset="1" stop-color="#f6fbff"/></linearGradient>
+  </defs><rect width="360" height="210" fill="url(#${gid})"/>`;
   let fg = '', target = '';
   const active = st.active === k;
   if(k === 'fish'){
     bg += `<path d="M0 120 Q60 96 120 116 T240 110 T360 118 L360 140 L0 140 Z" fill="${ground}" opacity=".5"/>`;
-    bg += `<rect x="0" y="132" width="360" height="78" fill="${acc}"/><g class="wave">${Array.from({length:12}, (_, i) => `<path d="M${i*40} ${150 + (i%3)*14} q10 -4 20 0 t20 0" stroke="${aux}" stroke-width="2" fill="none" opacity=".7"/>`).join('')}</g>`;
-    bg += `<path d="M0 150 L118 150 Q130 160 124 210 L0 210 Z" fill="${ground}"/><path d="M0 150 L118 150" stroke="rgba(0,0,0,.18)" stroke-width="3"/>`;
+    bg += `<rect x="0" y="132" width="360" height="78" fill="url(#sWater)"/>${[0,1,2,3,4,5].map(i => `<path d="M${150 + (i*53)%200} ${140 + i*11} h${18 + (i%3)*10}" stroke="#fff" stroke-width="1.2" opacity=".35" stroke-linecap="round"/>`).join('')}<g class="wave">${Array.from({length:12}, (_, i) => `<path d="M${i*40} ${150 + (i%3)*14} q10 -4 20 0 t20 0" stroke="${aux}" stroke-width="2" fill="none" opacity=".7"/>`).join('')}</g>`;
+    bg += `<path d="M0 150 L118 150 Q130 160 124 210 L0 210 Z" fill="${ground}"/><path d="M0 150 L118 150 Q130 160 124 210 L0 210 Z" fill="url(#sVol)" opacity=".7"/><path d="M0 150 L118 150" stroke="rgba(255,255,255,.25)" stroke-width="2"/>
+      <path d="M118 150 Q130 160 124 210" stroke="rgba(0,0,0,.25)" stroke-width="3" fill="none"/>
+      ${[[112,156,7,4],[121,176,9,5],[104,196,6,3.5]].map(([x,y,rx,ry]) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#8a8a86" stroke="rgba(0,0,0,.35)"/><ellipse cx="${x-2}" cy="${y-1.5}" rx="${rx*.5}" ry="${ry*.4}" fill="#fff" opacity=".25"/>`).join('')}
+      ${[14,38,62,88].map(x => `<path d="M${x} 151 l-3 -7 M${x+3} 151 l0 -9 M${x+6} 151 l3 -7" stroke="${mixHex(ground, '#000000', .25)}" stroke-width="1.4" stroke-linecap="round"/>`).join('')}`;
     // 낚싯줄 끝(찌): 낚싯대 끝에서 물로
-    target = `<g class="fline"><line x1="172" y1="47" x2="236" y2="156" stroke="rgba(255,255,255,.75)" stroke-width="1"/><g class="bob"><circle cx="236" cy="157" r="4" fill="#ff3b3b"/><rect x="234.5" y="149" width="3" height="6" fill="#fff"/></g><ellipse class="ripple" cx="236" cy="160" rx="10" ry="3" fill="none" stroke="#fff" stroke-opacity=".7"/></g>
-      <g class="leap" style="opacity:0"><path d="M226 152 q10 -8 20 0 q-10 8 -20 0 z M246 152 l8 -6 l0 12 z" fill="${aux === '#ff4a4a' ? '#ffb000' : '#f2f2f2'}" stroke="rgba(0,0,0,.4)"/></g>`;   // 찌 자리에서 튀어 올라 플레이어 등 뒤로
+    target = `<g class="fline"><line x1="172" y1="47" x2="236" y2="156" stroke="rgba(255,255,255,.75)" stroke-width="1"/><g class="bob"><path d="M232 157 a4.2 4.2 0 0 1 8.4 0 Z" fill="url(#sBob)" stroke="rgba(0,0,0,.5)" stroke-width=".7"/><path d="M232 157 a4.2 4.2 0 0 0 8.4 0 Z" fill="#f4f4f0" stroke="rgba(0,0,0,.5)" stroke-width=".7"/><rect x="235.4" y="146" width="1.6" height="7" rx=".6" fill="#ffd23a" stroke="rgba(0,0,0,.4)" stroke-width=".4"/><circle cx="234.4" cy="155" r="1" fill="#fff" opacity=".7"/></g><ellipse class="ripple" cx="236" cy="160" rx="10" ry="3" fill="none" stroke="#fff" stroke-opacity=".7"/></g>
+      <g class="leap" style="opacity:0"><path d="M245 152 l9 -7 l-2 7 l2 7 Z" fill="${aux === '#ff4a4a' ? '#e07a10' : '#5a7a9a'}" stroke="rgba(0,0,0,.45)" stroke-width=".7"/><path d="M224 152 Q234 142 246 152 Q234 162 224 152 Z" fill="${aux === '#ff4a4a' ? '#ffb000' : 'url(#sFish)'}" stroke="rgba(0,0,0,.45)" stroke-width=".7"/><path d="M233 146 l5 -3 l1 4 Z" fill="${aux === '#ff4a4a' ? '#e07a10' : '#5a7a9a'}"/><circle cx="228" cy="151" r="1.1" fill="#111"/><path d="M231 149 q0 3 0 6" stroke="rgba(0,0,0,.25)" stroke-width=".7" fill="none"/></g>`;   // 찌 자리에서 튀어 올라 플레이어 등 뒤로
   } else if(k === 'wood'){
     bg += `<rect x="0" y="160" width="360" height="50" fill="${ground}"/>` + [30, 300, 340].map((x, i) => `<g opacity=".55">${rpgTree(aux, acc, x, 162, .55 + i*.05)}</g>`).join('');
     target = `<g class="target">${rpgTree(aux, acc, 196, 172, 1)}</g><g class="fx1" style="--fx:-26px;--fy:-38px;transform-box:view-box"><rect x="186" y="140" width="7" height="4" fill="#c49a5a"/></g><g class="fx1" style="--fx:18px;--fy:-30px;transform-box:view-box"><rect x="190" y="146" width="5" height="3" fill="#a87a3a"/></g>`;
     fg += `<rect x="0" y="168" width="360" height="42" fill="${ground}"/>`;
   } else if(k === 'mine'){
     bg += `<path d="M0 0 L360 0 L360 40 Q300 60 260 34 Q200 54 150 30 Q90 56 40 28 L0 44 Z" fill="${ground}"/><path d="M0 210 L0 70 Q30 90 20 140 L40 210 Z M360 210 L360 60 Q326 96 344 150 L320 210 Z" fill="${ground}"/>`;
-    bg += `<circle cx="300" cy="70" r="40" fill="#ffd27a" opacity=".12"/><rect x="296" y="62" width="8" height="12" rx="2" fill="#ffd27a"/>`;
+    bg += `<circle cx="300" cy="70" r="46" fill="#ffd27a" opacity=".1"/><circle cx="300" cy="70" r="22" fill="#ffd27a" opacity=".12"/><path d="M300 44 v14" stroke="#3a3a3a" stroke-width="1.2"/><path d="M293 58 h14 l-2 4 h-10 Z" fill="#4a4a4a"/><rect x="295" y="62" width="10" height="13" rx="2.5" fill="#ffe7a8" stroke="#5a4a2a" stroke-width="1"/><path d="M295 66 h10 M295 70 h10" stroke="#5a4a2a" stroke-width=".7"/><circle cx="300" cy="68.5" r="2.4" fill="#fff" opacity=".9"/>`;
     bg += `<rect x="0" y="168" width="360" height="42" fill="${ground}"/>`;
-    target = `<g class="target"><path d="M168 172 Q164 128 196 116 Q236 110 246 140 Q256 164 246 172 Z" fill="${acc}" stroke="rgba(0,0,0,.35)" stroke-width="2"/>${[[186,138],[208,128],[226,148],[198,158],[232,162]].map(([x,y]) => `<path d="M${x} ${y-5} L${x+5} ${y} L${x} ${y+5} L${x-5} ${y} Z" fill="${aux}" stroke="rgba(0,0,0,.3)"/>`).join('')}</g>
+    const rk = `M166 172 L164 150 L174 128 L192 116 L214 112 L234 120 L248 138 L254 160 L250 172 Z`;
+    target = `<ellipse cx="208" cy="173" rx="48" ry="5" fill="rgba(0,0,0,.35)"/><g class="target"><path d="${rk}" fill="${acc}" stroke="rgba(0,0,0,.5)" stroke-width="1.5" stroke-linejoin="round"/><path d="${rk}" fill="url(#sVol)"/>
+      <path d="M174 128 L196 140 L214 112 M196 140 L208 172 M196 140 L164 150 M234 120 L222 146 L248 138 M222 146 L208 172" stroke="rgba(0,0,0,.28)" stroke-width="1" fill="none"/>
+      <path d="M174 128 L192 116 L214 112 L196 140 Z" fill="#fff" opacity=".12"/><path d="M222 146 L248 138 L254 160 L250 172 L208 172 Z" fill="#000" opacity=".15"/>
+      ${[[186,138,5],[208,128,6],[226,150,5.5],[198,158,4.5],[236,162,5],[180,156,3.5]].map(([x,y,r]) => `<path d="M${x} ${y-r} L${x+r} ${y} L${x} ${y+r} L${x-r} ${y} Z" fill="${aux}" stroke="rgba(0,0,0,.45)" stroke-width=".7"/><path d="M${x} ${y-r} L${x+r} ${y} L${x} ${y} Z" fill="#fff" opacity=".45"/><path d="M${x} ${y} L${x} ${y+r} L${x-r} ${y} Z" fill="#000" opacity=".2"/><circle cx="${x-r*.3}" cy="${y-r*.35}" r="${r*.18}" fill="#fff"/>`).join('')}
+      ${[[160,170,5],[258,169,6],[252,172,3.5]].map(([x,y,r]) => `<path d="M${x-r} ${y+2} L${x-r*.6} ${y-r*.7} L${x+r*.4} ${y-r} L${x+r} ${y+2} Z" fill="${mixHex(acc, '#000000', .2)}" stroke="rgba(0,0,0,.45)" stroke-width=".7"/>`).join('')}</g>
       <g class="spark"><path d="M172 132 l6 -10 l2 10 l10 -2 l-8 7 l6 8 l-10 -4 l-4 9 l-1 -10 l-9 -2 z" fill="#fff6b0"/></g>
       <g class="fx1" style="--fx:-30px;--fy:-26px;transform-box:view-box"><path d="M176 140 l5 0 l-2 5 z" fill="${aux}"/></g><g class="fx1" style="--fx:-10px;--fy:-40px;transform-box:view-box"><path d="M180 136 l4 0 l-2 4 z" fill="${aux}"/></g>`;
   } else {
@@ -4226,7 +4500,7 @@ function rpgScene(k){
 }
 // ---------- 화면 ----------
 function appTabs(on){
-  return `<div class="apptabs"><button class="btn ${on==='mj'?'on':''}" data-act="tab" data-t="mj">마작</button><button class="btn ${on==='rpg'?'on':''}" data-act="tab" data-t="rpg">RPG</button>${on === 'mj' ? `<button class="btn small spk hbtn" data-act="help" aria-label="조작 설명" title="조작 설명">?</button>` : ''}${on === 'rpg' ? `<button class="btn small spk ${settings.bgm!==false && settings.sound!==false?'spkon':''}" data-act="toggleBgm" aria-label="BGM ${settings.bgm!==false?'끄기':'켜기'}" aria-pressed="${settings.bgm!==false}" title="던전 BGM">${settings.bgm!==false ? '♪' : '<s>♪</s>'}</button>` : ''}${on === 'rpg' ? `<button class="btn small spk ${settings.sound!==false?'spkon':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button>` : ''}</div>`;
+  return `<div class="apptabs"><button class="btn ${on==='mj'?'on':''}" data-act="tab" data-t="mj">마작</button><button class="btn ${on==='rpg'?'on':''}" data-act="tab" data-t="rpg">RPG</button>${on === 'mj' ? `<button class="btn small spk hbtn" data-act="help" aria-label="도움말" title="도움말">?</button>` : ''}${on === 'rpg' ? `<button class="btn small spk ${settings.bgm!==false && settings.sound!==false?'spkon':''}" data-act="toggleBgm" aria-label="BGM ${settings.bgm!==false?'끄기':'켜기'}" aria-pressed="${settings.bgm!==false}" title="던전 BGM">${settings.bgm!==false ? '♪' : '<s>♪</s>'}</button>` : ''}${on === 'rpg' ? `<button class="btn small spk ${settings.sound!==false?'spkon':''}" data-act="toggleSound" aria-label="효과음 ${settings.sound!==false?'끄기':'켜기'}" aria-pressed="${settings.sound!==false}">${speakerSVG(settings.sound!==false)}</button>` : ''}</div>`;
 }
 function rpgHTML(){
   const st = RPG.st, sel = st.sel || 'fish', S = SKILLS[sel], sk = st.sk[sel];
@@ -4241,21 +4515,22 @@ function rpgHTML(){
   }).join('');
   // 상점: 등급(장비 + 같은 등급 던전). 산 등급으로 바로 옮기고, 지난 등급으로는 돌아갈 수 없다
   const gradeItems = TIERS.map((t, i) => {
-    const g = i + 1, past = g < sk.gear, cur = g === sk.gear, next = g === sk.gear + 1, needLv = g >= 2 ? LV_CAP(g - 1) : 1, need99 = lvOf(sk.exp) < needLv;   // 다음 등급은 지금 등급의 상한 레벨(19·29…99)에 닿아야 살 수 있다
-    const btn = cur ? '<span class="d">사용 중</span>' : past ? '<span class="d">✓</span>'
-      : next && !need99 ? `<button class="btn small buy" data-act="rpgBuy" data-g="${g}" aria-label="축의칩 ${GRADE_PRICE[i]}개"><i class="chipi"></i>${GRADE_PRICE[i]}</button>`
-      : `<span class="d">${need99 ? 'Lv' + needLv + ' 필요' : '<i class="chipi"></i>' + GRADE_PRICE[i]}</span>`;
-    return `<div class="it ${cur?'eq':''} ${past || (!cur && !next) || need99 ? 'lock' : ''}"><span class="n"><i class="${t.gl ? 'glow' : ''}" style="background:${t.c};${t.gl ? '--gl:' + t.gl : ''}"></i>${t.n}<small>${g >= 10 ? 'Lv 100' : '~Lv ' + LV_CAP(g)}</small></span>${btn}</div>`;
+    const g = i + 1, past = g < sk.gear, cur = g === sk.gear, next = g === sk.gear + 1, lvOk = lvOf(sk.exp) >= REQ_LV(g), admin = !!settings.admin;
+    const btn = admin ? (cur ? '<span class="d">사용 중</span>' : `<button class="btn small buy" data-act="rpgAdmin" data-g="${g}">착용</button>`)
+      : cur ? '<span class="d">사용 중</span>' : past ? '<span class="d">✓</span>'
+      : next && lvOk ? `<button class="btn small buy" data-act="rpgBuy" data-g="${g}" aria-label="축의칩 ${GRADE_PRICE[i]}개"><i class="chipi"></i>${GRADE_PRICE[i]}</button>`
+      : `<span class="d"><i class="chipi"></i>${GRADE_PRICE[i]}</span>`;
+    return `<div class="it ${cur?'eq':''} ${!admin && (past || !next || !lvOk) && !cur ? 'lock' : ''}"><span class="n"><i class="${t.gl ? 'glow' : ''}" style="background:${t.c};${t.gl ? '--gl:' + t.gl : ''}"></i>${t.n}<small>${g >= 2 ? `(${REQ_LV(g)}레벨 이상)` : ''}</small></span>${btn}</div>`;
   }).join('');
   const away = RPG.away; RPG.away = null;
   const M = MJSK[sel], on = sk.skillOn !== false, ok = sk.gear >= 2, gc = tier.gl || tier.c;
-  const rate = capped(sk) ? `<b>Lv ${LV_CAP(sk.gear)} 상한</b>` : `시간당 ${fmtNum(X * 1000)} · ${sk.gear >= 10 ? '만렙' : '~Lv ' + LV_CAP(sk.gear)}`;
+  const rate = capped(sk) ? `<b>Lv ${LV_CAP(sk.gear)} 상한</b> · 다음 장비 필요` : `${settings.admin ? '<b>운영자</b> · ' : ''}시간당 ${fmtNum(X * 1000)} · ${sk.gear >= 10 ? '만렙' : '~Lv ' + LV_CAP(sk.gear)}`;
   return `<div class="rpg">${appTabs('rpg')}
     ${away ? `<div class="welcome">자리 비운 동안 ${esc(SKILLS[away.k].name)} +${fmtNum(away.gain)} exp${away.after > away.before ? ` · Lv ${away.before}→${away.after}` : ''}${away.cap ? ' · 상한' : ''}</div>` : ''}
     <div class="scene ${st.active === sel ? '' : 'idle'}">${rpgScene(sel)}
-      <div class="shead"><span>${esc(stg[0])} · ${tier.n} ${S.tool}</span><span class="skbs">${skillBadges()}</span></div>
-      <div class="sfoot"><span class="srate">${rate}</span><span class="sbtns">
-        ${ok ? `<button class="btn small sktg ${on ? 'on' : ''}" data-act="rpgSkill" aria-pressed="${on}" title="마작 스킬 · ${M.n} ${Math.min(100, sk.gear * 10)}%"><span class="swt"><i></i></span>${on ? 'Skill ON' : 'Skill OFF'}</button>` : ''}
+      <div class="shead"><span>${esc(stg[0])}</span><span class="skbs">${skillBadges()}</span></div>
+      <div class="sfoot"><span></span><span class="sbtns">
+        ${ok ? `<button class="btn small sktg ${on ? 'on' : ''}" data-act="rpgSkill" aria-pressed="${on}" title="마작 스킬 · ${M.n} ${Math.min(100, sk.gear * 10)}%"><span class="swt"><i></i></span>${M.n}</button>` : ''}
         ${st.active === sel ? `<button class="btn small gobtn" data-act="rpgGo">그만하기</button>` : `<button class="btn small primary gobtn" data-act="rpgGo">${esc(S.name)} 시작</button>`}
       </span></div>
       <div class="tickbar"><b></b></div></div>
@@ -4275,6 +4550,11 @@ function rpgTableHTML(){
     <div class="xpwrap"><table class="xpt"><thead><tr><th>레벨</th><th>누적 경험치</th><th>다음 레벨까지</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>
     <div class="row"><button class="btn primary" data-act="closeModal">닫기</button></div></div>`;
 }
+function rpgWear(st, sel, sk, g){
+  sk.gear = sk.stage = sk.gMax = sk.sMax = g;
+  if(st.active === sel){ st.active = null; st.carry = 0; }   // 새 던전에 들어가 새 장비를 든 채 멈춰 있는다. 시작을 눌러야 캔다
+  rpgToast(`${TIERS[g-1].n} ${SKILLS[sel].tool} 착용 · ${SKILLS[sel].stages[g-1][0]} 입장`);
+}
 function rpgToast(msg){
   document.querySelectorAll('.rpgtoast').forEach(x => x.remove());
   const t = document.createElement('div'); t.className = 'rpgtoast'; t.textContent = msg; document.body.appendChild(t);
@@ -4285,16 +4565,20 @@ function rpgAct(a, b){
   rpgAdvance(false);
   if(a === 'rpgSel'){ if(b.dataset.s !== st.sel && st.active){ st.active = null; st.carry = 0; } st.sel = b.dataset.s; }   // 다른 행동으로 바꾸면 하던 행동은 멈춘다
   else if(a === 'rpgGo' && st.active !== sel && capped(sk)){ rpgToast(`Lv ${LV_CAP(sk.gear)} 상한 · ${TIERS[sk.gear].n} ${SKILLS[sel].tool}이 필요해요`); return; }
-  else if(a === 'rpgGo'){ if(st.active === sel) st.active = null; else { st.active = sel; st.carry = 0; st.last = Date.now(); SFX.unlock(); if(SFX[sel]) SFX[sel](); } }
+  else if(a === 'rpgGo'){ if(st.active === sel) st.active = null; else { st.active = sel; st.carry = 0; st.last = Date.now(); SFX.unlock(); if(sel === 'combat') SFX.hit(SKILLS.combat.stages[sk.stage - 1][5]); else if(SFX[sel]) SFX[sel](); } }   // 시작할 때 한 번: 전투는 그 몬스터의 타격음
   else if(a === 'rpgSkill'){ sk.skillOn = sk.skillOn === false; }
-  else if(a === 'rpgBuy'){
+  else if(a === 'rpgBuy'){   // 사면 곧 착용. 그 장비의 착용 레벨(20·30…100)에 닿아야 살 수 있다
     const g = +b.dataset.g, p = GRADE_PRICE[g-1];
-    if(g !== sk.gear + 1) return;
-    if(lvOf(sk.exp) < LV_CAP(g - 1)){ rpgToast(`${TIERS[g-1].n}은(는) Lv ${LV_CAP(g - 1)}를 달성해야 살 수 있어요`); return; }
+    if(g !== sk.gear + 1 || g > 10) return;
+    if(lvOf(sk.exp) < REQ_LV(g)){ rpgToast(`${REQ_LV(g)}레벨 이상부터 착용할 수 있어요`); return; }
     if(st.chips < p){ rpgToast('축의칩이 부족합니다'); return; }
-    st.chips -= p; sk.gear = sk.stage = sk.gMax = sk.sMax = g; SFX.cash();
-    if(st.active === sel){ st.active = null; st.carry = 0; }   // 새 던전에 들어가 새 장비를 든 채 멈춰 있는다. 시작을 눌러야 캔다
-    rpgToast(`${TIERS[g-1].n} ${SKILLS[sel].tool} · ${SKILLS[sel].stages[g-1][0]} 입장`);
+    st.chips -= p; SFX.cash();
+    rpgWear(st, sel, sk, g);
+  }
+  else if(a === 'rpgAdmin'){   // 운영자 모드: 축의칩·레벨 없이 아무 등급이나 착용(낮은 등급으로도)
+    const g = +b.dataset.g;
+    if(!settings.admin || !(g >= 1 && g <= 10) || g === sk.gear) return;
+    rpgWear(st, sel, sk, g);
   }
   rpgSave(); chipFix(); render();
 }
@@ -4334,7 +4618,7 @@ document.addEventListener('click', e => {
     case 'help': $modal.innerHTML = helpHTML(); $modal.hidden = false; break;
     case 'closeModal': $modal.hidden = true; break;
     case 'tab': show(b.dataset.t === 'rpg' ? 'rpg' : 'home'); break;
-    case 'rpgSel': case 'rpgGo': case 'rpgBuy': case 'rpgSkill': rpgAct(a, b); break;
+    case 'rpgSel': case 'rpgGo': case 'rpgBuy': case 'rpgAdmin': case 'rpgSkill': rpgAct(a, b); break;
     case 'rpgTable': { $modal.innerHTML = rpgTableHTML(); $modal.hidden = false; const c = $modal.querySelector('tr.cur'); if(c) c.scrollIntoView({block:'center'}); break; }
     case 'secret': {   // 제목을 2.5초 안에 5번 누르면 숨김 메뉴
       const now = Date.now(); UI.secretTaps = (UI.secretTaps || []).filter(x => now - x < 2500); UI.secretTaps.push(now);
@@ -4346,7 +4630,7 @@ document.addEventListener('click', e => {
 <div class="row"><button class="btn warn" data-act="recWipeGo">모두 삭제</button><button class="btn" data-act="closeModal">취소</button></div></div>`;
       $modal.hidden = false; break;
     case 'recWipeGo': store.del(KEY.rec); UI.last = null; store.del(RPG_KEY); RPG.st = rpgLoad(); RPG.away = null; rpgSave(); chipFix(); $modal.hidden = true; render(); break;
-    case 'chipCheat': { RPG.st.chips = Math.max(0, RPG.st.chips + (+b.dataset.n)); rpgSave(); chipFix(); if(UI.screen === 'rpg') render(); break; }
+    case 'adminToggle': { settings.admin = !settings.admin; store.set(KEY.set, settings); $modal.innerHTML = secretMenuHTML(); if(UI.screen === 'rpg') render(); break; }
     case 'drill': { const k = b.dataset.d; $modal.hidden = true; startGame(DRILLS[k].mode, null, true, k); break; }
     case 'tsumo': if(pd) pd.resolve({type:'tsumo'}); break;
     case 'pickWind': if(UI.windPick && UI.windPick.picked == null){ UI.windPick.picked = +b.dataset.i; UI.windPick.done(); } break;

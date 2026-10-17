@@ -4596,6 +4596,9 @@ document.addEventListener('pointerdown', e => {
   else { ghost.innerHTML = ht.outerHTML.replace(/data-fk="[^"]*"/, '').replace(/\bsel\b|\bhint\b/g, ''); ghost.firstElementChild.style.setProperty('--w', r0.width + 'px'); }
   document.body.appendChild(ghost);
   const sx = e.clientX, sy = e.clientY;
+  // 폰 모드: 손가락에 가리지 않게 든 패를 손가락보다 왼쪽으로 패 한 칸, 위로 반 칸 띄워 들고, 놓는 자리·담그기 판정도 손가락이 아니라 그 패 위치로 한다
+  let ox = 0, oy = 0;
+  if(settings.phone){ const ht0 = document.querySelector('.hand > .tile[data-tile]'); const tw = ht0 ? ht0.getBoundingClientRect().width : 40; ox = -tw; oy = -tw * 1.36 * .5; }
   let moved = false, yoko = false, lastFlip = 0, flips = 0, spinAng = 0;
   // 잡은 패는 원래 자리에서 사라진다(빈자리만 남김). 끄는 동안 화면을 다시 그려도 유지되도록 스타일로 숨긴다
   const hideCss = mode === 'deal' ? '.sk.dnext i.dn{visibility:hidden}' : (mode === 'draw' || mode === 'passdraw') ? '.wnext{visibility:hidden}' : `.hand > .tile[data-tile="${id}"]{visibility:hidden}`;
@@ -4675,7 +4678,7 @@ document.addEventListener('pointerdown', e => {
   const dip = ev => {
     if(!settings.phone || id == null || mode === 'deal') return;
     const cells = [...document.querySelectorAll('.tray .tcell')];
-    const ci = cells.findIndex(c => inRect(c.getBoundingClientRect(), ev.clientX, ev.clientY));
+    const ci = cells.findIndex(c => inRect(c.getBoundingClientRect(), ev.clientX + ox, ev.clientY + oy));
     const now = ci >= 0 ? ci : null;
     if(now === dipCell) return;
     dipCell = now;
@@ -4689,7 +4692,7 @@ document.addEventListener('pointerdown', e => {
       dropHint({discard: mode.startsWith('tile'), nuki: mode.includes('nuki'), draw: mode === 'draw'});
     }
     if(moved) dip(ev);
-    ghost.style.left = ev.clientX + 'px'; ghost.style.top = ev.clientY + 'px'; ghost.style.opacity = moved ? 1 : 0;
+    ghost.style.left = (ev.clientX + ox) + 'px'; ghost.style.top = (ev.clientY + oy) + 'px'; ghost.style.opacity = moved ? 1 : 0;
   };
   move(e);
   const up = ev => {
@@ -4698,7 +4701,7 @@ document.addEventListener('pointerdown', e => {
     setTimeout(() => { document.removeEventListener('contextmenu', cm, true); UI.dragging = false; }, 250);   // 손을 뗄 때 따라오는 우클릭 메뉴도 막는다
     ghost.remove(); dropHint(null); dragHideStyle.textContent = '';
     if(!moved || ev.type !== 'pointerup') return;
-    const x = ev.clientX, y = ev.clientY;
+    const x = ev.clientX + ox, y = ev.clientY + oy;
     if(id != null && flips % 2 === 1){   // 홀수 번 돌렸고 손패 줄에 놓았으면 상하 반전 확정(버리기는 하지 않는다)
       const hw0 = document.querySelector('.handwrap'), hr0 = hw0 && hw0.getBoundingClientRect();
       if(hr0 && y >= hr0.top - 30 && y <= hr0.bottom + 30){

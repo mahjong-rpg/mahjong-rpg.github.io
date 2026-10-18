@@ -211,6 +211,22 @@ h1,h2,h3{margin:0;text-wrap:balance}
 .sk.hl.fin::after{animation:hlfin .34s ease-out both}
 /* 아리스·튤립: 새로 뒤집힌 패산 패 + 대상 패가 있으면 초록으로 깜빡 */
 .sk .tf.afl{animation:aflp .4s ease-out both;transform-origin:50% 100%}
+/* 손가락으로 튕겨 까기: 두께(--d) 있는 상자가 긴 방향으로 180° 휘릭(위 벽은 가로축, 옆 벽은 세로축) */
+.sk:has(> .tf.f3){perspective:calc(var(--ww)*6)}   /* 쌓인 순서(앞줄 패가 뒷줄 패를 가림)는 도는 동안에도 그대로 */
+.sk .tf.f3{--d:calc(var(--ww)*.3);transform-style:preserve-3d;transform-origin:50% 50% calc(var(--d)*-1);animation:f3x .25s cubic-bezier(.4,.1,.3,1) both}
+.sk .tf.f3.f3y{animation-name:f3y}
+.sk .tf.f3 > .tile{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.sk .tf.f3 > i{position:absolute;display:block;pointer-events:none;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.sk .tf.f3 > .f3b{inset:0;border-radius:inherit;background:linear-gradient(var(--tile-back-hi),var(--tile-back));box-shadow:inset 0 0 0 .5px rgba(0,0,0,.5)}
+.sk .tf.f3x > .f3b{transform:translateZ(calc(var(--d)*-1)) rotateX(180deg)}
+.sk .tf.f3y > .f3b{transform:translateZ(calc(var(--d)*-1)) rotateY(180deg)}
+.sk .tf.f3x > .f3e{left:0;right:0;height:var(--d);transform-origin:50% 0;transform:rotateX(-90deg);background:linear-gradient(#f4f1e6 0 50%,var(--tile-back) 50% 100%);backface-visibility:visible}
+.sk .tf.f3x > .e1{top:0}.sk .tf.f3x > .e2{top:100%}
+.sk .tf.f3y > .f3e{top:0;bottom:0;width:var(--d);transform-origin:0 50%;transform:rotateY(90deg);background:linear-gradient(to right,#f4f1e6 0 50%,var(--tile-back) 50% 100%);backface-visibility:visible}
+.sk .tf.f3y > .e1{left:0}.sk .tf.f3y > .e2{left:100%}
+@keyframes f3x{0%{transform:rotateX(180deg);box-shadow:none}45%{transform:translateZ(calc(var(--ww)*.35)) rotateX(80deg);box-shadow:none}80%{transform:rotateX(-12deg);box-shadow:none}99%{transform:rotateX(0);box-shadow:none}100%{transform:none}}
+@keyframes f3y{0%{transform:rotateY(-180deg);box-shadow:none}45%{transform:translateZ(calc(var(--ww)*.35)) rotateY(-80deg);box-shadow:none}80%{transform:rotateY(12deg);box-shadow:none}99%{transform:rotateY(0);box-shadow:none}100%{transform:none}}
+@media (prefers-reduced-motion: reduce){.sk .tf.f3{animation:none}}
 @keyframes aflp{from{opacity:0;transform:scaleY(.1)}to{opacity:1;transform:none}}
 /* 자리 정할 때 패산 줄이 빛나던 것과 같은 붉은 형광색(결정될 때 번쩍이던 밝은 상태)으로 깜빡인다 */
 .sk.hl.amiss::after{background:rgba(255,90,65,.9);box-shadow:0 0 calc(var(--ww)*.9) calc(var(--ww)*.2) rgba(255,70,40,1);animation:ablink .3s ease-in-out infinite alternate}   /* 꽝: 깐 패가 붉게 깜빡 */
@@ -466,7 +482,8 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .apptabs .btn{min-width:72px;height:28px;padding:0 12px;display:inline-grid;place-items:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
 .wrap:has(.apptabs){padding-top:44px}
 .appskbs{position:fixed;top:5px;right:max(118px, calc(112px + env(safe-area-inset-right, 0px)));z-index:60}   /* 스킬 표시: 마작 중 상단바와 같은 자리 */
-.appskbs.low{top:38px}   /* 좁은 화면: 탭과 겹치면 한 줄 아래로 */
+.appskbs.low{top:38px}
+.appskbs.compact small{display:none}.appskbs.compact .skb{padding:0 8px;min-width:32px;justify-content:center}   /* 좁은 화면: 탭과 겹치면 한 줄 아래로 */
 .wrap:has(.appskbs.low){padding-top:74px}
 .apptools{position:fixed;top:5px;right:max(6px, env(safe-area-inset-right, 0px));z-index:60;display:flex;gap:6px;align-items:center}
 .apptools .btn.spk{min-width:0;height:28px;padding:0 8px;color:var(--ink-dim);display:inline-grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.35)}
@@ -481,6 +498,9 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .scene{width:80%;align-self:center;position:relative;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.45);background:#000;aspect-ratio:360/210}
 .rpg .scene svg{display:block;width:100%;height:100%;filter:url(#crt) contrast(1.12) saturate(1.2) brightness(.97)}   /* 브라운관: 번짐·RGB 어긋남·빛 번짐 */
 .rpg .scene > :not(svg){z-index:2}
+/* 장면 속 문구(경험치·레벨업)도 브라운관 필터를 받는다: 주사선 아래에 깔고 같은 번짐·RGB 어긋남 (장소 이름은 선명하게) */
+.rpg .scene > .floatexp,.rpg .scene > .lvup{z-index:0;filter:url(#crt) contrast(1.1) saturate(1.15)}
+.rpg .welcome{filter:url(#crt)}
 .rpg .scene::before,.rpg .scene::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;border-radius:inherit}
 .rpg .scene::before{box-shadow:inset 0 0 30px 6px rgba(0,0,0,.55),inset 0 0 2px 1px rgba(255,255,255,.08);background:radial-gradient(ellipse 60% 40% at 28% 16%,rgba(255,255,255,.10),transparent 70%),repeating-linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,.13) 2px,rgba(0,0,0,0) 4px),radial-gradient(ellipse 120% 95% at 50% 45%,transparent 55%,rgba(0,0,0,.42) 100%),linear-gradient(180deg,rgba(255,236,190,.10) 0%,transparent 35%,transparent 70%,rgba(0,0,0,.22) 100%)}
 .rpg .scene::after{opacity:.2;mix-blend-mode:overlay;background-size:180px 180px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='.33 .33 .33 0 0 .33 .33 .33 0 0 .33 .33 .33 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -534,6 +554,9 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .ymban{align-self:center;font:900 34px/1.1 var(--f-ui);letter-spacing:.08em;color:#fff3b0;background:linear-gradient(180deg,#fff7c8,#ffd255 55%,#d99a1c);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 0 #7a4b00) drop-shadow(0 0 12px rgba(255,200,60,.8));animation:ymin .9s cubic-bezier(.2,1.6,.4,1) both}
 @keyframes ymin{0%{transform:scale(.2) rotate(-8deg);opacity:0}100%{transform:none;opacity:1}}
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:9500;overflow:hidden}
+.rpg .scene > .sconf{position:absolute;z-index:0;filter:url(#crt)}   /* 레벨업 색종이: 화면 안에서만, 주사선 아래 */
+.sconf i{animation-name:cfs!important;width:5px;height:9px}
+@keyframes cfs{0%{opacity:1;top:-12px;transform:translateX(0) rotate(0)}100%{opacity:1;top:105%;transform:translateX(var(--x)) rotate(var(--r))}}
 .confetti i{position:absolute;top:-20px;width:8px;height:14px;border-radius:2px;animation:cf var(--t) cubic-bezier(.3,.4,.6,1) var(--dl) forwards;opacity:0}
 @keyframes cf{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:1;transform:translate(var(--x),110vh) rotate(var(--r))}}
 @media (max-width:520px){.topbar .row > .muted{display:none}.skb{padding:4px 5px;font-size:12px}}   /* 좁은 화면: 모드 이름 대신 스킬 표시를 남긴다 */
@@ -2260,7 +2283,14 @@ function fitRpg(){
   const r = $app.querySelector('.rpg'); if(!r) return;
   r.style.transform = ''; r.style.marginBottom = '';
   const sb = $app.querySelector('.appskbs'), tb = $app.querySelector('.apptabs');
-  if(sb && tb){ sb.classList.remove('low'); if(sb.getBoundingClientRect().left < tb.getBoundingClientRect().right + 6) sb.classList.add('low'); }
+  // 스킬 표시를 켜고 끌 때 화면이 흔들리지 않게: 지금 켜진 개수가 아니라 4개가 다 켜졌을 때 탭과 겹치는지로 정한다
+  //  탭과 겹치면 먼저 확률 숫자를 빼고 아이콘만(한 줄 유지), 그래도 겹치면 한 줄 아래로
+  if(sb && tb){
+    sb.classList.remove('low', 'compact');
+    const room = sb.getBoundingClientRect().right - (tb.getBoundingClientRect().right + 6);
+    if(4 * 56 + 3 * 4 > room) sb.classList.add('compact');
+    if(4 * 32 + 3 * 4 > room) sb.classList.add('low');
+  }
   const d = document.createElement('div'); d.className = 'wrap';
   d.style.cssText = `position:absolute;visibility:hidden;pointer-events:none;top:0;left:0;width:${$app.getBoundingClientRect().width}px`;
   d.innerHTML = homeHTML(); document.body.appendChild(d);
@@ -2901,7 +2931,10 @@ function startGame(mode, saved, practice, drill, ym){
   UI.wallSplit = true;
   UI.seating = false;
   UI.dealCount = null;
-  UI.oyaShown = !!saved; UI.autoDeal = UI.drill ? !DRILLS[UI.drill].full : UI.ymTest != null ? true : !!settings.skipDeal;   // 배패 연습은 배패 스킵 설정과 상관없이 직접 굴린다 UI.diceShow = null; UI.rollWait = null; UI.lastDice = null; UI.kikaSeat = null; UI.dealWait = null; UI.chon = null; UI.cpuFirst = null; UI.cpuFirstId = null; UI.claim = null; UI.callStage = null;
+  UI.oyaShown = !!saved; UI.autoDeal = UI.drill ? !DRILLS[UI.drill].full : UI.ymTest != null ? true : !!settings.skipDeal;   // 배패 연습은 배패 스킵 설정과 상관없이 직접 굴린다
+  // 앞 게임(자리 정하기·주사위·배패 도중에 나간 것 포함)의 연출 상태를 모두 비운다
+  UI.diceShow = null; UI.rollWait = null; UI.lastDice = null; UI.kikaSeat = null; UI.dealWait = null; UI.chon = null; UI.cpuFirst = null; UI.cpuFirstId = null; UI.claim = null; UI.callStage = null;
+  UI.windPick = null; UI.dealing = false; UI.wallFx = null; UI.flipMany = null;
   UI.frozen = null; UI.alice = null;
   SFX.unlock();
   UI.confirm = null;
@@ -2934,9 +2967,10 @@ function startGame(mode, saved, practice, drill, ym){
   const dstate = D ? { scores: seatsBy(N0).map(() => P3 ? 35000 : 25000), kyoku: 0, honba: 0, kyotaku: 0, decisions: [], results: [], oya0: D.dealer === 'kami' ? N0 - 1 : 0, seatDraw: D.full ? forcedSeatDraw(N0) : null } : null;
   const g = new Game({ controllers: ctrls, players: P3 ? 3 : 4, length: UI.mode.replace('3',''), aka:UI.aka, state: saved ? saved.state : dstate, rigTenpai: !!window.__rig, beforeDraw: () => sleep(settings.speed === 'fast' ? 250 : 650),rig: D ? (gg => D.rig(gg)) : null, 
     onKyokuStart: async (game) => {
+      const tk0 = UI.token, sleepT = async ms => { await sleep(ms); if(tk0 !== UI.token) await HALT(); };   // 나간 게임의 배패 연출은 멈춘다
       UI.frozen = null; UI.cpuOut = {}; UI.handSet = game.results.length % 2; document.documentElement.classList.toggle('setb', UI.handSet === 1);
       UI.callouts = {}; UI.carryKyotaku = game.kyotaku;
-      UI.kyokuSerial = (UI.kyokuSerial || 0) + 1; UI.sense = null; UI.swapIn = null; UI.peek = null; UI.prune = null; uraState();
+      UI.kyokuSerial = (UI.kyokuSerial || 0) + 1; UI.kyokuReady = true; UI.doraAt = {}; UI.sense = null; UI.swapIn = null; UI.peek = null; UI.prune = null; uraState();
       UI.inv = new Set();   // 처음 배패된 손패는 상하가 정리되지 않은 채로 온다(끌면서 우클릭해 180도 돌려 다시 손패에 놓아 정리)
       if(!UI.drill && !settings.skipDeal) game.players[0].hand.forEach(id => { if(ASYM_K.has(kindOf(id)) && Math.random() < .5) UI.inv.add(id); });
       if((settings.skipDeal || UI.drill || UI.ymTest != null) && !(D && D.full)){   // 배패 스킵(연습 모드도 바로 시작): 자리 정하기·주사위·배패 연출 없이 바로 시작
@@ -2955,13 +2989,13 @@ function startGame(mode, saved, practice, drill, ym){
         await new Promise(res => { UI.windPick.done = res; });
         if(t !== UI.token) return;
         moveKika(sd.kariton);   // 東을 뽑은 가동에게 기가마크
-        SFX.draw(); render(); await sleep(1800);
+        SFX.draw(); render(); await sleepT(1800);
         UI.windPick = null;
         // 2) 가동이 굴려 가친
         const n1 = sd.d1[0] + sd.d1[1];
         await rollDice(sd.kariton, { vals: sd.d1, title: `가동 ${SEATNAME[sd.kariton]} 주사위`, text: `합 ${n1}` });
         if(!await countSeats(game, sd.kariton, n1, t)) return;
-        UI.diceShow.text = `합 ${n1} → ${SEATNAME[sd.kario]} 가친`; moveKika(sd.kario); render(); await sleep(650);
+        UI.diceShow.text = `합 ${n1} → ${SEATNAME[sd.kario]} 가친`; moveKika(sd.kario); render(); await sleepT(650);
         UI.wallFx = null; await diceBack(250);
         // 3) 가친이 굴려 기가
         const n2 = sd.d2[0] + sd.d2[1];
@@ -2969,7 +3003,7 @@ function startGame(mode, saved, practice, drill, ym){
         UI.seating = false;
         await rollDice(sd.kario, { vals: sd.d2, title: `가친 ${SEATNAME[sd.kario]} 주사위`, text: `합 ${n2}` });
         if(!await countSeats(game, sd.kario, n2, t)) return;
-        UI.diceShow.text = `합 ${n2} → ${SEATNAME[game.oya0]} 기가`; moveKika(game.oya0); render(); await sleep(650);
+        UI.diceShow.text = `합 ${n2} → ${SEATNAME[game.oya0]} 기가`; moveKika(game.oya0); render(); await sleepT(650);
         UI.wallFx = null; UI.kikaSeat = null; await diceBack(250);
       }
       // 매 국: 친이 굴려 반시계로 세고, 걸린 자리 패산을 그 사람 오른쪽부터 주사위 수만큼 세어 가른다
@@ -2979,10 +3013,10 @@ function startGame(mode, saved, practice, drill, ym){
       if(!await countSeats(game, game.dealer, game.dice, t2)) return;
       UI.diceShow.text = `합 ${game.dice} → ${SEATNAME[wseat]} 패산`;
       const fk = settings.speed === 'fast' ? .7 : 1;
-      for(let k = 1; k <= game.dice; k++){ UI.wallFx = { cseat: wseat, cnt: k }; render(); await sleep(Math.round(85 * fk)); if(t2 !== UI.token) return; }
-      await sleep(Math.round(220 * fk));
+      for(let k = 1; k <= game.dice; k++){ UI.wallFx = { cseat: wseat, cnt: k }; render(); await sleepT(Math.round(85 * fk)); if(t2 !== UI.token) return; }
+      await sleepT(Math.round(220 * fk));
       await diceBack(0); UI.wallSplit = true; UI.wallFx = { cseat: wseat, cnt: game.dice, split: true };
-      SFX.draw(); render(); await sleep(650);   // 패산 가르고 도라 표시패 뒤집기
+      SFX.draw(); render(); await sleepT(650);   // 패산 가르고 도라 표시패 뒤집기
       UI.wallFx = null;
       // 배패: 친부터 반시계로 4장씩 세 바퀴, 마지막에 한 장씩 (친의 두 번째 패는 첫 쯔모로 이어진다)
       UI.diceShow = null;
@@ -3010,10 +3044,10 @@ function startGame(mode, saved, practice, drill, ym){
           if(pt) UI.flipMany = { keys: Array.from({length: n}, (_, i) => `d${seat}-${UI.dealCount[seat] + i}`), pt, dur: Math.round(CPU_FLY() * .8) };
         }
         if(chon) UI.chon.taken.push(...offs);
-        UI.dealCount[seat] += n; SFX.draw(); render(); await sleep(dt);
+        UI.dealCount[seat] += n; SFX.draw(); render(); await sleepT(dt);
       }
       UI.chon = null;
-      await sleep(dt * 2);
+      await sleepT(dt * 2);
       UI.dealCount = null; UI.dealing = false; UI.dealerFirst = game.dealer === 0; UI.cpuFirst = game.dealer !== 0 ? game.dealer : null; render();   // 내가 친이면 14번째 패는 배패로 이미 손에 있다
     },
     onKyokuEnd: async (res, game) => {
@@ -3026,6 +3060,7 @@ function startGame(mode, saved, practice, drill, ym){
   UI.lastDraw = {}; UI.cpuOut = {};
   g.on((type, d) => {
     if(type === 'draw') UI.lastDraw[d.seat] = d.id;
+    if(type === 'dora' && UI.kyokuReady){ const i = g.doraIndIds.length - 1; if(i > 0){ (UI.doraAt = UI.doraAt || {})[i] = Date.now(); SFX.draw(); setTimeout(render, FLICK_MS + 60); } }   // 깡도라: 튕겨 까기
     if(type === 'draw' && d.seat === 0 && !UI.drill && ASYM_K.has(kindOf(d.id)) && Math.random() < .5){ if(!UI.inv) UI.inv = new Set(); UI.inv.add(d.id); }   // 쯔모해 온 패도 상하가 제각각
     if((type === 'draw' || type === 'discard') && !UI.dealing) UI.wallFx = null;
     // CPU 친의 첫 차례: ちょんちょん으로 이미 14장이라 패산에서 뽑지 않는다(게임 안에서는 14번째 패를 첫 쯔모로 셈)
@@ -3084,8 +3119,13 @@ async function aliceShow(res, game){
   if(t !== UI.token) return;
   for(let i = 0; i < al.flips.length; i++){
     const f = al.flips[i];
-    UI.alice = { flips: al.flips, n: i + 1, hit: f.c ? f.ks : null, blink: !!f.c, miss: !f.c, at: Date.now() };
-    SFX.draw(); if(f.c) SFX.jjan(); else SFX.miss(); render();   // 맞으면 짠! 꽝이면 뿌뿌(붉게 깜빡)
+    const at = Date.now();
+    UI.alice = { flips: al.flips, n: i + 1, hit: null, blink: false, miss: false, at };   // 먼저 휘릭 뒤집고
+    SFX.draw(); render();
+    await sleep(FLICK_MS + 180);
+    if(t !== UI.token) return;
+    UI.alice = { flips: al.flips, n: i + 1, hit: f.c ? f.ks : null, blink: !!f.c, miss: !f.c, at };   // 착지한 뒤에 짠!(초록) / 뿌뿌(빨강)
+    if(f.c) SFX.jjan(); else SFX.miss(); render();
     if(f.c){ await sleep(Math.round(550 * fk)); if(t !== UI.token) return; callout(0, '+' + f.c); await sleep(Math.round(1100 * fk)); }   // 짠! … 텀 두고 +N
     else await sleep(Math.round(900 * fk));
     if(t !== UI.token) return;
@@ -3147,15 +3187,20 @@ async function countSeats(game, start, n, token){
 }
 function rollWaitHTML(w){ return `<div class="dicebox"><div class="dt">${esc(w.title)}</div><div class="dx">주사위를 끌어서<br>가운데에 놓으세요</div></div>`; }
 // 내가 굴릴 차례면 홈의 주사위를 가운데로 끌어 놓아야 굴러가고, 아니면 바로 굴러 나온다
+// 게임을 나가면(토큰이 바뀌면) 앞 게임의 연출은 거기서 멈춘다: 새 게임의 화면 상태를 건드리지 않게
+const HALT = () => new Promise(() => {});
 async function rollDice(seat, d){
-  if(seat === 0){ await new Promise(res => { UI.rollWait = { title: d.title, done: res }; render(); }); d.drag = true; }
+  const tk = UI.token;
+  if(seat === 0){ await new Promise(res => { UI.rollWait = { title: d.title, done: res }; render(); }); if(tk !== UI.token) return HALT(); d.drag = true; }
   UI.diceShow = d; SFX.dice(); render(); await sleep(650);
+  if(tk !== UI.token) return HALT();
 }
 // 숫자가 정해지고 동작이 끝나면 주사위가 홈으로 슥 들어간다 (rest: 들어간 뒤 잠깐 쉬는 시간)
 async function diceBack(rest){
-  if(UI.diceShow){ UI.diceShow.ret = true; render(); await sleep(430); }
+  const tk = UI.token;
+  if(UI.diceShow){ UI.diceShow.ret = true; render(); await sleep(430); if(tk !== UI.token) return HALT(); }
   UI.diceShow = null;
-  if(rest){ render(); await sleep(rest); }
+  if(rest){ render(); await sleep(rest); if(tk !== UI.token) return HALT(); }
 }
 function diceBlockHTML(d){
   if(!d.at) d.at = Date.now();   // 다시 그려도 굴러가는 연출이 처음부터 반복되지 않게 지난 시간만큼 당겨 둔다
@@ -3271,7 +3316,10 @@ function wallsScreenHTML(walls, fx, uraGc){
       else { x = .5 + WD; y = .5 - off; }
       let face = '';
       const tap = sl.dIdx != null && sl.ura == null && uraCanTry(sl.dIdx);   // 광맥 탐지: 도라 표시패를 누르면 그 뒷도라 판정
-      if(sl.t && sl.dora != null) face = `<span class="tf ${sl.afl != null ? 'afl' : ''} ${tap ? 'uratap' : ''}" ${tap ? `data-act="uraTry" data-i="${sl.dIdx}" title="광맥 탐지: 눌러서 뒷도라 보기" style="--gc:${uraGc}"` : ''} ${sl.afl != null ? `style="animation-delay:-${sl.afl}ms"` : ''}>${tile(sl.dora,{size:'wl', id: sl.doraId, cls: vert ? 'rot'+v : ''})}</span>`;
+      // 새로 뒤집는 패(아리스·튤립, 깡도라): 손가락으로 튕겨 까듯 긴 방향으로 휘릭 도는 두께 있는 입체 패
+      const kfa = sl.dIdx > 0 && UI.doraAt && UI.doraAt[sl.dIdx] ? Date.now() - UI.doraAt[sl.dIdx] : null;
+      const fa = sl.afl != null ? sl.afl : kfa, f3 = fa != null && fa < FLICK_MS;
+      if(sl.t && sl.dora != null) face = `<span class="tf ${f3 ? 'f3 ' + (vert ? 'f3y' : 'f3x') : ''} ${tap && !f3 ? 'uratap' : ''}" ${tap && !f3 ? `data-act="uraTry" data-i="${sl.dIdx}" title="광맥 탐지: 눌러서 뒷도라 보기"` : ''} style="${tap && !f3 ? `--gc:${uraGc};` : ''}${f3 ? `animation-delay:-${fa}ms` : ''}">${tile(sl.dora,{size:'wl', id: sl.doraId, cls: vert ? 'rot'+v : ''})}${f3 ? '<i class="f3b"></i><i class="f3e e1"></i><i class="f3e e2"></i>' : ''}</span>`;
       if(sl.drop){   // 내려 둔 영상패: 산패 쪽 옆자리에 한 단으로
         const prevLive = j > 0 && !slots[j-1].dead;
         const d = (prevLive || j === 0 ? -1 : 1) * (WW + WGAP);
@@ -3746,7 +3794,8 @@ function waitsHTML(g){
   const total = waits.reduce((a, k) => a + Math.max(0, 4 - vis[k]), 0);
   const furiten = me.riichiFuriten || me.tempFuriten || me.discards.some(d => waits.includes(kindOf(d.id))) || (out != null && waits.includes(kindOf(out)));
   // 패산을 가리지 않게 평소엔 '대기패 표시' 버튼만, 누르면 펼쳐진다
-  if(!UI.waitOpen) return `<div class="waitbar wclosed"><button class="btn small wtog" data-act="waitToggle" aria-expanded="false">대기패 표시</button></div>`;
+  // 손패에 마우스를 올려 '이 패를 버리면' 대기를 볼 때는 바로 펼쳐 보인다. 이미 텐파이일 때만 버튼으로 여닫는다
+  if(!UI.waitOpen && hv == null) return `<div class="waitbar wclosed"><button class="btn small wtog" data-act="waitToggle" aria-expanded="false">대기패 표시</button></div>`;
   return `<div class="waitbar ${hv!=null?'hov':''}"><button class="btn small wtog on" data-act="waitToggle" aria-expanded="true">대기패 표시</button><b class="wsum">${total}장</b><span class="wrow">${items}</span>${furiten?'<span class="fbadge">후리텐</span>':''}</div>`;
 }
 function gameHTML(){
@@ -3953,13 +4002,13 @@ function aliceOf(w, g){
   return { flips, n, name: mode === 'tulip' ? '튤립' : '아리스' };
 }
 // 역만 결과창 손패: 처음엔 모두 엎어져 있다가 왼쪽부터 도미노처럼 차르륵 뒤집힌다(호타루가에시)
-const FLIP0 = .35, FLIPD = .065;
-function confetti(){
-  const box = document.createElement('div'); box.className = 'confetti';
+const FLIP0 = .35, FLIPD = .065, FLICK_MS = 270;   // FLICK_MS: 튕겨 까기 연출 길이
+function confetti(host){   // host가 있으면 그 안(RPG 브라운관 화면)에서만 뿌린다
+  const box = document.createElement('div'); box.className = host ? 'confetti sconf' : 'confetti';
   const C = ['#ffd255', '#ff5a5a', '#5ad1ff', '#7ee08a', '#ffffff', '#c58aff'];
   let h = '';
-  for(let i = 0; i < 90; i++) h += `<i style="left:${(Math.random() * 100).toFixed(1)}%;background:${C[i % C.length]};--x:${((Math.random() - .5) * 240) | 0}px;--r:${((Math.random() - .5) * 1440) | 0}deg;--t:${(2.4 + Math.random() * 1.8).toFixed(2)}s;--dl:${(1.4 + Math.random() * .9).toFixed(2)}s"></i>`;
-  box.innerHTML = h; document.body.appendChild(box);
+  for(let i = 0; i < 90; i++) h += `<i style="left:${(Math.random() * 100).toFixed(1)}%;background:${C[i % C.length]};--x:${((Math.random() - .5) * 240) | 0}px;--r:${((Math.random() - .5) * 1440) | 0}deg;--t:${(host ? 1.6 + Math.random() * 1 : 2.4 + Math.random() * 1.8).toFixed(2)}s;--dl:${(host ? 1 + Math.random() * .5 : 1.4 + Math.random() * .9).toFixed(2)}s"></i>`;
+  box.innerHTML = h; (host || document.body).appendChild(box);
   setTimeout(() => box.remove(), 6000);
 }
 function flipWrap(t, i){ return `<span class="rflip" style="--i:${i}"><span class="rfi"><i class="rs rl"></i><i class="rs rr"></i><i class="rs rt"></i><i class="rs rb"></i><span class="rfB">${backTile('md')}</span><span class="rfF">${t}</span></span></span>`; }   // 앞·뒷면 + 옆면 4개로 두께 있는 패
@@ -4422,8 +4471,8 @@ function rpgFx(r){
   f.textContent = `+${fmtNum(r.gain)} exp`; sc.appendChild(f); setTimeout(() => f.remove(), 1200);
   if(SFX[r.k] && (r.k === 'fish' || !swingAnim())){ if(r.k === 'combat') SFX.hit(SKILLS.combat.stages[RPG.st.sk.combat.stage - 1][5]); else SFX[r.k](); }   // 낚시는 틱(물고기 점프)에, 나머지는 휘두르는 타이밍(rpgFrame)에 소리가 난다. 애니메이션이 없는 환경(모션 줄이기)이면 틱에
   if(r.after > r.before){
-    const l = document.createElement('div'); l.className = 'lvup'; l.textContent = `LEVEL UP! Lv ${r.after}`;
-    sc.appendChild(l); setTimeout(() => l.remove(), 1900); SFX.lvup();
+    const l = document.createElement('div'); l.className = 'lvup'; l.textContent = 'LEVEL UP!';
+    sc.appendChild(l); setTimeout(() => l.remove(), 1900); SFX.fanfare();   // 레벨업 소리 = 역만 빵빠레
     if(UI.screen === 'rpg') setTimeout(render, 1900);
   }
 }

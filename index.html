@@ -2147,7 +2147,8 @@ const store = {
   set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } },
   del(k){ try{ localStorage.removeItem(k); }catch(e){} }
 };
-let settings = Object.assign({hint:false, skipDeal:false, alice:true, tulip:false, speed:'normal', sound:true}, store.get(KEY.set, {}));
+const SETTINGS0 = {hint:false, skipDeal:false, alice:false, tulip:false, phone:false, speed:'normal', sound:true};   // 처음 시작: 체크는 모두 꺼짐, 소리는 켜짐
+let settings = Object.assign({}, SETTINGS0, store.get(KEY.set, {}));
 settings.hint = false;   // AI 힌트 표시는 설정에서 뺐다
 if(settings.alice && settings.tulip) settings.tulip = false;   // 아리스·튤립은 둘 중 하나만
 if(settings.phone === undefined){ try{ settings.phone = !!(window.matchMedia && matchMedia('(pointer: coarse)').matches); }catch(e){ settings.phone = false; } }   // 폰 모드: 눌러서 조작
@@ -2669,7 +2670,7 @@ const BGM = (() => {
   return {
     sync(){   // 화면이 바뀔 때마다 부른다: RPG 화면이고 소리·BGM이 켜져 있으면 지금 던전의 BGM
       if(UI.screen === 'rpg' && settings.sound !== false){   // 스피커 하나로 효과음과 BGM을 함께 켜고 끈다
-        const st = RPG.st, k = st.sel || 'fish', sg = st.sk[k].stage;
+        const st = RPG.st, k = st.sel || 'combat', sg = st.sk[k].stage;
         play(k + sg, BGM_ENV[k][sg - 1]);
       } else stop();
     },
@@ -3618,6 +3619,16 @@ function ymRig(g, T0){
     return Array.prototype.pop.call(this);
   };
 }
+// 운영자 모드 입구: 제목 5번 누른 뒤 비밀 문자(원문은 소스에 두지 않고 해시로만 비교)
+const SECRET_H = [8827874273247958];
+document.addEventListener('submit', e => e.preventDefault());   // 비밀 문자 입력칸: Enter는 확인 버튼(클릭)으로 처리되고, 페이지는 다시 불러오지 않는다
+function cyrb53(str, seed = 7){ let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed; for(let i = 0, ch; i < str.length; i++){ ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); } h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507); h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909); h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507); h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909); return 4294967296 * (2097151 & h2) + (h1 >>> 0); }
+function secretGateHTML(bad){
+  return `<div class="sheet"><h2>비밀 문자</h2>
+    <form class="row" data-form="sgate" style="gap:6px"><input id="sgate" type="password" autocomplete="off" style="flex:1;min-width:0;padding:8px 10px;border-radius:8px;border:1px solid var(--felt-line);background:var(--panel-2);color:var(--ink);font:inherit"><button class="btn primary" data-act="sgateGo">확인</button></form>
+    ${bad ? '<p style="margin:0;color:var(--alert);font-size:13px">틀렸어요</p>' : ''}
+    <div class="row"><button class="btn" data-act="closeModal">닫기</button></div></div>`;
+}
 function secretMenuHTML(){
   const on = !!settings.admin;
   return `<div class="sheet"><h2>운영자 모드</h2>
@@ -4288,7 +4299,7 @@ function importCode(txt){
   UI.importedRpg = false;
   if(data.rpg && data.rpg.v === 1 && data.rpg.sk){   // RPG 진행도는 가져온 것으로 통째로 덮어쓴다
     const st = data.rpg;
-    st.chips = Math.max(0, +st.chips || 0); st.sel = st.sel || 'fish'; st.carry = +st.carry || 0; st.active = SK_KEYS.includes(st.active) ? st.active : null;
+    st.chips = Math.max(0, +st.chips || 0); st.sel = st.sel || 'combat'; st.carry = +st.carry || 0; st.active = SK_KEYS.includes(st.active) ? st.active : null;
     st.last = Date.now();   // 내보낸 뒤 지난 시간이 한꺼번에 쌓이지 않게
     rpgNorm(st);
     RPG.st = st; rpgSave(); chipFix(); UI.importedRpg = true;
@@ -4377,7 +4388,7 @@ const fmtDur = ms => { const s = ms / 1000; return s < 60 ? `${s.toFixed(s < 10 
 const fmtNum = n => n >= 1e9 ? (n/1e9).toFixed(n >= 1e11 ? 0 : 2) + 'B' : n >= 1e6 ? (n/1e6).toFixed(n >= 1e8 ? 0 : 1) + 'M' : n >= 1e4 ? (n/1e3).toFixed(n >= 1e6 ? 0 : 1) + 'K' : Math.floor(n).toLocaleString();
 function rpgLoad(){
   let st = null; try{ st = JSON.parse(localStorage.getItem(RPG_KEY) || 'null'); }catch(e){}
-  if(!st || st.v !== 1) st = { v:1, xv:2, chips:0, active:null, last:Date.now(), carry:0, sel:'fish', sk:{} };
+  if(!st || st.v !== 1) st = { v:1, xv:2, chips:0, active:null, last:Date.now(), carry:0, sel:'combat', sk:{} };
   return rpgNorm(st);
 }
 // 행동마다 장비와 던전은 한 등급(grade)으로 묶인다. 예전 저장(장비·단계 따로, 옛 경험치 표)은 여기서 옮긴다
@@ -4910,7 +4921,7 @@ function appTabs(on){
 }
 
 function rpgHTML(){
-  const st = RPG.st, sel = st.sel || 'fish', S = SKILLS[sel], sk = st.sk[sel];
+  const st = RPG.st, sel = st.sel || 'combat', S = SKILLS[sel], sk = st.sk[sel];
   const stg = S.stages[sk.stage - 1], tier = TIERS[sk.gear - 1];
   const X = expPer(sk.stage);
   const cards = SK_KEYS.map(k => {
@@ -4951,7 +4962,7 @@ function rpgHTML(){
 }
 // 경험치 테이블: 레벨별 누적 경험치와 다음 레벨까지 필요한 양. 지금 고른 행동의 레벨을 강조한다
 function rpgTableHTML(){
-  const st = RPG.st, sel = st.sel || 'fish', sk = st.sk[sel], L = lvOf(sk.exp);
+  const st = RPG.st, sel = st.sel || 'combat', sk = st.sk[sel], L = lvOf(sk.exp);
   const left = L >= 100 ? 0 : CUM[L+1] - sk.exp;
   const rows = [];
   for(let l = 1; l <= 100; l++) rows.push(`<tr class="${l === L ? 'cur' : ''} ${l === LV_CAP(sk.gear) ? 'cap' : ''}"><td class="num">${l}</td><td class="num">${CUM[l].toLocaleString()}</td><td class="num">${l < 100 ? NEED[l].toLocaleString() : '–'}</td></tr>`);
@@ -4994,7 +5005,7 @@ function rpgToast(msg){
   setTimeout(() => t.remove(), 1600);
 }
 function rpgAct(a, b){
-  const st = RPG.st, sel = st.sel || 'fish', sk = st.sk[sel];
+  const st = RPG.st, sel = st.sel || 'combat', sk = st.sk[sel];
   rpgAdvance(false);
   if(a === 'rpgSel'){ if(b.dataset.s !== st.sel && st.active){ st.active = null; st.carry = 0; } st.sel = b.dataset.s; }   // 다른 행동으로 바꾸면 하던 행동은 멈춘다
   else if(a === 'rpgGo' && st.active !== sel && capped(sk)){ rpgToast(`Lv ${LV_CAP(sk.gMax)} 상한 · ${TIERS[sk.gMax].n} ${SKILLS[sel].tool}이 필요해요`); return; }
@@ -5060,16 +5071,17 @@ document.addEventListener('click', e => {
     case 'rpgTable': { $modal.innerHTML = rpgTableHTML(); $modal.hidden = false; const c = $modal.querySelector('tr.cur'); if(c) c.scrollIntoView({block:'center'}); break; }
     case 'secret': {   // 제목을 2.5초 안에 5번 누르면 숨김 메뉴
       const now = Date.now(); UI.secretTaps = (UI.secretTaps || []).filter(x => now - x < 2500); UI.secretTaps.push(now);
-      if(UI.secretTaps.length >= 5){ UI.secretTaps = []; $modal.innerHTML = secretMenuHTML(); $modal.hidden = false; }
+      if(UI.secretTaps.length >= 5){ UI.secretTaps = []; $modal.innerHTML = secretGateHTML(); $modal.hidden = false; setTimeout(() => { const i = document.getElementById('sgate'); if(i) i.focus(); }, 30); }
       break; }
     case 'drillMenu': $modal.innerHTML = drillMenuHTML(); $modal.hidden = false; break;
     case 'recWipe':
       $modal.innerHTML = `<div class="sheet"><h2>기록을 모두 삭제할까요?</h2>
 <div class="row"><button class="btn warn" data-act="recWipeGo">모두 삭제</button><button class="btn" data-act="closeModal">취소</button></div></div>`;
       $modal.hidden = false; break;
-    case 'recWipeGo': store.del(KEY.rec); UI.last = null; store.del(RPG_KEY); RPG.st = rpgLoad(); RPG.away = null; rpgSave(); chipFix(); $modal.hidden = true; render(); break;
+    case 'recWipeGo': store.del(KEY.rec); UI.last = null; settings = Object.assign({}, SETTINGS0, { admin: settings.admin }); store.set(KEY.set, settings); store.del(RPG_KEY); RPG.st = rpgLoad(); RPG.away = null; rpgSave(); chipFix(); $modal.hidden = true; render(); break;
     case 'ymTest': { const i = +b.dataset.i; if(!settings.admin || !YM_TESTS[i]) break; $modal.hidden = true; startGame(YM_TESTS[i].mode || 'east', null, true, null, i); break; }
     case 'waitToggle': UI.waitOpen = !UI.waitOpen; render(); break;
+    case 'sgateGo': { const i = document.getElementById('sgate'); if(i && SECRET_H.includes(cyrb53(i.value.trim()))){ $modal.innerHTML = secretMenuHTML(); } else { $modal.innerHTML = secretGateHTML(true); setTimeout(() => { const j = document.getElementById('sgate'); if(j) j.focus(); }, 30); } break; }
     case 'adminToggle': { settings.admin = !settings.admin; store.set(KEY.set, settings); $modal.innerHTML = secretMenuHTML(); if(UI.screen === 'rpg') render(); break; }
     case 'drill': { const k = b.dataset.d; $modal.hidden = true; startGame(DRILLS[k].mode, null, true, k); break; }
     case 'tsumo': if(pd) pd.resolve({type:'tsumo'}); break;

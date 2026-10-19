@@ -459,6 +459,11 @@ table.y{width:100%;border-collapse:collapse;font-size:14px}
   clip-path:polygon(0 0,100% 0,97% 50%,100% 100%,0 100%);animation:yin .32s cubic-bezier(.2,.9,.3,1) both;animation-delay:calc(var(--yi) * 90ms + 150ms)}
 .yrow .yh{color:#ffd76a;font:900 17px var(--f-num);text-shadow:0 1px 0 #5a3a00}.yrow .yh small{font-size:11px;margin-left:1px;font-family:var(--f-ui)}
 @keyframes yin{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+.rkb{display:inline-block;margin-left:7px;padding:1px 7px 1px;border-radius:4px;font:900 11.5px/1.35 var(--f-ui);vertical-align:1px;transform:rotate(-4deg);box-shadow:0 1px 3px rgba(0,0,0,.45);animation:stamp .35s cubic-bezier(.2,1.6,.4,1) both;animation-delay:.6s}
+.rkb.rk1{background:linear-gradient(#ffe27a,#d39a14);color:#4a2c00;border:1px solid #fff2b8}
+.rkb.rk2{background:linear-gradient(#f4f6f8,#9aa6b2);color:#26313c;border:1px solid #fff}
+.rkb.rk3{background:linear-gradient(#e7a56a,#9a5a26);color:#2e1606;border:1px solid #f6caa0}
+.rkb.rk4{background:linear-gradient(#3a3d42,#121316);color:#e8e8e8;border:1px solid #5a5e66}   /* 최종 순위 딱지 */
 .ptsline{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:2px}
 .ptsline .hfu{font-weight:700;color:var(--muted,#9fb8ad);font-size:14px;margin-right:auto}
 .lblst{display:inline-block;padding:3px 12px;font:900 18px var(--f-ui);color:#fff;background:linear-gradient(#e2403a,#a8161c);border:2px solid #ffd9a8;border-radius:6px;transform:rotate(-6deg);box-shadow:0 3px 8px rgba(0,0,0,.45);
@@ -691,6 +696,7 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .items .it .btn{padding:4px 8px;flex:none}
 .chipi{display:inline-block;width:13px;height:13px;border-radius:50%;margin-right:4px;vertical-align:-1px;background:var(--chip-icon) center/contain no-repeat}
 .rpg .it.lock .chipi{filter:none}
+.chipi.rc{width:14px;height:14px;margin:0 1px;vertical-align:-2px}
 .help .chipi.hc{width:15px;height:15px;margin:0 2px 0 3px;vertical-align:-2px}   /* 잠긴 장비도 칩 아이콘은 같은 노란 칩 */
 .rpg .items .it .n small{font-weight:600;color:var(--ink-dim);font-size:11px;margin-left:4px}
 .rpg .items{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
@@ -2271,6 +2277,7 @@ const store = {
 const SETTINGS0 = {hint:false, skipDeal:true, alice:false, tulip:false, phone:true, autoSort:true, speed:'normal', sound:true};   // 처음 시작: 배패 스킵·폰 모드·소리 켜짐, 나머지 꺼짐
 let settings = Object.assign({}, SETTINGS0, store.get(KEY.set, {}));
 settings.hint = false;   // AI 힌트 표시는 설정에서 뺐다
+delete settings.admin; delete settings.pwOk;   // 운영자 모드는 없앴다(예전에 켜 둔 값도 지운다)
 if(settings.alice && settings.tulip) settings.tulip = false;   // 아리스·튤립은 둘 중 하나만
 if(settings.phone === undefined) settings.phone = true;   // 폰 모드: 처음엔 켜 둔다
 settings.aka = true; settings.oneTap = true;            // 적도라·한 번 탭 버리기는 항상
@@ -2450,7 +2457,7 @@ function homeHTML(){
   return `${appTabs('mj')}
   <header class="hero">
     <div class="tiles" title="누적 축의 ${rpgEarnedAll().toLocaleString()}개">${chipTilesHTML(rpgEarnedAll())}</div>
-    <h1 data-act="secret" style="cursor:default;user-select:none">마작 RPG</h1>
+    <h1 style="cursor:default;user-select:none">마작 RPG</h1>
   </header>
   ${sv ? `<section class="card"><h3>이어하기</h3><p class="muted">${modeName(sv.mode)} · ${esc(sv.label)} ${sv.mid ? '도중(나간 순간)부터' : '시작부터'} · 내 점수 <span class="num">${sv.state.scores[0]}</span></p>
     <div class="row"><button class="btn primary" data-act="resume">이어서 하기</button><button class="btn small" data-act="dropSave" ${RPG.st.chips < 1 ? 'disabled title="축의칩이 없어서 게임 종료할 수 없어요"' : 'title="게임 종료하면 축의칩 1개를 냅니다"'}>게임 종료 <span class="dropcost"><i class="chipi"></i>1</span></button></div>${RPG.st.chips < 1 ? '<p class="muted" style="margin:6px 0 0;font-size:12px">축의칩이 없어서 게임 종료할 수 없어요. 이어서 끝까지 두세요</p>' : ''}</section>` : ''}
@@ -3791,49 +3798,7 @@ function drillMenuHTML(){
 }
 // 운영자 모드: 역만 바로 나기 — 손패를 짜 두고 첫 쯔모에 화료패가 오게 한다. 결과창을 본 뒤 홈으로
 // hand: 손패 종류(퐁·깡 제외), pon/kan: 울어 둔 종류, win: 화료패 종류, dora: 도라 표시패 종류, oya: 'kami'면 상가가 친(지화)
-// 운영자 시험(임시): 내가 리치 선언패를 버리면 하가가 그 패로 론. 내 첫 쯔모(불요 자패) = 하가의 단기 대기패
-function riironRig(g, tsumoNext){
-  g.rigTenpai(0);
-  const me = g.players[0], cpu1 = g.players[1], myK = new Set(me.hand.map(kindOf));
-  const pool = () => [g.wall, g.players[1].hand, g.players[2].hand, ...(g.players[3] ? [g.players[3].hand] : [])];
-  const freeIds = k => pool().flatMap(a => a.filter(x => kindOf(x) === k));
-  const X = [27, 28, 29, 30, 31, 32].find(k => !myK.has(k) && freeIds(k).length >= 2);
-  const D = [31, 32, 33].find(k => k !== X && freeIds(k).length >= 3);
-  const seqs = []; for(const b of [0, 3, 6, 9, 12, 15, 18, 21, 24]){ if(seqs.length >= 3) break; if([b, b+1, b+2].every(k => freeIds(k).filter(x => !seqs.flat().includes(x)).length >= 1)) seqs.push([b, b+1, b+2].map(k => freeIds(k)[0])); }
-  if(X == null || D == null || seqs.length < 3) return;
-  const Y = tsumoNext ? [27, 28, 29, 30, 31, 32, 33].find(k => k !== X && k !== D && !myK.has(k) && freeIds(k).length >= 2) : X;   // 쯔모 시험: 하가는 X가 아닌 Y 단기
-  if(Y == null) return;
-  const want = [...freeIds(D).slice(0, 3), ...seqs.flat(), freeIds(Y)[0]];
-  const old = cpu1.hand.filter(x => !want.includes(x));
-  for(const id of want){ if(cpu1.hand.includes(id)) continue; const a = pool().find(arr => arr !== cpu1.hand && arr.includes(id)); a[a.indexOf(id)] = old.pop(); }
-  cpu1.hand = want.slice();
-  const xi = g.wall.findIndex(x => kindOf(x) === X);   // 내 첫 쯔모 = X
-  const t = g.wall[g.wall.length - 1]; g.wall[g.wall.length - 1] = g.wall[xi]; g.wall[xi] = t;
-  if(tsumoNext){ const yi = g.wall.findIndex((x, i) => kindOf(x) === Y && i < g.wall.length - 1); const n2 = g.wall.length - 2; const u = g.wall[n2]; g.wall[n2] = g.wall[yi]; g.wall[yi] = u; }   // 하가 첫 쯔모 = Y
-}
-const YM_TESTS = [
-  { n:'리치 선언패 방총(임시)', mode:'east', oya:'me', ronBy:1, rig: riironRig },
-  { n:'리치 후 하가 쯔모(임시)', mode:'east', oya:'me', tsumoBy:1, rig: g => riironRig(g, true) },
-  { n:'천화',          hand:[0,1,2,12,13,14,24,25,26,4,4,6,7], win:8, first:true },
-  { n:'지화',          hand:[0,1,2,12,13,14,24,25,26,4,4,6,7], win:8, first:true, oya:'kami' },
-  { n:'국사무쌍',      hand:[0,0,8,9,17,18,26,27,28,29,30,31,32], win:33 },
-  { n:'국사무쌍 13면', hand:[0,8,9,17,18,26,27,28,29,30,31,32,33], win:33 },
-  { n:'대삼원',        hand:[31,31,31,32,32,32,33,33,0,1,2,22,22], win:33 },
-  { n:'자일색',        hand:[27,27,28,28,29,29,30,30,31,31,32,32,33], win:33 },
-  { n:'녹일색',        hand:[19,20,21,19,20,21,23,23,23,25,25,32,32], win:32 },
-  { n:'청노두',        hand:[8,8,8,9,9,9,17,17,18,18], pon:[0], win:18 },
-  { n:'대사희',        hand:[28,28,28,29,29,29,30,30,0,0], pon:[27], win:30 },
-  { n:'소사희',        hand:[28,28,28,29,29,29,30,30,0,0], pon:[27], win:0 },
-  { n:'스안커',        hand:[0,0,0,9,9,9,18,18,18,27,27,4,4], win:27 },
-  { n:'스안커 단기',   hand:[0,0,0,9,9,9,18,18,18,27,27,27,4], win:4 },
-  { n:'스깡쯔',        hand:[4], kan:[0,9,18,27], win:4 },
-  { n:'구련보등',      hand:[0,0,0,1,2,3,4,4,5,6,8,8,8], win:7 },
-  { n:'순정구련보등',  hand:[0,0,0,1,2,3,4,5,6,7,8,8,8], win:4 },
-  { n:'헤아림 역만',   hand:[1,2,2,3,3,4,4,5,5,6,6,7,7], win:1, dora:6 },
-  // 축의 모의게임(3인): 패산 꽁무니 뒤집을 자리(flips)를 짜 둔다. 아리스 1통+3·白+2 → 5장 / 튤립 2통→1~3통+5·發→白+2·7삭→6~8삭+3 → 10장
-  { n:'아리스 5장', chip:true, mode:'east3', alice:'alice', hand:[9,9,9,10,11,12,23,24,25,27,27,31,31], win:27, flips:[9,31,26] },
-  { n:'튤립 10장',  chip:true, mode:'east3', alice:'tulip', riichi:true, ura:0, hand:[9,9,9,10,11,12,23,24,25,27,27,31,31], win:27, flips:[10,32,24,8] },
-];
+const YM_TESTS = [];   // (운영자 시험 모드는 없앴다)
 function ymRig(g, T0){
   const me = g.players[0], N = g.N, cpus = [...Array(N).keys()].filter(s => s !== 0);
   const inDead = id => g.dead.includes(id);
@@ -3899,25 +3864,6 @@ function ymRig(g, T0){
     }
     return Array.prototype.pop.call(this);
   };
-}
-// 운영자 모드 입구: 제목 5번 누른 뒤 PW(원문은 소스에 두지 않고 해시로만 비교)
-const SECRET_H = [8106163429600574];
-document.addEventListener('submit', e => e.preventDefault());   // PW 입력칸: Enter는 확인 버튼(클릭)으로 처리되고, 페이지는 다시 불러오지 않는다
-function cyrb53(str, seed = 7){ let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed; for(let i = 0, ch; i < str.length; i++){ ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); } h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507); h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909); h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507); h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909); return 4294967296 * (2097151 & h2) + (h1 >>> 0); }
-function secretGateHTML(bad){
-  return `<div class="sheet"><h2>PW</h2>
-    <form class="row" data-form="sgate" style="gap:6px"><input id="sgate" type="password" autocomplete="off" style="flex:1;min-width:0;padding:8px 10px;border-radius:8px;border:1px solid var(--felt-line);background:var(--panel-2);color:var(--ink);font:inherit"><button class="btn primary" data-act="sgateGo">확인</button></form>
-    ${bad ? '<p style="margin:0;color:var(--alert);font-size:13px">틀렸어요</p>' : ''}
-    <div class="row"><button class="btn" data-act="closeModal">닫기</button></div></div>`;
-}
-function secretMenuHTML(){
-  const on = !!settings.admin;
-  return `<div class="sheet"><h2>운영자 모드</h2>
-    <p class="muted" style="margin:0">켜면 RPG 상점의 모든 장비를 축의칩·레벨 없이 눌러서 바로 착용해요 (낮은 등급으로도). 레벨 상한도 걸리지 않아요.</p>
-    <div class="row"><button class="btn ${on ? 'primary' : ''}" data-act="adminToggle" aria-pressed="${on}">운영자 모드 ${on ? 'ON' : 'OFF'}</button></div>
-    ${on ? `<h3 style="margin:4px 0 0">역만 바로 나기</h3><div class="row" style="flex-wrap:wrap;gap:6px">${YM_TESTS.map((t, i) => t.chip ? '' : `<button class="btn small" data-act="ymTest" data-i="${i}">${esc(t.n)}</button>`).join('')}</div>
-    <h3 style="margin:4px 0 0">축의 모의게임</h3><div class="row" style="flex-wrap:wrap;gap:6px">${YM_TESTS.map((t, i) => t.chip ? `<button class="btn small" data-act="ymTest" data-i="${i}">${esc(t.n)}</button>` : '').join('')}</div>` : ''}
-    <div class="row"><button class="btn" data-act="closeModal">닫기</button></div></div>`;
 }
 const DRILL_RINSHAN = ['minkan', 'ankan', 'kakan', 'nuki'];   // 깡·북 빼기: 영상패를 뽑고 타패까지 해야 완료
 function drillFinish(){
@@ -4375,7 +4321,7 @@ function chipsOfWin(w, res){
 // 튤립(3인 전용, 아리스의 발전형): 리치 화료만. 뒤집은 패와 그 양옆 패까지 내 패에 있는 만큼 축의.
 //  수패는 1·9가 이어진다(1 → 9·1·2, 9 → 8·9·1). 바람패는 동남서북이 돌고(동 → 북·동·남), 삼원패는 셋 다.
 const ALICE_LV = 80, TULIP_LV = 160;   // 아리스·튤립을 쓰려면 필요한 총합 레벨
-const aliceOpen = m => !!settings.admin || rpgTotalLv() >= (m === 'tulip' ? TULIP_LV : ALICE_LV);
+const aliceOpen = m => rpgTotalLv() >= (m === 'tulip' ? TULIP_LV : ALICE_LV);
 function aliceMode(){
   const T = UI.ymTest != null ? YM_TESTS[UI.ymTest] : null;
   if(T && T.alice) return T.alice;
@@ -4466,7 +4412,11 @@ function kyokuEnd(res, g){
             <div class="ptsline" style="--yn:${r.yaku.length}"><span class="hfu">${esc(head)}</span>${r.label ? `<span class="lblst ${r.yakuman ? 'ym' : ''}">${esc(r.label)}</span>` : ''}<span class="pts num ${!r.label ? 'silver' : ''}${res.tsumo ? ' tsm' : ''}">${res.tsumo ? (isOya ? `${MJ.ceil100(B * 2).toLocaleString()}<i class="all">All</i>` : `${MJ.ceil100(B).toLocaleString()}<i class="sep">/</i>${MJ.ceil100(B * 2).toLocaleString()}`) : `${handPts.toLocaleString()}`}</span></div>${chipTotal > 0 && (UI.ymTest == null || YM_TESTS[UI.ymTest].chip) ? `<p style="margin:0;color:#ffe9a8;font-weight:800">축의 +${chipTotal} <span class="muted" style="font-weight:600">(${(chip ? chip.parts : []).concat(alice && alice.n > 0 ? [alice.name + ' ' + alice.n] : []).join(' · ')})</span></p>` : ''}</div>`;
         }).join('') + (res.sticks ? `<p class="muted" style="margin:0">공탁 ${res.sticks*1000}점 → ${SEATNAME[res.tsumo ? res.winners[0] : res.sticksTo]}</p>` : '');
     }
-    const dl = seatsBy(res.deltas.length).map(i => `<span>${SEATNAME[i]}${i===0?'':' CPU'}</span><span class="num ${res.deltas[i]>0?'pos':res.deltas[i]<0?'neg':''}">${res.deltas[i]>0?'+':''}${res.deltas[i].toLocaleString()}</span><span class="num">${res.scores[i].toLocaleString()}</span>`).join('');
+    // 대국 마지막 국: 최종 순위 딱지(1위 금 · 2위 은 · 3위 동 · 4위 검정). 동점이면 기가에 가까운 쪽이 위
+    const NN = res.deltas.length, rankOf = {};
+    if(res.gameEnds){ seatsBy(NN).slice().sort((a, b) => res.scores[b] - res.scores[a] || ((a - g.oya0 + NN) % NN) - ((b - g.oya0 + NN) % NN)).forEach((s, k) => { rankOf[s] = k + 1; }); }
+    const rkb = i => rankOf[i] ? `<b class="rkb rk${rankOf[i]}">${rankOf[i]}위</b>` : '';
+    const dl = seatsBy(res.deltas.length).map(i => `<span>${SEATNAME[i]}${i===0?'':' CPU'}${rkb(i)}</span><span class="num ${res.deltas[i]>0?'pos':res.deltas[i]<0?'neg':''}">${res.deltas[i]>0?'+':''}${res.deltas[i].toLocaleString()}</span><span class="num">${res.scores[i].toLocaleString()}</span>`).join('');
     const nextBtn = `<button class="btn primary" id="next">${UI.ymTest != null ? '홈으로' : res.gameEnds?'대국 종료':'다음 국'}</button>`;
     UI.endRes = res;   // 결과창 밖을 꾹 누르는 동안 끝난 판(화료한 사람 손패는 공개)을 보여 준다
     $modal.innerHTML = `<div class="sheet ${ym ? 'ymsheet' : ''}" role="dialog" aria-modal="true">${ym ? `<div class="ymban">${esc(ym.label)}</div>` : ''}${body}<div class="deltas">${dl}</div><div class="row">${nextBtn}</div><p class="muted endpeek">결과창 밖을 꾹 누르면 끝난 판 보기</p></div>`;
@@ -4782,7 +4732,7 @@ const GRADE_PRICE = [0, 1, 2, 3, 4, 5, 10, 20, 40, 80];   // 실버 1 · 골드 
 const REQ_LV = g => g >= 2 ? 10 * g : 1;
 const LV_CAP = g => g >= 10 ? Infinity : 10 * g + 10;
 const EXP_CAP = g => g >= 10 ? Infinity : CUM[LV_CAP(g)];
-const capped = sk => !settings.admin && sk.exp >= EXP_CAP(sk.gMax || sk.gear);   // 레벨 상한은 산 장비 중 가장 높은 등급 기준(낮은 장비로 갈아입어도 멈추지 않는다)   // 등급 g(장비 + 같은 등급 던전)를 사는 값. 1등급은 처음부터
+const capped = sk => sk.exp >= EXP_CAP(sk.gMax || sk.gear);   // 레벨 상한은 산 장비 중 가장 높은 등급 기준(낮은 장비로 갈아입어도 멈추지 않는다)   // 등급 g(장비 + 같은 등급 던전)를 사는 값. 1등급은 처음부터
 const OFFLINE_CAP = 24 * 3600 * 1000;                         // 꺼 둔 동안은 최대 24시간까지 쌓인다
 // 레벨 L까지 누적 경험치 = ⌊¼ × Σ(l=1..L-1) ⌊l + 300·2^(l/7)⌋⌋ (Lv2 83 · Lv50 101,333 · Lv92 6,517,253 · Lv99 13,034,431)
 const CUM = [0, 0]; { let pts = 0; for(let L = 2; L <= 100; L++){ pts += Math.floor((L - 1) + 300 * Math.pow(2, (L - 1) / 7)); CUM[L] = Math.floor(pts / 4); } }
@@ -4871,7 +4821,7 @@ function rpgAdvance(offline){
   if(n <= 0) return null;
   st.carry -= n * T;
   const before = lvOf(sk.exp);
-  const gain = Math.max(0, Math.min(n * expPer(sk.stage), (settings.admin ? Infinity : EXP_CAP(sk.gMax || sk.gear)) - sk.exp));
+  const gain = Math.max(0, Math.min(n * expPer(sk.stage), EXP_CAP(sk.gMax || sk.gear) - sk.exp));
   sk.exp += gain;
   const after = lvOf(sk.exp);
   const cap = capped(sk);
@@ -5344,20 +5294,19 @@ function rpgHTML(){
   }).join('');
   // 상점: 등급(장비 + 같은 등급 던전). 산 등급으로 바로 옮기고, 지난 등급으로는 돌아갈 수 없다
   const gradeItems = TIERS.map((t, i) => {   // 무기 상점: 진열대에 눕힌 실제 장비 + 이름 + (착용 레벨) + 가격
-    const g = i + 1, cur = g === sk.gear, owned = g <= sk.gMax && !cur, next = g === sk.gMax + 1, lvOk = lvOf(sk.exp) >= REQ_LV(g), admin = !!settings.admin;
-    const btn = admin ? (cur ? '' : `<button class="btn small buy" data-act="rpgAdmin" data-g="${g}">착용</button>`)
-      : cur ? '' : owned ? `<button class="btn small buy" data-act="rpgWear" data-g="${g}">착용</button>`
+    const g = i + 1, cur = g === sk.gear, owned = g <= sk.gMax && !cur, next = g === sk.gMax + 1, lvOk = lvOf(sk.exp) >= REQ_LV(g);
+    const btn = cur ? '' : owned ? `<button class="btn small buy" data-act="rpgWear" data-g="${g}">착용</button>`
       : next && lvOk ? `<button class="btn small buy" data-act="rpgBuy" data-g="${g}" aria-label="축의칩 ${GRADE_PRICE[i]}개"><i class="chipi"></i>${GRADE_PRICE[i]}</button>`
       : `<span class="d"><i class="chipi"></i>${GRADE_PRICE[i]}</span>`;
     const past = owned;
     const req = !cur && !owned && g >= 2 ? `<small>(${REQ_LV(g)}레벨 이상)</small>` : '';   // 착용 중이거나 이미 산 장비에는 레벨 안내를 붙이지 않는다
-    return `<div class="it wshop ${cur?'eq':''} ${!admin && !cur && !owned && (!next || !lvOk) ? 'lock' : ''}">
+    return `<div class="it wshop ${cur?'eq':''} ${!cur && !owned && (!next || !lvOk) ? 'lock' : ''}">
       ${rpgRack(sel, g)}
       <div class="wrow"><span class="n">${t.n} ${S.tool}${req}</span>${btn}</div></div>`;
   }).join('');
   const away = RPG.away;   // 확인을 누를 때까지 남는다
   const M = MJSK[sel], on = sk.skillOn !== false, ok = sk.gear >= 2, gc = tier.gl || tier.c;
-  const rate = capped(sk) ? `<b>Lv ${LV_CAP(sk.gMax)} 상한</b> · 다음 장비 필요` : `${settings.admin ? '<b>운영자</b> · ' : ''}시간당 ${fmtNum(X * 1000)} · ${sk.gear >= 10 ? '만렙' : '~Lv ' + LV_CAP(sk.gear)}`;
+  const rate = capped(sk) ? `<b>Lv ${LV_CAP(sk.gMax)} 상한</b> · 다음 장비 필요` : `시간당 ${fmtNum(X * 1000)} · ${sk.gear >= 10 ? '만렙' : '~Lv ' + LV_CAP(sk.gear)}`;
   return `${appTabs('rpg')}<div class="rpg">
     ${away ? `<div class="welcome">자리 비운 동안 ${esc(SKILLS[away.k].name)} +${fmtNum(away.gain)} exp${away.after > away.before ? ` · Lv ${away.before}→${away.after}` : ''}${away.cap ? ' · 상한' : ''}<button class="btn small primary" data-act="awayOk">확인</button></div>` : ''}
     <div class="scene ${st.active === sel ? '' : 'idle'}">${rpgScene(sel)}
@@ -5405,20 +5354,20 @@ function rpgHelpHTML(){
   const S = MJSK;
   return `<div class="sheet help" role="dialog" aria-modal="true"><h2>RPG 도움말</h2>
     <ul>
-      <li><b>행동</b> 전투·나무베기·광질·낚시 중 하나를 선택하여 경험치 획득<br>오프라인 최대 24시간 누적</li>
-      <li><b>재화</b> 축의칩. 마작에서 청도라·금도라(3인)·뒷도라·일발·아리스·튤립으로 획득 가능</li>
+      <li><b>행동</b> 전투·나무베기·광질·낚시 중 하나를 선택하여 경험치 획득<br>(오프라인 최대 24시간 누적)</li>
+      <li><b>재화</b> 축의칩(<i class="chipi rc"></i>). 3인 마작에서 획득 가능</li>
       <li><b>장비</b> 레벨 제한까지 도달하면 새 장비 구매 가능</li>
       <li><b>만렙</b> 100레벨. 만렙 이후 경험치 축적 가능</li>
-      <li><b>총합 레벨</b> 모든 행동 레벨의 합. 100레벨에 아리스, 200레벨에 튤립 개방</li>
+      <li><b>총합 레벨</b> 모든 행동 레벨의 합.<br>${ALICE_LV}레벨에 아리스(3인 마작), ${TULIP_LV}레벨에 튤립(3인 마작) 설정이 개방됨</li>
     </ul>
     <h2>마작 스킬</h2>
     <ul>
       <li>실버 장비부터 스킬 사용 가능. 장비 등급이 높을수록 발동 확률 증가</li>
       <li>게임 화면 우측 하단 스위치를 켜면 마작에서 적용</li>
-      <li>⚔ <b>${S.combat.n}</b>(전투) 손패를 잡고 <kbd>휠</kbd>을 굴리면 방총 확인<br><span style="color:#2fe06a">초록</span> → 안전, <span style="color:#ff3b30">빨강</span> → 방총, <span style="color:#000;text-shadow:.5px 0 #ccc,-.5px 0 #ccc,0 .5px #ccc,0 -.5px #ccc">검정</span> → 스킬 실패</li>
-      <li>🪓 <b>${S.wood.n}</b>(나무베기) 필요 없는 손패 두 장을 패산으로 끌어 교환</li>
-      <li>⛏ <b>${S.mine.n}</b>(광질) 도라 표시패를 눌러 스킬 발동 성공 시 뒷도라 표시패 확인</li>
-      <li>🎣 <b>${S.fish.n}</b>(낚시) 스킬 성공 시 다음 쯔모 패가 투시되어 보임</li>
+      <li>⚔ <b>(${S.combat.n})</b> 손패를 잡고 <kbd>휠</kbd>을 굴리면 방총 확인<br><span style="color:#2fe06a">초록</span> → 안전, <span style="color:#ff3b30">빨강</span> → 방총, <span style="color:#000;text-shadow:.5px 0 #ccc,-.5px 0 #ccc,0 .5px #ccc,0 -.5px #ccc">검정</span> → 스킬 실패</li>
+      <li>🪓 <b>(${S.wood.n})</b> 필요 없는 손패 두 장을 패산으로 끌어 교환</li>
+      <li>⛏ <b>(${S.mine.n})</b> 도라 표시패를 눌러 스킬 발동 성공 시 뒷도라 표시패 확인</li>
+      <li>🎣 <b>(${S.fish.n})</b> 스킬 성공 시 다음 쯔모 패가 투시되어 보임</li>
     </ul>
     <div class="row"><button class="btn primary" data-act="closeModal">닫기</button></div></div>`;
 }
@@ -5441,11 +5390,6 @@ function rpgAct(a, b){
     if(st.chips < p){ rpgToast('축의칩이 부족합니다'); return; }
     st.chips -= p; SFX.cash();
     rpgWear(st, sel, sk, g, false, true);
-  }
-  else if(a === 'rpgAdmin'){   // 운영자 모드: 축의칩·레벨 없이 아무 등급이나 착용(낮은 등급으로도)
-    const g = +b.dataset.g;
-    if(!settings.admin || !(g >= 1 && g <= 10) || g === sk.gear) return;
-    rpgWear(st, sel, sk, g, true);
   }
   else if(a === 'rpgWear'){   // 이미 산 장비로 갈아입기(지난 장비 포함)
     const g = +b.dataset.g;
@@ -5497,24 +5441,17 @@ document.addEventListener('click', e => {
     case 'help': $modal.innerHTML = helpHTML(); $modal.hidden = false; break;
     case 'closeModal': $modal.hidden = true; break;
     case 'tab': show(b.dataset.t === 'rpg' ? 'rpg' : 'home'); break;
-    case 'rpgSel': case 'rpgGo': case 'rpgBuy': case 'rpgAdmin': case 'rpgWear': case 'rpgSkill': rpgAct(a, b); break;
+    case 'rpgSel': case 'rpgGo': case 'rpgBuy': case 'rpgWear': case 'rpgSkill': rpgAct(a, b); break;
     case 'rpgTable': { $modal.innerHTML = rpgTableHTML(); $modal.hidden = false; const c = $modal.querySelector('tr.cur'); if(c) c.scrollIntoView({block:'center'}); break; }
-    case 'secret': {   // 제목을 2.5초 안에 5번 누르면 숨김 메뉴
-      const now = Date.now(); UI.secretTaps = (UI.secretTaps || []).filter(x => now - x < 2500); UI.secretTaps.push(now);
-      if(UI.secretTaps.length >= 5){ UI.secretTaps = []; $modal.innerHTML = settings.pwOk ? secretMenuHTML() : secretGateHTML();   /* PW를 한 번 연 기기는 바로 들어간다 */ $modal.hidden = false; setTimeout(() => { const i = document.getElementById('sgate'); if(i) i.focus(); }, 30); }
-      break; }
     case 'drillMenu': $modal.innerHTML = drillMenuHTML(); $modal.hidden = false; break;
     case 'recWipe':
       $modal.innerHTML = `<div class="sheet"><h2>기록을 모두 삭제할까요?</h2>
 <div class="row"><button class="btn warn" data-act="recWipeGo">모두 삭제</button><button class="btn" data-act="closeModal">취소</button></div></div>`;
       $modal.hidden = false; break;
-    case 'recWipeGo': store.del(KEY.rec); store.del(KEY.save);   /* 이어하기도 함께 지운다 */ UI.last = null; settings = Object.assign({}, SETTINGS0, { admin: settings.admin, pwOk: settings.pwOk }); store.set(KEY.set, settings); store.del(RPG_KEY); RPG.st = rpgLoad(); RPG.away = null; rpgSave(); chipFix(); $modal.hidden = true; render(); break;
-    case 'ymTest': { const i = +b.dataset.i; if(!settings.admin || !YM_TESTS[i]) break; $modal.hidden = true; startGame(YM_TESTS[i].mode || 'east', null, true, null, i); break; }
+    case 'recWipeGo': store.del(KEY.rec); store.del(KEY.save);   /* 이어하기도 함께 지운다 */ UI.last = null; settings = Object.assign({}, SETTINGS0); store.set(KEY.set, settings); store.del(RPG_KEY); RPG.st = rpgLoad(); RPG.away = null; rpgSave(); chipFix(); $modal.hidden = true; render(); break;
     case 'autoSort': settings.autoSort = settings.autoSort === false; store.set(KEY.set, settings); UI.order = null; render(); break;   // 켜면 바로 정렬
     case 'autoWin': UI.autoWin = !UI.autoWin; render(); if(UI.autoWin) autoWinCheck(); break;
     case 'waitToggle': UI.waitOpen = !UI.waitOpen; render(); break;
-    case 'sgateGo': { const i = document.getElementById('sgate'); if(i && SECRET_H.includes(cyrb53(i.value.trim()))){ settings.pwOk = true; store.set(KEY.set, settings); $modal.innerHTML = secretMenuHTML(); } else { $modal.innerHTML = secretGateHTML(true); setTimeout(() => { const j = document.getElementById('sgate'); if(j) j.focus(); }, 30); } break; }
-    case 'adminToggle': { settings.admin = !settings.admin; store.set(KEY.set, settings); $modal.innerHTML = secretMenuHTML(); if(UI.screen === 'rpg') render(); break; }
     case 'drill': { const k = b.dataset.d; $modal.hidden = true; startGame(DRILLS[k].mode, null, true, k); break; }
     case 'tsumo': if(pd) pd.resolve({type:'tsumo'}); break;
     case 'pickWind': if(UI.windPick && UI.windPick.picked == null){ UI.windPick.picked = +b.dataset.i; UI.windPick.done(); } break;

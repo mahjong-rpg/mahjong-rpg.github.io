@@ -1615,7 +1615,7 @@ class Game {
   }
   riichiOptions(s) {
     const p = this.players[s];
-    if (p.melds.some(m => m.type !== 'ankan') || p.riichi || this.scores[s] < 1000 || this.wall.length < 4 || p.hand.length % 3 !== 2) return [];
+    if (p.melds.some(m => m.type !== 'ankan') || p.riichi || this.scores[s] < 1000 || this.wall.length < this.N || p.hand.length % 3 !== 2) return [];   // 내 다음 쯔모가 돌아와야 리치: 4인 4장·3인 3장 이상
     const c = countsOf(p.hand);
     const out = [];
     for (let k = 0; k < 34; k++) {
@@ -1626,9 +1626,11 @@ class Game {
     }
     return out;
   }
+  // 3인: 깡도라는 산패 꽁무니 한 줄(2장)을 넘겨받아 깐다 → 그 2장(영상패도 산패에서 보충해야 하면 +1)이 남아 있어야 깡 가능
+  kanWallOk() { return this.sanma ? this.wall.length >= 2 + (this.rinshanIdx >= 8 ? 1 : 0) : this.wall.length > 0; }
   selfKanOptions(s, drawn) {
     const p = this.players[s];
-    if (this.kanCount >= 4 || this.wall.length === 0) return [];
+    if (this.kanCount >= 4 || !this.kanWallOk()) return [];
     const c = countsOf(p.hand);
     const out = [];
     for (let k = 0; k < 34; k++) {
@@ -1766,7 +1768,7 @@ class Game {
       const p = this.players[o];
       if (p.riichi) continue;
       const c = countsOf(p.hand);
-      const opts = { pon: c[k] >= 2, kan: c[k] >= 3 && this.kanCount < 4, chi: [], tile: id, from: s };
+      const opts = { pon: c[k] >= 2, kan: c[k] >= 3 && this.kanCount < 4 && this.kanWallOk(), chi: [], tile: id, from: s };
       if (this.N === 4 && o === next && k < 27) {   // 3인은 치가 없다
         const n = k % 9;
         for (const [a, b] of [[-2, -1], [-1, 1], [1, 2]]) {
@@ -3089,7 +3091,7 @@ function stickSVGv(c){ return stickSVG(c).replace('viewBox="0 0 120 12"', 'viewB
 function trayHTML(g){
   const pd = UI.pending;
   const can = pd && pd.kind === 'action' && !UI.confirm && UI.riichiDiscard != null;
-  const n = sticksOf(g.scores[0]);
+  const n = sticksOf(shownScores(g)[0]);
   // 점봉 케이스: 1칸 빨강·노랑, 2칸 파랑, 3칸 초록·하양
   // 차곡차곡 쌓기: 1단은 6개를 나란히, 2단은 1단 점봉 사이 홈에 5개, 3단은 다시 2단 사이에 6개 … (아래쪽 칸부터 채운다)
   const MAXL = 4;   // 6+5+6+5 = 22개까지 보이고 그 뒤는 +N
@@ -3669,7 +3671,7 @@ function layerHTML(g, s, walls){
       (p.nuki || []).map(id => tileId(id)).join(''), kikaW);
   }
   return `<div class="layer ${v===1||v===3?'side':''} ${s===0?'mekika':''}" data-seat="${s}" data-rot="${ROT[v]}" style="transform:rotate(${ROT[v]}deg)">
-    <div class="strip ${g.turn===s&&!UI.seating?'on':''}">${UI.seating ? '' : `<span class="w ${dealer?'dealer':''}">${HONOR_CH[g.seatWind(s)-27]}</span>`}${scoreHTML(g.scores[s])}${s !== 0 ? diffHTML(g.scores[s] - g.scores[0]) : ''}</div>
+    <div class="strip ${g.turn===s&&!UI.seating?'on':''}">${UI.seating ? '' : `<span class="w ${dealer?'dealer':''}">${HONOR_CH[g.seatWind(s)-27]}</span>`}${scoreHTML(shownScores(g)[s])}${s !== 0 ? diffHTML(shownScores(g)[s] - shownScores(g)[0]) : ''}</div>
     ${(UI.barHoldUntil > Date.now() ? UI.barSeat === s : g.turn === s) && !UI.frozen && !UI.seating ? '<div class="turnbar"></div>' : ''}
     ${p.riichi?`<div class="stick">${stickSVG('b')}</div>`:(s===0 && UI.riichiMode ? '<div class="stick pendst"></div>' : '')}
     ${cornerSt ? `<div class="cornerst" title="${g.honba}본장${carry?` · 공탁 ${carry}`:''}">${Array.from({length:g.honba}, () => `<span class="vst">${stickSVGv('w')}</span>`).join('')}${Array.from({length:carry}, () => `<span class="vst">${stickSVGv('b')}</span>`).join('')}</div>` : ''}
@@ -4084,6 +4086,8 @@ function reorderAt(x, y, id){
 // 막 운 멘쯔(치·퐁·대명깡)와 안깡은 타패할 때까지 작탁 오른쪽 아래(북 빼기 띠)에 펼쳐 두고, 타패하면 손패 옆으로 옮긴다
 // 리치 중 자동 쯔모기리할 패(방금 쯔모한 패): 클릭·드래그 불가. 리치 중 北을 뺄지 물을 때만 예외
 function rlockId(id){ const g = UI.game, me = g && g.players[0]; return !!(me && me.riichi && g.drawn && g.drawn.seat === 0 && g.drawn.id === id && !(UI.pending && UI.pending.kind === 'riichiNuki')); }
+// 콘솔·점봉통 점수: 국이 끝나 결과창이 떠 있는 동안은 화료 정산 전 점수 그대로(점봉도 그대로라 자연스럽게). 다음 국이 되면 반영
+function shownScores(g){ if(!UI.frozen || !UI.consoleScores || UI.consoleScores.length !== g.scores.length) { if(!UI.frozen) UI.consoleScores = g.scores.slice(); else return g.scores; } return UI.consoleScores; }
 function tableMeld(){ return UI.claim && UI.claim.seat === 0 ? UI.claim.m : (UI.selfKan || null); }
 function tableMeldHTML(staged){
   const m = tableMeld();
@@ -4350,6 +4354,9 @@ function confetti(host){   // host가 있으면 그 안(RPG 브라운관 화면)
   setTimeout(() => box.remove(), 6000);
 }
 function flipWrap(t, i){ return `<span class="rflip" style="--i:${i}"><span class="rfi"><i class="rs rl"></i><i class="rs rr"></i><i class="rs rt"></i><i class="rs rb"></i><span class="rfB">${backTile('md')}</span><span class="rfF">${t}</span></span></span>`; }   // 앞·뒷면 + 옆면 4개로 두께 있는 패
+// 결과창 역 순서: 리치(더블 리치)·혼일색·탕야오·핑후·일발·멘젠쯔모·이페코 → 나머지 역(원래 순서) → 적도라·도라·북도라·뒷도라
+const YAKU_RANK = { '리치':0, '더블 리치':0, '혼일색':1, '탕야오':2, '핑후':3, '일발':3.5, '멘젠쯔모':4, '적도라':7, '도라':8, '북도라':8.5, '뒷도라':9 };
+function yakuOrder(list){ return list.map((y, i) => [y, i]).sort((a, b) => ((YAKU_RANK[a[0][0]] ?? 5) - (YAKU_RANK[b[0][0]] ?? 5)) || a[1] - b[1]).map(x => x[0]); }
 function kyokuEnd(res, g){
   return new Promise(resolve => {
     const t = UI.token;
@@ -4381,7 +4388,7 @@ function kyokuEnd(res, g){
           const r = w.res;
           const hand = w.hand.slice().sort((a,b)=>a-b).map(id=>fw(tileId(id,{size:'md'}))).join('') + '<span style="width:8px;display:inline-block"></span>' + fw(tileId(w.winTile,{size:'md',cls:'last'}));
           const melds = w.melds.slice().reverse().map(m => meldHTML(m, 'md', 'meld', w.winner)).join('');
-          const yaku = r.yaku.map((y, i) => `<div class="yrow" style="--yi:${i}"><span class="yn">${esc(y[0])}</span><span class="yh">${typeof y[1]==='number'?`${y[1]}<small>판</small>`:esc(y[1])}</span></div>`).join('');
+          const yaku = yakuOrder(r.yaku).map((y, i) => `<div class="yrow" style="--yi:${i}"><span class="yn">${esc(y[0])}</span><span class="yh">${typeof y[1]==='number'?`${y[1]}<small>판</small>`:esc(y[1])}</span></div>`).join('');
           const head = r.yakuman ? '' : `${r.han}판 ${r.fu}부`;   // 판·부는 작게, 만관·하네만·역만 등은 도장으로
           const got = w.deltas[w.winner];
           // 큰 숫자는 역(판·부)만의 점수: 연장봉·공탁·책임 지불 없이 '론 기준' 값(친 ×6, 자 ×4). 쯔모면 각자 낸 몫을 옆에 작게

@@ -452,6 +452,25 @@ h1,h2,h3{margin:0;text-wrap:balance}
 .sheet h2{font-size:20px}
 .sheet.help h2{word-break:keep-all;max-width:none;width:auto;margin-top:6px}
 table.y{width:100%;border-collapse:collapse;font-size:14px}
+/* 결과창: 역은 금테 띠, 총점은 크게 금빛으로 */
+.yk{display:flex;flex-direction:column;gap:4px}
+.yrow{display:flex;align-items:center;justify-content:space-between;padding:5px 14px 5px 12px;font-weight:800;font-size:15px;color:#fff;letter-spacing:.02em;
+  background:linear-gradient(90deg,rgba(120,20,30,.85),rgba(70,12,20,.65) 70%,rgba(70,12,20,0));border-left:4px solid #f0c24a;border-radius:2px 14px 14px 2px;
+  clip-path:polygon(0 0,100% 0,97% 50%,100% 100%,0 100%);animation:yin .32s cubic-bezier(.2,.9,.3,1) both;animation-delay:calc(var(--yi) * 90ms + 150ms)}
+.yrow .yh{color:#ffd76a;font:900 17px var(--f-num);text-shadow:0 1px 0 #5a3a00}.yrow .yh small{font-size:11px;margin-left:1px;font-family:var(--f-ui)}
+@keyframes yin{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+.ptsline{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:2px}
+.ptsline .hfu{font-weight:700;color:var(--muted,#9fb8ad);font-size:14px;margin-right:auto}
+.lblst{display:inline-block;padding:3px 12px;font:900 18px var(--f-ui);color:#fff;background:linear-gradient(#e2403a,#a8161c);border:2px solid #ffd9a8;border-radius:6px;transform:rotate(-6deg);box-shadow:0 3px 8px rgba(0,0,0,.45);
+  animation:stamp .35s cubic-bezier(.2,1.6,.4,1) both;animation-delay:calc(var(--yn) * 90ms + 350ms)}
+.lblst.ym{background:linear-gradient(#ffcf4a,#d4880c);color:#5a1200;border-color:#fff3b0}
+@keyframes stamp{from{opacity:0;transform:rotate(-6deg) scale(2.2)}to{opacity:1;transform:rotate(-6deg) scale(1)}}
+.ptsline .pts{font:900 44px/1 var(--f-num);letter-spacing:.01em;background:linear-gradient(180deg,#fff8d6 0%,#ffd255 45%,#e09a12 75%,#fff1b0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 0 #5a3500) drop-shadow(0 0 8px rgba(255,190,60,.45));animation:ptsin .45s cubic-bezier(.2,1.4,.4,1) both;animation-delay:calc(var(--yn) * 90ms + 250ms)}
+.ptsline .pts.silver{background:linear-gradient(180deg,#ffffff 0%,#dfe6ec 40%,#8e9aa6 75%,#f4f7fa 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 2px 0 #2c343c) drop-shadow(0 0 7px rgba(210,225,240,.35))}   /* 만관 미만은 은색 */
+.ptsline .pts small{font:800 18px var(--f-ui);margin-left:3px}
+@keyframes ptsin{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){.yrow,.lblst,.ptsline .pts{animation:none}}
 table.y td{padding:4px 0;border-bottom:1px dashed var(--felt-line)}
 table.y td:last-child{text-align:right}
 .deltas{display:grid;grid-template-columns:1fr auto auto;gap:4px 14px;font-size:14px}
@@ -1309,14 +1328,15 @@ class Game {
   get dealer() { return (this.kyoku + this.oya0) % this.N; }
   roundWind() { return 27 + Math.floor(this.kyoku / this.N); }
   seatWind(s) { return 27 + ((s - this.dealer + this.N) % this.N); }
-  kyokuLabel() { return ['동', '남', '서', '북'][Math.floor(this.kyoku / this.N)] + ' ' + (this.kyoku % this.N + 1) + '국 · ' + this.honba + '본장'; }
+  kyokuLabel() { const nx = this._next || this; return ['동', '남', '서', '북'][Math.floor(nx.kyoku / this.N)] + ' ' + (nx.kyoku % this.N + 1) + '국 · ' + nx.honba + '본장'; }
   // 3인 왕패: 영상패 8장(4줄) + 도라 표시패 1줄 = 10장. 산패는 도라 표시패 바로 앞까지 쯔모하고, 깡도라는 산패 꽁무니 한 줄을 넘겨받아 뒤집는다
   get deadSize() { return this.sanma ? 10 : 14; }
   get doraBase() { return this.sanma ? 8 : 4; }
   get liveTotal() { return (this.sanma ? 108 : 136) - this.deadSize; }
   doraKinds() { return this.doraInd.map(doraOf); }
   saveState() {
-    return { players: this.N, scores: this.scores.slice(), kyoku: this.kyoku, honba: this.honba, kyotaku: this.kyotaku, decisions: this.decisions.slice(), results: this.results.slice(), oya0: this.oya0, seatDraw: this.seatDraw, seed: this.seed };
+    const nx = this._next || this;   // 결과창 도중 저장이면 다음 국 기준
+    return { players: this.N, scores: this.scores.slice(), kyoku: nx.kyoku, honba: nx.honba, kyotaku: this.kyotaku, decisions: this.decisions.slice(), results: this.results.slice(), oya0: this.oya0, seatDraw: this.seatDraw, seed: this.seed };
   }
   visibleCounts(s) {
     const v = new Array(34).fill(0);
@@ -1346,11 +1366,15 @@ class Game {
       res.label = this.kyokuLabel();
       res.kyoku = this.kyoku;
       res.dealer = this.dealer;
+      const k0 = this.kyoku, h0 = this.honba;
       const end = this.advance(res);
+      // 다음 국 번호·본장은 결과창을 닫을 때 반영한다. 그 전까지는 끝난 국 그대로(친·자풍·패산 위치가 바뀌어 보이지 않게)
+      this._next = { kyoku: this.kyoku, honba: this.honba }; this.kyoku = k0; this.honba = h0;
       res.scores = this.scores.slice();
       this.results.push({ type: res.type, winners: res.winners || [], from: res.from, tsumo: !!res.tsumo, riichi: this.players.map(p => !!p.riichi), furo: this.players.map(p => p.melds.some(m => m.type !== 'ankan')), deltas: res.deltas, label: res.label });   // furo: 울어서 손을 연 국(안깡은 제외)
       this.emit('kyokuEnd', res);
       if (this.opts.onKyokuEnd) await this.opts.onKyokuEnd(res, this);
+      this.kyoku = this._next.kyoku; this.honba = this._next.honba; this._next = null;
       if (end) break;
     }
     const fin = this.finish();
@@ -2331,7 +2355,9 @@ function flipPlay(m){
     const ly = el.closest('.layer'), th = (ly ? +ly.dataset.rot || 0 : 0) * Math.PI / 180;
     const lx = dx * Math.cos(th) + dy * Math.sin(th), lyy = -dx * Math.sin(th) + dy * Math.cos(th);
     const far = Math.hypot(dx, dy) > 60;
-    try{ el.animate([{translate:`${lx}px ${lyy}px`, zIndex:40}, {translate:'0px 0px', zIndex:40}], o.dur ? {duration: o.dur, easing:'cubic-bezier(.35,.1,.3,1)'} : {duration: far ? 230 : 160, easing:'cubic-bezier(.2,.75,.3,1)'}); }catch(e){}
+    try{ const an = el.animate([{translate:`${lx}px ${lyy}px`, zIndex:40}, {translate:'0px 0px', zIndex:40}], o.dur ? {duration: o.dur, easing:'cubic-bezier(.35,.1,.3,1)'} : {duration: far ? 230 : 160, easing:'cubic-bezier(.2,.75,.3,1)'});
+      // 날아가는 패(쯔모해 오는 패·버리는 패)는 그 자리 레이어를 잠시 맨 위로 올려, 다른 사람의 강·패산 밑으로 지나가지 않게 한다
+      if(ly && far){ ly.dataset.fly = (+ly.dataset.fly || 0) + 1; ly.style.zIndex = 45; const done = () => { const n = (+ly.dataset.fly || 1) - 1; ly.dataset.fly = n; if(n <= 0) ly.style.zIndex = ''; }; an.onfinish = done; an.oncancel = done; } }catch(e){}
   });
 }
 function draw(){
@@ -3099,7 +3125,7 @@ function startGame(mode, saved, practice, drill, ym){
   // 앞 게임(자리 정하기·주사위·배패 도중에 나간 것 포함)의 연출 상태를 모두 비운다
   UI.diceShow = null; UI.rollWait = null; UI.lastDice = null; UI.kikaSeat = null; UI.dealWait = null; UI.chon = null; UI.cpuFirst = null; UI.cpuFirstId = null; UI.claim = null; UI.callStage = null; UI.selfKan = null;
   UI.windPick = null; UI.dealing = false; UI.wallFx = null; UI.flipMany = null;
-  UI.frozen = null; UI.alice = null;
+  UI.frozen = null; UI.endRes = null; UI.winOpen = null; UI.peekEnd = false; UI.alice = null;
   SFX.unlock();
   UI.confirm = null;
   const cpu = makeCPU(() => sleep(SPEED[settings.speed]));
@@ -3117,7 +3143,7 @@ function startGame(mode, saved, practice, drill, ym){
   UI.practice = saved ? !!saved.practice : !!practice;
   const N0 = P3 ? 3 : 4;
   const ctrls = P3 ? [Human,cpu,cpu] : [Human,cpu,cpu,cpu];
-  if(YT){ const quiet = Object.assign({}, cpu, { async chooseAction(g2, s2, ctx){ return cpu.chooseAction(g2, s2, Object.assign({}, ctx, { kyuushu:false, tsumo:false, kanOptions:[] })); }, async decideCall(){ return null; }, async decideRon(){ return false; }, async decideTsumo(){ return false; } }); for(let i = 1; i < N0; i++) ctrls[i] = quiet; if(YT.ronBy) ctrls[YT.ronBy] = Object.assign({}, quiet, { async decideRon(){ return true; } }); }   // 역만 시험: CPU는 울거나 화료하지 않는다
+  if(YT){ const quiet = Object.assign({}, cpu, { async chooseAction(g2, s2, ctx){ return cpu.chooseAction(g2, s2, Object.assign({}, ctx, { kyuushu:false, tsumo:false, kanOptions:[] })); }, async decideCall(){ return null; }, async decideRon(){ return false; }, async decideTsumo(){ return false; } }); for(let i = 1; i < N0; i++) ctrls[i] = quiet; if(YT.ronBy) ctrls[YT.ronBy] = Object.assign({}, quiet, { async decideRon(){ return true; } }); if(YT.tsumoBy) ctrls[YT.tsumoBy] = Object.assign({}, quiet, { async chooseAction(g2, s2, ctx){ return cpu.chooseAction(g2, s2, ctx); }, async decideTsumo(){ return true; } }); }   // 역만 시험: CPU는 울거나 화료하지 않는다
   if(D && D.script){   // 울기 연습: 상가(친)가 첫 타패로 정해 둔 패를 버린다
     let used = false;
     ctrls[N0 - 1] = Object.assign({}, cpu, { async chooseAction(g2, s2, ctx){ if(!used && UI.drillDiscard != null && g2.players[s2].hand.includes(UI.drillDiscard)){ used = true; await sleep(Math.max(900, SPEED[settings.speed])); return {type:'discard', id:UI.drillDiscard, riichi:false}; } return cpu.chooseAction(g2, s2, ctx); } });
@@ -3133,7 +3159,7 @@ function startGame(mode, saved, practice, drill, ym){
   const g = new Game({ controllers: ctrls, players: P3 ? 3 : 4, length: UI.mode.replace('3',''), aka:UI.aka, state: saved ? saved.state : dstate, resume: saved && saved.mid ? saved.mid : null, onSnap: snap => midSave(snap), rigTenpai: !!window.__rig, beforeDraw: () => sleep(settings.speed === 'fast' ? 250 : 650),rig: D ? (gg => D.rig(gg)) : null, 
     onKyokuStart: async (game) => {
       const tk0 = UI.token, sleepT = async ms => { await sleep(ms); if(tk0 !== UI.token) await HALT(); };   // 나간 게임의 배패 연출은 멈춘다
-      UI.frozen = null; UI.endRes = null; UI.peekEnd = false; UI.cpuOut = {}; UI.handSet = game.results.length % 2; document.documentElement.classList.toggle('setb', UI.handSet === 1);
+      UI.frozen = null; UI.endRes = null; UI.winOpen = null; UI.peekEnd = false; UI.cpuOut = {}; UI.handSet = game.results.length % 2; document.documentElement.classList.toggle('setb', UI.handSet === 1);
       UI.callouts = {}; UI.carryKyotaku = game.kyotaku;
       UI.kyokuSerial = (UI.kyokuSerial || 0) + 1; UI.skDice = {}; UI.kyokuReady = true; UI.order = null; UI.riichiCalled = false; UI.riichiDiscard = null; UI.riichiClacked = false; UI.autoWin = false; UI.wasTenpai = false;   /* 자동 화료는 국마다 꺼진 채로 시작 */ UI.doraAt = {}; UI.sense = null; UI.swapIn = null; UI.peek = null; UI.prune = null; uraState(); kskRestore(game);
       UI.inv = new Set();   // 처음 배패된 손패는 상하가 정리되지 않은 채로 온다(끌면서 우클릭해 180도 돌려 다시 손패에 놓아 정리)
@@ -3227,7 +3253,14 @@ function startGame(mode, saved, practice, drill, ym){
         if(!UI.drillDone){ const key = UI.drill, tk = UI.token; setTimeout(() => { if(tk === UI.token) startGame(DRILLS[key].mode, null, true, key); }, 300); }
         return new Promise(() => {});
       }
-      UI.frozen = res.label; if(res.type === 'win'){ if(!res.tsumo){ const need = (UI.lastDiscRii ? 1250 : 650) - (Date.now() - (UI.lastDiscAt || 0)); if(need > 0) await sleep(need); }   /* 론: 방총패(리치 선언패면 리치 알림이 사라질 때까지)를 먼저 보여 준 뒤 론 알림 */ SFX.win(); res.winners.forEach(w => callout(w, res.tsumo ? '쯔모' : '론')); if(UI.order && res.winners.includes(0)){ await sleep(260); UI.order = null; render(); await sleep(2340); } else await sleep(2600);   /* 화료: 무슨 패로 났는지 판을 2초쯤 볼 수 있게 둔 뒤 결과창 */   /* 내가 화료: 론·쯔모 알림 뒤 손패가 삭 정리된다 */ await aliceShow(res, game); } else if(res.type === 'abort'){ if(res.who != null) callout(res.who, '구종구패'); await sleep(700); } else if(res.type === 'draw'){ await sleep(1400); }   /* 마지막 패를 버리고 강에 놓이는 걸 본 뒤 유국 결과 */ if(UI.ymTest != null){ await kyokuEnd(res, game); UI.token++; UI.ymTest = null; show('home'); return new Promise(() => {}); } return kyokuEnd(res, game); } });
+      UI.frozen = res.label; if(res.type === 'win'){ if(!res.tsumo){ const need = (UI.lastDiscRii ? 420 : 650) - (Date.now() - (UI.lastDiscAt || 0)); if(need > 0) await sleep(need); }   /* 론: 방총패(리치 선언패면 리치 알림이 사라질 때까지)를 먼저 보여 준 뒤 론 알림 */ const cpuWin = res.winners.some(w => w !== 0);
+        if(cpuWin && res.tsumo){   /* CPU 쯔모: 가져옴 → '쯔모' 알림 + 쯔모패 공개 → 손패 공개 */
+          UI.winOpen = res; UI.winStage = 'tile'; SFX.win(); res.winners.forEach(w => callout(w, '쯔모')); render(); await sleep(700);   /* '쯔모' 알림과 함께 쯔모패 공개 */
+          UI.winStage = 'hand'; render();
+        } else {   /* 론: CPU면 손패를 펼치며 '론' */
+          if(cpuWin){ UI.winOpen = res; UI.winStage = 'hand'; render(); await sleep(80); }
+          SFX.win(); res.winners.forEach(w => callout(w, res.tsumo ? '쯔모' : '론'));
+        } if(UI.order && res.winners.includes(0)){ await sleep(260); UI.order = null; render(); await sleep(2340); } else await sleep(2600);   /* 화료: 무슨 패로 났는지 판을 2초쯤 볼 수 있게 둔 뒤 결과창 */   /* 내가 화료: 론·쯔모 알림 뒤 손패가 삭 정리된다 */ await aliceShow(res, game); } else if(res.type === 'abort'){ if(res.who != null) callout(res.who, '구종구패'); await sleep(700); } else if(res.type === 'draw'){ await sleep(1400); }   /* 마지막 패를 버리고 강에 놓이는 걸 본 뒤 유국 결과 */ if(UI.ymTest != null){ await kyokuEnd(res, game); UI.token++; UI.ymTest = null; show('home'); return new Promise(() => {}); } return kyokuEnd(res, game); } });
   UI.game = g; UI.pending = null; UI.sel = null; UI.riichiMode = false; UI.riichiDiscard = null; UI.riichiClacked = false; UI.riichiCalled = false; UI.dragTile = null; UI.hoverDiscard = null;   /* 리치 선언 도중 나간 게임의 상태를 들고 오지 않는다 */
   UI.lastDraw = {}; UI.cpuOut = {};
   saveProgress(g);   // 시작하자마자 이어하기로 남긴다(나갔다 다시 시작해 배패를 고르는 것 방지)
@@ -3558,8 +3591,9 @@ function cpuView(g, s){
   return d != null ? rest.concat([d]) : rest;
 }
 function cpuHandHTML(g, s){
-  const ew = UI.peekEnd && UI.endRes && UI.endRes.type === 'win' ? UI.endRes.wins.find(w => w.winner === s) : null;
-  if(ew) return ew.hand.slice().sort((a, b) => a - b).map(id => tileId(id, {size:'sm'})).join('') + '<span class="hgap"></span>' + tileId(ew.winTile, {size:'sm', cls:'last'});   // 끝난 판 보기: 화료한 CPU 손패 공개
+  const er = UI.winOpen || (UI.peekEnd && UI.endRes), ew = er && er.type === 'win' ? er.wins.find(w => w.winner === s) : null;   // 화료한 CPU 손패 공개(화료 순간부터 결과창 뒤까지)
+  if(ew && er === UI.winOpen && UI.winStage === 'tile') return ew.hand.map(() => '<span class="back"></span>').join('') + '<span class="hgap"></span>' + tileId(ew.winTile, {size:'sm', cls:'last'});   // 쯔모패만 먼저 공개
+  if(ew) return ew.hand.slice().sort((a, b) => a - b).map(id => tileId(id, {size:'sm'})).join('') + (er.tsumo ? '<span class="hgap"></span>' + tileId(ew.winTile, {size:'sm', cls:'last'}) : '');   // 론패는 강에 그대로 두고 손패만   // 끝난 판 보기: 화료한 CPU 손패 공개
   const out = UI.cpuOut && UI.cpuOut[s];
   const view = out ? out.view : cpuView(g, s);
   return view.map(x => x === 'gap' ? '<span class="hgap"></span>' : x === 'hole' ? '<span class="back hole"></span>' : `<span class="back" data-fk="h${x}"></span>`).join('');
@@ -3739,7 +3773,7 @@ function drillMenuHTML(){
 // 운영자 모드: 역만 바로 나기 — 손패를 짜 두고 첫 쯔모에 화료패가 오게 한다. 결과창을 본 뒤 홈으로
 // hand: 손패 종류(퐁·깡 제외), pon/kan: 울어 둔 종류, win: 화료패 종류, dora: 도라 표시패 종류, oya: 'kami'면 상가가 친(지화)
 // 운영자 시험(임시): 내가 리치 선언패를 버리면 하가가 그 패로 론. 내 첫 쯔모(불요 자패) = 하가의 단기 대기패
-function riironRig(g){
+function riironRig(g, tsumoNext){
   g.rigTenpai(0);
   const me = g.players[0], cpu1 = g.players[1], myK = new Set(me.hand.map(kindOf));
   const pool = () => [g.wall, g.players[1].hand, g.players[2].hand, ...(g.players[3] ? [g.players[3].hand] : [])];
@@ -3748,15 +3782,19 @@ function riironRig(g){
   const D = [31, 32, 33].find(k => k !== X && freeIds(k).length >= 3);
   const seqs = []; for(const b of [0, 3, 6, 9, 12, 15, 18, 21, 24]){ if(seqs.length >= 3) break; if([b, b+1, b+2].every(k => freeIds(k).filter(x => !seqs.flat().includes(x)).length >= 1)) seqs.push([b, b+1, b+2].map(k => freeIds(k)[0])); }
   if(X == null || D == null || seqs.length < 3) return;
-  const want = [...freeIds(D).slice(0, 3), ...seqs.flat(), freeIds(X)[0]];
+  const Y = tsumoNext ? [27, 28, 29, 30, 31, 32, 33].find(k => k !== X && k !== D && !myK.has(k) && freeIds(k).length >= 2) : X;   // 쯔모 시험: 하가는 X가 아닌 Y 단기
+  if(Y == null) return;
+  const want = [...freeIds(D).slice(0, 3), ...seqs.flat(), freeIds(Y)[0]];
   const old = cpu1.hand.filter(x => !want.includes(x));
   for(const id of want){ if(cpu1.hand.includes(id)) continue; const a = pool().find(arr => arr !== cpu1.hand && arr.includes(id)); a[a.indexOf(id)] = old.pop(); }
   cpu1.hand = want.slice();
   const xi = g.wall.findIndex(x => kindOf(x) === X);   // 내 첫 쯔모 = X
   const t = g.wall[g.wall.length - 1]; g.wall[g.wall.length - 1] = g.wall[xi]; g.wall[xi] = t;
+  if(tsumoNext){ const yi = g.wall.findIndex((x, i) => kindOf(x) === Y && i < g.wall.length - 1); const n2 = g.wall.length - 2; const u = g.wall[n2]; g.wall[n2] = g.wall[yi]; g.wall[yi] = u; }   // 하가 첫 쯔모 = Y
 }
 const YM_TESTS = [
   { n:'리치 선언패 방총(임시)', mode:'east', oya:'me', ronBy:1, rig: riironRig },
+  { n:'리치 후 하가 쯔모(임시)', mode:'east', oya:'me', tsumoBy:1, rig: g => riironRig(g, true) },
   { n:'천화',          hand:[0,1,2,12,13,14,24,25,26,4,4,6,7], win:8, first:true },
   { n:'지화',          hand:[0,1,2,12,13,14,24,25,26,4,4,6,7], win:8, first:true, oya:'kami' },
   { n:'국사무쌍',      hand:[0,0,8,9,17,18,26,27,28,29,30,31,32], win:33 },
@@ -4341,8 +4379,8 @@ function kyokuEnd(res, g){
           const r = w.res;
           const hand = w.hand.slice().sort((a,b)=>a-b).map(id=>fw(tileId(id,{size:'md'}))).join('') + '<span style="width:8px;display:inline-block"></span>' + fw(tileId(w.winTile,{size:'md',cls:'last'}));
           const melds = w.melds.slice().reverse().map(m => meldHTML(m, 'md', 'meld', w.winner)).join('');
-          const yaku = r.yaku.map(y => `<tr><td>${esc(y[0])}</td><td class="num">${typeof y[1]==='number'?y[1]+'판':y[1]}</td></tr>`).join('');
-          const head = r.yakuman ? r.label : `${r.han}판 ${r.fu}부${r.label?' · '+r.label:''}`;
+          const yaku = r.yaku.map((y, i) => `<div class="yrow" style="--yi:${i}"><span class="yn">${esc(y[0])}</span><span class="yh">${typeof y[1]==='number'?`${y[1]}<small>판</small>`:esc(y[1])}</span></div>`).join('');
+          const head = r.yakuman ? '' : `${r.han}판 ${r.fu}부`;   // 판·부는 작게, 만관·하네만·역만 등은 도장으로
           const got = w.deltas[w.winner];
           const chip = w.winner === 0 ? chipsOfWin(w, res) : null;
           const alice = w.winner === 0 ? (res._alice || (res._alice = aliceOf(w, g))) : null;
@@ -4350,8 +4388,8 @@ function kyokuEnd(res, g){
           if(chipTotal > 0 && !res._chips && !UI.drill && UI.ymTest == null){ res._chips = true; UI.pendingChips = (UI.pendingChips || 0) + chipTotal; }   // 국마다 모아 두고, 게임이 끝나야 한꺼번에 지급(중간에 끄고 다시 하는 리세마라 방지)
           return `<div class="winblk"><h3>${SEATNAME[w.winner]}${w.winner===0?'':' CPU'}${w.pao?` <span class="badge">책임 지불 · ${SEATNAME[w.pao.liable]}</span>`:''}</h3>
             <div class="row" style="gap:2px">${hand}</div>${melds?`<div class="melds">${melds}</div>`:''}
-            <table class="y">${yaku}</table>
-            <p style="margin:0;font-weight:700">${esc(head)} · <span class="num">${got.toLocaleString()}</span>점</p>${chipTotal > 0 && (UI.ymTest == null || YM_TESTS[UI.ymTest].chip) ? `<p style="margin:0;color:#ffe9a8;font-weight:800">축의 +${chipTotal} <span class="muted" style="font-weight:600">(${(chip ? chip.parts : []).concat(alice && alice.n > 0 ? [alice.name + ' ' + alice.n] : []).join(' · ')})</span></p>` : ''}</div>`;
+            <div class="yk">${yaku}</div>
+            <div class="ptsline" style="--yn:${r.yaku.length}">${head ? `<span class="hfu">${esc(head)}</span>` : ''}${r.label ? `<span class="lblst ${r.yakuman ? 'ym' : ''}">${esc(r.label)}</span>` : ''}<span class="pts num ${!r.label ? 'silver' : ''}">${got.toLocaleString()}<small>점</small></span></div>${chipTotal > 0 && (UI.ymTest == null || YM_TESTS[UI.ymTest].chip) ? `<p style="margin:0;color:#ffe9a8;font-weight:800">축의 +${chipTotal} <span class="muted" style="font-weight:600">(${(chip ? chip.parts : []).concat(alice && alice.n > 0 ? [alice.name + ' ' + alice.n] : []).join(' · ')})</span></p>` : ''}</div>`;
         }).join('') + (res.sticks ? `<p class="muted" style="margin:0">공탁 ${res.sticks*1000}점 → ${SEATNAME[res.tsumo ? res.winners[0] : res.sticksTo]}</p>` : '');
     }
     const dl = seatsBy(res.deltas.length).map(i => `<span>${SEATNAME[i]}${i===0?'':' CPU'}</span><span class="num ${res.deltas[i]>0?'pos':res.deltas[i]<0?'neg':''}">${res.deltas[i]>0?'+':''}${res.deltas[i].toLocaleString()}</span><span class="num">${res.scores[i].toLocaleString()}</span>`).join('');

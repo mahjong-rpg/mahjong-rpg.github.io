@@ -2455,6 +2455,7 @@ const SFX = (() => {
   }
   const ac = () => {
     if(settings.sound === false) return null;
+    if(typeof document !== 'undefined' && document.hidden) return null;   // 탭을 가린 동안 낸 소리는 오디오가 멈춰 쌓였다가 돌아올 때 한꺼번에 터진다 → 아예 내지 않는다
     if(!ctx){ try{ ctx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return null; } }
     if(ctx.state === 'suspended') ctx.resume().catch(()=>{});
     return ctx;
@@ -3077,7 +3078,7 @@ function trayHTML(g){
     return h + (seq.length > i ? `<i class="more">+${seq.length - i}</i>` : '');
   };
   const seqOf = cs => cs.slice().reverse().flatMap(c => Array(n[c]).fill(c));   // 아래 단부터: 노랑 → 빨강, 하양 → 초록
-  const cell = (cs, extra) => `<div class="tcell ${extra||''}" ${extra==='can'?'data-stickdrag="1" title="콘솔로 끌어 놓으면 리치"':''} aria-label="${cs.map(c => ({r:'만점봉',y:'오천점봉',b:'천점봉',g:'오백점봉',w:'백점봉'}[c]) + ' ' + n[c] + '개').join(', ')}">${stack(seqOf(cs))}</div>`;
+  const cell = (cs, extra) => `<div class="tcell ${extra||''}" ${extra==='can'?'data-stickdrag="1" title="누르거나 콘솔로 끌어 놓으면 리치"':''} aria-label="${cs.map(c => ({r:'만점봉',y:'오천점봉',b:'천점봉',g:'오백점봉',w:'백점봉'}[c]) + ' ' + n[c] + '개').join(', ')}">${stack(seqOf(cs))}</div>`;
   return `<div class="tray">${cell(['r','y'])}${cell(['b'], can ? 'can' : '')}${cell(['g','w'])}</div>`;
 }
 function speakerSVG(on){
@@ -3104,7 +3105,7 @@ function startGame(mode, saved, practice, drill, ym){
   const cpu = makeCPU(() => sleep(SPEED[settings.speed]));
   UI.mode = saved ? saved.mode : mode;
   const YT = UI.ymTest != null ? YM_TESTS[UI.ymTest] : null;
-  const D = drill ? DRILLS[drill] : YT ? { dealer: YT.oya || 'me', rig: gg => ymRig(gg, YT) } : null;
+  const D = drill ? DRILLS[drill] : YT ? { dealer: YT.oya || 'me', rig: gg => YT.rig ? YT.rig(gg) : ymRig(gg, YT) } : null;
   const P3 = UI.mode.endsWith('3');
   setNP(P3 ? 3 : 4);
   UI.usedHint = saved ? !!saved.usedHint : false;
@@ -3116,7 +3117,7 @@ function startGame(mode, saved, practice, drill, ym){
   UI.practice = saved ? !!saved.practice : !!practice;
   const N0 = P3 ? 3 : 4;
   const ctrls = P3 ? [Human,cpu,cpu] : [Human,cpu,cpu,cpu];
-  if(YT){ const quiet = Object.assign({}, cpu, { async chooseAction(g2, s2, ctx){ return cpu.chooseAction(g2, s2, Object.assign({}, ctx, { kyuushu:false, tsumo:false, kanOptions:[] })); }, async decideCall(){ return null; }, async decideRon(){ return false; }, async decideTsumo(){ return false; } }); for(let i = 1; i < N0; i++) ctrls[i] = quiet; }   // 역만 시험: CPU는 울거나 화료하지 않는다
+  if(YT){ const quiet = Object.assign({}, cpu, { async chooseAction(g2, s2, ctx){ return cpu.chooseAction(g2, s2, Object.assign({}, ctx, { kyuushu:false, tsumo:false, kanOptions:[] })); }, async decideCall(){ return null; }, async decideRon(){ return false; }, async decideTsumo(){ return false; } }); for(let i = 1; i < N0; i++) ctrls[i] = quiet; if(YT.ronBy) ctrls[YT.ronBy] = Object.assign({}, quiet, { async decideRon(){ return true; } }); }   // 역만 시험: CPU는 울거나 화료하지 않는다
   if(D && D.script){   // 울기 연습: 상가(친)가 첫 타패로 정해 둔 패를 버린다
     let used = false;
     ctrls[N0 - 1] = Object.assign({}, cpu, { async chooseAction(g2, s2, ctx){ if(!used && UI.drillDiscard != null && g2.players[s2].hand.includes(UI.drillDiscard)){ used = true; await sleep(Math.max(900, SPEED[settings.speed])); return {type:'discard', id:UI.drillDiscard, riichi:false}; } return cpu.chooseAction(g2, s2, ctx); } });
@@ -3226,7 +3227,7 @@ function startGame(mode, saved, practice, drill, ym){
         if(!UI.drillDone){ const key = UI.drill, tk = UI.token; setTimeout(() => { if(tk === UI.token) startGame(DRILLS[key].mode, null, true, key); }, 300); }
         return new Promise(() => {});
       }
-      UI.frozen = res.label; if(res.type === 'win'){ SFX.win(); res.winners.forEach(w => callout(w, res.tsumo ? '쯔모' : '론')); if(UI.order && res.winners.includes(0)){ await sleep(260); UI.order = null; render(); await sleep(640); } else await sleep(900);   /* 내가 화료: 론·쯔모 알림 뒤 손패가 삭 정리된다 */ await aliceShow(res, game); } else if(res.type === 'abort'){ if(res.who != null) callout(res.who, '구종구패'); await sleep(700); } else if(res.type === 'draw'){ await sleep(1400); }   /* 마지막 패를 버리고 강에 놓이는 걸 본 뒤 유국 결과 */ if(UI.ymTest != null){ await kyokuEnd(res, game); UI.token++; UI.ymTest = null; show('home'); return new Promise(() => {}); } return kyokuEnd(res, game); } });
+      UI.frozen = res.label; if(res.type === 'win'){ if(!res.tsumo){ const need = (UI.lastDiscRii ? 1250 : 650) - (Date.now() - (UI.lastDiscAt || 0)); if(need > 0) await sleep(need); }   /* 론: 방총패(리치 선언패면 리치 알림이 사라질 때까지)를 먼저 보여 준 뒤 론 알림 */ SFX.win(); res.winners.forEach(w => callout(w, res.tsumo ? '쯔모' : '론')); if(UI.order && res.winners.includes(0)){ await sleep(260); UI.order = null; render(); await sleep(2340); } else await sleep(2600);   /* 화료: 무슨 패로 났는지 판을 2초쯤 볼 수 있게 둔 뒤 결과창 */   /* 내가 화료: 론·쯔모 알림 뒤 손패가 삭 정리된다 */ await aliceShow(res, game); } else if(res.type === 'abort'){ if(res.who != null) callout(res.who, '구종구패'); await sleep(700); } else if(res.type === 'draw'){ await sleep(1400); }   /* 마지막 패를 버리고 강에 놓이는 걸 본 뒤 유국 결과 */ if(UI.ymTest != null){ await kyokuEnd(res, game); UI.token++; UI.ymTest = null; show('home'); return new Promise(() => {}); } return kyokuEnd(res, game); } });
   UI.game = g; UI.pending = null; UI.sel = null; UI.riichiMode = false; UI.riichiDiscard = null; UI.riichiClacked = false; UI.riichiCalled = false; UI.dragTile = null; UI.hoverDiscard = null;   /* 리치 선언 도중 나간 게임의 상태를 들고 오지 않는다 */
   UI.lastDraw = {}; UI.cpuOut = {};
   saveProgress(g);   // 시작하자마자 이어하기로 남긴다(나갔다 다시 시작해 배패를 고르는 것 방지)
@@ -3275,12 +3276,12 @@ function startGame(mode, saved, practice, drill, ym){
         UI.nukiDraw = false;
       }
     }
+    if(type === 'discard'){ UI.lastDiscAt = Date.now(); UI.lastDiscRii = !!d.riichi; }
     if(type === 'discard'){ UI.barSeat = d.seat; UI.barHoldUntil = Date.now() + 235; setTimeout(render, 240); }   // 차례 초록바: 버린 패가 강까지 날아가 멈출 때까지는 버린 사람에게, 멈추는 순간 다음 사람에게(꺼짐 없이 바로 옮김)
     if(type === 'discard'){ if(!(d.seat === 0 && d.riichi && UI.riichiClacked)) SFX.discard(); if(d.riichi) SFX.stick(); if(d.seat === 0) UI.riichiClacked = false; }   // 내 리치: 딱은 가로로 놓을 때 이미, 점봉 놓을 때는 스틱 소리
-    if(type === 'call') SFX.call();
     if(type === 'discard' && d.riichi && !(d.seat === 0 && UI.riichiCalled)){ callout(d.seat, '리치'); SFX.call(); }   // 치·퐁과 같은 알림 소리   // 나는 가로로 놓는 순간 이미 외쳤다
     if(type === 'discard' && d.seat === 0) UI.riichiCalled = false;
-    else if(type === 'call') callout(d.seat, d.type === 'pon' ? '퐁' : d.type === 'kan' ? '깡' : '치');
+    if(type === 'call'){ if(callout(d.seat, d.type === 'pon' ? '퐁' : d.type === 'kan' ? '깡' : '치')) SFX.call(); }   // 이미 같은 알림·소리를 냈으면 겹쳐 내지 않는다
     else if(type === 'nuki'){ callout(d.seat, '북'); SFX.call(); if(d.seat === 0) UI.nukiDraw = true; }
     render();
   });
@@ -3316,10 +3317,15 @@ async function aliceShow(res, game){
   if(t !== UI.token) return;
   UI.alice = null; render();
 }
+// 알림: 같은 자리에 같은 말이 이미 떠 있으면(예: 울 패를 꺼내는 순간 '퐁' → 퐁 성립) 다시 튀어나오지 않고 그대로 이어서 1초 더 둔다
+// 돌려주는 값: 새로 띄웠으면 true (알림 소리를 낼지 정할 때 쓴다)
 function callout(s, text){
-  UI.callouts[s] = text; UI.calloutAt[s] = Date.now(); render();
+  const fresh = !(UI.callouts[s] === text && Date.now() - (UI.calloutAt[s] || 0) < 1500);
+  UI.callouts[s] = text; if(fresh){ UI.calloutAt[s] = Date.now(); render(); }
   const t = UI.token;
-  setTimeout(() => { if(t === UI.token && UI.callouts[s] === text){ delete UI.callouts[s]; render(); } }, 1000);
+  UI.coTimer = UI.coTimer || {}; clearTimeout(UI.coTimer[s]);
+  UI.coTimer[s] = setTimeout(() => { if(t === UI.token && UI.callouts[s] === text && !UI.frozen){ delete UI.callouts[s]; render(); } }, 1000);
+  return fresh;   // 국이 끝난 뒤(론·쯔모·리치 알림)는 결과창이 뜰 때까지 그대로 둔다
 }
 // 국 도중 판 전체(차례마다)를 이어하기에 적어 둔다
 function midSave(snap){
@@ -3634,7 +3640,7 @@ function layerHTML(g, s, walls){
     ${kikaSeat(g)===s ? `<div class="kikamark ${Date.now() - (UI.kikaAt || 0) < 400 ? 'kmv' : ''}" title="기가" style="animation-delay:-${Date.now() - (UI.kikaAt || 0)}ms;${cornerSt?`right:calc(var(--S)*${((g.honba + carry) * .0105).toFixed(4)})`:''}">${g.kyoku < g.N ? '東' : '南'}</div>` : ''}
     <div class="river">${riverRows(river)}</div>
     ${edge}
-    ${co?`<div class="callout" style="transform:translateX(-50%) rotate(${-ROT[v]}deg)${coNew?'':';animation:none'}">${esc(co)}</div>`:''}
+    ${co?`<div class="callout" style="transform:translateX(-50%) rotate(${-ROT[v]}deg)${coNew?`;animation-delay:-${Date.now() - (UI.calloutAt[s] || 0)}ms`:';animation:none'}">${esc(co)}</div>`:''}
   </div>`;
 }
 
@@ -3713,7 +3719,7 @@ const DRILLS = {
             rig(g){ const T = rigTools(g); T.give(0, [T.free(30)[0]]); } },
   deal:   { name:'배패',   mode:'east',  dealer:'me', full:true, hint:'자리 정하기 → 패산 가르기 → 배패(패산에서 손패로 끌어오기) → 첫 타패까지 해 보세요 (항상 내가 친)',
             rig(g){} },
-  riichi: { name:'리치',   mode:'east',  dealer:'me', hint:'버릴 패를 끄는 도중 우클릭해 가로로 꺾어 강에 놓고, 파란 점봉을 가운데 콘솔로 던지세요',
+  riichi: { name:'리치',   mode:'east',  dealer:'me', hint:'버릴 패를 끄는 도중 우클릭해 가로로 꺾어 강에 놓고, 파란 점봉을 누르거나 가운데 콘솔로 던지세요',
             rig(g){ g.rigTenpai(0);   // 텐파이 13장 + 첫 쯔모는 불요패(자패 한 장): 쯔모 버튼 없이 그 패를 가로로 버려 리치
               const me = g.players[0], have = new Set(me.hand.map(kindOf)); let planted = false;
               g.wall.pop = function(){
@@ -3732,7 +3738,25 @@ function drillMenuHTML(){
 }
 // 운영자 모드: 역만 바로 나기 — 손패를 짜 두고 첫 쯔모에 화료패가 오게 한다. 결과창을 본 뒤 홈으로
 // hand: 손패 종류(퐁·깡 제외), pon/kan: 울어 둔 종류, win: 화료패 종류, dora: 도라 표시패 종류, oya: 'kami'면 상가가 친(지화)
+// 운영자 시험(임시): 내가 리치 선언패를 버리면 하가가 그 패로 론. 내 첫 쯔모(불요 자패) = 하가의 단기 대기패
+function riironRig(g){
+  g.rigTenpai(0);
+  const me = g.players[0], cpu1 = g.players[1], myK = new Set(me.hand.map(kindOf));
+  const pool = () => [g.wall, g.players[1].hand, g.players[2].hand, ...(g.players[3] ? [g.players[3].hand] : [])];
+  const freeIds = k => pool().flatMap(a => a.filter(x => kindOf(x) === k));
+  const X = [27, 28, 29, 30, 31, 32].find(k => !myK.has(k) && freeIds(k).length >= 2);
+  const D = [31, 32, 33].find(k => k !== X && freeIds(k).length >= 3);
+  const seqs = []; for(const b of [0, 3, 6, 9, 12, 15, 18, 21, 24]){ if(seqs.length >= 3) break; if([b, b+1, b+2].every(k => freeIds(k).filter(x => !seqs.flat().includes(x)).length >= 1)) seqs.push([b, b+1, b+2].map(k => freeIds(k)[0])); }
+  if(X == null || D == null || seqs.length < 3) return;
+  const want = [...freeIds(D).slice(0, 3), ...seqs.flat(), freeIds(X)[0]];
+  const old = cpu1.hand.filter(x => !want.includes(x));
+  for(const id of want){ if(cpu1.hand.includes(id)) continue; const a = pool().find(arr => arr !== cpu1.hand && arr.includes(id)); a[a.indexOf(id)] = old.pop(); }
+  cpu1.hand = want.slice();
+  const xi = g.wall.findIndex(x => kindOf(x) === X);   // 내 첫 쯔모 = X
+  const t = g.wall[g.wall.length - 1]; g.wall[g.wall.length - 1] = g.wall[xi]; g.wall[xi] = t;
+}
 const YM_TESTS = [
+  { n:'리치 선언패 방총(임시)', mode:'east', oya:'me', ronBy:1, rig: riironRig },
   { n:'천화',          hand:[0,1,2,12,13,14,24,25,26,4,4,6,7], win:8, first:true },
   { n:'지화',          hand:[0,1,2,12,13,14,24,25,26,4,4,6,7], win:8, first:true, oya:'kami' },
   { n:'국사무쌍',      hand:[0,0,8,9,17,18,26,27,28,29,30,31,32], win:33 },
@@ -4117,7 +4141,7 @@ function gameHTML(){
       if(UI.sel != null && pd.ctx.riichiOptions.includes(kindOf(UI.sel))) actions += `<button class="btn warn" data-act="riichiGo">리치</button><button class="btn" data-act="discard">다마로 버리기</button>`;
     }
     if(UI.sel != null && !settings.oneTap) actions += `<button class="btn primary" data-act="discard">${kname(kindOf(UI.sel))} 버리기</button>`;
-    prompt = UI.riichiDiscard != null ? '리치 선언: 파란 점봉을 가운데 콘솔로 던지세요' : UI.riichiMode ? '리치: 텐파이를 유지하는 패만 고를 수 있어요' : pd.ctx.riichiOptions.length ? '리치: 텐파이 패를 끄는 중 우클릭해 가로로 꺾어 강에 놓고, 점봉을 콘솔로 · 세로로 놓으면 다마' : (pd.ctx.forbidden ? '울었던 패와 같은 패(쿠이카에)는 버릴 수 없어요' : '버릴 패를 강으로 끌어 놓으세요');
+    prompt = UI.riichiDiscard != null ? '리치 선언: 파란 점봉을 누르거나 가운데 콘솔로 던지세요' : UI.riichiMode ? '리치: 텐파이를 유지하는 패만 고를 수 있어요' : pd.ctx.riichiOptions.length ? '리치: 텐파이 패를 끄는 중 우클릭해 가로로 꺾어 강에 놓고, 점봉을 콘솔로 · 세로로 놓으면 다마' : (pd.ctx.forbidden ? '울었던 패와 같은 패(쿠이카에)는 버릴 수 없어요' : '버릴 패를 강으로 끌어 놓으세요');
     if(pd.ctx.nuki) prompt += ' · 北은 오른쪽 탁자 구석으로 끌면 북 빼기';
     if(pd.ctx.kanOptions && pd.ctx.kanOptions.length) prompt += ' · 깡: 같은 패를 손패 오른쪽 끝이나 탁자 오른쪽 구석으로(가깡은 퐁 위로) 끌기';
   } else if(pd && pd.kind === 'tsumo'){
@@ -4371,7 +4395,7 @@ function helpHTML(){
       <li><b>후로</b> 패를 작탁 우측 아래로, 가깡은 후로한 멘쯔 위로 <kbd>좌클릭 드래그</kbd></li>
       <li><b>북 빼기</b> 북을 작탁 우측 아래로 <kbd>좌클릭 드래그</kbd></li>
       <li><b>패 돌리기</b> 패를 <kbd>좌클릭 드래그</kbd> 중 <kbd>휠</kbd>로 세로꺾기<br><kbd>우클릭</kbd>으로 상하반전 (리치 가능한 상황에선 가로꺾기로 작동)</li>
-      <li><b>리치</b> 가로꺾기로 타패 후 1000점봉을 가운데 콘솔로 <kbd>좌클릭 드래그</kbd></li>
+      <li><b>리치</b> 가로꺾기로 타패 후 1000점봉 <kbd>좌클릭</kbd> or 가운데 콘솔로 <kbd>좌클릭 드래그</kbd></li>
       <li><b>폰</b> <kbd>드래그</kbd> 중 패를 좌측 or 우측 점봉에 넣으면 세로꺾기<br>가운데 점봉에 넣으면 상하반전 (리치 가능한 상황에선 가로꺾기로 작동)</li>
     </ul>
     <h2>장비 레벨에 따라 발동확률을 가진 스킬</h2>
@@ -5469,11 +5493,20 @@ document.addEventListener('pointerdown', e => {
   const move = ev => { ghost.style.left = ev.clientX + 'px'; ghost.style.top = ev.clientY + 'px'; };
   move(e);
   const con = document.querySelector('.game .console');
+  const x0 = e.clientX, y0 = e.clientY;
   const up = ev => {
     document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); document.removeEventListener('pointercancel', up);
-    ghost.remove();
     const r = con && con.getBoundingClientRect();
     const pd = UI.pending;
+    // 좌클릭(탭) 한 번: 점봉이 저절로 콘솔로 날아가 공탁된다
+    if(r && ev.type === 'pointerup' && Math.hypot(ev.clientX - x0, ev.clientY - y0) < 6 && pd && pd.kind === 'action' && UI.riichiDiscard != null && !UI.confirm){
+      const id = UI.riichiDiscard, cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      try{ const an = ghost.animate([{left: x0 + 'px', top: y0 + 'px'}, {left: cx + 'px', top: cy + 'px'}], {duration: 240, easing: 'cubic-bezier(.3,.7,.3,1)', fill: 'forwards'});
+        an.onfinish = () => { ghost.remove(); const q = UI.pending; if(q && q.kind === 'action' && UI.riichiDiscard === id) choose({type:'discard', id, riichi:true}); }; }
+      catch(err){ ghost.remove(); choose({type:'discard', id, riichi:true}); }
+      return;
+    }
+    ghost.remove();
     if(r && ev.type === 'pointerup' && ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom
        && pd && pd.kind === 'action' && UI.riichiDiscard != null && !UI.confirm){
       choose({type:'discard', id:UI.riichiDiscard, riichi:true});   // 점봉을 올리는 순간 리치 확정, 다음 차례로

@@ -2190,11 +2190,11 @@ const store = {
   set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } },
   del(k){ try{ localStorage.removeItem(k); }catch(e){} }
 };
-const SETTINGS0 = {hint:false, skipDeal:false, alice:false, tulip:false, phone:false, autoSort:true, speed:'normal', sound:true};   // 처음 시작: 체크는 모두 꺼짐, 소리는 켜짐
+const SETTINGS0 = {hint:false, skipDeal:true, alice:false, tulip:false, phone:true, autoSort:true, speed:'normal', sound:true};   // 처음 시작: 배패 스킵·폰 모드·소리 켜짐, 나머지 꺼짐
 let settings = Object.assign({}, SETTINGS0, store.get(KEY.set, {}));
 settings.hint = false;   // AI 힌트 표시는 설정에서 뺐다
 if(settings.alice && settings.tulip) settings.tulip = false;   // 아리스·튤립은 둘 중 하나만
-if(settings.phone === undefined){ try{ settings.phone = !!(window.matchMedia && matchMedia('(pointer: coarse)').matches); }catch(e){ settings.phone = false; } }   // 폰 모드: 눌러서 조작
+if(settings.phone === undefined) settings.phone = true;   // 폰 모드: 처음엔 켜 둔다
 settings.aka = true; settings.oneTap = true;            // 적도라·한 번 탭 버리기는 항상
 settings.speed = 'normal';   // CPU 속도는 보통으로 고정
 const SPEED = {fast:300, normal:750};   // CPU가 패산에서 끌어 오는 모습이 보이도록 여유 있게
@@ -2789,7 +2789,9 @@ function takeDraw(){
 function flyIn(dropAt){
   const pd = UI.pendingDraw;
   if(!pd || pd.flying) return;
-  const src = document.querySelector('.wnext') || document.querySelector('.hand .tile.slot');
+  // 폰 모드처럼 빛나는 패가 없으면: 패산 맨 앞(일반 쯔모) 또는 왕패 영상패 자리에서 날아온다
+  const wallSrc = () => { if(pd.rinshan) return document.querySelector('.sk.drop i') || document.querySelector('.sk.dead i.t, .sk.dead i.b'); let el = null, mi = Infinity; document.querySelectorAll('[data-wi]').forEach(x => { const v = +x.dataset.wi; if(v < mi){ mi = v; el = x; } }); return el; };
+  const src = document.querySelector('.wnext') || wallSrc() || document.querySelector('.hand .tile.slot');
   const slot = document.querySelector('.hand .tile.slot');
   if(!src || !slot){ if(pd.rinshan && UI.drill) UI.drillRinshan = true; UI.pendingDraw = null; render(); pd.resolve && pd.resolve(); return; }
   const to = slot.getBoundingClientRect();
@@ -3191,7 +3193,7 @@ function startGame(mode, saved, practice, drill, ym){
         UI.pendingDraw = { id: d.id, rinshan: !!d.rinshan };
         const at = UI.autoTake; UI.autoTake = null;
         if(at && Date.now() - at.at < 4000 && !d.rinshan) requestAnimationFrame(() => requestAnimationFrame(() => flyIn(at)));   // 울기 대신 쯔모한 패: 놓은 자리에서 바로 손으로
-        else if(settings.phone && !UI.drill && (!d.rinshan || UI.nukiDraw)){   // 폰 모드: 내 차례 쯔모·북 빼고 받는 영상패는 저절로 손으로
+        else if(settings.phone && !UI.drill){   // 폰 모드: 내 차례 쯔모·깡·북 빼고 받는 영상패 모두 저절로 손으로
           const pd = UI.pendingDraw; setTimeout(() => { if(UI.pendingDraw === pd && !pd.flying){ pd.earlySnd = true; flyIn(); } }, settings.speed === 'fast' ? 250 : 650);   // CPU가 뽑기 전에 두는 것과 같은 템포
         }
         UI.nukiDraw = false;
@@ -4057,7 +4059,7 @@ function gameHTML(){
   const pw = UI.pendingDraw && !UI.pendingDraw.flying ? UI.pendingDraw : null;
   const walls = (UI.seating || (UI.dealing && !UI.wallSplit)) ? fullWalls(g.N) : g.dice ? wallLayout({ N:g.N, dice:g.dice, dealer:g.dealer,
     left: UI.dealing ? g.liveTotal - (UI.dealCount ? UI.dealCount.reduce((a, b) => a + b, 0) : 0) : g.wall.length + (pw ? 1 : 0), deal: UI.dealing && UI.dealCount ? { base: UI.chon ? UI.chon.base : null, taken: UI.chon ? UI.chon.taken : [], next: UI.dealWait ? UI.dealWait.offs : null } : null,
-    rinshan: g.rinshanIdx - (pw && pw.rinshan ? 1 : 0), dora:g.doraInd, doraIds:g.doraIndIds, alice: UI.alice ? { flips: UI.alice.flips.slice(0, UI.alice.n), blink: UI.alice.blink, miss: UI.alice.miss, age: Date.now() - UI.alice.at } : null, next: pw ? (pw.rinshan ? 'rinshan' : 'live') : (callFromKami() ? 'live' : null),
+    rinshan: g.rinshanIdx - (pw && pw.rinshan ? 1 : 0), dora:g.doraInd, doraIds:g.doraIndIds, alice: UI.alice ? { flips: UI.alice.flips.slice(0, UI.alice.n), blink: UI.alice.blink, miss: UI.alice.miss, age: Date.now() - UI.alice.at } : null, next: settings.phone && !UI.drill ? null : pw ? (pw.rinshan ? 'rinshan' : 'live') : (callFromKami() ? 'live' : null),   /* 폰 모드: 쯔모는 저절로라 빛내지도, 잡게 하지도 않는다 */
     ura: (uraState(), UI.dealing ? null : g.uraInd.map((k, i) => UI.uraSeen.has(i) ? k : null)), uraAt: UI.uraAt,
     peek: (() => { const t = peekTarget(g, pw); return t ? Object.assign({ gc: mjSkillColor('fish') }, t) : null; })() }) : null;
   const fx = UI.wallFx;

@@ -4168,6 +4168,8 @@ function gameHTML(){
   if(cf){
     actions = `<button class="btn primary" data-act="confirmOK">확인</button>`;
     prompt = 'AI 의견을 확인하고 넘어가세요';
+  } else if(act && UI.riichiDiscard != null){   // 가로로 놓은 순간 리치는 확정: 깡·북 빼기·쯔모 등 다른 선택지는 없다(점봉만 던지면 된다)
+    prompt = '리치 선언: 파란 점봉을 누르거나 가운데 콘솔로 던지세요';
   } else if(act){
     if(pd.ctx.tsumo) actions += `<button class="btn warn" data-act="tsumo">쯔모</button>`;
     if(pd.ctx.kyuushu) actions += `<button class="btn" data-act="kyuushu">구종구패 유국</button>`;
@@ -5454,7 +5456,7 @@ document.addEventListener('click', e => {
     case 'autoWin': UI.autoWin = !UI.autoWin; render(); if(UI.autoWin) autoWinCheck(); break;
     case 'waitToggle': UI.waitOpen = !UI.waitOpen; render(); break;
     case 'drill': { const k = b.dataset.d; $modal.hidden = true; startGame(DRILLS[k].mode, null, true, k); break; }
-    case 'tsumo': if(pd) pd.resolve({type:'tsumo'}); break;
+    case 'tsumo': if(pd && UI.riichiDiscard == null) pd.resolve({type:'tsumo'}); break;
     case 'pickWind': if(UI.windPick && UI.windPick.picked == null){ UI.windPick.picked = +b.dataset.i; UI.windPick.done(); } break;
     case 'rpgHelp': $modal.innerHTML = rpgHelpHTML(); $modal.hidden = false; break;
     case 'toggleSound': settings.sound = settings.sound === false; store.set(KEY.set, settings); if(settings.sound) SFX.unlock(); render(); break;
@@ -5469,7 +5471,7 @@ document.addEventListener('click', e => {
       o.chi.forEach(c => list.push({type:'chi', kinds:c}));
       if(list.length === 1) choose(list[0]); else { UI.callPick = true; render(); }
     } break;
-    case 'nuki': if(pd && pd.kind === 'riichiNuki') choose(true); else if(pd && pd.kind === 'action' && pd.ctx.nuki) choose({type:'nuki'}); break;
+    case 'nuki': if(pd && pd.kind === 'riichiNuki') choose(true); else if(pd && pd.kind === 'action' && pd.ctx.nuki && UI.riichiDiscard == null) choose({type:'nuki'}); break;
     case 'recP': UI.recP = +b.dataset.p; render(); break;
     case 'confirmOK': { const c = UI.confirm; UI.confirm = null; if(pd && c) pd.resolve(c.value); break; }
     case 'riichi': UI.riichiMode = !UI.riichiMode; UI.sel = null; UI.hoverDiscard = null; render(); break;
@@ -5478,9 +5480,9 @@ document.addEventListener('click', e => {
     case 'no': if(pd) choose(pd.kind === 'call' || pd.kind === 'riichiKan' ? null : false); break;
     case 'pon': if(pd) choose({type:'pon'}); break;
     case 'minkan': if(pd) choose({type:'minkan'}); break;
-    case 'selfkan': if(pd && pd.kind === 'action') choose(pd.ctx.kanOptions[+b.dataset.i]); break;
+    case 'selfkan': if(pd && pd.kind === 'action' && UI.riichiDiscard == null) choose(pd.ctx.kanOptions[+b.dataset.i]); break;
     case 'rkan': if(pd && pd.kind === 'riichiKan') choose(pd.opts[+b.dataset.i]); break;
-    case 'kyuushu': if(pd && pd.kind === 'action') choose({type:'kyuushu'}); break;
+    case 'kyuushu': if(pd && pd.kind === 'action' && UI.riichiDiscard == null) choose({type:'kyuushu'}); break;
     case 'uraTry': uraTry(+b.dataset.i || 0); break;
     case 'pruneMode': if(pruneReady()){ UI.pruneMode = !UI.pruneMode; render(); } break;
     case 'chi': if(pd) choose({type:'chi', kinds: pd.opts.chi[+b.dataset.i]}); break;
@@ -5927,6 +5929,7 @@ document.addEventListener('contextmenu', e => {
   if(pd.kind === 'call' || pd.kind === 'riichiKan'){ choose(null); return; }
   if(pd.kind === 'ron' || pd.kind === 'tsumo'){ choose(false); return; }   // 론·쯔모도 넘기기는 우클릭으로만
   if(pd.kind === 'riichiNuki'){ choose(false); return; }
+  if(pd.kind === 'action' && UI.riichiDiscard != null){ choose({type:'discard', id:UI.riichiDiscard, riichi:true}); return; }   // 리치 선언패를 놓은 뒤 우클릭: 점봉 공탁(리치 확정)
   if(pd.kind !== 'action' || !g || !g.drawn || g.drawn.seat !== 0) return;
   const id = g.drawn.id;
   if(!g.players[0].hand.includes(id)) return;

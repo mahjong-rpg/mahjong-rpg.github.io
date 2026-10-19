@@ -4382,6 +4382,10 @@ function kyokuEnd(res, g){
           const yaku = r.yaku.map((y, i) => `<div class="yrow" style="--yi:${i}"><span class="yn">${esc(y[0])}</span><span class="yh">${typeof y[1]==='number'?`${y[1]}<small>판</small>`:esc(y[1])}</span></div>`).join('');
           const head = r.yakuman ? '' : `${r.han}판 ${r.fu}부`;   // 판·부는 작게, 만관·하네만·역만 등은 도장으로
           const got = w.deltas[w.winner];
+          // 큰 숫자는 역(판·부)만의 점수: 연장봉·공탁·책임 지불 없이 '론 기준' 값(친 ×6, 자 ×4). 쯔모면 각자 낸 몫을 옆에 작게
+          const isOya = w.winner === g.dealer, B = r.base || 0;
+          const handPts = MJ.ceil100(B * (isOya ? 6 : 4));
+          const tsumoSplit = res.tsumo ? (isOya ? `${MJ.ceil100(B * 2).toLocaleString()} 올` : `${MJ.ceil100(B).toLocaleString()} / ${MJ.ceil100(B * 2).toLocaleString()}`) : '';
           const chip = w.winner === 0 ? chipsOfWin(w, res) : null;
           const alice = w.winner === 0 ? (res._alice || (res._alice = aliceOf(w, g))) : null;
           const chipTotal = (chip ? chip.n : 0) + (alice ? alice.n : 0);
@@ -4389,7 +4393,7 @@ function kyokuEnd(res, g){
           return `<div class="winblk"><h3>${SEATNAME[w.winner]}${w.winner===0?'':' CPU'}${w.pao?` <span class="badge">책임 지불 · ${SEATNAME[w.pao.liable]}</span>`:''}</h3>
             <div class="row" style="gap:2px">${hand}</div>${melds?`<div class="melds">${melds}</div>`:''}
             <div class="yk">${yaku}</div>
-            <div class="ptsline" style="--yn:${r.yaku.length}">${head ? `<span class="hfu">${esc(head)}</span>` : ''}${r.label ? `<span class="lblst ${r.yakuman ? 'ym' : ''}">${esc(r.label)}</span>` : ''}<span class="pts num ${!r.label ? 'silver' : ''}">${got.toLocaleString()}<small>점</small></span></div>${chipTotal > 0 && (UI.ymTest == null || YM_TESTS[UI.ymTest].chip) ? `<p style="margin:0;color:#ffe9a8;font-weight:800">축의 +${chipTotal} <span class="muted" style="font-weight:600">(${(chip ? chip.parts : []).concat(alice && alice.n > 0 ? [alice.name + ' ' + alice.n] : []).join(' · ')})</span></p>` : ''}</div>`;
+            <div class="ptsline" style="--yn:${r.yaku.length}"><span class="hfu">${esc([head, tsumoSplit].filter(Boolean).join(' · '))}</span>${r.label ? `<span class="lblst ${r.yakuman ? 'ym' : ''}">${esc(r.label)}</span>` : ''}<span class="pts num ${!r.label ? 'silver' : ''}">${handPts.toLocaleString()}<small>점</small></span></div>${chipTotal > 0 && (UI.ymTest == null || YM_TESTS[UI.ymTest].chip) ? `<p style="margin:0;color:#ffe9a8;font-weight:800">축의 +${chipTotal} <span class="muted" style="font-weight:600">(${(chip ? chip.parts : []).concat(alice && alice.n > 0 ? [alice.name + ' ' + alice.n] : []).join(' · ')})</span></p>` : ''}</div>`;
         }).join('') + (res.sticks ? `<p class="muted" style="margin:0">공탁 ${res.sticks*1000}점 → ${SEATNAME[res.tsumo ? res.winners[0] : res.sticksTo]}</p>` : '');
     }
     const dl = seatsBy(res.deltas.length).map(i => `<span>${SEATNAME[i]}${i===0?'':' CPU'}</span><span class="num ${res.deltas[i]>0?'pos':res.deltas[i]<0?'neg':''}">${res.deltas[i]>0?'+':''}${res.deltas[i].toLocaleString()}</span><span class="num">${res.scores[i].toLocaleString()}</span>`).join('');

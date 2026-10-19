@@ -316,6 +316,7 @@ h1,h2,h3{margin:0;text-wrap:balance}
 .hand .tile.dragging{opacity:.25}
 .hand > .tile[data-tile], .wnext{touch-action:none}
 .hand > .tile[data-tile]{cursor:grab}
+.hand > .tile.rlock{cursor:default;pointer-events:none}   /* 리치 중 쯔모해 온 패: 잡을 수 없다 */
 .wnext{cursor:grab}
 .sk.dnext{pointer-events:auto;cursor:grab;touch-action:none}
 .sk i.dn{animation:wglow 1s ease-in-out infinite alternate}
@@ -4017,6 +4018,8 @@ function reorderAt(x, y, id){
   UI.order = next; render();
 }
 // 막 운 멘쯔(치·퐁·대명깡)와 안깡은 타패할 때까지 작탁 오른쪽 아래(북 빼기 띠)에 펼쳐 두고, 타패하면 손패 옆으로 옮긴다
+// 리치 중 자동 쯔모기리할 패(방금 쯔모한 패): 클릭·드래그 불가. 리치 중 北을 뺄지 물을 때만 예외
+function rlockId(id){ const g = UI.game, me = g && g.players[0]; return !!(me && me.riichi && g.drawn && g.drawn.seat === 0 && g.drawn.id === id && !(UI.pending && UI.pending.kind === 'riichiNuki')); }
 function tableMeld(){ return UI.claim && UI.claim.seat === 0 ? UI.claim.m : (UI.selfKan || null); }
 function tableMeldHTML(staged){
   const m = tableMeld();
@@ -4090,7 +4093,7 @@ function gameHTML(){
   const ht = id => {
     const k = kindOf(id);
     const aiHere = cf && cf.aiTile === k && !aiMarked; if(aiHere) aiMarked = true;
-    return tileId(id, {size:'lg', cls:[selId===id?'sel':'', act && !legal(id)?'off':'', aiHere?'hint':'', UI.alice && UI.alice.hit && UI.alice.hit.includes(k) ? 'ahit' : '', UI.inv && UI.inv.has(id) ? 'inv' : '', UI.sense && UI.sense.key === turnKey() && UI.sense.id === id ? 'sn-' + UI.sense.res : '', UI.pruneMode && pruneReady() ? 'prune' : '', swAge(id) != null ? 'swnew' : ''].join(' '), inner: swAge(id) != null ? '<i class="s3b"></i><i class="s3e s3t"></i><i class="s3e s3m"></i>' : '', attrs:`data-tile="${id}" role="button" tabindex="0" aria-label="${kname(k)}" style="${UI.pruneMode && pruneReady() ? `--gc:${mjSkillColor('wood')};` : ''}${swAge(id) != null ? `--swd:-${swAge(id)}ms` : ''}"`});
+    return tileId(id, {size:'lg', cls:[selId===id?'sel':'', act && !legal(id)?'off':'', aiHere?'hint':'', UI.alice && UI.alice.hit && UI.alice.hit.includes(k) ? 'ahit' : '', UI.inv && UI.inv.has(id) ? 'inv' : '', UI.sense && UI.sense.key === turnKey() && UI.sense.id === id ? 'sn-' + UI.sense.res : '', UI.pruneMode && pruneReady() ? 'prune' : '', swAge(id) != null ? 'swnew' : '', rlockId(id) ? 'rlock' : ''].join(' '), inner: swAge(id) != null ? '<i class="s3b"></i><i class="s3e s3t"></i><i class="s3e s3m"></i>' : '', attrs:`data-tile="${id}" role="button" tabindex="0" aria-label="${kname(k)}" style="${UI.pruneMode && pruneReady() ? `--gc:${mjSkillColor('wood')};` : ''}${swAge(id) != null ? `--swd:-${swAge(id)}ms` : ''}"`});
   };
   // 배패 중: 친이 ちょんちょん으로 14장째를 받으면 그 패(=곧 첫 쯔모로 셈할 패산 맨 앞 패)를 바로 쯔모 칸에 둔다
   const chon14 = UI.dealing && UI.dealCount && UI.dealCount[0] >= 14 ? g.wall[g.wall.length - 1] : null;
@@ -5601,6 +5604,8 @@ document.addEventListener('pointerdown', e => {
     else if(pd && pd.kind === 'call' && !UI.confirm) mode = 'call';
     else if(canNuki) mode = 'nuki';
   }
+  // 리치 중 자동 쯔모기리: 쯔모해 온 패(패산·영상패)는 잡을 수 없다 (북 빼기를 묻는 경우만 예외)
+  if(ht && g && g.players[0] && g.players[0].riichi && mode !== 'nuki' && mode !== 'tile+nuki' && ((g.drawn && g.drawn.seat === 0 && g.drawn.id === id) || UI.pendingDraw)) return;
   if(!mode && ht && !UI.dealing && !UI.dealWait) mode = 'play';   // 패놀음: 내 차례가 아니어도 손패를 잡고 놀 수 있다(놓으면 제자리로)
   if(!mode) return;
   e.preventDefault();

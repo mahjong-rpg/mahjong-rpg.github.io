@@ -4303,7 +4303,8 @@ function chipsOfWin(w, res){
     if(nb) parts.push(`청도라 ${nb}`); if(ng) parts.push(`금도라 ${ng * 2}`);
     aka = nb + ng * 2;   // 아래 합계에 그대로 더한다
   }
-  else aka = 0;   // 4인: 적도라는 판만(축의 없음) if(ura) parts.push(`뒷도라 ${ura}`); if(ipp) parts.push('일발 1');
+  else aka = 0;   // 4인: 적도라는 판만(축의 없음)
+  if(ura) parts.push(`뒷도라 ${ura}`); if(ipp) parts.push('일발 1');
   let n = aka + ura + ipp;
   const r = w.res;
   if(r && r.yakuman){ const ym = 5 * r.yakuman; n += ym; parts.push(`역만 ${ym}`); }

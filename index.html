@@ -443,6 +443,8 @@ h1,h2,h3{margin:0;text-wrap:balance}
 /* 모달 */
 .melds{display:flex;gap:8px;flex-wrap:wrap}
 .meld{display:flex;gap:1px}
+.modal.peek{opacity:0;transition:opacity .12s}   /* 결과창 밖을 꾹: 끝난 판을 본다 */
+.endpeek{font-size:12px;margin:0;text-align:center}
 .modal{position:fixed;inset:0;z-index:100;background:rgba(5,15,11,.72);display:flex;align-items:center;justify-content:center;
   padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .sheet{background:var(--felt-2);border:1px solid var(--felt-line);border-radius:14px;padding:16px;max-width:560px;width:100%;max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:12px}
@@ -515,6 +517,8 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .apptools .btn.spk.spkon{color:inherit}
 .apptabs .btn.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass)}
 #chipfix{position:fixed;top:calc(8px + env(safe-area-inset-top, 0px));left:calc(8px + env(safe-area-inset-left, 0px));z-index:60;height:28px;box-sizing:border-box;padding:0 12px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.btn:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(.6)}
+.dropcost{display:inline-flex;align-items:center;gap:3px;margin-left:5px;color:#ff4a3a;font-weight:900;text-shadow:0 0 1px rgba(0,0,0,.5)}.chipi{width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff6c8,#e6b422 55%,#a87a10);box-shadow:0 0 0 1.5px rgba(0,0,0,.25) inset;display:inline-block}
 .chipcount{display:inline-flex;align-items:center;gap:6px;font-weight:800;color:#ffe9a8;background:rgba(0,0,0,.28);border-radius:99px;padding:4px 12px;font-size:14px}
 .chipcount i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff6c8,#e6b422 55%,#a87a10);box-shadow:0 0 0 2px rgba(0,0,0,.25) inset;display:inline-block}
 /* ---------- RPG ---------- */
@@ -524,7 +528,6 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .scene > :not(svg){z-index:2}
 /* 장면 속 문구(경험치·레벨업)도 브라운관 필터를 받는다: 주사선 아래에 깔고 같은 번짐·RGB 어긋남 (장소 이름은 선명하게) */
 .rpg .scene > .floatexp,.rpg .scene > .lvup{z-index:0;filter:url(#crt) contrast(1.1) saturate(1.15)}
-.rpg .welcome{filter:url(#crt)}
 .rpg .scene::before,.rpg .scene::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;border-radius:inherit}
 .rpg .scene::before{box-shadow:inset 0 0 30px 6px rgba(0,0,0,.55),inset 0 0 2px 1px rgba(255,255,255,.08);background:radial-gradient(ellipse 60% 40% at 28% 16%,rgba(255,255,255,.10),transparent 70%),repeating-linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,.13) 2px,rgba(0,0,0,0) 4px),radial-gradient(ellipse 120% 95% at 50% 45%,transparent 55%,rgba(0,0,0,.42) 100%),linear-gradient(180deg,rgba(255,236,190,.10) 0%,transparent 35%,transparent 70%,rgba(0,0,0,.22) 100%)}
 .rpg .scene::after{opacity:.2;mix-blend-mode:overlay;background-size:180px 180px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='.33 .33 .33 0 0 .33 .33 .33 0 0 .33 .33 .33 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -723,7 +726,8 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 @keyframes aflipm{from{opacity:0;transform:rotateY(90deg)}to{opacity:.55;transform:none}}
 .rpgtoast{position:fixed;left:50%;bottom:12%;transform:translateX(-50%);background:rgba(20,24,26,.92);color:#fff;border:1px solid rgba(255,255,255,.12);border-radius:99px;padding:9px 18px;font-weight:700;font-size:14px;z-index:90;animation:rtoast 1.6s ease forwards;pointer-events:none}
 @keyframes rtoast{0%{opacity:0;transform:translate(-50%,8px)}12%{opacity:1;transform:translate(-50%,0)}80%{opacity:1}100%{opacity:0}}
-.rpg .welcome{position:absolute;left:50%;top:44px;transform:translateX(-50%);z-index:5;width:max-content;max-width:90%;box-shadow:0 4px 14px rgba(0,0,0,.45);background:#1d3a52;color:#dcefff;border-radius:10px;padding:8px 12px;font-size:13px;text-align:center;animation:wcout .5s ease 4s forwards;pointer-events:none}   /* 화면 위에 떠 있다 사라진다(배치 높이를 바꾸지 않게) */
+.rpg .welcome{position:absolute;left:50%;top:44px;transform:translateX(-50%);z-index:5;width:max-content;max-width:90%;box-shadow:0 4px 14px rgba(0,0,0,.45);background:#1d3a52;color:#dcefff;border-radius:10px;padding:8px 12px;font-size:13px;text-align:center;pointer-events:auto}   /* 화면 위에 떠 있다가 '확인'을 눌러야 사라진다(배치 높이를 바꾸지 않게, 브라운관 필터 없이) */
+.rpg .welcome .btn{margin-left:10px;padding:2px 12px;font-size:12px;vertical-align:middle}
 @keyframes wcout{to{opacity:0}}
 .rpg .hero .arm{transform-box:view-box;animation:swing 1.15s cubic-bezier(.5,0,.7,1) infinite}
 @keyframes swing{0%{transform:rotate(140deg)}38%{transform:rotate(150deg)}55%{transform:rotate(300deg)}64%{transform:rotate(290deg)}100%{transform:rotate(140deg)}}
@@ -1258,6 +1262,7 @@ class Game {
     this.opts = Object.assign({ length: 'east', aka: true, humanSeat: 0 }, opts || {});
     this.controllers = this.opts.controllers;
     this.rand = this.opts.rand || Math.random;
+    this.seed = this.opts.state && this.opts.state.seed != null ? this.opts.state.seed >>> 0 : (Math.random() * 4294967296) >>> 0;   // 국마다 배패·주사위를 이 씨앗으로 정한다(껐다 켜도 같은 배패)
     this.humanSeat = this.opts.humanSeat;
     const st = this.opts.state;
     this.N = this.opts.players === 3 ? 3 : 4;                     // 3인 마작이면 3
@@ -1310,7 +1315,7 @@ class Game {
   get liveTotal() { return (this.sanma ? 108 : 136) - this.deadSize; }
   doraKinds() { return this.doraInd.map(doraOf); }
   saveState() {
-    return { players: this.N, scores: this.scores.slice(), kyoku: this.kyoku, honba: this.honba, kyotaku: this.kyotaku, decisions: this.decisions.slice(), results: this.results.slice(), oya0: this.oya0, seatDraw: this.seatDraw };
+    return { players: this.N, scores: this.scores.slice(), kyoku: this.kyoku, honba: this.honba, kyotaku: this.kyotaku, decisions: this.decisions.slice(), results: this.results.slice(), oya0: this.oya0, seatDraw: this.seatDraw, seed: this.seed };
   }
   visibleCounts(s) {
     const v = new Array(34).fill(0);
@@ -1368,15 +1373,34 @@ class Game {
   }
   flushPendingDora() { while (this.pendingDora > 0) { this.pendingDora--; this.revealDora(); } }
 
+  // 국 도중 이어하기: 차례마다(뽑기 전·뽑은 뒤) 판 전체를 적어 둔다. 나갔다 들어오면 그 순간부터 그대로 이어진다
+  turnSnap(c) {
+    return JSON.parse(JSON.stringify({ ri: this.results.length, s: c.s, draw: c.draw, drawn: c.drawn, rinshan: c.rinshan,
+      wall: this.wall, dead: this.dead, rinshanIdx: this.rinshanIdx, doraIndIds: this.doraIndIds, doraInd: this.doraInd, uraInd: this.uraInd,
+      log: this.log, kanCount: this.kanCount, kanBy: this.kanBy, pendingDora: this.pendingDora, anyCall: this.anyCall, pao: this.pao,
+      players: this.players, diceVals: this.diceVals, dice: this.dice, scores: this.scores, kyotaku: this.kyotaku, decisions: this.decisions }));
+  }
+  snap(s, draw, drawn, rinshan) { this._snapCtx = { s, draw, drawn, rinshan }; this.resnap(); }
+  resnap() { if (this._snapCtx && this.opts.onSnap) this.opts.onSnap(this.turnSnap(this._snapCtx)); }
   async playKyoku() {
+    const R = this.opts.resume && this.opts.resume.ri === this.results.length ? this.opts.resume : null;
+    this.opts.resume = null; this.resumed = !!R; this._snapCtx = null;
+    if (R) {
+      for (const k of ['wall', 'dead', 'rinshanIdx', 'doraIndIds', 'doraInd', 'uraInd', 'log', 'kanCount', 'kanBy', 'pendingDora', 'anyCall', 'pao', 'players', 'diceVals', 'dice', 'scores', 'kyotaku', 'decisions']) this[k] = R[k];
+      this.turn = R.s;
+      this.drawn = R.drawn != null ? { seat: R.s, id: R.drawn } : null;
+    } else {
+    // 이 국의 패 섞기·주사위: 게임 씨앗 + 몇 번째 국인지로 정해진다(이어하기로 다시 들어와도 같은 배패)
+    let rs = (this.seed ^ Math.imul(this.results.length + 1, 0x9E3779B1)) >>> 0;
+    const krand = this.opts.rand || (() => { rs = (rs + 0x6D2B79F5) >>> 0; let t = rs; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; });
     const wall = [];
     for (let i = 0; i < 136; i++) { const k = i >> 2; if (this.sanma && k >= 1 && k <= 7) continue; wall.push(i); }
     for (let i = wall.length - 1; i > 0; i--) {
-      const j = Math.floor(this.rand() * (i + 1));
+      const j = Math.floor(krand() * (i + 1));
       [wall[i], wall[j]] = [wall[j], wall[i]];
     }
     // 친이 주사위 두 개를 굴려 합을 친부터 반시계로 센 사람의 패산을 오른쪽에서 합만큼 세어 가른다
-    this.diceVals = [1 + Math.floor(this.rand() * 6), 1 + Math.floor(this.rand() * 6)];
+    this.diceVals = [1 + Math.floor(krand() * 6), 1 + Math.floor(krand() * 6)];
     this.dice = this.diceVals[0] + this.diceVals[1];
     this.dead = wall.splice(0, this.deadSize);   // 4인: 0~3 영상패, 4/6/8/10/12 도라 표시패, 5/7/…뒷도라 · 3인: 0~7 영상패, 8 도라 표시패, 9 뒷도라 (깡도라는 산패에서 넘겨받아 뒤에 붙는다)
     this.rinshanIdx = 0;
@@ -1396,15 +1420,22 @@ class Game {
     for (const p of this.players) this.updateWaits(p);
     this.turn = this.dealer;
     this.drawn = null;
+    }
     this.emit('kyokuStart', {});
     if (this.opts.onKyokuStart) await this.opts.onKyokuStart(this);
-    let s = this.dealer;
-    let draw = 'normal';
+    let s = R ? R.s : this.dealer;
+    let draw = R ? R.draw : 'normal';
+    let resumeDrawn = R && R.drawn != null ? R : null;
     while (true) {
       this.turn = s;
       const p = this.players[s], ctrl = this.controllers[s];
       let drawn = null, rinshan = false;
-      if (draw) {
+      if (resumeDrawn) {   // 이어하기: 뽑은 패를 손에 든 채로 멈췄던 차례
+        drawn = resumeDrawn.drawn; rinshan = !!resumeDrawn.rinshan; resumeDrawn = null;
+        this.drawn = { seat: s, id: drawn };
+        this._snapCtx = { s, draw: null, drawn, rinshan };
+      } else if (draw) {
+        this.snap(s, draw, null, false);
         if (this.opts.beforeDraw && (s !== this.humanSeat || p.riichi) && this.log.length) await this.opts.beforeDraw(s);   // 앞 사람이 버린 뒤 잠깐 템포를 둔다
         if (draw === 'normal') {
           if (this.wall.length === 0) return this.ryuukyoku();
@@ -1422,7 +1453,8 @@ class Game {
         p.tempFuriten = false;
         this.drawn = { seat: s, id: drawn };
         this.emit('draw', { seat: s, id: drawn, rinshan });
-      } else this.drawn = null;
+        this.snap(s, null, drawn, rinshan);
+      } else { this.drawn = null; this.snap(s, null, null, false); }
       draw = null;
 
       const tsumoRes = drawn != null ? this.checkTsumo(s, drawn, rinshan) : null;
@@ -2168,11 +2200,13 @@ else root.MJ = MJ;
     out += `<symbol id="f4r" viewBox="0 0 60 80">${man(4, true)}</symbol>`;
     out += `<symbol id="f13r" viewBox="0 0 60 80">${pins(4, true)}</symbol>`;
     out += `<symbol id="f22r" viewBox="0 0 60 80">${sous(4, true)}</symbol>`;
-    out += `<symbol id="f31s" viewBox="0 0 60 80"><circle cx="30" cy="40" r="9.5" fill="${RED}"/><circle cx="30" cy="40" r="9.5" fill="none" stroke="#7a0a1c" stroke-width="1" opacity=".5"/><ellipse cx="27" cy="36.5" rx="3" ry="2" fill="#fff" opacity=".35"/></symbol>`;   // 시로폿치
+    // 3인 白: 파란 테두리(틀 白) 안에 시로폿치 · R · P · G — 테두리로 한눈에 白임을 알 수 있게
+    const FR = `<rect x="8.5" y="9" width="43" height="62" rx="4.5" fill="none" stroke="#2f6fb3" stroke-width="3.2"/><rect x="13" y="13.5" width="34" height="53" rx="2.2" fill="none" stroke="#2f6fb3" stroke-width="1.1"/>`;
+    out += `<symbol id="f31s" viewBox="0 0 60 80">${FR}<circle cx="30" cy="40" r="8.5" fill="${RED}"/><circle cx="30" cy="40" r="8.5" fill="none" stroke="#7a0a1c" stroke-width="1" opacity=".5"/><ellipse cx="27.3" cy="36.8" rx="2.7" ry="1.8" fill="#fff" opacity=".35"/></symbol>`;   // 시로폿치
     // 3인 白: 시로폿치가 아닌 세 장에 R·P·G 문양 (위아래가 있는 패)
     // 패에 새긴 각인: 아래쪽 밝은 테(빛이 홈 아래 가장자리에 닿음) + 검은 글자 + 위쪽 그늘
-    ['R', 'P', 'G'].forEach(ch => { const T = (dx, dy, fill, extra) => `<text x="${30 + dx}" y="${53.5 + dy}" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-weight="900" font-size="42" ${extra || ''} fill="${fill}">${ch}</text>`;
-      out += `<symbol id="f31${ch}" viewBox="0 0 60 80">${T(.9, 1.3, 'rgba(255,255,255,.95)', 'stroke="rgba(255,255,255,.95)" stroke-width="2.6" stroke-linejoin="round"')}${T(0, 0, '#4a4a52', 'stroke="#4a4a52" stroke-width="2.6" stroke-linejoin="round"')}${T(0, .5, '#000')}</symbol>`; });
+    ['R', 'P', 'G'].forEach(ch => { const T = (dx, dy, fill, extra) => `<text x="${30 + dx}" y="${51.5 + dy}" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-weight="900" font-size="33" ${extra || ''} fill="${fill}">${ch}</text>`;
+      out += `<symbol id="f31${ch}" viewBox="0 0 60 80">${FR}${T(.9, 1.3, 'rgba(255,255,255,.95)', 'stroke="rgba(255,255,255,.95)" stroke-width="2" stroke-linejoin="round"')}${T(0, 0, '#4a4a52', 'stroke="#4a4a52" stroke-width="2" stroke-linejoin="round"')}${T(0, .5, '#000')}</symbol>`; });
     return `<svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false"><defs>${out}</defs></svg>`;
   }
   root.TileFaces = { symbols };
@@ -2273,7 +2307,7 @@ function avgRate(list){ const n = list.reduce((a,x)=>a+x.decisions,0), m = list.
 // ---------- 화면 전환 ----------
 let UI = { recP:4, callouts:{}, calloutAt:{}, dealing:false, aka:true, screen:'home', game:null, token:0, pending:null, sel:null, riichiMode:false, usedHint:false, mode:'east', last:null, reviewOf:null, reviewAll:false };
 try { const r0 = records(); if (r0.length) { UI.last = r0[r0.length-1].id; if (isP3(r0[r0.length-1])) UI.recP = 3; } } catch(e) {}
-function show(screen){ if(screen !== 'game') document.documentElement.classList.remove('setb'); UI.screen = screen; $modal.hidden = true; render(); window.scrollTo(0,0); }
+function show(screen){ if(screen !== 'game') document.documentElement.classList.remove('setb'); const prevScr = UI.screen; UI.screen = screen; try{ if(prevScr === 'rpg' && screen !== 'rpg') awaySnapTake(); if(screen === 'rpg' && prevScr !== 'rpg'){ rpgAdvance(false); awaySnapShow(); } }catch(e){}   /* RPG 화면을 떠난 동안 번 경험치 안내 */ $modal.hidden = true; render(); window.scrollTo(0,0); }
 let rq = false;
 function render(){ if(rq) return; rq = true; requestAnimationFrame(()=>{ rq = false; draw(); }); }
 // 다시 그릴 때 같은 패(data-fk)는 이전 자리에서 새 자리로 미끄러진다: 손패→강, 강→울은 패, 손패 정렬, CPU 손패 빈칸 메우기
@@ -2372,10 +2406,10 @@ function homeHTML(){
     <div class="tiles" title="누적 축의 ${rpgEarnedAll().toLocaleString()}개">${chipTilesHTML(rpgEarnedAll())}</div>
     <h1 data-act="secret" style="cursor:default;user-select:none">마작 RPG</h1>
   </header>
-  ${sv ? `<section class="card"><h3>이어하기</h3><p class="muted">${modeName(sv.mode)} · ${esc(sv.label)} 시작부터 · 내 점수 <span class="num">${sv.state.scores[0]}</span></p>
-    <div class="row"><button class="btn primary" data-act="resume">이어서 하기</button><button class="btn small" data-act="dropSave">버리기</button></div></section>` : ''}
+  ${sv ? `<section class="card"><h3>이어하기</h3><p class="muted">${modeName(sv.mode)} · ${esc(sv.label)} ${sv.mid ? '도중(나간 순간)부터' : '시작부터'} · 내 점수 <span class="num">${sv.state.scores[0]}</span></p>
+    <div class="row"><button class="btn primary" data-act="resume">이어서 하기</button><button class="btn small" data-act="dropSave" ${RPG.st.chips < 1 ? 'disabled title="축의칩이 없어서 게임 종료할 수 없어요"' : 'title="게임 종료하면 축의칩 1개를 냅니다"'}>게임 종료 <span class="dropcost"><i class="chipi"></i>1</span></button></div>${RPG.st.chips < 1 ? '<p class="muted" style="margin:6px 0 0;font-size:12px">축의칩이 없어서 게임 종료할 수 없어요. 이어서 끝까지 두세요</p>' : ''}</section>` : ''}
   <nav class="ptabs" role="tablist">${[4,3].map(n => `<button role="tab" aria-selected="${UI.recP===n}" class="${UI.recP===n?'on':''}" data-act="recP" data-p="${n}">${n}인 마작</button>`).join('')}</nav>
-  <div class="pstart"><button class="btn" data-act="start" data-mode="south${K}">반장전</button><button class="btn" data-act="start" data-mode="east${K}">동풍전</button></div>
+  <div class="pstart"><button class="btn" data-act="start" data-mode="south${K}" ${sv ? 'disabled' : ''}>반장전</button><button class="btn" data-act="start" data-mode="east${K}" ${sv ? 'disabled' : ''}>동풍전</button></div>${sv ? '<p class="muted" style="margin:4px 0 0;font-size:12px;text-align:center">이어하기 중인 대국을 끝내거나 게임 종료해야 새 대국을 시작할 수 있어요</p>' : ''}
 
   <section class="card">
     <h3>내 기록</h3>
@@ -2828,7 +2862,20 @@ function mjSkillRoll(k){   // 켜져 있지 않으면 null, 켜져 있으면 성
   const p = mjSkillPct(k);
   if(!p) return null;
   UI.usedSkill = true;
-  return Math.random() * 100 < p;
+  const ok = skillDice(k) * 100 < p;
+  setTimeout(kskSave, 0);   // 판정 결과(바꿔치기 발동 등)가 반영된 뒤 적어 둔다
+  return ok;
+}
+// 스킬 판정 주사위: 게임 씨앗 · 몇 번째 국 · 스킬 · 그 국에서 몇 번째 시도로 정해진다
+// (이어하기로 같은 국을 다시 해도 같은 순서로 같은 결과 → 성공할 때까지 다시 하기 방지)
+function skillDice(k){
+  const g = UI.game;
+  if(!g || g.seed == null) return Math.random();
+  const c = UI.skDice || (UI.skDice = {}); const n = c[k] = (c[k] || 0) + 1;
+  let h = (g.seed ^ Math.imul(g.results.length + 1, 0x85EBCA6B)) >>> 0;
+  for(const ch of k + ':' + n){ h = Math.imul(h ^ ch.charCodeAt(0), 0x9E3779B1) >>> 0; h ^= h >>> 15; }
+  h = Math.imul(h ^ (h >>> 13), 0xC2B2AE35) >>> 0; h ^= h >>> 16;
+  return (h >>> 0) / 4294967296;
 }
 const mjSkillColor = k => { const t = TIERS[(RPG.st.sk[k].gear || 1) - 1]; return t.gl || t.c; };
 const turnKey = () => UI.game ? `${UI.kyokuSerial || 0}-${UI.game.players[0].discards.length}` : '';
@@ -2909,6 +2956,7 @@ function doPrune(id){
   ctx.rec = advise(g, 0, ctx.forbidden);
   UI.prune.left--;
   if(UI.prune.left <= 0){ UI.prune = null; UI.pruneMode = false; }
+  g.resnap(); kskSave();   // 바꾼 손패·패산을 그대로 이어하기에
   UI.sel = null; UI.hoverDiscard = null;
   UI.swapIn = { key: turnKey(), ids: fresh.concat([t]) };
   (UI.swapAt = UI.swapAt || {})[t] = Date.now(); setTimeout(render, SWFLIP_MS + 60);   // 바꿔 들어온 패: 뒷면으로 들어와 세로로 휘리릭 돌며 앞면이 된다
@@ -2939,7 +2987,25 @@ function uraTry(i){
   UI.uraTried.add(i);
   if(mjSkillRoll('mine')){ UI.uraSeen.add(i); UI.uraAt[i] = Date.now(); SFX.skOk(); }
   else { uraSmoke(i); SFX.skFail(); }
-  render();
+  kskSave(); render();
+}
+// 이 국에서 쓴 스킬(바꿔치기 남은 장수·판정 순번·광맥 탐지)을 이어하기에 바로 적어 둔다
+// → 나갔다 들어와 같은 국을 다시 해도 이미 쓴 만큼은 돌아오지 않는다
+function kskSave(){
+  const g = UI.game; if(!g || UI.drill || UI.ymTest != null) return;
+  const sv = store.get(KEY.save, null); if(!sv) return;
+  uraState();
+  sv.ksk = { ri: g.results.length, pruneTried: UI.pruneTried === UI.kyokuSerial, pruneLeft: UI.prune && UI.prune.serial === UI.kyokuSerial ? UI.prune.left : 0,
+    dice: Object.assign({}, UI.skDice || {}), uraTried: [...UI.uraTried], uraSeen: [...UI.uraSeen] };
+  store.set(KEY.save, sv);
+}
+function kskRestore(g){
+  const k = UI.kskLoad; if(!k || k.ri !== g.results.length) return;
+  UI.kskLoad = null;
+  UI.skDice = Object.assign({}, k.dice || {});
+  if(k.pruneTried) UI.pruneTried = UI.kyokuSerial;
+  if(k.pruneLeft > 0) UI.prune = { serial: UI.kyokuSerial, left: k.pruneLeft };
+  uraState(); (k.uraTried || []).forEach(i => UI.uraTried.add(i)); (k.uraSeen || []).forEach(i => { UI.uraSeen.add(i); UI.uraAt[i] = 0; });
 }
 function skillBadges(){
   return SK_KEYS.map(k => { const p = mjSkillPct(k); return p ? `<span class="skb" style="--gc:${mjSkillColor(k)}" title="${MJSK[k].n} ${p}%">${MJSK[k].icon}<small>${p}%</small></span>` : ''; }).join('');
@@ -3042,6 +3108,7 @@ function startGame(mode, saved, practice, drill, ym){
   setNP(P3 ? 3 : 4);
   UI.usedHint = saved ? !!saved.usedHint : false;
   UI.usedSkill = saved ? !!saved.usedSkill : false;
+  UI.kskLoad = saved && saved.ksk ? saved.ksk : null;   // 이 국에서 이미 쓴 스킬
   UI.pendingChips = saved ? (+saved.pendingChips || 0) : 0;   // 이어하기면 그 게임에서 모아 둔 축의도 이어 간다
   UI.startedAt = saved ? saved.startedAt : Date.now();
   UI.aka = saved ? saved.aka : settings.aka;
@@ -3061,14 +3128,19 @@ function startGame(mode, saved, practice, drill, ym){
     return { kariton, d1, kario, d2 };
   };
   const dstate = D ? { scores: seatsBy(N0).map(() => P3 ? 35000 : 25000), kyoku: 0, honba: 0, kyotaku: 0, decisions: [], results: [], oya0: D.dealer === 'kami' ? N0 - 1 : 0, seatDraw: D.full ? forcedSeatDraw(N0) : null } : null;
-  const g = new Game({ controllers: ctrls, players: P3 ? 3 : 4, length: UI.mode.replace('3',''), aka:UI.aka, state: saved ? saved.state : dstate, rigTenpai: !!window.__rig, beforeDraw: () => sleep(settings.speed === 'fast' ? 250 : 650),rig: D ? (gg => D.rig(gg)) : null, 
+  const g = new Game({ controllers: ctrls, players: P3 ? 3 : 4, length: UI.mode.replace('3',''), aka:UI.aka, state: saved ? saved.state : dstate, resume: saved && saved.mid ? saved.mid : null, onSnap: snap => midSave(snap), rigTenpai: !!window.__rig, beforeDraw: () => sleep(settings.speed === 'fast' ? 250 : 650),rig: D ? (gg => D.rig(gg)) : null, 
     onKyokuStart: async (game) => {
       const tk0 = UI.token, sleepT = async ms => { await sleep(ms); if(tk0 !== UI.token) await HALT(); };   // 나간 게임의 배패 연출은 멈춘다
-      UI.frozen = null; UI.cpuOut = {}; UI.handSet = game.results.length % 2; document.documentElement.classList.toggle('setb', UI.handSet === 1);
+      UI.frozen = null; UI.endRes = null; UI.peekEnd = false; UI.cpuOut = {}; UI.handSet = game.results.length % 2; document.documentElement.classList.toggle('setb', UI.handSet === 1);
       UI.callouts = {}; UI.carryKyotaku = game.kyotaku;
-      UI.kyokuSerial = (UI.kyokuSerial || 0) + 1; UI.kyokuReady = true; UI.order = null; UI.riichiCalled = false; UI.riichiDiscard = null; UI.riichiClacked = false; UI.autoWin = false; UI.wasTenpai = false;   /* 자동 화료는 국마다 꺼진 채로 시작 */ UI.doraAt = {}; UI.sense = null; UI.swapIn = null; UI.peek = null; UI.prune = null; uraState();
+      UI.kyokuSerial = (UI.kyokuSerial || 0) + 1; UI.skDice = {}; UI.kyokuReady = true; UI.order = null; UI.riichiCalled = false; UI.riichiDiscard = null; UI.riichiClacked = false; UI.autoWin = false; UI.wasTenpai = false;   /* 자동 화료는 국마다 꺼진 채로 시작 */ UI.doraAt = {}; UI.sense = null; UI.swapIn = null; UI.peek = null; UI.prune = null; uraState(); kskRestore(game);
       UI.inv = new Set();   // 처음 배패된 손패는 상하가 정리되지 않은 채로 온다(끌면서 우클릭해 180도 돌려 다시 손패에 놓아 정리)
       if(!UI.drill && !settings.skipDeal) game.players[0].hand.forEach(id => { if(asymId(id) && Math.random() < .5) UI.inv.add(id); });
+      if(game.resumed){   // 국 도중 이어하기: 연출 없이 멈췄던 그 순간의 판으로
+        UI.carryKyotaku = game.kyotaku - game.players.filter(p => p.riichi).length;
+        UI.oyaShown = true; UI.seating = false; UI.windPick = null; UI.diceShow = null; UI.dealCount = null;
+        UI.wallSplit = true; UI.dealing = false; UI.dealerFirst = false; UI.cpuFirst = null; render(); return;
+      }
       if((settings.skipDeal || UI.drill || UI.ymTest != null) && !(D && D.full)){   // 배패 스킵(연습 모드도 바로 시작): 자리 정하기·주사위·배패 연출 없이 바로 시작
         UI.oyaShown = true; UI.seating = false; UI.windPick = null; UI.diceShow = null; UI.dealCount = null;
         UI.wallSplit = true; UI.dealing = false; UI.dealerFirst = game.dealer === 0; UI.cpuFirst = game.dealer !== 0 ? game.dealer : null; render(); return;
@@ -3147,6 +3219,8 @@ function startGame(mode, saved, practice, drill, ym){
       UI.dealCount = null; UI.dealing = false; UI.dealerFirst = game.dealer === 0; UI.cpuFirst = game.dealer !== 0 ? game.dealer : null; render();   // 내가 친이면 14번째 패는 배패로 이미 손에 있다
     },
     onKyokuEnd: async (res, game) => {
+      // 국이 끝나는 즉시 이어하기를 다음 국으로 넘긴다(결과창에서 나갔다 들어와 그 국을 다시 하는 것 방지). 대국이 끝났으면 이어하기는 없앤다
+      if(!UI.drill && UI.ymTest == null){ if(res.gameEnds) store.del(KEY.save); else saveProgress(game); }
       if(UI.drill){   // 연습모드: 결과창은 띄우지 않는다. 연습이 끝나기 전에 국이 끝나면 같은 연습을 다시 짠다
         if(!UI.drillDone){ const key = UI.drill, tk = UI.token; setTimeout(() => { if(tk === UI.token) startGame(DRILLS[key].mode, null, true, key); }, 300); }
         return new Promise(() => {});
@@ -3154,6 +3228,7 @@ function startGame(mode, saved, practice, drill, ym){
       UI.frozen = res.label; if(res.type === 'win'){ SFX.win(); res.winners.forEach(w => callout(w, res.tsumo ? '쯔모' : '론')); if(UI.order && res.winners.includes(0)){ await sleep(260); UI.order = null; render(); await sleep(640); } else await sleep(900);   /* 내가 화료: 론·쯔모 알림 뒤 손패가 삭 정리된다 */ await aliceShow(res, game); } else if(res.type === 'abort'){ if(res.who != null) callout(res.who, '구종구패'); await sleep(700); } else if(res.type === 'draw'){ await sleep(1400); }   /* 마지막 패를 버리고 강에 놓이는 걸 본 뒤 유국 결과 */ if(UI.ymTest != null){ await kyokuEnd(res, game); UI.token++; UI.ymTest = null; show('home'); return new Promise(() => {}); } return kyokuEnd(res, game); } });
   UI.game = g; UI.pending = null; UI.sel = null; UI.riichiMode = false; UI.riichiDiscard = null; UI.riichiClacked = false; UI.riichiCalled = false; UI.dragTile = null; UI.hoverDiscard = null;   /* 리치 선언 도중 나간 게임의 상태를 들고 오지 않는다 */
   UI.lastDraw = {}; UI.cpuOut = {};
+  saveProgress(g);   // 시작하자마자 이어하기로 남긴다(나갔다 다시 시작해 배패를 고르는 것 방지)
   g.on((type, d) => {
     if(type === 'draw') UI.lastDraw[d.seat] = d.id;
     if(type === 'dora' && UI.kyokuReady){ const i = g.doraIndIds.length - 1; if(i > 0){ (UI.doraAt = UI.doraAt || {})[i] = Date.now(); SFX.draw(); setTimeout(render, FLICK_MS + 60); } }   // 깡도라: 튕겨 까기
@@ -3199,6 +3274,7 @@ function startGame(mode, saved, practice, drill, ym){
         UI.nukiDraw = false;
       }
     }
+    if(type === 'discard'){ UI.barSeat = d.seat; UI.barHoldUntil = Date.now() + 235; setTimeout(render, 240); }   // 차례 초록바: 버린 패가 강까지 날아가 멈출 때까지는 버린 사람에게, 멈추는 순간 다음 사람에게(꺼짐 없이 바로 옮김)
     if(type === 'discard'){ if(!(d.seat === 0 && d.riichi && UI.riichiClacked)) SFX.discard(); if(d.riichi) SFX.stick(); if(d.seat === 0) UI.riichiClacked = false; }   // 내 리치: 딱은 가로로 놓을 때 이미, 점봉 놓을 때는 스틱 소리
     if(type === 'call') SFX.call();
     if(type === 'discard' && d.riichi && !(d.seat === 0 && UI.riichiCalled)){ callout(d.seat, '리치'); SFX.call(); }   // 치·퐁과 같은 알림 소리   // 나는 가로로 놓는 순간 이미 외쳤다
@@ -3244,9 +3320,17 @@ function callout(s, text){
   const t = UI.token;
   setTimeout(() => { if(t === UI.token && UI.callouts[s] === text){ delete UI.callouts[s]; render(); } }, 1000);
 }
+// 국 도중 판 전체(차례마다)를 이어하기에 적어 둔다
+function midSave(snap){
+  if(UI.drill || UI.ymTest != null) return;
+  const sv = store.get(KEY.save, null); if(!sv) return;
+  sv.mid = snap; store.set(KEY.save, sv);
+}
 function saveProgress(g){
   if(UI.drill || UI.ymTest != null) return;   // 연습·역만 시험은 이어하기에 남기지 않는다
-  store.set(KEY.save, { mode:UI.mode, aka:UI.aka, usedHint:UI.usedHint, usedSkill:UI.usedSkill, pendingChips:UI.pendingChips || 0, practice:UI.practice, startedAt:UI.startedAt, label:g.kyokuLabel(), state:g.saveState() });
+  const old = store.get(KEY.save, null), ksk = old && old.ksk && old.ksk.ri === g.results.length ? old.ksk : undefined;   // 같은 국이면 쓴 스킬 기록은 그대로
+  const mid = old && old.mid && old.mid.ri === g.results.length ? old.mid : undefined;   // 같은 국 도중 판도 그대로
+  store.set(KEY.save, { ksk, mid, mode:UI.mode, aka:UI.aka, usedHint:UI.usedHint, usedSkill:UI.usedSkill, pendingChips:UI.pendingChips || 0, practice:UI.practice, startedAt:UI.startedAt, label:g.kyokuLabel(), state:g.saveState() });
 }
 
 // 각 자리 레이어: 아래쪽에 앉은 사람 기준으로 그린 뒤 돌린다 (나 0°, 하가 -90°, 대면 180°, 상가 90°)
@@ -3467,6 +3551,8 @@ function cpuView(g, s){
   return d != null ? rest.concat([d]) : rest;
 }
 function cpuHandHTML(g, s){
+  const ew = UI.peekEnd && UI.endRes && UI.endRes.type === 'win' ? UI.endRes.wins.find(w => w.winner === s) : null;
+  if(ew) return ew.hand.slice().sort((a, b) => a - b).map(id => tileId(id, {size:'sm'})).join('') + '<span class="hgap"></span>' + tileId(ew.winTile, {size:'sm', cls:'last'});   // 끝난 판 보기: 화료한 CPU 손패 공개
   const out = UI.cpuOut && UI.cpuOut[s];
   const view = out ? out.view : cpuView(g, s);
   return view.map(x => x === 'gap' ? '<span class="hgap"></span>' : x === 'hole' ? '<span class="back hole"></span>' : `<span class="back" data-fk="h${x}"></span>`).join('');
@@ -3541,7 +3627,7 @@ function layerHTML(g, s, walls){
   }
   return `<div class="layer ${v===1||v===3?'side':''} ${s===0?'mekika':''}" data-seat="${s}" data-rot="${ROT[v]}" style="transform:rotate(${ROT[v]}deg)">
     <div class="strip ${g.turn===s&&!UI.seating?'on':''}">${UI.seating ? '' : `<span class="w ${dealer?'dealer':''}">${HONOR_CH[g.seatWind(s)-27]}</span>`}${scoreHTML(g.scores[s])}${s !== 0 ? diffHTML(g.scores[s] - g.scores[0]) : ''}</div>
-    ${g.turn===s && !UI.frozen && !UI.seating ? '<div class="turnbar"></div>' : ''}
+    ${(UI.barHoldUntil > Date.now() ? UI.barSeat === s : g.turn === s) && !UI.frozen && !UI.seating ? '<div class="turnbar"></div>' : ''}
     ${p.riichi?`<div class="stick">${stickSVG('b')}</div>`:(s===0 && UI.riichiMode ? '<div class="stick pendst"></div>' : '')}
     ${cornerSt ? `<div class="cornerst" title="${g.honba}본장${carry?` · 공탁 ${carry}`:''}">${Array.from({length:g.honba}, () => `<span class="vst">${stickSVGv('w')}</span>`).join('')}${Array.from({length:carry}, () => `<span class="vst">${stickSVGv('b')}</span>`).join('')}</div>` : ''}
     ${kikaSeat(g)===s ? `<div class="kikamark ${Date.now() - (UI.kikaAt || 0) < 400 ? 'kmv' : ''}" title="기가" style="animation-delay:-${Date.now() - (UI.kikaAt || 0)}ms;${cornerSt?`right:calc(var(--S)*${((g.honba + carry) * .0105).toFixed(4)})`:''}">${g.kyoku < g.N ? '東' : '南'}</div>` : ''}
@@ -3732,12 +3818,12 @@ function ymRig(g, T0){
     return Array.prototype.pop.call(this);
   };
 }
-// 운영자 모드 입구: 제목 5번 누른 뒤 비밀 문자(원문은 소스에 두지 않고 해시로만 비교)
-const SECRET_H = [8827874273247958];
-document.addEventListener('submit', e => e.preventDefault());   // 비밀 문자 입력칸: Enter는 확인 버튼(클릭)으로 처리되고, 페이지는 다시 불러오지 않는다
+// 운영자 모드 입구: 제목 5번 누른 뒤 PW(원문은 소스에 두지 않고 해시로만 비교)
+const SECRET_H = [8106163429600574];
+document.addEventListener('submit', e => e.preventDefault());   // PW 입력칸: Enter는 확인 버튼(클릭)으로 처리되고, 페이지는 다시 불러오지 않는다
 function cyrb53(str, seed = 7){ let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed; for(let i = 0, ch; i < str.length; i++){ ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); } h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507); h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909); h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507); h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909); return 4294967296 * (2097151 & h2) + (h1 >>> 0); }
 function secretGateHTML(bad){
-  return `<div class="sheet"><h2>비밀 문자</h2>
+  return `<div class="sheet"><h2>PW</h2>
     <form class="row" data-form="sgate" style="gap:6px"><input id="sgate" type="password" autocomplete="off" style="flex:1;min-width:0;padding:8px 10px;border-radius:8px;border:1px solid var(--felt-line);background:var(--panel-2);color:var(--ink);font:inherit"><button class="btn primary" data-act="sgateGo">확인</button></form>
     ${bad ? '<p style="margin:0;color:var(--alert);font-size:13px">틀렸어요</p>' : ''}
     <div class="row"><button class="btn" data-act="closeModal">닫기</button></div></div>`;
@@ -4243,7 +4329,8 @@ function kyokuEnd(res, g){
     }
     const dl = seatsBy(res.deltas.length).map(i => `<span>${SEATNAME[i]}${i===0?'':' CPU'}</span><span class="num ${res.deltas[i]>0?'pos':res.deltas[i]<0?'neg':''}">${res.deltas[i]>0?'+':''}${res.deltas[i].toLocaleString()}</span><span class="num">${res.scores[i].toLocaleString()}</span>`).join('');
     const nextBtn = `<button class="btn primary" id="next">${UI.ymTest != null ? '홈으로' : res.gameEnds?'대국 종료':'다음 국'}</button>`;
-    $modal.innerHTML = `<div class="sheet ${ym ? 'ymsheet' : ''}" role="dialog" aria-modal="true">${ym ? `<div class="ymban">${esc(ym.label)}</div>` : ''}${body}<div class="deltas">${dl}</div><div class="row">${nextBtn}</div></div>`;
+    UI.endRes = res;   // 결과창 밖을 꾹 누르는 동안 끝난 판(화료한 사람 손패는 공개)을 보여 준다
+    $modal.innerHTML = `<div class="sheet ${ym ? 'ymsheet' : ''}" role="dialog" aria-modal="true">${ym ? `<div class="ymban">${esc(ym.label)}</div>` : ''}${body}<div class="deltas">${dl}</div><div class="row">${nextBtn}</div><p class="muted endpeek">결과창 밖을 꾹 누르면 끝난 판 보기</p></div>`;
     if(ym){ SFX.fanfare(); confetti(); } else SFX.result();   // 역만이 아니면 결과창 SE
     for(let i = 0; i < fi; i++) SFX.at('flipTick', (ym ? 1.2 : 0) + FLIP0 + i * FLIPD);
     if(ym) $modal.querySelectorAll('.rflip').forEach(x => x.style.setProperty('--d0', '1.55s'));
@@ -4251,7 +4338,7 @@ function kyokuEnd(res, g){
     if(n2) n2.onclick = () => document.getElementById('next').click();
     $modal.hidden = false;
     if(!res.gameEnds) saveProgress(g);
-    document.getElementById('next').onclick = () => { if(t !== UI.token) return; $modal.hidden = true; resolve(); };
+    document.getElementById('next').onclick = () => { if(t !== UI.token) return; $modal.hidden = true; UI.endRes = null; UI.peekEnd = false; $modal.classList.remove('peek'); resolve(); };
     document.getElementById('next').focus();
   });
 }
@@ -5118,11 +5205,11 @@ function rpgHTML(){
       ${rpgRack(sel, g)}
       <div class="wrow"><span class="n">${t.n} ${S.tool}${req}</span>${btn}</div></div>`;
   }).join('');
-  const away = RPG.away; RPG.away = null;
+  const away = RPG.away;   // 확인을 누를 때까지 남는다
   const M = MJSK[sel], on = sk.skillOn !== false, ok = sk.gear >= 2, gc = tier.gl || tier.c;
   const rate = capped(sk) ? `<b>Lv ${LV_CAP(sk.gMax)} 상한</b> · 다음 장비 필요` : `${settings.admin ? '<b>운영자</b> · ' : ''}시간당 ${fmtNum(X * 1000)} · ${sk.gear >= 10 ? '만렙' : '~Lv ' + LV_CAP(sk.gear)}`;
   return `${appTabs('rpg')}<div class="rpg">
-    ${away ? `<div class="welcome">자리 비운 동안 ${esc(SKILLS[away.k].name)} +${fmtNum(away.gain)} exp${away.after > away.before ? ` · Lv ${away.before}→${away.after}` : ''}${away.cap ? ' · 상한' : ''}</div>` : ''}
+    ${away ? `<div class="welcome">자리 비운 동안 ${esc(SKILLS[away.k].name)} +${fmtNum(away.gain)} exp${away.after > away.before ? ` · Lv ${away.before}→${away.after}` : ''}${away.cap ? ' · 상한' : ''}<button class="btn small primary" data-act="awayOk">확인</button></div>` : ''}
     <div class="scene ${st.active === sel ? '' : 'idle'}">${rpgScene(sel)}
       <div class="shead"><span>${esc(stg[0])}</span></div>
       <div class="sfoot"><span></span><span class="sbtns">
@@ -5135,6 +5222,18 @@ function rpgHTML(){
   </div>`;
 }
 // 경험치 테이블: 레벨별 누적 경험치와 다음 레벨까지 필요한 양. 지금 고른 행동의 레벨을 강조한다
+// 확인을 누르기 전에 또 자리를 비웠다 오면, 같은 행동이면 합쳐서 보여 준다
+// RPG 화면을 떠나 있던 동안(다른 탭·마작 탭) 번 경험치: 떠날 때 적어 두고, RPG 화면으로 돌아오면 차이를 알려 준다
+function awaySnapTake(){ const st = RPG.st; if(!RPG.awaySnap && st.active) RPG.awaySnap = { k: st.active, exp: st.sk[st.active].exp }; }
+function awaySnapShow(){
+  if(UI.screen !== 'rpg' || document.hidden) return false;
+  const sn = RPG.awaySnap; RPG.awaySnap = null; if(!sn) return false;
+  const st = RPG.st, sk = st.sk[sn.k]; if(!sk) return false;
+  const gain = sk.exp - sn.exp; if(gain <= 0) return false;
+  RPG.away = awayMerge(RPG.away, { k: sn.k, gain, before: lvOf(sn.exp), after: lvOf(sk.exp), cap: capped(sk) });
+  return true;
+}
+function awayMerge(a, b){ if(!a || a.k !== b.k) return b; return Object.assign({}, b, { gain: a.gain + b.gain, before: a.before, cap: a.cap || b.cap }); }
 function rpgTableHTML(){
   const st = RPG.st, sel = st.sel || 'combat', sk = st.sk[sel], L = lvOf(sk.exp);
   const left = L >= 100 ? 0 : CUM[L+1] - sk.exp;
@@ -5209,12 +5308,18 @@ function rpgAct(a, b){
 (function rpgBoot(){
   chipFix();
   const r = rpgAdvance(true);
-  if(r && r.gain > 0) RPG.away = r;
+  if(r && r.gain > 0) RPG.away = awayMerge(RPG.away, r);
   rpgSave();
   setInterval(rpgTick, 50);
   requestAnimationFrame(rpgFrame);
   const flush = () => { rpgAdvance(false); rpgSave(); };
-  document.addEventListener('visibilitychange', () => { if(document.hidden) flush(); else { const r2 = rpgAdvance(true); if(r2 && r2.gain > 0){ RPG.away = r2; rpgSave(); if(UI.screen === 'rpg') render(); } } });
+  // 탭을 가린 동안에도 타이머가 틱을 조금씩 처리해 버리므로, 가릴 때의 경험치를 적어 두고 돌아왔을 때 그 차이를 알려 준다(1틱이라도)
+  document.addEventListener('visibilitychange', () => {
+    const st = RPG.st;
+    if(document.hidden){ flush(); awaySnapTake(); return; }
+    rpgAdvance(true); rpgSave();
+    if(awaySnapShow()) render();
+  });
   window.addEventListener('pagehide', flush);
 })();
 
@@ -5229,11 +5334,12 @@ document.addEventListener('click', e => {
   const a = b.dataset.act, pd = UI.pending;
   const msg = t => { const m = document.getElementById('iomsg'); if(m) m.textContent = t; };
   switch(a){
-    case 'start': store.del(KEY.save); startGame(b.dataset.mode); break;
+    case 'start': if(store.get(KEY.save, null)) return; startGame(b.dataset.mode); break;   // 이어하기가 남아 있으면 새 대국 불가(버리기 먼저)
     case 'resume': { const sv = store.get(KEY.save, null); if(sv) startGame(null, sv); break; }
-    case 'dropSave': store.del(KEY.save); render(); break;
+    case 'dropSave': if(RPG.st.chips < 1) return; RPG.st.chips -= 1; rpgSave(); chipFix(); store.del(KEY.save); render(); break;   // 버리기: 축의칩 1개
     case 'records': UI.token++; show('records'); break;
     case 'home': UI.token++; show('home'); break;
+    case 'awayOk': RPG.away = null; render(); break;   // RPG 자리 비운 동안 안내: 확인을 눌러야 닫힌다
     case 'quit':
       $modal.innerHTML = `<div class="sheet"><h2>대국을 나갈까요?</h2><p class="muted" style="margin:0">이번 국 시작 시점까지는 저장돼 있어요. 홈에서 이어서 할 수 있습니다.</p>
         <div class="row"><button class="btn warn" data-act="home">나가기</button><button class="btn" data-act="closeModal">계속 두기</button></div></div>`;
@@ -5245,19 +5351,19 @@ document.addEventListener('click', e => {
     case 'rpgTable': { $modal.innerHTML = rpgTableHTML(); $modal.hidden = false; const c = $modal.querySelector('tr.cur'); if(c) c.scrollIntoView({block:'center'}); break; }
     case 'secret': {   // 제목을 2.5초 안에 5번 누르면 숨김 메뉴
       const now = Date.now(); UI.secretTaps = (UI.secretTaps || []).filter(x => now - x < 2500); UI.secretTaps.push(now);
-      if(UI.secretTaps.length >= 5){ UI.secretTaps = []; $modal.innerHTML = secretGateHTML(); $modal.hidden = false; setTimeout(() => { const i = document.getElementById('sgate'); if(i) i.focus(); }, 30); }
+      if(UI.secretTaps.length >= 5){ UI.secretTaps = []; $modal.innerHTML = settings.pwOk ? secretMenuHTML() : secretGateHTML();   /* PW를 한 번 연 기기는 바로 들어간다 */ $modal.hidden = false; setTimeout(() => { const i = document.getElementById('sgate'); if(i) i.focus(); }, 30); }
       break; }
     case 'drillMenu': $modal.innerHTML = drillMenuHTML(); $modal.hidden = false; break;
     case 'recWipe':
       $modal.innerHTML = `<div class="sheet"><h2>기록을 모두 삭제할까요?</h2>
 <div class="row"><button class="btn warn" data-act="recWipeGo">모두 삭제</button><button class="btn" data-act="closeModal">취소</button></div></div>`;
       $modal.hidden = false; break;
-    case 'recWipeGo': store.del(KEY.rec); UI.last = null; settings = Object.assign({}, SETTINGS0, { admin: settings.admin }); store.set(KEY.set, settings); store.del(RPG_KEY); RPG.st = rpgLoad(); RPG.away = null; rpgSave(); chipFix(); $modal.hidden = true; render(); break;
+    case 'recWipeGo': store.del(KEY.rec); UI.last = null; settings = Object.assign({}, SETTINGS0, { admin: settings.admin, pwOk: settings.pwOk }); store.set(KEY.set, settings); store.del(RPG_KEY); RPG.st = rpgLoad(); RPG.away = null; rpgSave(); chipFix(); $modal.hidden = true; render(); break;
     case 'ymTest': { const i = +b.dataset.i; if(!settings.admin || !YM_TESTS[i]) break; $modal.hidden = true; startGame(YM_TESTS[i].mode || 'east', null, true, null, i); break; }
     case 'autoSort': settings.autoSort = settings.autoSort === false; store.set(KEY.set, settings); UI.order = null; render(); break;   // 켜면 바로 정렬
     case 'autoWin': UI.autoWin = !UI.autoWin; render(); if(UI.autoWin) autoWinCheck(); break;
     case 'waitToggle': UI.waitOpen = !UI.waitOpen; render(); break;
-    case 'sgateGo': { const i = document.getElementById('sgate'); if(i && SECRET_H.includes(cyrb53(i.value.trim()))){ $modal.innerHTML = secretMenuHTML(); } else { $modal.innerHTML = secretGateHTML(true); setTimeout(() => { const j = document.getElementById('sgate'); if(j) j.focus(); }, 30); } break; }
+    case 'sgateGo': { const i = document.getElementById('sgate'); if(i && SECRET_H.includes(cyrb53(i.value.trim()))){ settings.pwOk = true; store.set(KEY.set, settings); $modal.innerHTML = secretMenuHTML(); } else { $modal.innerHTML = secretGateHTML(true); setTimeout(() => { const j = document.getElementById('sgate'); if(j) j.focus(); }, 30); } break; }
     case 'adminToggle': { settings.admin = !settings.admin; store.set(KEY.set, settings); $modal.innerHTML = secretMenuHTML(); if(UI.screen === 'rpg') render(); break; }
     case 'drill': { const k = b.dataset.d; $modal.hidden = true; startGame(DRILLS[k].mode, null, true, k); break; }
     case 'tsumo': if(pd) pd.resolve({type:'tsumo'}); break;
@@ -5516,7 +5622,7 @@ document.addEventListener('pointerdown', e => {
   const sx = e.clientX, sy = e.clientY;
   // 폰 모드: 손가락에 가리지 않게 든 패를 손가락보다 왼쪽으로 패 한 칸, 위로 반 칸 띄워 들고, 놓는 자리·담그기 판정도 손가락이 아니라 그 패 위치로 한다
   let ox = 0, oy = 0;
-  if(settings.phone){ const ht0 = document.querySelector('.hand > .tile[data-tile]'); const tw = ht0 ? ht0.getBoundingClientRect().width : 40; ox = -tw; oy = -tw * 1.36 * .5; }
+  if(settings.phone){ const ht0 = document.querySelector('.hand > .tile[data-tile]'); const tw = ht0 ? ht0.getBoundingClientRect().width : 40; ox = -tw * .5; oy = -tw * 1.36 * .5; }   // 폰 모드: 손가락이 패의 오른쪽 아래 모서리를 잡은 위치
   let moved = false, yoko = false, lastFlip = 0, flips = 0, spinAng = 0;
   // 잡은 패는 원래 자리에서 사라진다(빈자리만 남김). 끄는 동안 화면을 다시 그려도 유지되도록 스타일로 숨긴다
   const hideCss = mode === 'deal' ? '.sk.dnext i.dn{visibility:hidden}' : (mode === 'draw' || mode === 'passdraw') ? '.wnext{visibility:hidden}' : `.hand > .tile[data-tile="${id}"]{visibility:hidden}`;
@@ -5683,6 +5789,14 @@ document.addEventListener('pointerdown', e => {
   };
   document.addEventListener('pointermove', move); document.addEventListener('pointerup', up); document.addEventListener('pointercancel', up);
 });
+// 결과창 밖(어두운 바탕)을 꾹 누르고 있는 동안 결과창을 걷어 끝난 판을 보여 주고, 떼면 다시 결과창
+$modal.addEventListener('pointerdown', e => {
+  if(e.target !== $modal || !UI.endRes || $modal.hidden) return;
+  e.preventDefault(); UI.peekEnd = true; $modal.classList.add('peek'); render();
+  const off = () => { document.removeEventListener('pointerup', off); document.removeEventListener('pointercancel', off); UI.peekEnd = false; $modal.classList.remove('peek'); render(); };
+  document.addEventListener('pointerup', off); document.addEventListener('pointercancel', off);
+});
+$modal.addEventListener('contextmenu', e => { if(UI.endRes) e.preventDefault(); });
 // 리치 타패 고르기 중 마우스를 올린 패 추적
 document.addEventListener('mouseover', e => {
   if(UI.screen !== 'game') return;

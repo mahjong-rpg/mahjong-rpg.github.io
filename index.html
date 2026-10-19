@@ -540,9 +540,10 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .apptabs .btn.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass)}
 #chipfix{position:fixed;top:calc(8px + env(safe-area-inset-top, 0px));left:calc(8px + env(safe-area-inset-left, 0px));z-index:60;height:28px;box-sizing:border-box;padding:0 12px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
 .btn:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(.6)}
-.dropcost{display:inline-flex;align-items:center;gap:3px;margin-left:5px;color:#ff4a3a;font-weight:900;text-shadow:0 0 1px rgba(0,0,0,.5)}.chipi{width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff6c8,#e6b422 55%,#a87a10);box-shadow:0 0 0 1.5px rgba(0,0,0,.25) inset;display:inline-block}
+.dropcost{display:inline-flex;align-items:center;gap:3px;margin-left:5px;color:#ff4a3a;font-weight:900;text-shadow:0 0 1px rgba(0,0,0,.5)}.chipi{width:12px;height:12px;border-radius:50%;background:var(--chip-icon) center/contain no-repeat;display:inline-block}
 .chipcount{display:inline-flex;align-items:center;gap:6px;font-weight:800;color:#ffe9a8;background:rgba(0,0,0,.28);border-radius:99px;padding:4px 12px;font-size:14px}
-.chipcount i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff6c8,#e6b422 55%,#a87a10);box-shadow:0 0 0 2px rgba(0,0,0,.25) inset;display:inline-block}
+.chipcount i{width:16px;height:16px;border-radius:50%;background:var(--chip-icon) center/contain no-repeat;display:inline-block}
+.table > .chipstk{position:absolute;right:calc(var(--S)*-.1);bottom:0;width:calc(var(--S)*.07);z-index:6;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}.chipstk svg{display:block;width:100%;height:auto}   /* 대국 중 모은 축의칩 탑 */
 /* ---------- RPG ---------- */
 .rpg{position:relative;width:100%;box-sizing:border-box;max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:10px;padding:0 4px 30px}
 .rpg .scene{width:80%;align-self:center;position:relative;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.45);background:#000;aspect-ratio:360/210}
@@ -688,8 +689,9 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .items .it .n i{flex:none;vertical-align:-1px;margin-right:5px}
 .rpg .items .it .n small{display:block;margin:1px 0 0 17px}
 .rpg .items .it .btn{padding:4px 8px;flex:none}
-.chipi{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;vertical-align:-1px;background:radial-gradient(circle at 35% 35%,#fff6c8,#e6b422 55%,#a87a10);box-shadow:0 0 0 1.5px rgba(0,0,0,.25) inset}
-.rpg .it.lock .chipi{filter:grayscale(.6) brightness(.8)}
+.chipi{display:inline-block;width:13px;height:13px;border-radius:50%;margin-right:4px;vertical-align:-1px;background:var(--chip-icon) center/contain no-repeat}
+.rpg .it.lock .chipi{filter:none}
+.help .chipi.hc{width:15px;height:15px;margin:0 2px 0 3px;vertical-align:-2px}   /* 잠긴 장비도 칩 아이콘은 같은 노란 칩 */
 .rpg .items .it .n small{font-weight:600;color:var(--ink-dim);font-size:11px;margin-left:4px}
 .rpg .items{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
 /* 무기 상점 진열 */
@@ -823,7 +825,14 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 const HONOR_CH = ['東', '南', '西', '北', '白', '發', '中'];
 const SUIT_KR = ['만', '통', '삭'];
 const kindOf = id => id >> 2;
-const isRedId = id => { const k = id >> 2; return k === 4 || k === 13 || k === 22; };   // 모든 5(만·통·삭)는 적도라
+// 특수 5패 색: 4인은 5만·5통·5삭에 적도라 1장씩(총 3장).
+// 3인은 5통·5삭 4장 중 — 아리스·튤립 사용 판: 적·적·청·금 / 미사용 판: 적·청·일반·일반
+//  적도라 = 1판(축의 없음) · 청도라 = 판 없음, 축의 1 · 금도라 = 판 없음, 축의 2
+let SAN_DORA = null;   // 3인 판이면 'on'(아리스·튤립) / 'off', 4인은 null — Game이 만들어질 때 정한다
+const tileColor = id => { const k = id >> 2;
+  if (SAN_DORA) { if (k !== 13 && k !== 22) return null; return (SAN_DORA === 'on' ? ['r', 'r', 'b', 'g'] : ['r', 'b', null, null])[id & 3]; }
+  return (k === 4 || k === 13 || k === 22) && (id & 3) === 0 ? 'r' : null; };   // 4인: 5만·5통·5삭 1장씩(총 3장)
+const isRedId = id => tileColor(id) === 'r';
 const SHIRO_ID = 124;   // 3인 마작 시로폿치: 白(31) 4장 중 1장 (올 마이티)
 const isHonor = k => k >= 27;
 const isYaochu = k => k >= 27 || k % 9 === 0 || k % 9 === 8;
@@ -1272,7 +1281,7 @@ function advise(g, s, forbidden) {
 }
 function pickId(hand, k, preferRed) {
   const ids = hand.filter(id => kindOf(id) === k);
-  const nonRed = ids.filter(id => !isRedId(id));
+  const nonRed = ids.filter(id => !tileColor(id));   // 적·청·금 5는 아껴 둔다
   if (preferRed) return ids.find(isRedId) ?? ids[0];
   return nonRed.length ? nonRed[0] : ids[0];
 }
@@ -1290,6 +1299,8 @@ class Game {
     this.N = this.opts.players === 3 ? 3 : 4;                     // 3인 마작이면 3
     this.sanma = this.N === 3;
     YONMAI = this.sanma;   // 3인: 욘마이즈카이 치또이츠
+    SAN_DORA = this.sanma ? ((this.opts.state && this.opts.state.sanDora) || this.opts.sanDora || 'off') : null;   // 이어하기는 시작할 때의 설정 그대로
+    this.sanDora = SAN_DORA;
     this.startPts = this.sanma ? 35000 : 25000;
     this.target = this.sanma ? 40000 : 30000;                     // 반환점(이 점수 이상이 있어야 종료)
     this.seats = [...Array(this.N).keys()];
@@ -1338,7 +1349,7 @@ class Game {
   doraKinds() { return this.doraInd.map(doraOf); }
   saveState() {
     const nx = this._next || this;   // 결과창 도중 저장이면 다음 국 기준
-    return { players: this.N, scores: this.scores.slice(), kyoku: nx.kyoku, honba: nx.honba, kyotaku: this.kyotaku, decisions: this.decisions.slice(), results: this.results.slice(), oya0: this.oya0, seatDraw: this.seatDraw, seed: this.seed };
+    return { players: this.N, scores: this.scores.slice(), kyoku: nx.kyoku, honba: nx.honba, kyotaku: this.kyotaku, decisions: this.decisions.slice(), results: this.results.slice(), oya0: this.oya0, seatDraw: this.seatDraw, seed: this.seed, sanDora: this.sanDora };
   }
   visibleCounts(s) {
     const v = new Array(34).fill(0);
@@ -2100,7 +2111,7 @@ function makeCPU(delayFn) {
   };
 }
 
-const MJ = { adviseCall, adviseSelfKan, adviseRiichi, HONOR_CH, SUIT_KR, SEAT_KR, kindOf, isRedId, isHonor, isYaochu, doraOf, kindName, countsOf, countsOfKinds, shanten, waitsOf, ukeire, evaluateWin, advise, pickId, Game, makeCPU, basePoints, ceil100, SHIRO_ID };
+const MJ = { adviseCall, adviseSelfKan, adviseRiichi, HONOR_CH, SUIT_KR, SEAT_KR, kindOf, isRedId, isHonor, isYaochu, doraOf, kindName, countsOf, countsOfKinds, shanten, waitsOf, ukeire, evaluateWin, advise, pickId, Game, makeCPU, basePoints, ceil100, SHIRO_ID, tileColor, setSanDora: v => { SAN_DORA = v; } };
 if (typeof module !== 'undefined' && module.exports) module.exports = MJ;
 else root.MJ = MJ;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -2111,6 +2122,7 @@ else root.MJ = MJ;
 (function (root) {
   'use strict';
   const RED = '#c4122f', GREEN = '#0f7a3c', BLUE = '#1b4f9c', INK = '#16161d', CREAM = '#f7f2e6', GOLD = '#d39a1c', PIN = '#1b2130';
+  const BLUE_T = '#1d5fd6', GOLD_T = '#d9a21e';   // 청도라·금도라 무늬색
   const NUM = ['一', '二', '三', '四', '五', '六', '七', '八', '九'];
   const FONT = 'font-family:var(--f-tile);font-weight:900;paint-order:stroke;stroke-linejoin:round';
   // 글씨가 얇게 보이지 않도록 같은 색 테두리를 둘러 굵게 만든다
@@ -2132,7 +2144,7 @@ else root.MJ = MJ;
   function bamboo(x, y, h, col, a, w) {
     w = w || 12;                                   // 튀어나온 마디의 폭
     const sw = w * .66, k = Math.max(3, h * .12), top = y - h / 2, bot = top + h;   // k: 마디(위·가운데·아래) 높이
-    const out = col === RED ? '#6a0815' : '#05391c';
+    const out = col === RED ? '#6a0815' : col === BLUE_T ? '#0a2a6e' : col === GOLD_T ? '#6e4a00' : '#05391c';
     // 몸통 + 위·가운데·아래 마디: 둥글게 굵게 튀어나온 덩어리
     const knob = (cy, rx, ry) => `<ellipse cx="${x}" cy="${cy}" rx="${rx}" ry="${ry}"/>`;
     const shapes =
@@ -2149,7 +2161,7 @@ else root.MJ = MJ;
     return T(30, 35, 31, red ? RED : INK, 1.6, red ? '伍' : NUM[n]) + T(30, 73, 31, RED, .8, '萬');
   }
   function pins(n, red) {
-    const c = red ? RED : PIN;
+    const c = red ? (typeof red === 'string' ? red : RED) : PIN;
     switch (n) {
       case 0: return `<circle cx="30" cy="40" r="27" fill="${c}"/>` +
         `<circle cx="30" cy="40" r="22" fill="none" stroke="${CREAM}" stroke-width="2.2"/>` +
@@ -2168,7 +2180,7 @@ else root.MJ = MJ;
     }
   }
   function sous(n, red) {
-    const g = red ? RED : GREEN;
+    const g = red ? (typeof red === 'string' ? red : RED) : GREEN;
     switch (n) {
       case 0: {   // 1삭: 위에 촘촘히 붙은 둥근 꽃송이, 아래에 날개에 빗금이 있는 새
         const D = '#123f2a', LN = '#16161d';
@@ -2199,7 +2211,7 @@ else root.MJ = MJ;
       case 1: return bamboo(30, 21, 31, g) + bamboo(30, 59, 31, g);
       case 2: return bamboo(30, 21, 31, g) + bamboo(18, 59, 31, g) + bamboo(42, 59, 31, g);
       case 3: return bamboo(18, 21, 31, g) + bamboo(42, 21, 31, g) + bamboo(18, 59, 31, g) + bamboo(42, 59, 31, g);
-      case 4: return bamboo(13, 21, 31, g) + bamboo(47, 21, 31, g) + bamboo(30, 40, 28, RED) + bamboo(13, 59, 31, g) + bamboo(47, 59, 31, g);
+      case 4: return bamboo(13, 21, 31, g) + bamboo(47, 21, 31, g) + bamboo(30, 40, 28, typeof red === 'string' ? g : RED) + bamboo(13, 59, 31, g) + bamboo(47, 59, 31, g);
       case 5: { let s = ''; for (const y of [21, 59]) for (const x of [12, 30, 48]) s += bamboo(x, y, 31, g); return s; }
       case 6: { let s = bamboo(30, 12, 20, RED); for (const y of [40, 66]) for (const x of [12, 30, 48]) s += bamboo(x, y, 23, g); return s; }
       case 7: {   // 8삭: 위는 Λ(안쪽 두 줄이 꼭대기에서 겹쳐 만남), 아래는 V(바닥에서 겹쳐 만남). 바깥 세로 줄이 맨 위에 겹친다
@@ -2229,6 +2241,9 @@ else root.MJ = MJ;
     out += `<symbol id="f4r" viewBox="0 0 60 80">${man(4, true)}</symbol>`;
     out += `<symbol id="f13r" viewBox="0 0 60 80">${pins(4, true)}</symbol>`;
     out += `<symbol id="f22r" viewBox="0 0 60 80">${sous(4, true)}</symbol>`;
+    // 3인 청도라·금도라 (5통·5삭)
+    out += `<symbol id="f13b" viewBox="0 0 60 80">${pins(4, BLUE_T)}</symbol><symbol id="f13g" viewBox="0 0 60 80">${pins(4, GOLD_T)}</symbol>`;
+    out += `<symbol id="f22b" viewBox="0 0 60 80">${sous(4, BLUE_T)}</symbol><symbol id="f22g" viewBox="0 0 60 80">${sous(4, GOLD_T)}</symbol>`;
     // 3인 白: 파란 테두리(틀 白) 안에 시로폿치 · R · P · G — 테두리로 한눈에 白임을 알 수 있게
     const FR = `<rect x="8.5" y="9" width="43" height="62" rx="4.5" fill="none" stroke="#2f6fb3" stroke-width="3.2"/><rect x="13" y="13.5" width="34" height="53" rx="2.2" fill="none" stroke="#2f6fb3" stroke-width="1.1"/>`;
     out += `<symbol id="f31s" viewBox="0 0 60 80">${FR}<circle cx="30" cy="40" r="8.5" fill="${RED}"/><circle cx="30" cy="40" r="8.5" fill="none" stroke="#7a0a1c" stroke-width="1" opacity=".5"/><ellipse cx="27.3" cy="36.8" rx="2.7" ry="1.8" fill="#fff" opacity=".35"/></symbol>`;   // 시로폿치
@@ -2279,8 +2294,8 @@ const MODE = {eff:'패효율', fold:'리치 대응 · 오리(안전패 우선)',
 
 function tile(k, o){
   o = o || {};
-  const red = o.id != null && (UI.screen === 'game' || UI.screen === 'review' ? UI.aka !== false : settings.aka) && isRedId(o.id);
-  const key = o.face || ((o.id === MJ.SHIRO_ID && NP === 3 && UI.screen === 'game') ? '31s' : (k === 31 && o.id != null && NP === 3 && UI.screen === 'game') ? '31' + RPG_CH[o.id - 125] : red ? k + 'r' : k);
+  const col5 = o.id != null && (UI.screen === 'game' || UI.screen === 'review' ? UI.aka !== false : settings.aka) ? MJ.tileColor(o.id) : null, red = col5 === 'r';
+  const key = o.face || ((o.id === MJ.SHIRO_ID && NP === 3 && UI.screen === 'game') ? '31s' : (k === 31 && o.id != null && NP === 3 && UI.screen === 'game') ? '31' + RPG_CH[o.id - 125] : col5 ? k + col5 : k);
   return `<span class="tile ${o.size||'sm'} ${o.cls||''}" data-k="${k}" ${o.attrs||''}><svg viewBox="0 0 60 80" aria-hidden="true"><use href="#f${key}"/></svg>${o.inner||''}</span>`;
 }
 const tileId = (id, o) => { o = Object.assign({id}, o||{}); if(!o.nofk) o.attrs = `data-fk="h${id}" ` + (o.attrs || ''); return tile(kindOf(id), o); };
@@ -3160,12 +3175,12 @@ function startGame(mode, saved, practice, drill, ym){
     return { kariton, d1, kario, d2 };
   };
   const dstate = D ? { scores: seatsBy(N0).map(() => P3 ? 35000 : 25000), kyoku: 0, honba: 0, kyotaku: 0, decisions: [], results: [], oya0: D.dealer === 'kami' ? N0 - 1 : 0, seatDraw: D.full ? forcedSeatDraw(N0) : null } : null;
-  const g = new Game({ controllers: ctrls, players: P3 ? 3 : 4, length: UI.mode.replace('3',''), aka:UI.aka, state: saved ? saved.state : dstate, resume: saved && saved.mid ? saved.mid : null, onSnap: snap => midSave(snap), rigTenpai: !!window.__rig, beforeDraw: () => sleep(settings.speed === 'fast' ? 250 : 650),rig: D ? (gg => D.rig(gg)) : null, 
+  const g = new Game({ sanDora: P3 ? (aliceMode() ? 'on' : 'off') : null, controllers: ctrls, players: P3 ? 3 : 4, length: UI.mode.replace('3',''), aka:UI.aka, state: saved ? saved.state : dstate, resume: saved && saved.mid ? saved.mid : null, onSnap: snap => midSave(snap), rigTenpai: !!window.__rig, beforeDraw: () => sleep(settings.speed === 'fast' ? 250 : 650),rig: D ? (gg => D.rig(gg)) : null, 
     onKyokuStart: async (game) => {
       const tk0 = UI.token, sleepT = async ms => { await sleep(ms); if(tk0 !== UI.token) await HALT(); };   // 나간 게임의 배패 연출은 멈춘다
       UI.frozen = null; UI.endRes = null; UI.winOpen = null; UI.peekEnd = false; UI.cpuOut = {}; UI.handSet = game.results.length % 2; document.documentElement.classList.toggle('setb', UI.handSet === 1);
       UI.callouts = {}; UI.carryKyotaku = game.kyotaku;
-      UI.kyokuSerial = (UI.kyokuSerial || 0) + 1; UI.skDice = {}; UI.kyokuReady = true; UI.order = null; UI.riichiCalled = false; UI.riichiDiscard = null; UI.riichiClacked = false; UI.autoWin = false; UI.wasTenpai = false;   /* 자동 화료는 국마다 꺼진 채로 시작 */ UI.doraAt = {}; UI.sense = null; UI.swapIn = null; UI.peek = null; UI.prune = null; uraState(); kskRestore(game);
+      UI.kyokuSerial = (UI.kyokuSerial || 0) + 1; UI.skDice = {}; UI.kyokuChips = UI.pendingChips || 0;   /* 축의 탑은 국이 시작할 때의 값(이번 국에 얻은 건 다음 국부터) */ UI.kyokuReady = true; UI.order = null; UI.riichiCalled = false; UI.riichiDiscard = null; UI.riichiClacked = false; UI.autoWin = false; UI.wasTenpai = false;   /* 자동 화료는 국마다 꺼진 채로 시작 */ UI.doraAt = {}; UI.sense = null; UI.swapIn = null; UI.peek = null; UI.prune = null; uraState(); kskRestore(game);
       UI.inv = new Set();   // 처음 배패된 손패는 상하가 정리되지 않은 채로 온다(끌면서 우클릭해 180도 돌려 다시 손패에 놓아 정리)
       if(!UI.drill && !settings.skipDeal) game.players[0].hand.forEach(id => { if(asymId(id) && Math.random() < .5) UI.inv.add(id); });
       if(game.resumed){   // 국 도중 이어하기: 연출 없이 멈췄던 그 순간의 판으로
@@ -4088,6 +4103,41 @@ function reorderAt(x, y, id){
 function rlockId(id){ const g = UI.game, me = g && g.players[0]; return !!(me && me.riichi && g.drawn && g.drawn.seat === 0 && g.drawn.id === id && !(UI.pending && UI.pending.kind === 'riichiNuki')); }
 // 콘솔·점봉통 점수: 국이 끝나 결과창이 떠 있는 동안은 화료 정산 전 점수 그대로(점봉도 그대로라 자연스럽게). 다음 국이 되면 반영
 function shownScores(g){ if(!UI.frozen || !UI.consoleScores || UI.consoleScores.length !== g.scores.length) { if(!UI.frozen) UI.consoleScores = g.scores.slice(); else return g.scores; } return UI.consoleScores; }
+// 축의칩: 노란 포커칩(테두리 흰 줄무늬 + 안쪽 원). 윗면 그림은 홈·RPG의 칩 아이콘과 같다
+function chipFaceSVG(id){
+  let s = `<circle cx="30" cy="30" r="29" fill="#efbd2c" stroke="#a87a12" stroke-width="1"/>`;
+  for(let k = 0; k < 8; k++) s += `<rect x="26.6" y="1.2" width="6.8" height="9" rx=".9" fill="#fbf7ea" transform="rotate(${k * 45 + 22.5} 30 30)"/>`;
+  s += `<circle cx="30" cy="30" r="19.5" fill="#f3c63a" stroke="#d29e1f" stroke-width="1.4"/>` +
+       `<circle cx="30" cy="30" r="17" fill="none" stroke="#fbf7ea" stroke-width="1.2" stroke-dasharray="2.6 2.2"/>`;
+  return s;
+}
+const CHIP_ICON = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'>${chipFaceSVG().replace(/"/g, "'")}</svg>`)}")`;
+document.documentElement.style.setProperty('--chip-icon', CHIP_ICON);
+// 대국 중 모은 축의(게임이 끝나면 지급): 작탁 오른쪽 아래 바깥에 얻은 장수만큼 한 탑으로 쌓는다(거의 위에서 내려다본 모습)
+function chipStackHTML(){
+  const total = UI.kyokuChips || 0; if(!total || UI.drill || UI.ymTest != null) return '';
+  const n = Math.min(10, total);   // 10장부터는 탑 높이를 10장으로 고정
+  const rx = 30, ry = 27, T = 2.8, W = 64, H = ry * 2 + T * n + 6, cx = W / 2;
+  let s = '';
+  for(let i = 0; i < n; i++){
+    const yb = H - 3 - ry - i * T, yt = yb - T, rot = (i * 37) % 45;
+    s += `<path d="M${cx - rx} ${yt} L${cx - rx} ${yb} A${rx} ${ry} 0 0 0 ${cx + rx} ${yb} L${cx + rx} ${yt} A${rx} ${ry} 0 0 1 ${cx - rx} ${yt}Z" fill="#d9a92c" stroke="#8a620f" stroke-width=".7"/>`;
+    // 옆면 흰 줄: 원기둥 곡면을 따라 휘어지게(위·아래 타원 위의 두 점씩을 이은 조각). 앞쪽 반만 보인다
+    const P = (ang, y) => `${(cx + rx * Math.sin(ang)).toFixed(2)} ${(y + ry * Math.cos(ang)).toFixed(2)}`;
+    for(let k = 0; k < 8; k++){
+      const c = ((k * 45 + rot) % 360) * Math.PI / 180, d = 0.105;   // 줄 폭(각도)
+      let a0 = c - d, a1 = c + d; const lim = Math.PI / 2;
+      const wrap = x => { while(x > Math.PI) x -= 2 * Math.PI; while(x < -Math.PI) x += 2 * Math.PI; return x; };
+      a0 = wrap(a0); a1 = wrap(a1); if(a1 < a0) continue;
+      a0 = Math.max(a0, -lim); a1 = Math.min(a1, lim); if(a1 - a0 < .01) continue;
+      const m = (a0 + a1) / 2;
+      s += `<path d="M${P(a0, yt + .4)} Q${P(m, yt + .4).split(' ').map((v, i) => i ? (+v + (ry * (Math.cos(m) - (Math.cos(a0) + Math.cos(a1)) / 2))).toFixed(2) : v).join(' ')} ${P(a1, yt + .4)} L${P(a1, yb - .4)} L${P(a0, yb - .4)}Z" fill="#f6f0dc"/>`;
+    }
+  }
+  const yTop = H - 3 - ry - n * T;
+  s += `<g transform="translate(${cx - rx} ${yTop - ry}) scale(1 ${(ry / rx).toFixed(3)}) translate(-1 -1) scale(${(62 / 60).toFixed(3)})">${chipFaceSVG()}</g>`;
+  return `<div class="chipstk" title="이번 대국에서 모은 축의칩 ${total}개 (대국이 끝나면 지급)"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMax meet">${s}</svg></div>`;
+}
 function tableMeld(){ return UI.claim && UI.claim.seat === 0 ? UI.claim.m : (UI.selfKan || null); }
 function tableMeldHTML(staged){
   const m = tableMeld();
@@ -4238,6 +4288,7 @@ function gameHTML(){
     </div>
     ${drillGuideHTML(g)}
     ${tableMeldHTML(staged)}
+    ${chipStackHTML()}
     <div class="tblact">
       ${(UI.wpanelHTML = '', UI._wbar = UI.dealing ? '' : waitsHTML(g), UI.wpanelHTML) ? `<div class="twpanel">${UI.wpanelHTML}</div>` : ''}
       ${cf ? confirmHTML() : ''}
@@ -4288,7 +4339,7 @@ function onTile(id){
 }
 
 // ---------- 국 결과 ----------
-// 축의칩: 내가 화료하면 적도라 + 뒷도라(리치) + 일발 1개
+// 축의칩: 내가 화료하면 청도라 1/금도라 2(3인) + 뒷도라(리치) + 일발 1개 (적도라는 판만)
 function chipsOfWin(w, res){
   const y = (w.res && w.res.yaku) || [];
   const get = nm => { const e = y.find(x => x[0] === nm); return e && typeof e[1] === 'number' ? e[1] : 0; };
@@ -4299,12 +4350,22 @@ function chipsOfWin(w, res){
     aka = ids.filter(id => isRedId(id)).length;
   }
   const parts = [];
-  if(aka) parts.push(`적도라 ${aka}`); if(ura) parts.push(`뒷도라 ${ura}`); if(ipp) parts.push('일발 1');
+  if(NP === 3){   // 3인: 적도라는 판만(축의 없음), 청도라 1장당 축의 1, 금도라 1장당 축의 2
+    aka = 0;
+    const ids = w.hand.concat([w.winTile], ...w.melds.map(m => m.ids));
+    const nb = ids.filter(id => MJ.tileColor(id) === 'b').length, ng = ids.filter(id => MJ.tileColor(id) === 'g').length;
+    if(nb) parts.push(`청도라 ${nb}`); if(ng) parts.push(`금도라 ${ng * 2}`);
+    aka = nb + ng * 2;   // 아래 합계에 그대로 더한다
+  }
+  else aka = 0;   // 4인: 적도라는 판만(축의 없음) if(ura) parts.push(`뒷도라 ${ura}`); if(ipp) parts.push('일발 1');
   let n = aka + ura + ipp;
   const r = w.res;
   if(r && r.yakuman){ const ym = 5 * r.yakuman; n += ym; parts.push(`역만 ${ym}`); }
   else if(r && r.label === '헤아림 역만'){ n += 5; parts.push('헤아림 역만 5'); }   // 13판 이상도 역만 1개로   // 역만 1개당 5장 (더블 10, 트리플 15, 복합은 개수대로)
-  if(res && !res.tsumo && res.scores && w.deltas.some((d, i) => i !== w.winner && d < 0 && res.scores[i] < 0)){ n += 1; parts.push('토비 1'); }   // 론으로 상대를 0점 미만으로
+  if(NP === 3 && res && res.scores){   // 토비상(3인): 내 화료로 0점 미만이 된 사람 1명당 1장 (론은 방총자, 쯔모면 둘 다 날리면 2장)
+    const busted = res.scores.filter((sc, i) => i !== w.winner && sc < 0 && w.deltas[i] < 0).length;
+    if(busted){ n += busted; parts.push(`토비상 ${busted}`); }
+  }
   if(w.shiro){ n += 1; parts.push('시로폿치 1'); }
   return { n, parts };
 }
@@ -4313,7 +4374,7 @@ function chipsOfWin(w, res){
 //  3인 깡도라는 패산 꽁무니 줄을 넘겨받으므로 자리는 패산 꽁무니부터 줄마다 윗패 → 패산이 다할 때까지.
 // 튤립(3인 전용, 아리스의 발전형): 리치 화료만. 뒤집은 패와 그 양옆 패까지 내 패에 있는 만큼 축의.
 //  수패는 1·9가 이어진다(1 → 9·1·2, 9 → 8·9·1). 바람패는 동남서북이 돌고(동 → 북·동·남), 삼원패는 셋 다.
-const ALICE_LV = 100, TULIP_LV = 200;   // 아리스·튤립을 쓰려면 필요한 총합 레벨
+const ALICE_LV = 80, TULIP_LV = 160;   // 아리스·튤립을 쓰려면 필요한 총합 레벨
 const aliceOpen = m => !!settings.admin || rpgTotalLv() >= (m === 'tulip' ? TULIP_LV : ALICE_LV);
 function aliceMode(){
   const T = UI.ymTest != null ? YM_TESTS[UI.ymTest] : null;
@@ -4424,7 +4485,7 @@ function kyokuEnd(res, g){
 // ---------- 게임 종료 ----------
 function gameEnd(fin, g){
   store.del(KEY.save);
-  const rec = { id: 'g' + UI.startedAt, date: UI.startedAt, mode: UI.mode, rank: fin.ranks[0], score: fin.scores[0], decisions: fin.decisions, matches: fin.matches, rate: fin.rate, hint: UI.usedHint || UI.practice, skill: !!UI.usedSkill, stats: fin.stats,
+  const rec = { id: 'g' + UI.startedAt, date: UI.startedAt, mode: UI.mode, sanDora: g.sanDora || null, rank: fin.ranks[0], score: fin.scores[0], decisions: fin.decisions, matches: fin.matches, rate: fin.rate, hint: UI.usedHint || UI.practice, skill: !!UI.usedSkill, stats: fin.stats,
     order: fin.order.map(s => [s, fin.scores[s]]) };
   let r = records().filter(x => x.id !== rec.id);
   r.push(rec);
@@ -4448,6 +4509,16 @@ function helpHTML(){
       <li><b>패 돌리기</b> 패를 <kbd>좌클릭 드래그</kbd> 중 <kbd>휠</kbd>로 세로꺾기<br><kbd>우클릭</kbd>으로 상하반전 (리치 가능한 상황에선 가로꺾기로 작동)</li>
       <li><b>리치</b> 가로꺾기로 타패 후 1000점봉 <kbd>좌클릭</kbd> or 가운데 콘솔로 <kbd>좌클릭 드래그</kbd></li>
       <li><b>폰</b> <kbd>드래그</kbd> 중 패를 좌측 or 우측 점봉에 넣으면 세로꺾기<br>가운데 점봉에 넣으면 상하반전 (리치 가능한 상황에선 가로꺾기로 작동)</li>
+    </ul>
+    <h2>도라·축의칩</h2>
+    <ul>
+      <li><b>4마</b> 5만·5통·5삭 — <span style="color:#ff5a4a">적도라</span> 1장씩(1판)</li>
+      <li><b>3마</b> 5통·5삭 — <span style="color:#ff5a4a">적도라</span> 1장(1판) · <span style="color:#4d8dff">청도라</span> 1장(<i class="chipi hc"></i>1)</li>
+      <li><b>3마(아리스·튤립)</b> 5통·5삭 — <span style="color:#ff5a4a">적도라</span> 2장 · <span style="color:#4d8dff">청도라</span> 1장(<i class="chipi hc"></i>1) · <span style="color:#f0c040">금도라</span> 1장(<i class="chipi hc"></i>2)</li>
+      <li><b>뒷도라, 일발</b> 1판 + <i class="chipi hc"></i>1</li>
+      <li><b>3마 시로폿치</b> 白 중 빨간 점 패. 리치 후 쯔모하면 올마이티(<i class="chipi hc"></i>1)</li>
+      <li><b>역만</b> <i class="chipi hc"></i>5(헤아림 역만 포함, 중복 역만은 가산)</li>
+      <li><b>3마 토비상</b> 화료로 토비낸 사람 당 <i class="chipi hc"></i>1</li>
     </ul>
     <h2>장비 레벨에 따라 발동확률을 가진 스킬</h2>
     <ul>
@@ -4605,6 +4676,7 @@ function decCard(d){
 }
 function reviewHTML(){
   const rec = records().find(x => x.id === UI.reviewOf);
+  if(rec) MJ.setSanDora(rec.mode && rec.mode.endsWith('3') ? (rec.sanDora || 'off') : null);   // 복기 화면의 5 색깔은 그 판의 구성으로
   if(!rec || !rec.details) return `<div class="bar"><span class="k">분석</span><button class="btn small" data-act="records">기록</button></div><p class="muted">이 판의 수별 기록이 없어요.</p>`;
   const ds = UI.reviewAll ? rec.details : rec.details.filter(d => !d.match);
   const items = ds.map(decCard).join('');
@@ -5334,7 +5406,7 @@ function rpgHelpHTML(){
   return `<div class="sheet help" role="dialog" aria-modal="true"><h2>RPG 도움말</h2>
     <ul>
       <li><b>행동</b> 전투·나무베기·광질·낚시 중 하나를 선택하여 경험치 획득<br>오프라인 최대 24시간 누적</li>
-      <li><b>재화</b> 축의칩. 마작에서 적도라·뒷도라·일발·아리스·튤립으로 획득 가능</li>
+      <li><b>재화</b> 축의칩. 마작에서 청도라·금도라(3인)·뒷도라·일발·아리스·튤립으로 획득 가능</li>
       <li><b>장비</b> 레벨 제한까지 도달하면 새 장비 구매 가능</li>
       <li><b>만렙</b> 100레벨. 만렙 이후 경험치 축적 가능</li>
       <li><b>총합 레벨</b> 모든 행동 레벨의 합. 100레벨에 아리스, 200레벨에 튤립 개방</li>
@@ -5436,7 +5508,7 @@ document.addEventListener('click', e => {
       $modal.innerHTML = `<div class="sheet"><h2>기록을 모두 삭제할까요?</h2>
 <div class="row"><button class="btn warn" data-act="recWipeGo">모두 삭제</button><button class="btn" data-act="closeModal">취소</button></div></div>`;
       $modal.hidden = false; break;
-    case 'recWipeGo': store.del(KEY.rec); UI.last = null; settings = Object.assign({}, SETTINGS0, { admin: settings.admin, pwOk: settings.pwOk }); store.set(KEY.set, settings); store.del(RPG_KEY); RPG.st = rpgLoad(); RPG.away = null; rpgSave(); chipFix(); $modal.hidden = true; render(); break;
+    case 'recWipeGo': store.del(KEY.rec); store.del(KEY.save);   /* 이어하기도 함께 지운다 */ UI.last = null; settings = Object.assign({}, SETTINGS0, { admin: settings.admin, pwOk: settings.pwOk }); store.set(KEY.set, settings); store.del(RPG_KEY); RPG.st = rpgLoad(); RPG.away = null; rpgSave(); chipFix(); $modal.hidden = true; render(); break;
     case 'ymTest': { const i = +b.dataset.i; if(!settings.admin || !YM_TESTS[i]) break; $modal.hidden = true; startGame(YM_TESTS[i].mode || 'east', null, true, null, i); break; }
     case 'autoSort': settings.autoSort = settings.autoSort === false; store.set(KEY.set, settings); UI.order = null; render(); break;   // 켜면 바로 정렬
     case 'autoWin': UI.autoWin = !UI.autoWin; render(); if(UI.autoWin) autoWinCheck(); break;
@@ -5627,7 +5699,7 @@ function stageCall(id){
     for(const kk of remain){
       const opts = pool.filter(x => kindOf(x) === kk && !pick.includes(x));
       if(!opts.length) { render(); return; }
-      if(opts.some(isRedId) && opts.some(x => !isRedId(x))) { render(); return; }   // 적5/일반5 중 직접 고르게
+      if(new Set(opts.map(MJ.tileColor)).size > 1) { render(); return; }   // 적·청·금·일반 5 중 직접 고르게
       pick.push(opts[0]);
     }
     render();

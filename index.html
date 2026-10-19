@@ -326,6 +326,7 @@ h1,h2,h3{margin:0;text-wrap:balance}
   display:grid;place-items:center;font:900 28px var(--f-tile);color:rgba(255,226,140,.95);animation:dzp .9s ease-in-out infinite alternate}
 .dzone.nuki{border-color:rgba(120,200,255,.95);background:rgba(120,200,255,.15);color:#cfe9ff}
 @keyframes dzp{from{opacity:.65}to{opacity:1}}
+.stickfly{position:absolute;width:110px;height:12px;transform:translate(-50%,-50%) rotate(-6deg);z-index:60;pointer-events:none}   /* 점봉 누르기: 작탁 안에서 콘솔로 날아간다 */
 .stickghost{position:fixed;width:110px;height:12px;transform:translate(-50%,-50%) rotate(-6deg);z-index:60;pointer-events:none}
 .tile.callme{pointer-events:auto;cursor:pointer;animation:wglow .8s ease-in-out infinite alternate}
 .tile.pendrii{opacity:.85}
@@ -5563,10 +5564,14 @@ document.addEventListener('pointerdown', e => {
     const pd = UI.pending;
     // 좌클릭(탭) 한 번: 점봉이 저절로 콘솔로 날아가 공탁된다
     if(r && ev.type === 'pointerup' && Math.hypot(ev.clientX - x0, ev.clientY - y0) < 6 && pd && pd.kind === 'action' && UI.riichiDiscard != null && !UI.confirm){
-      const id = UI.riichiDiscard, cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-      try{ const an = ghost.animate([{left: x0 + 'px', top: y0 + 'px'}, {left: cx + 'px', top: cy + 'px'}], {duration: 240, easing: 'cubic-bezier(.3,.7,.3,1)', fill: 'forwards'});
-        an.onfinish = () => { ghost.remove(); const q = UI.pending; if(q && q.kind === 'action' && UI.riichiDiscard === id) choose({type:'discard', id, riichi:true}); }; }
-      catch(err){ ghost.remove(); choose({type:'discard', id, riichi:true}); }
+      // 화면 고정 좌표 대신 작탁 안 좌표로 날린다(폰 확대·스크롤 상태에서도 엉뚱한 곳으로 튀지 않게): 점봉 칸 → 콘솔 가운데
+      ghost.remove();
+      const id = UI.riichiDiscard, tb = document.querySelector('.game .table'), T = tb.getBoundingClientRect(), k = (T.width / tb.offsetWidth) || 1, sr = row.getBoundingClientRect();
+      const fx = (sr.left + sr.width / 2 - T.left) / k, fy = (sr.top + sr.height / 2 - T.top) / k, tx = (r.left + r.width / 2 - T.left) / k, ty = (r.top + r.height / 2 - T.top) / k;
+      const fly = document.createElement('div'); fly.className = 'stickfly'; fly.innerHTML = stickSVG('b'); fly.style.left = fx + 'px'; fly.style.top = fy + 'px'; tb.appendChild(fly);
+      const done = () => { fly.remove(); const q = UI.pending; if(q && q.kind === 'action' && UI.riichiDiscard === id) choose({type:'discard', id, riichi:true}); };
+      try{ const an = fly.animate([{transform: 'translate(-50%,-50%) rotate(-6deg)'}, {transform: `translate(calc(-50% + ${tx - fx}px), calc(-50% + ${ty - fy}px)) rotate(0deg)`}], {duration: 240, easing: 'cubic-bezier(.3,.7,.3,1)', fill: 'forwards'}); an.onfinish = done; }
+      catch(err){ done(); }
       return;
     }
     ghost.remove();

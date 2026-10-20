@@ -564,6 +564,9 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .shead span{background:rgba(0,0,0,.45);color:#fff;border-radius:99px;padding:3px 10px;font-size:12.5px;font-weight:700;backdrop-filter:blur(2px)}
 .rpg .tickbar{position:absolute;left:0;right:0;bottom:0;height:6px;background:rgba(0,0,0,.45)}
 .rpg .tickbar b{display:block;height:100%;width:0;background:linear-gradient(90deg,#7ee08a,#e9ff8a)}
+.rpg .shp .bars{display:flex;flex-direction:column;gap:2px}.rpg .shp .tk{display:block;width:90px;height:3px;background:rgba(0,0,0,.45);border-radius:99px;overflow:hidden;text-decoration:none}.rpg .shp .tk b{display:block;height:100%;width:0;background:linear-gradient(90deg,#e8b02a,#ffe066)}   /* 체력바 아래 틱: 나·적 모두 노랑 */   /* 전투: 한 줄에 왼쪽 내 틱, 오른쪽 적 틱(둘 다 왼쪽→오른쪽, 옅은 색) */
+.rpg .hero.hurt{animation:hurt .36s ease-out;transform-box:fill-box;transform-origin:50% 100%}@keyframes hurt{0%{filter:none;translate:0 0;rotate:0deg}14%{filter:sepia(1) saturate(14) hue-rotate(-35deg) brightness(1.15) drop-shadow(0 0 4px rgba(255,30,30,.95));translate:-8px 1px;rotate:-4deg}45%{translate:-3px 0;rotate:-1deg}100%{filter:none;translate:0 0;rotate:0deg}}   /* 맞으면 빨갛게 번쩍 + 뒤로 휘청 */
+.rpg .floatexp.dodge{color:#8fdcff;font-size:17px;font-style:italic;letter-spacing:.5px;text-shadow:0 2px 0 rgba(0,0,0,.7),0 0 8px rgba(60,170,255,.7)}
 .rpg .floatexp.miss{color:#ff4a4a;font-size:19px;font-style:italic;letter-spacing:.5px;text-shadow:0 2px 0 rgba(0,0,0,.7),0 0 8px rgba(255,40,40,.7)}
 .rpg .floatexp.crit{color:#ffd23a;font-size:19px;font-style:italic;letter-spacing:.5px;text-shadow:0 2px 0 rgba(0,0,0,.7),0 0 10px rgba(255,160,40,.9)}
 .rpg .floatexp.item{font-size:13px;color:#e8f6ff;display:flex;align-items:center;gap:3px}.rpg .floatexp.item .iic{width:16px;height:16px;margin:0}
@@ -586,16 +589,30 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 @media (max-width:720px){.rpg .stage{grid-template-columns:1fr 1fr}.rpg .stage > .scene{grid-column:1/-1}.rpg .stage > .side{grid-row:2}.rpg .stage > .side.l{grid-column:1}.rpg .stage > .side.r{grid-column:2}}
 .rpg .it.cons .cbuy{display:inline-flex;gap:4px;align-items:center;flex:none}
 .rpg .it.cons .qty{width:4.6em;padding:2px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.35);color:var(--ink);font:700 12px var(--f-num);text-align:right}
+.rpg .admin{border:1px dashed #ff9a3a}
+.rpg .admin .arow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px}
+.rpg .admin .arow > b{min-width:3em}
+.rpg .admin select{background:rgba(0,0,0,.35);color:var(--ink);border:1px solid rgba(255,255,255,.18);border-radius:6px;padding:3px 4px;font-size:12px}
+.rpg .admin .qty{width:5em;padding:3px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.35);color:var(--ink);font:700 12px var(--f-num);text-align:right}
 .rpg .items.acc3{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:560px){.rpg .items.acc3 .it{flex-direction:column;align-items:stretch;gap:4px}.rpg .items.acc3 .it .n{white-space:normal;word-break:keep-all;font-size:12px}.rpg .items.acc3 .it .btn,.rpg .items.acc3 .it .d{align-self:flex-end}}
 .rpg .shop h3.acch small{font-weight:600;font-size:11px;margin-left:6px}
 .rpg .shop h3.acch{font-size:13px;color:var(--ink-dim);margin-top:2px}
 .rpg .sklbl{font-size:12px;font-weight:800;color:var(--ink-dim);margin:0 2px -5px}
-.rpg .rcps{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px}
+.rpg .rcp,.rpg .items .wshop.map{height:80px;box-sizing:border-box;padding:7px 9px;gap:6px;justify-content:flex-start}   /* 8개 행동 카드 크기 통일 */
+.rpg .items .wshop.map .rack{height:34px;flex:none}
+.rpg .rcps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}   /* 제작법도 맵처럼 2×5 */
+@media (max-width:760px){.rpg .rcps{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .rpg .rcp{gap:3px;padding:7px 9px}
-.rpg .rcp .n{font-weight:800;font-size:13px}
+.rpg .nrow{display:flex;align-items:center;justify-content:space-between;gap:4px;min-width:0}
+.rpg .rnb{font:inherit;font-weight:800;font-size:13px;color:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;text-align:left;padding:2px 7px;margin-left:-7px;border:1px solid rgba(255,255,255,.28);border-radius:7px;background:rgba(255,255,255,.06);cursor:pointer}
+.rpg button.rnb:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.5)}
+.rpg .rnb.off{border-color:transparent;background:none;cursor:default}
+.rpg .rnb .iic{width:18px;height:18px;vertical-align:-4px;margin-right:4px}
+.rpg .lockt{font-size:11px;color:var(--ink-dim);white-space:nowrap;flex:none}
+.rpg .rcp .d.lockt,.rpg .rcp .d.short{align-self:flex-end}
 .rpg .rcp .n small,.rpg .rcp .d small{font-weight:600;color:var(--ink-dim);font-size:11px;margin-left:3px}
-.rpg .rcp .d{font-size:11.5px;color:var(--ink-dim);white-space:normal;line-height:1.55}
+.rpg .rcp .d{font-size:11.5px;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.55}
 .rpg .rcp .d .short,.rpg .rcp .d.short{color:#ff8a7a}
 .rpg .rcp .d.sel{color:var(--brass);font-weight:800;align-self:flex-end}
 .rpg .rcp .btn{align-self:flex-end;padding:3px 12px}
@@ -605,10 +622,13 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .skb.off{opacity:.45;filter:grayscale(.7)}
 .chipi.bc{background-image:var(--chip-blue)}
 .rpg .bag h3{display:flex;justify-content:space-between;align-items:center}
+.rpg .baghd{display:inline-flex;align-items:center;gap:8px}
+.rpg .btn.bulk{background:rgba(47,127,232,.16);border-color:rgba(91,160,255,.55);color:#cfe5ff;font-size:12px;padding:3px 10px}
 .rpg .bluec{display:inline-flex;align-items:center;font:800 14px var(--f-num);color:#bfe0ff;background:rgba(0,0,0,.28);border-radius:99px;padding:3px 10px}
 .rpg .eqs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 @media (max-width:560px){.rpg .eqs{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.rpg .slot{background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:6px 8px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.rpg .slot[data-act]{cursor:pointer;transition:border-color .15s}.rpg .slot[data-act]:hover{border-color:rgba(255,255,255,.25)}
+.rpg .slot{background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:6px 8px;display:flex;flex-direction:column;gap:2px;min-width:0;min-height:72px;box-sizing:border-box}   /* 비어 있어도 장착했을 때와 같은 높이 */
 .rpg .slot .sl{font-size:11px;color:var(--ink-dim);display:flex;justify-content:space-between;gap:6px;white-space:nowrap}
 .rpg .slot .sv{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rpg .slot .sv.none{color:var(--ink-dim);font-weight:600}
@@ -617,6 +637,9 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .hpb{flex:1 1 120px;height:10px;border-radius:99px;background:rgba(0,0,0,.4);overflow:hidden}
 .rpg .hpb b,.rpg .shp i b{display:block;height:100%;background:linear-gradient(90deg,#d8242e,#ff7a5a);transition:width .3s}
 .rpg .invtabs{display:flex;flex-wrap:wrap;gap:4px}
+.rpg .shop h3 > .invtabs{display:inline-flex;margin:0 auto 0 12px;font-size:13px;font-weight:400}   /* 탭은 제목 바로 오른쪽 */
+.rpg .shop h3.hrow{display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+.rpg .shop > h3:not(.acch){display:flex;align-items:center;min-height:26px}   /* 탭이 있든 없든 제목 줄 높이를 같게(행동을 바꿔도 화면이 흔들리지 않게) */
 .rpg .invtabs .btn{padding:3px 10px;font-size:12px;display:inline-flex;align-items:center;gap:4px}
 .rpg .invtabs .btn .chev{font-style:normal;font-size:8px;opacity:.7;margin-left:1px}
 .rpg .invpager{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:6px;font:700 13px var(--f-num);color:var(--ink-dim)}
@@ -636,6 +659,7 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .ivr{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.22);border-radius:8px;padding:0 8px;font-size:13px;height:36px;box-sizing:border-box;overflow:hidden}   /* 줄 높이 고정: 쪽을 넘겨도 흔들리지 않게 */
 .rpg .ivr.empty{background:none}
 .rpg .ivr .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.rpg .ivr .n .eff{font-weight:600;font-size:11px;color:var(--ink-dim);margin-left:6px}
 .rpg .ivr .c{font:800 13px var(--f-num);min-width:3em;text-align:right}
 .rpg .ivr .p{font-size:11px;color:var(--ink-dim);white-space:nowrap;display:inline-flex;align-items:center}
 .rpg .ivr .p.on{color:var(--brass);font-weight:800}
@@ -649,7 +673,7 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .shp .iic{width:16px;height:16px;margin:0 -2px 0 0;vertical-align:middle}
 .rpg .shp.me i b{background:linear-gradient(90deg,#26a84a,#7ee08a)}
 .rpg .shp.mon i b{background:linear-gradient(90deg,#d8242e,#ff7a5a)}
-.rpg .shp em[data-hpt],.rpg .shp em[data-mht]{min-width:6.5em;text-align:right}
+.rpg .shp em[data-hpt],.rpg .shp em[data-mht]{width:8.2em;text-align:right;white-space:nowrap}
 .rpg .shp i{display:block;width:90px;height:7px;background:rgba(0,0,0,.5);border-radius:99px;overflow:hidden}
 .rpg .shp em{font-style:normal;font-family:var(--f-num)}
 .rpg .flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick .45s ease-in-out infinite alternate}
@@ -845,7 +869,7 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .welcome{position:absolute;left:50%;top:44px;transform:translateX(-50%);z-index:5;width:max-content;max-width:90%;box-shadow:0 4px 14px rgba(0,0,0,.45);background:#1d3a52;color:#dcefff;border-radius:10px;padding:8px 12px;font-size:13px;text-align:center;pointer-events:auto}   /* 화면 위에 떠 있다가 '확인'을 눌러야 사라진다(배치 높이를 바꾸지 않게, 브라운관 필터 없이) */
 .rpg .welcome .btn{margin-left:10px;padding:2px 12px;font-size:12px;vertical-align:middle}
 @keyframes wcout{to{opacity:0}}
-.rpg .hero .arm{transform-box:view-box;animation:swing 1.15s cubic-bezier(.5,0,.7,1) infinite}
+.rpg .hero .arm{transform-box:view-box;animation:swing var(--swd,1.15s) cubic-bezier(.5,0,.7,1) infinite}
 @keyframes swing{0%{transform:rotate(140deg)}38%{transform:rotate(150deg)}55%{transform:rotate(300deg)}64%{transform:rotate(290deg)}100%{transform:rotate(140deg)}}
 .rpg .hero.fish .arm{animation:rod 3.2s ease-in-out infinite}
 .rpg .hero.smelt .arm{animation:dunk 1.15s ease-in-out infinite}   /* 제련: 집게로 바를 화로에 넣었다(치익) 뺐다 */
@@ -865,11 +889,11 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .scene.idle .cape{animation:none}
 .rpg .hero .body{animation:breathe 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
 @keyframes breathe{50%{transform:scaleY(1.02)}}
-.rpg .target{transform-box:fill-box;transform-origin:50% 100%;animation:hit 1.15s infinite}
+.rpg .target{transform-box:fill-box;transform-origin:50% 100%;animation:hit var(--swd,1.15s) infinite}
 @keyframes hit{0%,52%{transform:none}57%{transform:translateX(5px) rotate(2deg)}62%{transform:translateX(-3px) rotate(-1deg)}70%,100%{transform:none}}
-.rpg .mon{transform-box:fill-box;transform-origin:50% 100%;animation:mon 1.15s infinite}
+.rpg .mon{transform-box:fill-box;transform-origin:50% 100%;animation:mon var(--swd,1.15s) infinite}
 @keyframes mon{0%,50%{transform:translateY(0)}25%{transform:translateY(-3px)}56%{transform:translateX(9px) scaleY(.94);filter:brightness(1.6)}66%{transform:translateX(2px);filter:none}100%{transform:none}}
-.rpg .spark{opacity:0;animation:spark 1.15s infinite}
+.rpg .spark{opacity:0;animation:spark var(--swd,1.15s) infinite}   /* 별 타격 표시·몬스터 움찔도 휘두르기 주기에 맞춘다 */
 @keyframes spark{0%,53%{opacity:0;transform:scale(.4)}57%{opacity:1;transform:scale(1)}70%,100%{opacity:0;transform:scale(1.5)}}
 .rpg .spark{transform-box:fill-box;transform-origin:50% 50%}
 .rpg .bob{animation:bob 2.2s ease-in-out infinite}
@@ -877,6 +901,13 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .ripple{animation:ripple 2.2s ease-out infinite;transform-box:fill-box;transform-origin:50% 50%}
 @keyframes ripple{0%{opacity:.8;transform:scale(.4)}100%{opacity:0;transform:scale(1.8)}}
 .rpg .wave{animation:wave 4s linear infinite}
+.rpg .pj{transform-box:fill-box;transform-origin:50% 100%}.rpg .pb{transform-box:fill-box;transform-origin:50% 100%;animation:pbob 1.8s ease-in-out infinite}
+@keyframes pbob{50%{transform:scaleY(.95) scaleX(1.03)}}
+.rpg .pj.fly .pb{animation:pfly 1.2s ease-in-out infinite}@keyframes pfly{50%{transform:translateY(-3px) scaleX(.94)}}
+.rpg .scene:not(.idle) .pj{animation:phop 7s ease-in-out infinite}   /* 행동 중: 가끔 깡총깡총 + 하트 */
+@keyframes phop{0%,72%,100%{transform:none}76%{transform:translateY(-7px) rotate(-6deg)}80%{transform:none}84%{transform:translateY(-5px) rotate(5deg)}88%{transform:none}}
+.rpg .scene:not(.idle) .ph{animation:pheart 7s ease-out infinite;transform-box:fill-box;transform-origin:50% 50%}
+@keyframes pheart{0%,74%{opacity:0;transform:translateY(0) scale(.5)}80%{opacity:1;transform:translateY(-4px) scale(1)}94%{opacity:0;transform:translateY(-12px) scale(1.1)}100%{opacity:0}}
 .rpg .boatbob{animation:boatbob 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
 @keyframes boatbob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(1.6px) rotate(.6deg)}}
 @keyframes wave{to{transform:translateX(-40px)}}
@@ -2508,6 +2539,7 @@ function fitStats(){
     while(v.scrollWidth > v.clientWidth && f > 11){ f -= 1; v.style.fontSize = f + 'px'; }
   });
 }
+window.addEventListener('hashchange', () => { if(UI.screen === 'rpg') render(); });
 window.addEventListener('resize', () => { if(UI.screen === 'home') fitStats(); if(UI.screen === 'rpg') fitRpg(); });
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if(UI.screen === 'rpg') fitRpg(); });   // 글꼴이 늦게 들어와 높이가 바뀌어도 다시 맞춘다
 // RPG 화면은 마작 홈 화면 높이를 넘지 않게 비율 그대로 축소 (탭을 오가도 창이 위아래로 흔들리지 않게)
@@ -2687,11 +2719,11 @@ const SFX = (() => {
     }
   }
   let vi = 0;
-  function clack(kind, gain, rate){
+  function clack(kind, gain, rate, delay){
     const c = ac(); if(!c) return;
     const src = c.createBufferSource(); src.buffer = clackBuffer(c, kind, 0); if(rate) src.playbackRate.value = rate;   // rate: 음높이(1 = 그대로)
     const g = c.createGain(); g.gain.value = gain;
-    src.connect(g); g.connect(MAIN(c)); src.start(c.currentTime + base);
+    src.connect(g); g.connect(MAIN(c)); src.start(c.currentTime + base + (delay || 0));
   }
   const api = {
     unlock: ac,
@@ -2774,6 +2806,22 @@ const SFX = (() => {
       [[9000, 0], [7000, .018], [5200, .036], [3800, .054]].forEach(([f, d]) => noise(.05, f, 1.6, .22, d));   // 슈욱(높은 데서 낮게 훑는 바람)
       noise(.09, 2600, 2.2, .3, .07); noise(.16, 1400, 1.1, .16, .08);   // 촥(베임)
     },
+    die(type){   // 몬스터가 쓰러질 때(처치): 몬스터마다 다른 소리. 타격음 바로 뒤에 이어진다
+      const d = .14;
+      ({
+        slime:    () => { noise(.14, 600, 1.2, .2, d); [520, 430, 340, 260].forEach((f, i) => blip(f, f * .6, .07, .07, d + .05 + i * .06, 'sine')); },   // 철퍽 → 뽀글뽀글 녹아내림
+        wolf:     () => { blip(1100, 520, .22, .09, d, 'triangle'); blip(700, 300, .3, .06, d + .2, 'triangle'); noise(.12, 500, .8, .12, d + .38); },   // 깨갱 → 털썩
+        lizard:   () => { noise(.38, 4200, .9, .1, d); blip(240, 110, .22, .08, d + .05, 'sawtooth'); noise(.1, 600, 1, .12, d + .32); },   // 쉬이익 → 털썩
+        scorpion: () => { [0, .05, .1, .16, .23].forEach((t, i) => noise(.03, 2600 + i * 300, 3, .12, d + t)); noise(.12, 900, 1, .12, d + .28); },   // 다리가 다다닥 → 툭
+        yeti:     () => { blip(210, 90, .55, .1, d, 'sawtooth'); noise(.2, 380, .7, .18, d + .45); },   // 우어어… → 쿵
+        skeleton: () => { [0, .06, .1, .17, .22, .3, .36].forEach((t, i) => clack('discard', .2, .7 + Math.random() * .7, d + t)); },   // 뼈가 와르르
+        golem:    () => { [0, .09, .2, .3].forEach((t, i) => noise(.18, 260 + i * 90, .7, .22 - i * .03, d + t)); clack('discard', .25, .45, d + .4); },   // 쿠르르 무너짐
+        demon:    () => { blip(160, 55, .7, .1, d, 'sawtooth'); noise(.5, 900, .6, .06, d + .1); blip(330, 120, .4, .04, d + .05, 'square'); },   // 크아아… 사라짐
+        dragon:   () => { blip(240, 60, .9, .11, d, 'sawtooth'); noise(.7, 700, .5, .1, d); noise(.25, 220, .7, .26, d + .8); }   // 크아아아 → 쿵
+      }[type] || (() => { noise(.16, 700, 1, .16, d); blip(400, 150, .25, .06, d, 'triangle'); }))();
+    },
+    gain(){ tone(1568, .16, .0875, 'sine', .16); tone(2093, .22, .075, 'sine', .23); tone(3136, .12, .02, 'sine', .23); },   // 띵-딩: 아이템 획득(작고 맑게, 행동 소리 바로 뒤)
+    hurt(){ noise(.035, 1300, 1.6, .16, 0); blip(300, 160, .05, .07, 0, 'triangle'); noise(.11, 4600, 1.1, .12, .045); noise(.08, 2600, 1.4, .05, .05); },   // 투쉭! 용사가 맞음(짧은 '투' + 베이는 '쉭')
     farm(){ noise(.16, 3200, .7, .13, 0); noise(.12, 1100, .9, .1, .02); },                                                          // 쉭! 괭이로 흙을 긁음
     smelt(){ noise(.42, 5200, .7, .12, 0); noise(.3, 2800, .9, .06, .03); blip(380, 620, .05, .012, .26, 'sine'); },                 // 치익 (달군 바를 불에 넣을 때)
     smith(){ tone(1980, .38, .07, 'triangle', 0); tone(2970, .26, .04, 'sine', .004); noise(.03, 5200, 2, .16, 0); clack('discard', .18); },   // 깡! 모루
@@ -4769,7 +4817,7 @@ function importCode(txt){
   UI.importedRpg = false;
   if(data.rpg && data.rpg.v === 1 && data.rpg.sk){   // RPG 진행도는 가져온 것으로 통째로 덮어쓴다
     const st = data.rpg;
-    st.chips = Math.max(0, +st.chips || 0); st.sel = st.sel || 'combat'; st.carry = +st.carry || 0; st.active = ALL_KEYS.includes(st.active) ? st.active : null;
+    st.chips = Math.max(0, +st.chips || 0); st.sel = st.sel || 'combat'; st.carry = +st.carry || 0; st.mcarry = +st.mcarry || 0; st.active = ALL_KEYS.includes(st.active) ? st.active : null;
     st.last = Date.now();   // 내보낸 뒤 지난 시간이 한꺼번에 쌓이지 않게
     rpgNorm(st);
     RPG.st = st; rpgSave(); chipFix(); UI.importedRpg = true;
@@ -4832,7 +4880,7 @@ const SKILLS = {
     ['지옥 바다', '#0d0000','#4a0606','#1e1212','#b0101a','#ff4a4a', 'ember'],
     ['공허 바다', '#020104','#120820','#0e0818','#0a0614','#7a3cff', 'glint'] ] },
 };
-const SK_KEYS = ['wood', 'mine', 'fish', 'combat'];   // 표시 순서: 나무베기 · 광질 · 낚시 · 전투
+const SK_KEYS = ['combat', 'wood', 'mine', 'fish'];   // 표시 순서: 전투 · 나무베기 · 광질 · 낚시
 // ---------- 제작 (농사·제련·대장간·요리) · 가방 · 장비 ----------
 // 채집 행동(나무베기·광질·낚시)은 틱마다 그 등급의 재료를 1개 얻는다. 제작 행동은 틱마다 재료를 써서 1번 만든다(재료가 떨어지면 멈춤)
 const CR_KEYS = ['farm', 'smelt', 'smith', 'cook'], ALL_KEYS = SK_KEYS.concat(CR_KEYS);
@@ -4859,8 +4907,8 @@ const ITEM = {
   pick:  { n: g => TIERS[g-1].n + ' 곡괭이', v: 10, eq: 'tool' },
   rod:   { n: g => TIERS[g-1].n + ' 낚싯대', v: 10, eq: 'tool' },
   ring:  { n: g => TIERS[g-1].n + ' 반지', v: 0, eq: 'ring' },
-  bait:  { n: g => '미끼', v: 1, eq: 'bait' },     // 소모품: 낚시 1번에 1개(없으면 낚시 못 함)
-  whet:  { n: g => '숫돌', v: 1, eq: 'whet' },     // 소모품: 휘두를 때마다 1개, 명중 100%
+  bait:  { n: g => '미끼', v: 1, eq: 'bait' },
+  pet:   { n: g => PETS[g-1].n, v: 0, eq: 'pet' },     // 펫: 행동마다 한 번만 얻고 팔 수 없다     // 소모품: 낚시 1번에 1개(없으면 낚시 못 함)
   neck:  { n: g => TIERS[g-1].n + ' 목걸이', v: 0, eq: 'neck' }
 };
 // ---------- 아이템 아이콘(24×24): 종류마다 모양, 등급마다 색 ----------
@@ -4919,8 +4967,7 @@ function itemIcon(key, opt){
     b = `<path d="M3 21 L20 3" stroke="${c}" stroke-width="2" stroke-linecap="round"/><path d="M3 21 L8 15.7" stroke="#7a4a22" stroke-width="3" stroke-linecap="round"/><circle cx="9.5" cy="16.5" r="2.4" fill="#9aa3ad" ${O}/><path d="M20 3 Q22 10 18 15" stroke="rgba(255,255,255,.75)" stroke-width=".7" fill="none"/><path d="M18 15 q1 3 -1 3" stroke="#ccc" stroke-width=".9" fill="none"/>`; glow = T.gl; }
   else if(t === 'bait'){   // 지렁이
     b = `<path d="M4 16 Q6 9 11 12 Q15 15 17 9 Q19 5 21 7" fill="none" stroke="rgba(10,8,6,.75)" stroke-width="5" stroke-linecap="round"/><path d="M4 16 Q6 9 11 12 Q15 15 17 9 Q19 5 21 7" fill="none" stroke="#e88a9a" stroke-width="3.4" stroke-linecap="round"/>${[[7,12],[10,11.6],[14,13],[17,9.5]].map(([x, y]) => `<path d="M${x} ${y - 1.4} v2.8" stroke="#b8566a" stroke-width=".7"/>`).join('')}<circle cx="20.6" cy="7" r=".6" fill="#3a1a1a"/>`; }
-  else if(t === 'whet'){   // 숫돌: 각진 회색 돌
-    b = `<path d="M5 7 L8.5 7.5 L8.5 19 L5 18 Z" fill="#8f8f8f"/><path d="M5 7 L9 3.5 L15 1 L18 2 L16 6 L8.5 7.5 Z" fill="#f4f4f4"/><path d="M8.5 7.5 L16 6 L15.5 14 L14 20 L8.5 19 Z" fill="#cdcdcd"/><path d="M16 6 L18 2 L20 8 L19.5 15 L18 19 L14 20 L15.5 14 Z" fill="#ebebeb"/><path d="M8.5 19 L14 20 L16 22.5 L9.5 22.5 L5 18 Z" fill="#e2e2e2"/><path d="M14 20 L18 19 L16 22.5 Z" fill="#bdbdbd"/><path d="M5 7 L9 3.5 L15 1 L18 2 L20 8 L19.5 15 L18 19 L16 22.5 L9.5 22.5 L5 18 Z" fill="none" stroke="rgba(10,8,6,.6)" stroke-width=".9" stroke-linejoin="round"/>`; }
+  else if(t === 'pet'){ b = petSVG(g); }
   else if(t === 'ring'){ const c = T.c;
     b = `<ellipse cx="12" cy="15" rx="7" ry="5.5" fill="none" stroke="rgba(10,8,6,.75)" stroke-width="4"/><ellipse cx="12" cy="15" rx="7" ry="5.5" fill="none" stroke="#e2b84a" stroke-width="2.4"/><path d="M8 6 L12 3 L16 6 L12 11 Z" fill="${c}" ${O}/><path d="M8 6 L16 6" stroke="rgba(0,0,0,.35)" stroke-width=".7"/><path d="M10 5 L12 3.6" stroke="#fff" stroke-width=".9" opacity=".8"/>`; glow = T.gl; }
   else if(t === 'neck'){ const c = T.c;
@@ -4929,11 +4976,11 @@ function itemIcon(key, opt){
   return `<svg class="iic" viewBox="0 0 24 24" aria-hidden="true"${glow ? ` style="filter:drop-shadow(0 0 2px ${glow})"` : ''}>${b}</svg>`;
 }
 // 가방 탭: 전체 · 장비(검·투구·갑옷·반지·목걸이·요리·열매) · 도구(도끼·곡괭이·낚싯대) · 기타(씨앗·목재·원석·생선·주괴)
-const INV_TABS = [['all', '전체', null], ['gear', '장비', ['sword', 'helm', 'body', 'ring', 'neck', 'food', 'fruit', 'whet', 'bait']], ['tool', '도구', ['axe', 'pick', 'rod']], ['etc', '기타', ['seed', 'log', 'ore', 'fish', 'bar']]];
+const INV_TABS = [['all', '전체', null], ['pet', '펫', ['pet']], ['gear', '장비', ['sword', 'helm', 'body', 'ring', 'neck', 'food', 'fruit', 'bait']], ['tool', '도구', ['axe', 'pick', 'rod']], ['etc', '기타', ['seed', 'log', 'ore', 'fish', 'bar']]];
 const TOOL_T = { combat:'sword', wood:'axe', mine:'pick', fish:'rod' }, TOOL_SK = { sword:'combat', axe:'wood', pick:'mine', rod:'fish' };   // 행동 ↔ 도구 아이템
 const GEAR_T = ['helm', 'body', 'axe', 'pick', 'rod'];
-const QTY_SL = ['food', 'fruit', 'whet', 'bait'];   // 개수를 정해 장착하는 소모품
-const SELL_T = GEAR_T.concat(['food', 'fruit', 'bait', 'whet']);   // 팔 수 있는 것: 장비(등급값) + 요리·열매(개당 1)   // 팔 수 있는 장비(검·반지·목걸이는 등급마다 한 번만 사는 것이라 못 판다)
+const QTY_SL = ['food', 'fruit', 'bait'];   // 개수를 정해 장착하는 소모품
+const SELL_T = GEAR_T.concat(['food', 'fruit', 'bait']);   // 팔 수 있는 것: 장비(등급값) + 요리·열매(개당 1)   // 팔 수 있는 장비(검·반지·목걸이는 등급마다 한 번만 사는 것이라 못 판다)
 const SMITH_PARTS = ['helm', 'body', 'axe', 'pick', 'rod'];   // 검은 만들 수 없다(축의칩으로만 산다)
 // ---- 전투: 틱(휘두르기 1.15초)마다 서로 한 대씩. 몬스터 HP가 0이 되면 경험치 ----
 const COMBAT_MS = 1150;
@@ -4946,19 +4993,106 @@ const monAtk = s => Math.round(6 * Math.pow(1.6, s - 1)) + s;        // 몬스�
 const DEF_H = g => Math.round(2 * Math.pow(1.6, g - 1)), DEF_B = g => Math.round(4 * Math.pow(1.6, g - 1));   // 방어력: 같은 등급 투구+갑옷이면 한 대에 맵 등급만큼만 깎인다
 const killXp = s => HITS(s) * COMBAT_MS / 3600;                     // 처치 경험치(틱 경험치 배수): 같은 등급 장비면 시간당 경험치가 예전과 같다
 // 채집 틱: 장비가 맵보다 낮으면 5·10·15배 느리고, 높으면 등급마다 10%씩 빨라진다(최대 50%)
-const gearSpeed = (sk) => { const d = sk.gear - sk.stage; return d < 0 ? [5, 10, 15][Math.min(3, -d) - 1] : Math.max(.5, 1 - .1 * d); };
+// 장비가 맵보다 높을 때의 이득(틱·타수 배율). 높은 장비로 낮은 맵에 가도 시간당 경험치가 최고 맵을 넘지 않게 맞춘 표
+// 전투 레벨 페널티(MMO식): 맵 입장 레벨보다 20 이상 높으면 처치 경험치 절반, 40 이상이면 10%. 마지막 맵(공허)은 제외
+const lvPenalty = (L, s) => s >= 10 ? 1 : L - REQ_LV(s) >= 40 ? .1 : L - REQ_LV(s) >= 20 ? .5 : 1;
+const OVER = [1, .95, .9, .84, .78, .71, .65, .58, .5, 1 / 3];
+const gearSpeed = (sk) => { const d = sk.gear - sk.stage; return d < 0 ? [5, 10, 15][Math.min(3, -d) - 1] : OVER[Math.min(9, d)]; };
+// 한 대 기본 피해: 장비가 맵 이상이면 그 맵 몬스터를 HITS × OVER[차이]대(치명타 평균 포함)에 잡게, 낮으면 무기 공격력 그대로(아주 오래 걸림)
+const hitBase = (g, s) => { if(g < s) return ATK(g); const h = HITS(s) * OVER[Math.min(9, g - s)]; return h <= 1 ? monHp(s) : monHp(s) / (h * (1 + CRIT(g))); };   // 평균 1대 이하면 치명타 없이도 한 방
 const speedLabel = sk => { const f = gearSpeed(sk); return f > 1 ? `장비 부족 · ${f}배 느림` : f < 1 ? `${Math.round((1 - f) * 100)}% 빠름` : ''; };
 const josa = (w, a, b) => { const c = (w || '').charCodeAt(w.length - 1); return c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 ? a : b; };   // 받침 있으면 a(이·을·은), 없으면 b(가·를·는)
-const ITEM_ORDER = ['log', 'seed', 'ore', 'fish', 'fruit', 'bar', 'food', 'sword', 'axe', 'pick', 'rod', 'helm', 'body', 'ring', 'neck', 'bait', 'whet'];
+// 펫: 행동마다 아주 드물게(Melvor 공식: 틱 시간(초) × (레벨 + 1) ÷ 2,500만) 한 번만. 그 행동 펫을 장착하면 그 행동 속도 +10%
+const PETS = [
+  { k:'wood', n:'다람쥐' }, { k:'mine', n:'박쥐' }, { k:'fish', n:'고양이' }, { k:'combat', n:'강아지' },
+  { k:'farm', n:'토끼' }, { k:'smelt', n:'아기 용' }, { k:'smith', n:'고슴도치' }, { k:'cook', n:'햄스터' }
+];
+const petOf = k => PETS.findIndex(p => p.k === k) + 1;   // 행동 → 펫 번호(1~8)
+const petBoost = k => RPG.st.eq.pet && PETS[RPG.st.eq.pet - 1].k === k ? 1.1 : 1;
+const monMs = s => Math.round(2600 - (s - 1) * 800 / 9);   // 몬스터 공격 틱: 초원 2.6초 … 공허 1.8초(완만하게 빨라진다)
+const combatMs = () => COMBAT_MS / (typeof RPG !== 'undefined' ? petBoost('combat') : 1);
+function petSVG(i){   // 24×24, 오른쪽을 본다
+  const O = 'stroke="rgba(40,24,14,.7)" stroke-width=".8" stroke-linejoin="round"';
+  const eye = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r || 1.25}" fill="#1a1414"/><circle cx="${x + .4}" cy="${y - .45}" r="${(r || 1.25) * .38}" fill="#fff"/>`;
+  const blush = (x, y) => `<ellipse cx="${x}" cy="${y}" rx="1.3" ry=".8" fill="#ff8aa0" opacity=".65"/>`;
+  return [
+    // 다람쥐
+    `<path d="M9 19 Q1.5 18 2.5 10 Q3.5 3.5 9.5 5 Q12 6.5 10 9 Q7 9 7.5 12.5 Q8.5 15.5 10.5 16 Z" fill="#c8742e" ${O}/><path d="M4 11 Q4.5 7 8 6.5" stroke="#e8a060" stroke-width="1" fill="none"/>
+     <ellipse cx="13.5" cy="16.5" rx="4.6" ry="4.8" fill="#d8853a" ${O}/><ellipse cx="14.5" cy="17.5" rx="2.6" ry="3" fill="#f6e0bc"/>
+     <circle cx="16.5" cy="10.5" r="4.4" fill="#d8853a" ${O}/><path d="M14.2 7.4 L14.6 4 L16.8 6.6 Z" fill="#d8853a" ${O}/><ellipse cx="19" cy="12" rx="1.9" ry="1.5" fill="#f6e0bc"/>
+     ${eye(17.6, 9.8)}<circle cx="20.6" cy="11.4" r=".7" fill="#3a2010"/>${blush(16.6, 12.4)}
+     <ellipse cx="17.8" cy="16" rx="1.6" ry="1.9" fill="#a0602a" ${O}/><path d="M16.4 14.6 Q17.8 13.4 19.2 14.6" stroke="#5a3418" stroke-width="1.1" fill="none"/>
+     <ellipse cx="12" cy="21.4" rx="1.6" ry=".9" fill="#a8602a"/><ellipse cx="15.6" cy="21.4" rx="1.6" ry=".9" fill="#a8602a"/>`,
+    // 박쥐(날아다님)
+    `<path d="M10 12 Q5 6 1 9.5 Q3 10 3 12.5 Q4.6 11.6 5.6 14 Q7 12.6 8.6 14.4 Z" fill="#5a3a7a" ${O}/><path d="M14 12 Q19 6 23 9.5 Q21 10 21 12.5 Q19.4 11.6 18.4 14 Q17 12.6 15.4 14.4 Z" fill="#5a3a7a" ${O}/>
+     <circle cx="12" cy="12.5" r="4.6" fill="#7a58a0" ${O}/><path d="M8.8 9.4 L8.6 5.6 L10.8 8.2 Z M15.2 9.4 L15.4 5.6 L13.2 8.2 Z" fill="#7a58a0" ${O}/>
+     ${eye(10.4, 12)}${eye(13.6, 12)}${blush(9.4, 14)}${blush(14.6, 14)}<path d="M11.2 14.6 l.4 1 l.4 -1 M12.4 14.6 l.4 1 l.4 -1" fill="#fff" stroke="#fff" stroke-width=".4"/>
+     <path d="M11 17 v1.4 M13 17 v1.4" stroke="#3a2450" stroke-width=".9" stroke-linecap="round"/>`,
+    // 고양이
+    `<path d="M5.5 16 Q1.5 13 3.5 8 Q4.5 6.5 5.4 8" stroke="#e8964a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+     <ellipse cx="11.5" cy="17" rx="6.2" ry="4.8" fill="#f0a860" ${O}/><ellipse cx="12.5" cy="18.6" rx="3.6" ry="2.6" fill="#fff4e0"/>
+     <circle cx="16.5" cy="10.8" r="5" fill="#f0a860" ${O}/><path d="M12.4 8 L12.8 3.4 L15.8 6.4 Z M17.4 6 L20.6 3.4 L21.2 8 Z" fill="#f0a860" ${O}/><path d="M13.2 7 L13.4 4.8 L14.8 6.3 Z M18.4 6.1 L20 4.7 L20.3 7 Z" fill="#ffb0c0"/>
+     <path d="M15 6.4 l.6 1.6 M17 6 l-.2 1.7" stroke="#c87030" stroke-width=".9"/>${eye(15, 10.6)}${eye(18.6, 10.6)}<path d="M16.4 12.2 l.4 .5 l.4 -.5 Z" fill="#ff7090"/>
+     <path d="M15.4 13 q.6 .7 1.2 0 q.6 .7 1.2 0" stroke="#5a3418" stroke-width=".6" fill="none"/><path d="M13.5 12.4 h-2.6 M13.6 13.4 l-2.4 .6 M19.4 12.4 h2.6 M19.3 13.4 l2.4 .6" stroke="#5a3418" stroke-width=".45"/>${blush(14, 12.6)}${blush(19, 12.6)}
+     <ellipse cx="9" cy="21.6" rx="1.7" ry=".9" fill="#fff4e0" ${O}/><ellipse cx="14.4" cy="21.6" rx="1.7" ry=".9" fill="#fff4e0" ${O}/>`,
+    // 강아지
+    `<path d="M5.5 14.5 Q2 12 3.6 8.6" stroke="#c9985a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+     <ellipse cx="11.6" cy="16.6" rx="6.4" ry="4.8" fill="#ead0a0" ${O}/><path d="M8 20 v2 M11 20.4 v1.8 M14 20.4 v1.8" stroke="#c9985a" stroke-width="2" stroke-linecap="round"/>
+     <circle cx="16.6" cy="10.6" r="5.2" fill="#f4dcb0" ${O}/><path d="M12.6 6.4 Q10.4 9.4 12 14 Q14.6 12 14.6 7.2 Z" fill="#a8723a" ${O}/><path d="M18.6 5.8 Q21.6 6.4 21.2 10.6 Q19.6 9.6 18.4 7.4 Z" fill="#a8723a" ${O}/>
+     <ellipse cx="19.8" cy="12.4" rx="2.4" ry="1.9" fill="#fff6e4" ${O}/><circle cx="21.6" cy="11.6" r=".95" fill="#2a1a12"/>${eye(17.4, 9.8)}${blush(16, 12.8)}
+     <path d="M19.4 14 q1 1.4 2 0" stroke="#ff7090" stroke-width=".9" fill="#ff8aa0"/><path d="M12.6 14.4 Q16 16.2 19 14.6" stroke="#e8443a" stroke-width="1.5" fill="none"/><circle cx="16" cy="15.8" r=".8" fill="#ffd23a"/>`,
+    // 토끼
+    `<path d="M13.6 8.6 Q11.4 0.8 13.6 1 Q15.6 1.6 15.4 8.4 Z" fill="#fbf7f2" ${O}/><path d="M13.9 7 Q12.9 2.6 13.8 2.4 Q14.8 3 14.6 7 Z" fill="#ffb8c8"/>
+     <path d="M16.2 8.4 Q17.4 0.6 19.4 1.4 Q20.6 2.6 17.8 8.8 Z" fill="#fbf7f2" ${O}/><path d="M16.8 7.4 Q17.8 2.8 19 2.6 Q19.4 3.6 17.6 7.6 Z" fill="#ffb8c8"/>
+     <circle cx="6.4" cy="16.6" r="2.2" fill="#fff" ${O}/><ellipse cx="11.6" cy="17" rx="6" ry="4.6" fill="#fbf7f2" ${O}/>
+     <circle cx="16.4" cy="12" r="4.6" fill="#fbf7f2" ${O}/>${eye(17.6, 11.2)}<path d="M20.2 12.6 l.6 .5 l-.6 .5 Z" fill="#ff7090"/>${blush(17.4, 13.8)}
+     <ellipse cx="9" cy="21.4" rx="1.8" ry=".9" fill="#f0e8e0" ${O}/><ellipse cx="14" cy="21.4" rx="1.8" ry=".9" fill="#f0e8e0" ${O}/>`,
+    // 아기 용
+    `<path d="M6 18 Q1.6 19.6 2 15.4" stroke="#e85a3a" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M2 15.4 l-1.4 -1.6 l2.4 -.2 Z" fill="#ffb04a" ${O}/>
+     <path d="M9.6 11.4 Q6.4 4.6 3.6 8.8 Q5.8 8.8 6.6 11.8 Q7.8 10.6 9 13 Z" fill="#c03a2a" ${O}/>
+     <ellipse cx="12" cy="16.6" rx="5.8" ry="4.8" fill="#e85a3a" ${O}/><ellipse cx="13" cy="17.8" rx="3.2" ry="3" fill="#ffd08a"/><path d="M11 15.6 h4 M10.8 17.4 h4.4 M11.2 19.2 h3.6" stroke="#e8a050" stroke-width=".5"/>
+     <circle cx="16.4" cy="10.4" r="4.8" fill="#e85a3a" ${O}/><path d="M13.6 6.6 L13.2 3.6 L15.2 5.8 Z M16.6 5.8 L17.6 2.8 L18.4 6.2 Z" fill="#fff0c8" ${O}/>
+     <ellipse cx="19.6" cy="12" rx="2.2" ry="1.7" fill="#f07a4a" ${O}/><circle cx="20.4" cy="11.4" r=".4" fill="#5a1a10"/><circle cx="21.2" cy="11.8" r=".4" fill="#5a1a10"/>${eye(16.8, 9.6, 1.4)}${blush(15.4, 12.4)}
+     <ellipse cx="9.6" cy="21.2" rx="1.6" ry=".9" fill="#c03a2a"/><ellipse cx="14.4" cy="21.2" rx="1.6" ry=".9" fill="#c03a2a"/>`,
+    // 고슴도치
+    `<path d="M3.6 19.4 L2.8 15.6 L4.8 14.4 L4 11 L6.6 10.8 L7 7.6 L9.8 8.6 L11.2 5.4 L13 8.4 L15.6 6.6 L15.8 10 L18 10.4 L17.6 19.6 Z" fill="#6a4a30" ${O}/>
+     <path d="M5.6 15 L7.4 13.8 M8 11.6 L9.6 11 M11 9.6 L12.4 10.4 M13.8 9.8 L15 11.4 M6.4 18 L8.4 17" stroke="#a07850" stroke-width=".7"/>
+     <ellipse cx="17.6" cy="16" rx="4.8" ry="4" fill="#f2d9b0" ${O}/><circle cx="22.4" cy="15.6" r="1" fill="#2a1a12"/>${eye(18.4, 14.4)}${blush(18.6, 16.8)}
+     <path d="M15.4 19.6 v1.6 M19 19.4 v1.6" stroke="#c8a070" stroke-width="1.6" stroke-linecap="round"/>`,
+    // 햄스터(앞을 봄)
+    `<circle cx="7" cy="8.4" r="2.4" fill="#e8a85a" ${O}/><circle cx="7" cy="8.4" r="1.2" fill="#ffb8c8"/><circle cx="17" cy="8.4" r="2.4" fill="#e8a85a" ${O}/><circle cx="17" cy="8.4" r="1.2" fill="#ffb8c8"/>
+     <ellipse cx="12" cy="14.6" rx="8.4" ry="7.2" fill="#e8a85a" ${O}/><ellipse cx="12" cy="17" rx="5.6" ry="4.6" fill="#fff4e4"/>
+     <ellipse cx="6.2" cy="14.4" rx="2.4" ry="1.8" fill="#ffd0a0"/><ellipse cx="17.8" cy="14.4" rx="2.4" ry="1.8" fill="#ffd0a0"/>
+     ${eye(9.2, 12.2)}${eye(14.8, 12.2)}<path d="M11.4 14.2 l.6 .6 l.6 -.6 Z" fill="#ff7090"/>${blush(7.6, 15)}${blush(16.4, 15)}
+     <path d="M11 16.6 Q12 18.8 13 16.6" fill="#3a2a1a"/><ellipse cx="12" cy="18.6" rx="1.4" ry="2" fill="#5a4a3a" transform="rotate(20 12 18.6)"/><path d="M9.6 18 q1 -.8 1.8 .4 M14.4 18 q-1 -.8 -1.8 .4" stroke="#e8a85a" stroke-width="1.4" fill="none" stroke-linecap="round"/>`
+  ][i - 1];
+}
+// 장면 속 펫: 주인공 왼쪽. 쉬는 동안엔 숨만 쉬고, 행동 중엔 가끔 깡총·하트 같은 귀여운 몸짓
+function rpgPetSVG(k){
+  const st = RPG.st, i = st.eq.pet; if(!i) return '';
+  const X = k === 'fish' ? 70 : k === 'combat' ? 150 : k === 'smelt' ? 160 : k === 'cook' ? 140 : 112, fly = PETS[i - 1].k === 'mine';
+  const sc = 1.55, h = 24 * sc, px = Math.max(2, X - (k === 'fish' ? 68 : 64)), py = (k === 'fish' ? 151 : 173) - h - (fly ? 22 : 0);
+  return `<g transform="translate(${px} ${py.toFixed(1)}) scale(${sc})"><g class="pj ${fly ? 'fly' : ''}"><g class="pb">${petSVG(i)}</g><path class="ph" d="M18 0 q-1.6 -2 -3 -.4 q-1.4 1.4 3 4.4 q4.4 -3 3 -4.4 q-1.4 -1.6 -3 .4 Z" fill="#ff5a7a" opacity="0"/></g></g>`;
+}
+// 펫 획득: 행동마다 한 번만, 가방으로
+function petGain(k){
+  const st = RPG.st; if(st.pets[k]) return false;
+  st.pets[k] = 1; const i = petOf(k); st.inv['pet' + i] = (st.inv['pet' + i] || 0) + 1;
+  if(UI.screen === 'rpg'){ rpgToast(`펫 획득! ${PETS[i - 1].n}`); SFX.fanfare(.5); }
+  return true;
+}
+const ITEM_ORDER = ['log', 'seed', 'ore', 'fish', 'fruit', 'bar', 'food', 'sword', 'axe', 'pick', 'rod', 'helm', 'body', 'ring', 'neck', 'bait', 'pet'];
 const ikParse = key => { const m = /^([a-z]+)(\d+)$/.exec(key || ''); return m && ITEM[m[1]] ? [m[1], +m[2]] : null; };
 const itemName = key => { const t = ikParse(key); return t ? ITEM[t[0]].n(t[1]) : key; };
 const itemPrice = key => { const t = ikParse(key); return !t ? 0 : GEAR_T.includes(t[0]) ? ITEM[t[0]].v * t[1] : 1; };   // 재료·요리·열매는 모두 1, 돈은 투구(등급×8)·갑옷(등급×15)으로 번다
 // 제작법: 농사 씨앗 1 → 열매 5 · 제련 목재 1 + 원석 1 → 바 · 대장간 바 2 → 투구, 바 4 → 갑옷 · 요리 목재 1 + 생선 1 → 구이
+// 경험치 배수 = 그 재료를 모으는 데 든 채집 틱 수(씨앗 1 = 나무베기 1/SEED_P틱, 주괴 1 = 목재·원석 2틱)
+//  → 채집 3개를 올리며 쌓인 재료로 제작 4개도 같이 올라간다(어느 제작도 재료 때문에 혼자 막히지 않게)
 function recipe(k, g, part){
-  if(k === 'farm') return { in:{ ['seed' + g]:1 }, out:{ ['fruit' + g]:5 }, xp:1 };
-  if(k === 'smelt') return { in:{ ['log' + g]:1, ['ore' + g]:1 }, out:{ ['bar' + g]:1 }, xp:1 };
-  if(k === 'smith') return part === 'body' ? { in:{ ['bar' + g]:4 }, out:{ ['body' + g]:1 }, xp:2 } : TOOL_SK[part] ? { in:{ ['bar' + g]:3 }, out:{ [part + g]:1 }, xp:1.5 } : { in:{ ['bar' + g]:2 }, out:{ ['helm' + g]:1 }, xp:1 };
-  return { in:{ ['log' + g]:1, ['fish' + g]:1 }, out:{ ['food' + g]:1 }, xp:1 };
+  if(k === 'farm') return { in:{ ['seed' + g]:1 }, out:{ ['fruit' + g]:5 }, xp:Math.round(1 / SEED_P) };
+  if(k === 'smelt') return { in:{ ['log' + g]:1, ['ore' + g]:1 }, out:{ ['bar' + g]:1 }, xp:2 };
+  if(k === 'smith') return part === 'body' ? { in:{ ['bar' + g]:4 }, out:{ ['body' + g]:1 }, xp:8 } : TOOL_SK[part] ? { in:{ ['bar' + g]:3 }, out:{ [part + g]:1 }, xp:6 } : { in:{ ['bar' + g]:2 }, out:{ ['helm' + g]:1 }, xp:4 };
+  return { in:{ ['log' + g]:1, ['fish' + g]:1 }, out:{ ['food' + g]:1 }, xp:2 };
 }
 const hasMats = (st, R) => Object.entries(R.in).every(([key, c]) => (st.inv[key] || 0) >= c);
 const GATHER_OUT = { wood:'log', mine:'ore', fish:'fish' };
@@ -4969,7 +5103,7 @@ const ACC_PRICE = [0, 0, 20000, 50000, 125000, 300000, 750000, 2000000, 5000000,
 const ACC_N = { ring:'용사의 반지', neck:'용사의 목걸이' };
 const xpBoost = st => 1 + ((st.eq.ring || 0) + (st.eq.neck || 0)) * .05;   // 등급 ×5% (실버 10% … 옵시디언 50%), 둘은 더한다
 const hpMax = st => 99 + lvOf(st.sk.combat.exp);   // Lv 1에 100, 레벨마다 +1
-function dmgPerHit(st){ const s = st.sk.combat.stage, def = (st.eq.helm ? DEF_H(st.eq.helm) : 0) + (st.eq.body ? DEF_B(st.eq.body) : 0); return Math.max(0, monAtk(s) - def); }   // 같은 등급 투구+갑옷이면 피해 75% 감소
+function dmgPerHit(st){ const s = st.sk.combat.stage, def = (st.eq.helm ? DEF_H(st.eq.helm) : 0) + (st.eq.body ? DEF_B(st.eq.body) : 0); const m = monAtk(s); return Math.max(Math.ceil(m * .03), m - def); }   // 방어력이 아무리 높아도 공격력의 3%는 맞는다(매 턴 반드시 피해)
 for(const k of CR_KEYS) BGM_ENV[k] = Array(10).fill({ farm:['calm','breeze',['bird']], smelt:['calm','none',['crackle']], smith:['calm','none',['crackle']], cook:['calm','breeze',['crackle']] }[k]);
 // 등급 g(장비 + 같은 등급 던전)를 사는 값. 하루에 마작 2~3판 → 축의 하루 약 10개로 보고,
 //  앞 등급이 상한까지 가는 실제 시간(6등급 11h · 7등급 28h · 8등급 72h)에 하루치 축의가 맞도록 정했다
@@ -4993,7 +5127,8 @@ const OLD_CUM = [0, 0]; for(let L = 2; L <= 99; L++) OLD_CUM[L] = OLD_CUM[L-1] +
 const MAXEXP = CUM[MAXLV];   // 만렙(125)이 되는 경험치. 그 뒤로는 레벨은 그대로지만 경험치는 끝없이 쌓인다
 const lvOf = e => { let L = 1; while(L < MAXLV && e >= CUM[L+1]) L++; return L; };
 // 틱은 3.6초(시간당 1000틱). 던전(등급)별 시간당 경험치: 13K·25K·30K·34K·37K·41K·44K·47K·50K
-function tickMs(k){ if(k === 'combat') return COMBAT_MS; const sk = k && typeof RPG !== 'undefined' && RPG.st.sk[k]; return sk && SK_KEYS.includes(k) ? 3600 * gearSpeed(sk) * (k === 'fish' && !(RPG.st.eq.bait && RPG.st.eq.baitN > 0) ? 2 : 1) : 3600; }   // 낚시는 미끼가 없으면 2배 느리다
+function tickMs(k){ if(k === 'combat') return combatMs(); const pb = typeof RPG !== 'undefined' ? petBoost(k) : 1; return tickMs0(k) / pb; }
+function tickMs0(k){ const sk = k && typeof RPG !== 'undefined' && RPG.st.sk[k]; return sk && SK_KEYS.includes(k) ? 3600 * gearSpeed(sk) * (k === 'fish' && !(RPG.st.eq.bait && RPG.st.eq.baitN > 0) ? 2 : 1) : 3600; }   // 낚시는 미끼가 없으면 2배 느리다
 const XP_PER_HOUR = [13000, 25000, 30000, 34000, 37000, 41000, 44000, 47000, 50000, 53000];
 const expPer = s => XP_PER_HOUR[s - 1] / 1000;
 const fmtDur = ms => { const s = ms / 1000; return s < 60 ? `${s.toFixed(s < 10 ? 1 : 0)}초` : s < 3600 ? `${Math.floor(s/60)}분 ${Math.round(s%60)}초` : `${Math.floor(s/3600)}시간 ${Math.round(s%3600/60)}분`; };
@@ -5034,7 +5169,9 @@ function rpgNorm(st){
   }
   st.inv = st.inv && typeof st.inv === 'object' ? st.inv : {};
   for(const key of Object.keys(st.inv)){ st.inv[key] = Math.max(0, Math.floor(+st.inv[key] || 0)); if(!st.inv[key] || !ikParse(key)) delete st.inv[key]; }
-  st.eq = Object.assign({ helm:0, body:0, food:0, fruit:0, foodN:0, fruitN:0, ring:0, neck:0, bait:0, baitN:0, whet:0, whetN:0 }, st.eq || {});
+  st.eq = Object.assign({ helm:0, body:0, food:0, fruit:0, foodN:0, fruitN:0, ring:0, neck:0, bait:0, baitN:0, pet:0 }, st.eq || {});
+  delete st.eq.whet; delete st.eq.whetN;
+  st.pets = st.pets && typeof st.pets === 'object' ? st.pets : {};   // 얻은 펫(행동마다 한 번만)
   for(const sl of QTY_SL){ st.eq[sl + 'N'] = Math.max(0, Math.floor(+st.eq[sl + 'N'] || 0)); if(!st.eq[sl + 'N']) st.eq[sl] = 0; }   // 요리·열매는 장착한 개수만큼 가방에서 옮겨 둔다
   st.blue = Math.max(0, +st.blue || 0);
   st.bought = Object.assign({ sword:[], ring:[], neck:[] }, st.bought || {});   // 상점에서 한 번 산 것(다시 못 산다 = 매진)
@@ -5076,14 +5213,56 @@ function chipFix(){
   el.querySelector('b').textContent = RPG.st.chips.toLocaleString();
 }
 // 시간 흐름 처리: 지난 시간만큼 틱을 돌려 exp를 준다
+// 전투: 플레이어 틱(휘두르기)과 몬스터 틱(공격)이 따로 돈다. 시간 순서대로 처리
+function combatAdvance(st, sk, dt, T){
+  const k = 'combat', ms = sk.stage, mMax = monHp(ms), M = monMs(ms);
+  const before = lvOf(sk.exp), per = expPer(ms) * xpBoost(st), capE = EXP_CAP(sk.gMax || sk.gear);
+  const items = {};
+  let pc = st.carry, mc = +st.mcarry || 0, t = 0, gain = 0, done = 0, stop = null, eqOut = false, last = null;
+  if(!(st.mhp > 0) || st.mhp > mMax) st.mhp = mMax;
+  const L = () => last || (last = { swing:false, hit:0, crit:false, miss:false, kill:false, mon:false, taken:0, dodge:false });
+  const eat = () => { st.hp = Math.min(hpMax(st), Math.max(0, st.hp) + HEAL(st.eq.food)); st.eq.foodN--; if(!st.eq.foodN){ st.eq.food = 0; eqOut = true; } };
+  while(!stop){
+    const step = Math.min(T - pc, M - mc);
+    if(t + step > dt) break;
+    t += step; pc += step; mc += step;
+    if(pc >= T - 1e-6){   // 내가 한 대
+      pc = 0;
+      if(sk.exp + gain >= capE) break;
+      const miss = Math.random() < .1, crit = !miss && Math.random() < CRIT(sk.gear), hit = miss ? 0 : hitBase(sk.gear, ms) * (crit ? 2 : 1);
+      st.mhp -= hit; const l = L(); l.swing = true; l.hit = hit; l.crit = crit; l.miss = miss;
+      if(st.mhp <= 0){ st.mhp = mMax; mc = 0; l.kill = true; gain += Math.min(per * killXp(ms) * lvPenalty(lvOf(sk.exp + gain), ms), capE - sk.exp - gain); done++; }   // 처치: 경험치, 다음 몬스터(공격 틱도 처음부터)
+      if(!st.pets[k] && Math.random() < (T / 1000) * (lvOf(sk.exp + gain) + 1) / 25e6 && petGain(k)) items['pet' + petOf(k)] = 1;   // 펫: 아주 드물게 한 번
+    }
+    if(mc >= M - 1e-6){   // 몬스터가 한 대
+      mc = 0; const l = L(); l.mon = true;
+      let dodge = false;
+      if(st.eq.fruit && st.eq.fruitN > 0){ st.eq.fruitN--; dodge = Math.random() * 100 < DODGE(st.eq.fruit); if(!st.eq.fruitN){ st.eq.fruit = 0; eqOut = true; } }   // 장착한 열매에서 1개: 피하지 못해도 먹는다
+      if(dodge){ l.dodge = true; continue; }
+      const d = dmgPerHit(st); l.taken += d;
+      if(d >= hpMax(st)){ st.hp = 0; stop = 'ko'; break; }   // 최대 HP 이상을 한 방에 맞으면 요리를 먹을 틈도 없이 쓰러진다
+      st.hp -= d;
+      // 요리: 깎인 HP가 회복량 이상이 되면(낭비 없이) 1개 먹는다. 회복량이 최대 HP보다 커서 그럴 일이 없으면 HP가 0이 될 때 먹는다
+      while(st.eq.food && st.eq.foodN > 0 && hpMax(st) - st.hp >= HEAL(st.eq.food)) eat();
+      if(st.hp <= 0){ if(st.eq.food && st.eq.foodN > 0) eat(); else { st.hp = 0; stop = 'hp'; } }
+    }
+  }
+  st.carry = pc + (dt - t); st.mcarry = mc + (dt - t);
+  sk.exp += gain;
+  const after = lvOf(sk.exp), cap = capped(sk);
+  if(cap || stop){ st.active = null; st.carry = 0; st.mcarry = 0; }
+  if(!last && !Object.keys(items).length) return null;
+  return { k, n: done, gain, before, after, cap, items, stop, eqOut, last };
+}
 function rpgAdvance(offline){
   const st = RPG.st, now = Date.now();
   let dt = now - (st.last || now); st.last = now;
   if(offline && dt > OFFLINE_CAP) dt = OFFLINE_CAP;
   if(dt > OFFLINE_CAP * 2) dt = OFFLINE_CAP * 2;
   if(st.active !== 'combat') st.hp = Math.min(hpMax(st), (+st.hp || 0) + dt / 3600);   // 전투 밖에서는 틱마다 HP 1씩 회복
-  if(!st.active){ st.carry = 0; return null; }
+  if(!st.active){ st.carry = 0; st.mcarry = 0; return null; }
   const k = st.active, sk = st.sk[k], T = tickMs(k), craft = !!SKILLS[k].craft;
+  if(k === 'combat') return combatAdvance(st, sk, dt, T);
   st.carry += dt;
   const n = Math.floor(st.carry / T);
   if(n <= 0) return null;
@@ -5100,26 +5279,6 @@ function rpgAdvance(offline){
       for(const [key, c] of Object.entries(R.in)) add(key, -c);
       for(const [key, c] of Object.entries(R.out)) add(key, c);
       xp = R.xp; lastCraft = !hasMats(st, R);   // 이번이 마지막 재료면 다음 틱을 기다리지 않고 바로 멈춘다
-    } else if(k === 'combat'){
-      const ms = sk.stage, mMax = monHp(ms);
-      if(!(st.mhp > 0) || st.mhp > mMax) st.mhp = mMax;
-      let sure = false;   // 숫돌: 휘두를 때마다 1개, 명중 100%. 없으면 명중 90%
-      if(st.eq.whet && st.eq.whetN > 0){ st.eq.whetN--; sure = true; if(!st.eq.whetN){ st.eq.whet = 0; eqOut = true; } }
-      const miss = !sure && Math.random() < .1;
-      const crit = !miss && Math.random() < CRIT(sk.gear), hit = miss ? 0 : ATK(sk.gear) * (crit ? 2 : 1);   // 내가 먼저 한 대
-      st.mhp -= hit; last = { hit, crit, miss, kill: false, taken: 0, dodge: false };
-      if(st.mhp <= 0){ st.mhp = mMax; last.kill = true; xp = killXp(ms); gain += Math.min(per * xp, capE - sk.exp - gain); done++; continue; }   // 처치: 경험치, 다음 몬스터
-      xp = 0;
-      let dodge = false;
-      if(st.eq.fruit && st.eq.fruitN > 0){ st.eq.fruitN--; dodge = Math.random() * 100 < DODGE(st.eq.fruit); if(!st.eq.fruitN){ st.eq.fruit = 0; eqOut = true; } }   // 장착한 열매에서 1개: 피하지 못해도 먹는다
-      if(!dodge){ const d = dmgPerHit(st); if(d >= hpMax(st)){ st.hp = 0; last.taken = d; stop = 'ko'; break; } st.hp -= d; last.taken = d; } else last.dodge = true;   // 최대 HP 이상을 한 방에 맞으면 요리를 먹을 틈도 없이 쓰러진다
-      // 요리: 깎인 HP가 회복량 이상이 되면(낭비 없이 다 채울 수 있을 때) 1개 먹는다. 회복량이 최대 HP보다 커서 그럴 일이 없으면 HP가 0이 될 때 먹는다
-      const eat = () => { st.hp = Math.min(hpMax(st), Math.max(0, st.hp) + HEAL(st.eq.food)); st.eq.foodN--; if(!st.eq.foodN){ st.eq.food = 0; eqOut = true; } };
-      while(st.eq.food && st.eq.foodN > 0 && hpMax(st) - st.hp >= HEAL(st.eq.food)) eat();
-      if(st.hp <= 0){
-        if(st.eq.food && st.eq.foodN > 0) eat();
-        else { st.hp = 0; stop = 'hp'; break; }
-      }
     } else {
       let baitOut = false;
       if(k === 'fish' && st.eq.bait && st.eq.baitN > 0){   // 미끼가 있으면 1개 쓰고 정상 속도, 없으면 미끼 없이 2배 느리게
@@ -5130,6 +5289,7 @@ function rpgAdvance(offline){
       if(baitOut){ gain += Math.min(per * xp, capE - sk.exp - gain); done++; st.carry += (n - i - 1) * T; break; }   // 미끼가 떨어지면 남은 시간은 느린 속도로 다시 센다
     }
     gain += Math.min(per * xp, capE - sk.exp - gain); done++;
+    if(!st.pets[k] && Math.random() < (T / 1000) * (lvOf(sk.exp + gain) + 1) / 25e6 && petGain(k)) items['pet' + petOf(k)] = 1;   // 펫: 아주 드물게 한 번
     if(lastCraft){ stop = 'mat'; break; }
   }
   sk.exp += gain;
@@ -5153,13 +5313,16 @@ function rpgFx(r){
   const sc = document.querySelector('.rpg .scene'); if(!sc) return;
   sc.classList.remove('fx'); void sc.offsetWidth; sc.classList.add('fx');
   const fl = (txt, x, y, cls) => { const e = document.createElement('div'); e.className = 'floatexp ' + (cls || ''); e.style.left = x + '%'; e.style.top = y + '%'; e.textContent = txt; sc.appendChild(e); setTimeout(() => e.remove(), 1200); };
+  if(r.last && r.last.mon){ const h = sc.querySelector('.hero'); if(h && !r.last.dodge){ h.classList.remove('hurt'); void h.getBoundingClientRect(); h.classList.add('hurt'); SFX.hurt(); } if(r.last.dodge){ const c = document.createElement('div'); c.className = 'floatexp dodge'; c.style.left = '30%'; c.style.top = '50%'; c.textContent = 'Dodge'; sc.appendChild(c); setTimeout(() => c.remove(), 1200); } }   // 몬스터 공격: 맞으면 용사가 빨갛게 한 번 번쩍
   if(r.last && r.last.miss){ const c = document.createElement('div'); c.className = 'floatexp miss'; c.style.left = '70%'; c.style.top = '52%'; c.textContent = 'Miss'; sc.appendChild(c); setTimeout(() => c.remove(), 1750); }   // 빗나감: 몬스터 위에 빨간 Miss
+  if(r.last && r.last.kill) SFX.die(SKILLS.combat.stages[RPG.st.sk.combat.stage - 1][5]);   // 처치: 몬스터별 쓰러지는 소리
   if(r.last && r.last.crit){ const c = document.createElement('div'); c.className = 'floatexp crit'; c.style.left = '70%'; c.style.top = '52%'; c.textContent = 'Critical'; sc.appendChild(c); SFX.crit(); setTimeout(() => c.remove(), 1200); }   // 치명타: 몬스터 위에 Critical
   const f = document.createElement('div'); f.className = 'floatexp';
   const pos = { combat:[70,40], wood:[56,36], mine:[60,46], fish:[66,52], farm:[58,48], smelt:[60,40], smith:[58,40], cook:[58,44] }[r.k] || [60,40];
   f.style.left = pos[0] + '%'; f.style.top = pos[1] + '%';
   f.textContent = `+${fmtNum(r.gain)} exp`; if(r.gain > 0){ sc.appendChild(f); setTimeout(() => f.remove(), 1750); }
   const got = Object.entries(r.items || {}).filter(([, c]) => c > 0);   // 이번 틱에 얻은 재료(제작 결과물 포함)
+  if(got.length && !(r.after > r.before)) SFX.gain();   // 획득음(레벨업과 겹치면 빵빠레만)
   got.forEach(([key, c], i) => { const e = document.createElement('div'); e.className = 'floatexp item'; e.style.left = pos[0] + '%'; e.style.top = (pos[1] + 9 + i * 8) + '%'; e.innerHTML = `${itemIcon(key)}+${fmtNum(c)} ${esc(itemName(key))}`; sc.appendChild(e); setTimeout(() => e.remove(), 1750); });
   if(SFX[r.k] && (r.k === 'fish' || !swingAnim())){ if(r.k === 'combat') SFX.hit(SKILLS.combat.stages[RPG.st.sk.combat.stage - 1][5]); else SFX[r.k](); }   // 낚시는 틱(물고기 점프)에, 나머지는 휘두르는 타이밍(rpgFrame)에 소리가 난다. 애니메이션이 없는 환경(모션 줄이기)이면 틱에
   if(r.after > r.before){
@@ -5178,7 +5341,7 @@ function rpgLive(){
     el.querySelector('.xpbar b').style.width = (L >= MAXLV ? 100 : Math.min(100, into / need * 100)) + '%';
     el.querySelector('.xp').textContent = L >= MAXLV ? `MAX · 총 ${fmtNum(sk.exp)}` : (capped(sk) ? `${fmtNum(need)} / ${fmtNum(need)} · 상한` : `${fmtNum(into)} / ${fmtNum(need)}`);
   }
-  const tb = document.querySelector('.rpg .tickbar b');
+  const tb = document.querySelector('.rpg .tickbar b, .rpg .tk.me b');
   if(tb){ const a = st.active === st.sel ? st.active : null; tb.style.width = a ? Math.min(100, (st.carry + (Date.now() - st.last)) / tickMs(a) * 100) + '%' : '0%'; }
   document.querySelectorAll('.rpg [data-cnt]').forEach(el => { el.textContent = fmtNum(st.inv[el.dataset.cnt] || 0); });
   document.querySelectorAll('.rpg [data-sellv]').forEach(el => { el.textContent = (itemPrice(el.dataset.sellv) * (st.inv[el.dataset.sellv] || 0)).toLocaleString(); });
@@ -5194,6 +5357,7 @@ function rpgLive(){
 }
 // 휘두르는 애니메이션(swing, 1.15초 주기)의 타격 시점(약 55%)에 맞춰 효과음을 낸다
 const SWING_MS = 1150, SWING_HIT = 0.55;
+const swingMs = () => RPG.st.active === 'combat' ? combatMs() : SWING_MS;   // 전투는 강아지 펫이면 10% 빨리 휘두른다
 const SWING = { el:null, last:0, nextA:null };
 function swingAnim(){
   const el = document.querySelector('.rpg .scene:not(.idle) .hero:not(.fish) .arm');
@@ -5208,8 +5372,8 @@ function rpgSwingSfx(){
   const now = SFX.now(); if(now == null){ SWING.nextA = null; return; }   // 효과음이 꺼져 있으면 아무것도 하지 않는다
   // 프레임마다 소리를 '감지'하면 프레임 지연 때문에 간격이 들쭉날쭉해진다. 대신 오디오 시계로 1.15초 간격을 정확히 이어 예약하고,
   // 애니메이션 타격 시점과 어긋났을 때(화면이 다시 그려져 애니메이션이 새로 시작된 경우 등)만 다시 맞춘다
-  const period = SWING_MS / 1000;
-  const ph = (an.currentTime % SWING_MS) / SWING_MS;
+  const SW = swingMs(), period = SW / 1000;
+  const ph = (an.currentTime % SW) / SW;
   let untilHit = (SWING_HIT - ph) * period; if(untilHit < 0) untilHit += period;
   const actual = now + untilHit;                                  // 애니메이션 기준 다음 타격의 오디오 시각
   if(SWING.nextA == null) SWING.nextA = actual;
@@ -5230,14 +5394,14 @@ function combatSync(){
   const st = RPG.st;
   if(UI.screen !== 'rpg' || st.active !== 'combat' || st.sel !== 'combat' || document.hidden) return;
   const an = swingAnim(); if(!an || an.currentTime == null) return;
-  const ph = (an.currentTime % SWING_MS) / SWING_MS;
-  let until = (SWING_HIT - ph) * SWING_MS; if(until < 0) until += SWING_MS;   // 다음 타격까지 남은 ms
-  const now = Date.now(), want = COMBAT_MS - until, have = st.carry + (now - st.last);
-  let d = have - want; d -= Math.round(d / COMBAT_MS) * COMBAT_MS;
-  if(Math.abs(d) > 25){ rpgAdvance(false); st.carry = Math.max(0, COMBAT_MS - until - 1); st.last = Date.now(); }   // 어긋나면 위상만 다시 맞춘다
-  if(until < 20 || until > SWING_MS - 30) rpgTick();   // 타격 순간 바로 처리(50ms 타이머를 기다리지 않음)
+  const SW = combatMs(), ph = (an.currentTime % SW) / SW;
+  let until = (SWING_HIT - ph) * SW; if(until < 0) until += SW;   // 다음 타격까지 남은 ms
+  const now = Date.now(), want = SW - until, have = st.carry + (now - st.last);
+  let d = have - want; d -= Math.round(d / SW) * SW;
+  if(Math.abs(d) > 25){ rpgAdvance(false); st.carry = Math.max(0, SW - until - 1); st.last = Date.now(); }   // 어긋나면 위상만 다시 맞춘다
+  if(until < 20 || until > SW - 30) rpgTick();   // 타격 순간 바로 처리(50ms 타이머를 기다리지 않음)
 }
-function rpgFrame(){ combatSync(); if(UI.screen === 'rpg'){ const st = RPG.st, tb = document.querySelector('.rpg .tickbar b'); if(tb && st.active && st.active === st.sel) tb.style.width = Math.min(100, (st.carry + (Date.now() - st.last)) / tickMs(st.active) * 100) + '%'; } rpgSwingSfx(); requestAnimationFrame(rpgFrame); }
+function rpgFrame(){ combatSync(); if(UI.screen === 'rpg'){ const st = RPG.st, tb = document.querySelector('.rpg .tickbar b, .rpg .tk.me b'), mb = document.querySelector('.rpg .tk.mt b'); if(mb) mb.style.width = st.active === 'combat' && st.sel === 'combat' ? Math.min(100, ((st.mcarry || 0) + (Date.now() - st.last)) / monMs(st.sk.combat.stage) * 100) + '%' : '0%'; if(tb && st.active && st.active === st.sel) tb.style.width = Math.min(100, (st.carry + (Date.now() - st.last)) / tickMs(st.active) * 100) + '%'; } rpgSwingSfx(); requestAnimationFrame(rpgFrame); }
 // ---------- 그림 ----------
 // 장비 그림(손 기준 좌표: 손잡이가 아래로 뻗고 날은 -x 쪽). 용사가 드는 것과 상점 진열에 같이 쓴다
 function rpgToolSVG(k, tierC){
@@ -5278,7 +5442,7 @@ function rpgToolIcon(k, g){
 function rpgTotalLv(){ return ALL_KEYS.reduce((a, k) => a + lvOf(RPG.st.sk[k].exp), 0); }   // 행동 8개(전투·채집 4 + 제작 4) 레벨의 합, 최대 800
 function rpgLvTag(k){
   const X = k === 'fish' ? 70 : k === 'combat' ? 150 : k === 'smelt' ? 160 : k === 'cook' ? 140 : 112, HY = 170 - (k === 'fish' ? 72 : 80) + 4, y = HY - 36, t = `Lv ${rpgTotalLv()}`, w = 8 + t.length * 5.6;
-  const st = RPG.st, eqs = k === 'combat' ? ['food', 'fruit', 'whet'] : k === 'fish' ? ['bait'] : [];   // 장착한 소모품: 레벨 표시 바로 위에 아이콘
+  const st = RPG.st, eqs = k === 'combat' ? ['food', 'fruit'] : k === 'fish' ? ['bait'] : [];   // 장착한 소모품: 레벨 표시 바로 위에 아이콘
   const ic = eqs.filter(sl => st.eq[sl]).map(sl => sl + st.eq[sl]);
   const icons = ic.map((key, i) => `<g transform="translate(${X + 1 - ic.length * 6.5 + i * 13} ${y - 21}) scale(.5)"><rect x="-1" y="-1" width="26" height="26" rx="6" fill="rgba(0,0,0,.5)"/>${itemIcon(key, {raw:true})}</g>`).join('');
   return `${icons}<g class="lvtag"><rect x="${X + 1 - w / 2}" y="${y - 8}" width="${w}" height="13" rx="6.5" fill="rgba(0,0,0,.55)" stroke="rgba(255,233,168,.55)" stroke-width=".8"/><text x="${X + 1}" y="${y + 1.8}" text-anchor="middle" font-size="9" font-weight="800" fill="#ffe9a8" font-family="var(--f-num), monospace">${t}</text></g>`;
@@ -5674,7 +5838,7 @@ function rpgCraftScene(k){
 
       ${[0, 1, 2].map(i => `<circle class="p-ember" style="animation-delay:-${i * 1.1}s" cx="${200 + i * 8}" cy="150" r="1.4" fill="#ffb24a"/>`).join('')}`;
   }
-  return `<svg viewBox="0 0 360 210" aria-label="${esc(SKILLS[k].name)}"><defs><filter id="sDrop" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="2.2" dy="2.6" stdDeviation="2" flood-color="#000" flood-opacity=".38"/></filter></defs>${bg}<g filter="url(#sDrop)">${target}${ready || k !== 'smelt' ? rpgPerson(k, '#9aa3ad') : rpgPerson(k, '#9aa3ad').replace(/<rect x="-7" y="58"[^>]*\/><rect x="-6" y="59"[^>]*\/>/, '')}</g>${fg}${k === 'smelt' || k === 'cook' ? rpgParticles('ember') : ''}${rpgLvTag(k)}</svg>`;
+  return `<svg viewBox="0 0 360 210" aria-label="${esc(SKILLS[k].name)}"><defs><filter id="sDrop" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="2.2" dy="2.6" stdDeviation="2" flood-color="#000" flood-opacity=".38"/></filter></defs>${bg}<g filter="url(#sDrop)">${target}${ready || k !== 'smelt' ? rpgPerson(k, '#9aa3ad') : rpgPerson(k, '#9aa3ad').replace(/<rect x="-7" y="58"[^>]*\/><rect x="-6" y="59"[^>]*\/>/, '')}</g>${fg}${k === 'smelt' || k === 'cook' ? rpgParticles('ember') : ''}${rpgPetSVG(k)}${rpgLvTag(k)}</svg>`;
 }
 function rpgScene(k){
   if(SKILLS[k].craft) return rpgCraftScene(k);
@@ -5742,7 +5906,7 @@ function rpgScene(k){
   const fx = `<defs><linearGradient id="sHaze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky2}" stop-opacity="0"/><stop offset=".55" stop-color="${sky2}" stop-opacity=".28"/><stop offset=".8" stop-color="${sky2}" stop-opacity=".06"/><stop offset="1" stop-color="${sky2}" stop-opacity="0"/></linearGradient>
     <filter id="sDrop" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="2.2" dy="2.6" stdDeviation="2" flood-color="#000" flood-opacity=".38"/></filter>
     <radialGradient id="sRim" cx=".18" cy="-.05" r=".9"><stop offset="0" stop-color="#fff4d6" stop-opacity=".32"/><stop offset=".55" stop-color="#fff4d6" stop-opacity="0"/></radialGradient></defs>`;
-  return `<svg viewBox="0 0 360 210" aria-label="${esc(SKILLS[k].name)} · ${esc(nm)}">${fx}${bg}<rect width="360" height="210" fill="url(#sHaze)"/><g filter="url(#sDrop)">${target}${boatFront ? `<g class="boatbob">${rpgPerson(k, tierC).replace(/<g class="chair">[\s\S]*?<\/g>/, '')}${boatFront}</g>` : rpgPerson(k, tierC)}</g>${fg}<rect width="360" height="210" fill="url(#sRim)" style="mix-blend-mode:soft-light"/>${rpgParticles(wx)}${rpgLvTag(k)}</svg>`;
+  return `<svg viewBox="0 0 360 210" aria-label="${esc(SKILLS[k].name)} · ${esc(nm)}">${fx}${bg}<rect width="360" height="210" fill="url(#sHaze)"/><g filter="url(#sDrop)">${target}${boatFront ? `<g class="boatbob">${rpgPerson(k, tierC).replace(/<g class="chair">[\s\S]*?<\/g>/, '')}${boatFront}</g>` : rpgPerson(k, tierC)}</g>${fg}<rect width="360" height="210" fill="url(#sRim)" style="mix-blend-mode:soft-light"/>${rpgParticles(wx)}${rpgPetSVG(k)}${rpgLvTag(k)}</svg>`;
 }
 // ---------- 화면 ----------
 function appTabs(on){
@@ -5770,16 +5934,17 @@ function rpgHTML(){
   return `${appTabs('rpg')}<div class="rpg">
     ${away ? `<div class="welcome">자리 비운 동안 ${esc(SKILLS[away.k].name)} +${fmtNum(away.gain)} exp${away.after > away.before ? ` · Lv ${away.before}→${away.after}` : ''}${away.cap ? ' · 상한' : ''}${away.stop ? ` · ${away.stop === 'hp' ? 'HP 소진' : away.stop === 'bait' ? '미끼 소진' : away.stop === 'ko' ? '한 방에 쓰러짐' : '재료 소진'}으로 멈춤` : ''}${rpgAwayItems(away.items)}<button class="btn small primary" data-act="awayOk">확인</button></div>` : ''}
     <div class="stage"><div class="skills side l">${CR_KEYS.map(card).join('')}</div>
-    <div class="scene ${st.active === sel ? '' : 'idle'}">${rpgScene(sel)}
-      <div class="shead"><span>${esc(stg[0])}</span>${sel === 'combat' ? (() => { const mm = monHp(sk.stage), mh = st.mhp > 0 ? Math.min(mm, st.mhp) : mm; return `<div class="hps"><span class="shp me"><i><b data-hpb style="width:${Math.max(0, Math.min(1, st.hp / hpMax(st))) * 100}%"></b></i><em data-hpt>${Math.ceil(Math.max(0, st.hp))} / ${hpMax(st)}</em></span><span class="shp mon"><i><b data-mhb style="width:${mh / mm * 100}%"></b></i><em data-mht>${fmtNum(Math.ceil(mh))} / ${fmtNum(mm)}</em></span></div>`; })() : ''}</div>
+    <div class="scene ${st.active === sel ? '' : 'idle'}" style="--swd:${sel === 'combat' ? combatMs() / 1000 : 1.15}s">${rpgScene(sel)}
+      <div class="shead"><span>${esc(stg[0])}</span>${sel === 'combat' ? (() => { const mm = monHp(sk.stage), mh = st.mhp > 0 ? Math.min(mm, st.mhp) : mm; return `<div class="hps"><span class="shp me"><span class="bars"><i><b data-hpb style="width:${Math.max(0, Math.min(1, st.hp / hpMax(st))) * 100}%"></b></i><u class="tk me"><b></b></u></span><em data-hpt>${Math.ceil(Math.max(0, st.hp))} / ${hpMax(st)}</em></span><span class="shp mon"><span class="bars"><i><b data-mhb style="width:${mh / mm * 100}%"></b></i><u class="tk mt"><b></b></u></span><em data-mht>${fmtNum(Math.ceil(mh))} / ${fmtNum(mm)}</em></span></div>`; })() : ''}</div>
       <div class="sfoot"><span></span><span class="sbtns">
         ${st.active === sel ? `<button class="btn small gobtn" data-act="rpgGo">그만하기</button>` : `<button class="btn small primary gobtn" data-act="rpgGo">${esc(S.name)} 시작</button>`}
       </span></div>
-      <div class="tickbar"><b></b></div></div>
+      ${sel === 'combat' ? '' : '<div class="tickbar"><b></b></div>'}</div>
     <div class="skills side r">${SK_KEYS.map(card).join('')}</div></div>
-    ${craft ? `<div class="shop"><h3>${esc(S.name)} 제작법</h3>${sel === 'smith' ? `<div class="invtabs">${SMITH_PARTS.map(pt => `<button class="btn small ${pt === (SMITH_PARTS.includes(UI.smithTab) ? UI.smithTab : sk.part) ? 'on' : ''}" data-act="smithTab" data-t="${pt}">${{ helm:'투구', body:'갑옷', sword:'검', axe:'도끼', pick:'곡괭이', rod:'낚싯대' }[pt]}</button>`).join('')}</div>` : ''}<div class="rcps">${rpgRecipes(st, sel, sk)}</div></div>` : gradeItems ? `<div class="shop"><h3>${{ combat:'던전', wood:'숲', mine:'광산', fish:'낚시터' }[sel]}</h3><div class="items">${gradeItems}</div></div>` : ''}
+    ${craft ? `<div class="shop"><h3 class="hrow">${esc(S.name)} 제작법${sel === 'smith' ? `<div class="invtabs">${SMITH_PARTS.map(pt => `<button class="btn small ${pt === (SMITH_PARTS.includes(UI.smithTab) ? UI.smithTab : sk.part) ? 'on' : ''}" data-act="smithTab" data-t="${pt}">${{ helm:'투구', body:'갑옷', sword:'검', axe:'도끼', pick:'곡괭이', rod:'낚싯대' }[pt]}</button>`).join('')}</div>` : ''}</h3><div class="rcps">${rpgRecipes(st, sel, sk)}</div></div>` : gradeItems ? `<div class="shop"><h3>${{ combat:'던전', wood:'숲', mine:'광산', fish:'낚시터' }[sel]}</h3><div class="items">${gradeItems}</div></div>` : ''}
     ${rpgBagHTML(st)}
     ${rpgAccHTML(st)}
+    ${rpgAdmin() ? rpgAdminHTML(st) : ''}
   </div>`;
 }
 function rpgAwayItems(items){
@@ -5794,26 +5959,40 @@ function rpgRecipes(st, sel, sk){
   return list.map(([g, part]) => {
     const R = recipe(sel, g, part), ok = Object.keys(R.out)[0], has = hasMats(st, R), cur = has && sk.stage === g && (sel !== 'smith' || sk.part === part), lvOk = L >= REQ_LV(g);
     const ins = Object.entries(R.in).map(([key, c]) => `<span class="${(st.inv[key] || 0) >= c ? '' : 'short'}">${itemIcon(key)}${esc(itemName(key))} ${c}<small>(<b data-cnt="${key}">${fmtNum(st.inv[key] || 0)}</b>)</small></span>`).join('<br>');   // 재료마다 한 줄
-    return `<div class="it rcp ${cur ? 'eq' : ''} ${lvOk ? '' : 'lock'}"><span class="n">${itemIcon(ok)}${esc(itemName(ok))}${R.out[ok] > 1 ? ` ×${R.out[ok]}` : ''}${lvOk ? '' : `<small>(${REQ_LV(g)}레벨 이상)</small>`}</span><span class="d">${ins}</span>
-      ${cur ? '<span class="d sel">선택됨</span>' : lvOk && has ? `<button class="btn small" data-act="rpgRecipe" data-g="${g}" data-p="${part || ''}">선택</button>` : lvOk ? '<span class="d short">재료 부족</span>' : ''}</div>`;
+    const nm = `${itemIcon(ok)}${esc(itemName(ok))}${R.out[ok] > 1 ? ` ×${R.out[ok]}` : ''}`, can = !cur && lvOk && has;   // 이름이 곧 선택 버튼(선택되면 버튼 테두리 대신 카드에 노란 테두리)
+    return `<div class="it rcp ${cur ? 'eq' : ''} ${lvOk ? '' : 'lock'}"><span class="nrow">${can ? `<button class="rnb" data-act="rpgRecipe" data-g="${g}" data-p="${part || ''}">${nm}</button>` : `<span class="rnb off">${nm}</span>`}${lvOk ? '' : `<small class="lockt">Lv ${REQ_LV(g)}</small>`}</span><span class="d">${ins}</span></div>`;
   }).join('');
 }
 const slotName = (s, g) => itemName(s + g);
+// 장착 효과(가방 목록에 같이 적는다)
+function itemEffect(key){
+  const p = ikParse(key); if(!p) return ''; const [t, g] = p;
+  if(t === 'helm') return `방어력 +${DEF_H(g)}`;
+  if(t === 'body') return `방어력 +${DEF_B(g)}`;
+  if(t === 'sword') return `공격력 +${ATK(g)}${CRIT(g) ? ` · 치명타 ${Math.round(CRIT(g) * 100)}%` : ''} · ${SKILLS.combat.name} ${REQ_LV(g)}레벨 이상`;
+  if(TOOL_SK[t]) return `${g}등급 맵까지 정상 속도 · ${SKILLS[TOOL_SK[t]].name} ${REQ_LV(g)}레벨 이상`;
+  if(t === 'food') return `회복 ${HEAL(g)}`;
+  if(t === 'fruit') return `회피 ${DODGE(g)}%`;
+  if(t === 'bait') return '낚시 속도 2배';
+  if(t === 'ring' || t === 'neck') return `경험치 +${g * 5}%`;
+  if(t === 'pet') return `${SKILLS[PETS[g-1].k].name} 속도 +10%`;
+  return '';
+}
 function rpgBagHTML(st){
   const eq = st.eq;
-  const slot = (lbl, s, extra, canX) => { const g = eq[s]; return `<div class="slot"><span class="sl">${lbl}${g && canX ? `<button class="x" data-act="rpgUneq" data-slot="${s}">해제</button>` : ''}</span><span class="sv ${g ? '' : 'none'}">${g ? itemIcon(s + g) + esc(slotName(s, g)) : '없음'}</span>${g && extra ? `<span class="sl"><span>${extra}</span></span>` : ''}</div>`; };
+  const slot = (lbl, s, extra, canX) => { const g = eq[s]; return `<div class="slot" data-act="slotOpen" data-tab="${s === 'pet' ? 'pet' : 'gear'}" data-sub="${s}" title="가방에서 ${lbl} 보기"><span class="sl">${lbl}${g && canX ? `<button class="x" data-act="rpgUneq" data-slot="${s}">해제</button>` : ''}</span><span class="sv ${g ? '' : 'none'}">${g ? itemIcon(s + g) + esc(slotName(s, g)) : '없음'}</span><span class="sl"><span>${g && extra ? extra : '&nbsp;'}</span></span></div>`; };
   const cnt = sl => `<b data-eqn="${sl}">${fmtNum(eq[sl + 'N'] || 0)}</b>개`;
-  const tool = k => { const g = st.sk[k].gear; return `<div class="slot"><span class="sl">${SKILLS[k].tool === '검' ? '무기' : SKILLS[k].tool}</span><span class="sv">${itemIcon(TOOL_T[k] + g)}${TIERS[g-1].n} ${SKILLS[k].tool}</span><span class="sl"><span>${k === 'combat' ? `공격력 +${ATK(g)}${CRIT(g) ? ` · 치명 ${Math.round(CRIT(g) * 100)}%` : ''}` : speedLabel(st.sk[k]) || '속도 보통'}</span></span></div>`; };
-  const slots = SK_KEYS.map(tool).join('') + slot('투구', 'helm', eq.helm ? `방어력 +${DEF_H(eq.helm)}` : '', true) + slot('갑옷', 'body', eq.body ? `방어력 +${DEF_B(eq.body)}` : '', true)
+  const tool = k => { const g = st.sk[k].gear; return `<div class="slot" data-act="slotOpen" data-tab="${k === 'combat' ? 'gear' : 'tool'}" data-sub="${TOOL_T[k]}" title="가방에서 ${SKILLS[k].tool} 보기"><span class="sl">${SKILLS[k].tool === '검' ? '무기' : SKILLS[k].tool}</span><span class="sv">${itemIcon(TOOL_T[k] + g)}${TIERS[g-1].n} ${SKILLS[k].tool}</span><span class="sl"><span>${k === 'combat' ? `공격력 +${ATK(g)}${CRIT(g) ? ` · 치명 ${Math.round(CRIT(g) * 100)}%` : ''}` : speedLabel(st.sk[k]) || '속도 보통'}</span></span></div>`; };
+  const slots = tool('combat') + slot('투구', 'helm', eq.helm ? `방어력 +${DEF_H(eq.helm)}` : '', true) + slot('갑옷', 'body', eq.body ? `방어력 +${DEF_B(eq.body)}` : '', true) + ['wood', 'mine', 'fish'].map(tool).join('')   // 첫 줄: 무기·투구·갑옷
     + slot('요리', 'food', eq.food ? `회복 ${HEAL(eq.food)} · ${cnt('food')}` : '', true)
     + slot('열매', 'fruit', eq.fruit ? `회피 ${DODGE(eq.fruit)}% · ${cnt('fruit')}` : '', true)
-    + slot('숫돌', 'whet', eq.whet ? `명중률 100% · ${cnt('whet')}` : '', true) + slot('미끼', 'bait', eq.bait ? `낚시 속도 2배 · ${cnt('bait')}` : '', true)
-    + slot('반지', 'ring', eq.ring ? `경험치 +${eq.ring * 5}%` : '', true) + slot('목걸이', 'neck', eq.neck ? `경험치 +${eq.neck * 5}%` : '', true);
+    + slot('미끼', 'bait', eq.bait ? `낚시 속도 2배 · ${cnt('bait')}` : '', true)
+    + slot('반지', 'ring', eq.ring ? `경험치 +${eq.ring * 5}%` : '', true) + slot('목걸이', 'neck', eq.neck ? `경험치 +${eq.neck * 5}%` : '', true) + slot('펫', 'pet', eq.pet ? `${SKILLS[PETS[eq.pet - 1].k].name} 속도 +10%` : '', true);
   const hm = hpMax(st), hp = Math.max(0, Math.min(hm, st.hp)), dm = dmgPerHit(st);
   const allKeys = Object.keys(st.inv).filter(key => st.inv[key] > 0 && ikParse(key));
   const tab = INV_TABS.find(t => t[0] === UI.invTab), inTab = (T, key) => !T[2] || T[2].includes(ikParse(key)[0]);   // 처음엔 접혀 있다(탭을 눌러야 펼침, 같은 탭을 다시 누르면 접힘)
   const tabs = `<div class="invtabs" role="tablist">${INV_TABS.map(T => { const n = allKeys.filter(key => inTab(T, key)).length; return `<button class="btn small ${T === tab ? 'on' : ''} ${T[2] && allKeys.some(key => inTab(T, key) && SELL_T.includes(ikParse(key)[0])) ? 'sell' : ''} ${n ? '' : 'empty'}" role="tab" aria-selected="${T === tab}" data-act="invTab" data-t="${T[0]}" aria-expanded="${T === tab}">${T[1]}${n ? `<small>${n}</small>` : ''}<i class="chev">${T === tab ? '▲' : '▼'}</i></button>`; }).join('')}</div>`;
-  const SUBN = { log:'목재', seed:'씨앗', ore:'원석', fish:'생선', bar:'주괴', sword:'검', food:'요리', fruit:'열매', whet:'숫돌', bait:'미끼', helm:'투구', body:'갑옷', ring:'반지', neck:'목걸이', axe:'도끼', pick:'곡괭이', rod:'낚싯대' };
+  const SUBN = { log:'목재', seed:'씨앗', ore:'원석', fish:'생선', bar:'주괴', sword:'검', food:'요리', fruit:'열매', bait:'미끼', pet:'펫', helm:'투구', body:'갑옷', ring:'반지', neck:'목걸이', axe:'도끼', pick:'곡괭이', rod:'낚싯대' };
   const subs = tab && tab[2] && tab[2].length > 1 ? tab[2] : null, sub = subs && subs.includes(UI.invSub) ? UI.invSub : null;   // 탭 안의 탭(장비 → 검·투구…)
   const subtabs = subs ? `<div class="invtabs sub">${subs.map(t => { const n = allKeys.filter(key => ikParse(key)[0] === t).length; return `<button class="btn small ${t === sub ? 'on' : ''} ${n && SELL_T.includes(t) ? 'sell' : ''} ${n ? '' : 'empty'}" data-act="invSub" data-t="${t}">${SUBN[t]}${n ? `<small>${n}</small>` : ''}</button>`; }).join('')}</div>` : '';
   const keys = !tab ? [] : allKeys.filter(key => inTab(tab, key) && (!sub || ikParse(key)[0] === sub)).sort((a, b) => { const A = ikParse(a), B = ikParse(b); return ITEM_ORDER.indexOf(A[0]) - ITEM_ORDER.indexOf(B[0]) || A[1] - B[1]; });
@@ -5821,22 +6000,23 @@ function rpgBagHTML(st){
   const pager = pages > 1 ? `<div class="invpager"><button class="btn small" data-act="invPage" data-d="-1" ${pg ? '' : 'disabled'}>‹</button><span>${pg + 1} / ${pages}</span><button class="btn small" data-act="invPage" data-d="1" ${pg < pages - 1 ? '' : 'disabled'}>›</button></div>` : '';
   const rows = keys.slice(pg * PER, pg * PER + PER).map(key => {
     const [t, g] = ikParse(key), sl = ITEM[t].eq;
-    const eqB = !sl ? '' : sl === 'tool' && st.sk[TOOL_SK[t]].gear === g ? '<span class="p on">착용 중</span>' : QTY_SL.includes(sl) ? `<input class="qty" type="number" inputmode="numeric" min="1" max="${st.inv[key]}" value="${st.inv[key]}" aria-label="장착할 개수"><button class="btn small" data-act="rpgEq" data-key="${key}">장착</button>` : `<button class="btn small" data-act="rpgEq" data-key="${key}">착용</button>`;
-    return `<div class="ivr"><span class="n">${itemIcon(key)}${esc(itemName(key))}</span><b class="c" data-cnt="${key}">${fmtNum(st.inv[key])}</b>${eqB}${SELL_T.includes(t) ? `<button class="btn small" data-act="rpgSell" data-key="${key}"><i class="chipi bc"></i><span data-sellv="${key}">${(itemPrice(key) * st.inv[key]).toLocaleString()}</span> 전부 판매</button>` : ''}</div>`;   // 장비(투구·갑옷)만, 가진 개수 전부를 판다
+    const eqB = !sl ? '' : (sl === 'tool' ? st.sk[TOOL_SK[t]].gear === g : !QTY_SL.includes(sl) && st.eq[sl] === g) ? '<span class="p on">착용 중</span>' : QTY_SL.includes(sl) ? `<input class="qty" type="number" inputmode="numeric" min="1" max="${st.inv[key]}" value="${st.inv[key]}" aria-label="장착할 개수"><button class="btn small" data-act="rpgEq" data-key="${key}">장착</button>` : `<button class="btn small" data-act="rpgEq" data-key="${key}">착용</button>`;
+    const ef = itemEffect(key);
+    return `<div class="ivr"><span class="n">${itemIcon(key)}${esc(itemName(key))}${ef ? `<small class="eff">${ef}</small>` : ''}</span><b class="c" data-cnt="${key}">${fmtNum(st.inv[key])}</b>${eqB}${SELL_T.includes(t) ? `<button class="btn small" data-act="rpgSell" data-key="${key}"><i class="chipi bc"></i><span data-sellv="${key}">${(itemPrice(key) * st.inv[key]).toLocaleString()}</span> 전부 판매</button>` : ''}</div>`;   // 장비(투구·갑옷)만, 가진 개수 전부를 판다
   }).join('') + (pages > 1 ? '<div class="ivr empty" aria-hidden="true"></div>'.repeat(PER - Math.min(PER, keys.length - pg * PER)) : '');   // 마지막 쪽도 10줄 높이 그대로
   return `<div class="shop bag"><h3>장비</h3>
     <div class="eqs">${slots}</div></div>
-    <div class="shop bag"><h3>가방 <span class="bluec" title="파란 칩"><i class="chipi bc"></i><b data-blue>${Math.floor(st.blue).toLocaleString()}</b></span></h3>
-    ${tabs}${subtabs}${!tab ? `<button class="invopen" data-act="invTab" data-t="all"><i class="chev">▼</i> 펼치기</button>` : `<div class="inv">${rows || `<p class="muted" style="margin:4px 0">${tab[0] === 'all' ? '비어 있어요. 나무베기·광질·낚시를 하면 재료가 쌓여요' : `${tab[1]}${josa(tab[1], '이', '가')} 없어요`}</p>`}</div>${pager}`}</div>`;
+    <div class="shop bag"><h3>가방 ${tabs}<span class="baghd">${(() => { const L = bulkSellList(st), v = L.reduce((a, k) => a + itemPrice(k) * st.inv[k], 0); return L.length ? `<button class="btn small bulk" data-act="rpgBulk" title="종류마다 가진 최고 등급만 남기고 아래 등급 장비를 전부 판다"><i class="chipi bc"></i>${v.toLocaleString()} 일괄 판매</button>` : ''; })()}<span class="bluec" title="파란 칩"><i class="chipi bc"></i><b data-blue>${Math.floor(st.blue).toLocaleString()}</b></span></span></h3>
+    ${subtabs}${!tab ? `<button class="invopen" data-act="invTab" data-t="all"><i class="chev">▼</i> 펼치기</button>` : `<div class="inv">${rows || `<p class="muted" style="margin:4px 0">${tab[0] === 'all' ? '비어 있어요. 나무베기·광질·낚시를 하면 재료가 쌓여요' : `${tab[1]}${josa(tab[1], '이', '가')} 없어요`}</p>`}</div>${pager}`}</div>`;
 }
 // 맵: 그 등급의 배경(움직이는 날씨 포함). 가진 장비 등급까지 들어갈 수 있고, 들어가면 그 등급 장비를 든다
 function mapItems(k){   // 맵: 그 행동 레벨이 맵 등급의 요구 레벨(20·30…100)에 닿으면 들어갈 수 있다. 장비와는 따로
   const sk = RPG.st.sk[k], S = SKILLS[k], L = lvOf(sk.exp);
   return TIERS.map((t, i) => {
     const g = i + 1, cur = g === sk.stage, open = L >= REQ_LV(g);
-    const btn = cur ? '<span class="d sel">여기</span>' : open ? `<button class="btn small buy" data-act="rpgMap" data-k="${k}" data-g="${g}">이동</button>` : '';
-    return `<div class="it wshop ${cur ? 'eq' : ''} ${open ? '' : 'lock'}">${rpgRack(k, g, true)}
-      <div class="wrow"><span class="n">${esc(S.stages[i][0])}${open ? '' : `<small>(${REQ_LV(g)}레벨 이상)</small>`}</span>${btn}</div></div>`;
+    const nm = esc(S.stages[i][0]);   // 이름이 곧 이동 버튼(제작법과 같은 방식)
+    return `<div class="it wshop map ${cur ? 'eq' : ''} ${open ? '' : 'lock'}"><span class="nrow">${!cur && open ? `<button class="rnb" data-act="rpgMap" data-k="${k}" data-g="${g}">${nm}</button>` : `<span class="rnb off">${nm}</span>`}${open ? '' : `<small class="lockt">Lv ${REQ_LV(g)}</small>`}</span>
+      ${rpgRack(k, g, true)}</div>`;   // 이름(버튼)이 위, 그림이 아래 — 제작법 카드와 같은 위치
   }).join('');
 }
 // 상점 탭의 도구 줄: 아이콘 + 이름 + (착용 레벨) + 축의칩 가격 / 착용 / 착용 중
@@ -5848,15 +6028,64 @@ function toolShopItems(k){   // 무기: 축의칩만 있으면 언제든 산다.
     const sold = k === 'combat' ? cur || RPG.st.bought.sword.includes(g) : own;   // 검: 한 번 사면 매진
     const btn = sold ? '<span class="d">매진</span>'
       : `<button class="btn small buy" data-act="rpgBuy" data-k="${k}" data-g="${g}"><i class="chipi"></i>${GRADE_PRICE[i]}</button>`;
-    const info = [`${REQ_LV(g)}레벨 이상`, k === 'combat' && CRIT(g) ? `치명타 ${Math.round(CRIT(g) * 100)}%` : ''].filter(Boolean).join(' · ');
+    const info = [`${S.name} ${REQ_LV(g)}레벨 이상`, k === 'combat' && CRIT(g) ? `치명타 ${Math.round(CRIT(g) * 100)}%` : ''].filter(Boolean).join(' · ');
     return `<div class="it ${cur ? 'eq' : ''} ${!cur && own && !lvOk ? 'lock' : ''}"><span class="n">${itemIcon(TOOL_T[k] + g)}${t.n} ${S.tool}${info ? `<small>${info}</small>` : ''}</span>${btn}</div>`;
   }).join('');
+}
+// ---------- 운영자 모드(시험용): 주소 끝에 #admin ----------
+const rpgAdmin = () => /(^|[#&])admin\b/.test(location.hash);
+function rpgAdminHTML(st){
+  const AV = UI.admVals || (UI.admVals = { 'adm-t':'log', 'adm-g':'1', 'adm-n':'100', 'adm-k':'wood', 'adm-l':'50' });
+  const TN = { log:'목재', seed:'씨앗', ore:'원석', fish:'생선', fruit:'열매', bar:'주괴', food:'요리', sword:'검', axe:'도끼', pick:'곡괭이', rod:'낚싯대', helm:'투구', body:'갑옷', ring:'반지', neck:'목걸이', bait:'미끼', pet:'펫' };
+  const types = ITEM_ORDER.filter(t => t !== 'pet').map(t => `<option value="${t}"${AV['adm-t'] === t ? ' selected' : ''}>${TN[t] || t}</option>`).join('');
+  const grades = TIERS.map((t, i) => `<option value="${i + 1}"${AV['adm-g'] === String(i + 1) ? ' selected' : ''}>${i + 1} ${t.n}</option>`).join('');
+  const skills = ALL_KEYS.map(k => `<option value="${k}"${AV['adm-k'] === k ? ' selected' : ''}>${SKILLS[k].name}</option>`).join('');
+  const B = (op, label, extra) => `<button class="btn small" data-act="adm" data-op="${op}"${extra || ''}>${label}</button>`;
+  return `<div class="shop admin"><h3>운영자 모드 <small class="muted">주소의 #admin 을 지우면 사라져요</small></h3>
+    <div class="arow"><b>아이템</b><select id="adm-t">${types}</select><select id="adm-g">${grades}</select><input id="adm-n" class="qty" type="number" min="1" value="${esc(AV['adm-n'])}">${B('give', '지급')}${B('giveAll', '모든 아이템 ×100')}${B('clearInv', '가방 비우기')}</div>
+    <div class="arow"><b>칩</b>${B('blue', '파란 칩 +100만')}${B('blue0', '파란 칩 0')}${B('chips', '축의칩 +100')}${B('shopReset', '상점 매진 초기화')}</div>
+    <div class="arow"><b>레벨</b><select id="adm-k">${skills}</select><input id="adm-l" class="qty" type="number" min="1" max="${MAXLV}" value="${esc(AV['adm-l'])}">${B('lv', '설정')}${B('lvAll', `전부 ${MAXLV}`)}${B('gearAll', '도구 전 등급 열기')}</div>
+    <div class="arow"><b>전투</b>${B('hp0', 'HP 1')}${B('hpFull', 'HP 가득')}${B('unEq', '장착 전부 해제')}</div>
+    <div class="arow"><b>펫</b>${PETS.map(p => B('pet', `${p.n}${st.pets[p.k] ? ' ✓' : ''}`, ` data-k="${p.k}"`)).join('')}${B('petAll', '펫 전부')}${B('petReset', '펫 초기화')}</div>
+    <div class="arow"><b>시간</b>${B('ff', '+1분', ' data-m="1"')}${B('ff', '+10분', ' data-m="10"')}${B('ff', '+1시간', ' data-m="60"')}${B('ff', '+10시간', ' data-m="600"')}<small class="muted">진행 중인 행동을 그만큼 돌린다</small></div>
+  </div>`;
+}
+function rpgAdminAct(b){
+  const st = RPG.st, op = b.dataset.op, v = id => (document.getElementById(id) || {}).value;
+  const add = (key, n) => { st.inv[key] = (st.inv[key] || 0) + n; if(st.inv[key] <= 0) delete st.inv[key]; };
+  if(op === 'give'){ const t = v('adm-t'), g = t === 'bait' ? 1 : +v('adm-g'); add(t + g, Math.max(1, Math.floor(+v('adm-n') || 1))); }
+  else if(op === 'giveAll'){ for(const t of ITEM_ORDER) if(t !== 'pet') for(let g = 1; g <= (t === 'bait' ? 1 : 10); g++) add(t + g, 100); }
+  else if(op === 'clearInv') st.inv = {};
+  else if(op === 'blue') st.blue += 1e6;
+  else if(op === 'blue0') st.blue = 0;
+  else if(op === 'chips') st.chips += 100;
+  else if(op === 'shopReset') st.bought = { sword:[], ring:[], neck:[] };
+  else if(op === 'lv' || op === 'lvAll'){ const L = Math.max(1, Math.min(MAXLV, Math.floor(+v('adm-l') || 1))); for(const k of op === 'lvAll' ? ALL_KEYS : [v('adm-k')]) st.sk[k].exp = CUM[op === 'lvAll' ? MAXLV : L]; }
+  else if(op === 'gearAll'){ for(const k of SK_KEYS) for(let g = 1; g <= 10; g++) addOwn(st.sk[k], g); }
+  else if(op === 'hp0') st.hp = 1;
+  else if(op === 'hpFull') st.hp = hpMax(st);
+  else if(op === 'unEq'){ for(const sl of ['helm', 'body', 'ring', 'neck', 'pet']) if(st.eq[sl]){ add(sl + st.eq[sl], 1); st.eq[sl] = 0; } for(const sl of QTY_SL) if(st.eq[sl]){ add(sl + st.eq[sl], st.eq[sl + 'N']); st.eq[sl] = 0; st.eq[sl + 'N'] = 0; } }
+  else if(op === 'pet') petGain(b.dataset.k);                                  // 실제 획득과 같은 경로(알림·가방)
+  else if(op === 'petAll') PETS.forEach(p => petGain(p.k));
+  else if(op === 'petReset'){ st.pets = {}; st.eq.pet = 0; for(const k of Object.keys(st.inv)) if(/^pet\d/.test(k)) delete st.inv[k]; }
+  else if(op === 'ff'){ st.last -= (+b.dataset.m || 1) * 60000; rpgTick(); }
+  rpgSave(); chipFix(); render();
 }
 const SHOP_TABS = [['combat', '무기'], ['ring', '반지'], ['neck', '목걸이'], ['cons', '소모품']];   // 도끼·곡괭이·낚싯대는 대장간에서 만들어 착용
 // 소모품: 개수를 넣고 산다(개당 파란 칩 1)
 function consShopItems(st){
-  return [['whet', '명중률 100%'], ['bait', '낚시 속도 2배']].map(([t, d]) =>
+  return [['bait', '낚시 속도 2배']].map(([t, d]) =>
     `<div class="it cons"><span class="n">${itemIcon(t + 1)}${ITEM[t].n(1)}<small>${d}</small></span><span class="cbuy"><input class="qty" type="number" inputmode="numeric" min="1" value="100" aria-label="살 개수"><button class="btn small buy" data-act="rpgCons" data-t="${t}"><i class="chipi bc"></i>구매</button></span></div>`).join('');
+}
+// 일괄 판매: 팔 수 있는 장비(투구·갑옷·도끼·곡괭이·낚싯대)마다 가진 것 중 최고 등급은 남기고 그 아래 등급을 전부
+function bulkSellList(st){
+  const out = [];
+  for(const t of GEAR_T){
+    const eqG = t === 'helm' || t === 'body' ? st.eq[t] || 0 : st.sk[TOOL_SK[t]].gear || 0;   // 장착 중인 등급
+    let top = eqG; for(let g = 1; g <= 10; g++) if((st.inv[t + g] || 0) > 0) top = Math.max(top, g);
+    for(let g = 1; g < top; g++) if((st.inv[t + g] || 0) > 0) out.push(t + g);
+  }
+  return out;
 }
 function rpgAccHTML(st){
   const row = s => TIERS.slice(1).map((t, i) => {
@@ -5903,6 +6132,7 @@ function rpgHelpHTML(){
     <ul>
       <li><b>행동</b> 오프라인 최대 24시간 누적 경험치 획득 가능</li>
       <li><b>전투</b> 요리를 장착하여 HP 회복이 가능하고,<br>열매를 장착하여 적의 공격이 회피 가능</li>
+      <li><b>펫</b> 행동마다 아주 드물게 1마리 획득. 그 행동 펫을 장착하면 속도 +10%</li>
       <li><b>파란 칩</b>(<i class="chipi bc"></i>) 장비를 팔아 획득. 상점에서 반지·목걸이 구매 가능</li>
       <li><b>재화</b> 축의칩(<i class="chipi rc"></i>). 3인 마작에서 획득 가능</li>
       <li><b>총 레벨</b> ${ALICE_LV}에 설정 '아리스(3인 마작)' 개방</li>
@@ -5912,10 +6142,10 @@ function rpgHelpHTML(){
     <ul>
       
       
+      <li>${MJSK.combat.icon} <b>(${S.combat.n})</b> 손패를 잡고 <kbd>휠</kbd>을 굴리면 방총 확인<br><span style="color:#2fe06a">초록</span> → 안전, <span style="color:#ff3b30">빨강</span> → 방총, <span style="color:#000;text-shadow:.5px 0 #ccc,-.5px 0 #ccc,0 .5px #ccc,0 -.5px #ccc">검정</span> → 스킬 실패</li>
       <li>${MJSK.wood.icon} <b>(${S.wood.n})</b> 필요 없는 손패 두 장을 패산으로 끌어 교환</li>
       <li>${MJSK.mine.icon} <b>(${S.mine.n})</b> 도라 표시패를 눌러 스킬 발동 성공 시 뒷도라 표시패 확인</li>
       <li>${MJSK.fish.icon} <b>(${S.fish.n})</b> 스킬 성공 시 다음 쯔모 패가 투시되어 보임</li>
-      <li>${MJSK.combat.icon} <b>(${S.combat.n})</b> 손패를 잡고 <kbd>휠</kbd>을 굴리면 방총 확인<br><span style="color:#2fe06a">초록</span> → 안전, <span style="color:#ff3b30">빨강</span> → 방총, <span style="color:#000;text-shadow:.5px 0 #ccc,-.5px 0 #ccc,0 .5px #ccc,0 -.5px #ccc">검정</span> → 스킬 실패</li>
     </ul>
     <div class="row"><button class="btn primary" data-act="closeModal">닫기</button></div></div>`;
 }
@@ -5927,12 +6157,12 @@ function rpgToast(msg){
 function rpgAct(a, b){
   const st = RPG.st, sel = st.sel || 'combat', sk = st.sk[sel];
   rpgAdvance(false);
-  if(a === 'rpgSel'){ if(b.dataset.s !== st.sel && st.active){ st.active = null; st.carry = 0; } st.sel = b.dataset.s; }   // 다른 행동으로 바꾸면 하던 행동은 멈춘다
+  if(a === 'rpgSel'){ if(b.dataset.s !== st.sel && st.active){ st.active = null; st.carry = 0; st.mcarry = 0; } st.sel = b.dataset.s; }   // 다른 행동으로 바꾸면 하던 행동은 멈춘다
   else if(a === 'rpgGo' && st.active !== sel && SKILLS[sel].craft && lvOf(sk.exp) < REQ_LV(sk.stage)){ rpgToast(`${REQ_LV(sk.stage)}레벨 이상부터 만들 수 있어요`); return; }
   else if(a === 'rpgGo' && st.active !== sel && SKILLS[sel].craft && !hasMats(st, recipe(sel, sk.stage, sk.part))){ rpgToast('재료가 부족해요'); return; }
   else if(a === 'rpgGo' && st.active !== sel && sel === 'combat' && st.hp < 1){ rpgToast('HP 회복 중이에요'); return; }
   else if(a === 'rpgGo' && st.active !== sel && capped(sk)){ rpgToast(`Lv ${LV_CAP(sk.gMax)} 상한 · ${TIERS[sk.gMax].n} ${SKILLS[sel].tool}이 필요해요`); return; }
-  else if(a === 'rpgGo'){ if(st.active === sel) st.active = null; else { st.active = sel; st.carry = 0; st.last = Date.now(); SFX.unlock(); if(sel === 'combat') SFX.hit(SKILLS.combat.stages[sk.stage - 1][5]); else if(SFX[sel]) SFX[sel](); } }   // 시작할 때 한 번: 전투는 그 몬스터의 타격음
+  else if(a === 'rpgGo'){ if(st.active === sel) st.active = null; else { st.active = sel; st.carry = 0; st.mcarry = 0; st.last = Date.now(); SFX.unlock(); if(sel === 'combat') SFX.hit(SKILLS.combat.stages[sk.stage - 1][5]); else if(SFX[sel]) SFX[sel](); } }   // 시작할 때 한 번: 전투는 그 몬스터의 타격음
   else if(a === 'rpgBuy'){   // 사면 곧 착용. 그 장비의 착용 레벨(20·30…100)에 닿아야 살 수 있다
     const K = SK_KEYS.includes(b.dataset.k) ? b.dataset.k : sel, sk = st.sk[K];
     const g = +b.dataset.g, p = GRADE_PRICE[g-1];
@@ -5957,7 +6187,7 @@ function rpgAct(a, b){
     rpgWear(st, K, sk, g);
   }
   else if(a === 'rpgCons'){   // 소모품 구매: 개수 × 1
-    const t = b.dataset.t; if(t !== 'bait' && t !== 'whet') return;
+    const t = b.dataset.t; if(t !== 'bait') return;
     const inp = b.closest('.it') && b.closest('.it').querySelector('.qty'), n = Math.max(0, Math.floor(+(inp ? inp.value : 0) || 0));
     if(!n){ rpgToast('살 개수를 입력하세요'); return; }
     if(st.blue < n){ rpgToast('파란 칩이 부족합니다'); return; }
@@ -5967,7 +6197,7 @@ function rpgAct(a, b){
     const K = SK_KEYS.includes(b.dataset.k) ? b.dataset.k : sel, ks = st.sk[K], g = +b.dataset.g;
     if(!(g >= 1 && g <= 10) || g === ks.stage) return;
     if(lvOf(ks.exp) < REQ_LV(g)){ rpgToast(`${REQ_LV(g)}레벨 이상부터 들어갈 수 있어요`); return; }
-    ks.stage = g; if(K === 'combat') st.mhp = 0; if(st.active === K){ st.active = null; st.carry = 0; }
+    ks.stage = g; if(K === 'combat') st.mhp = 0; if(st.active === K){ st.active = null; st.carry = 0; st.mcarry = 0; }
   }
   else if(a === 'rpgRecipe'){ const g = +b.dataset.g; if(g >= 1 && g <= 10 && lvOf(sk.exp) >= REQ_LV(g) && hasMats(st, recipe(sel, g, SMITH_PARTS.includes(b.dataset.p) ? b.dataset.p : 'helm'))){ sk.stage = g; if(sel === 'smith') sk.part = SMITH_PARTS.includes(b.dataset.p) ? b.dataset.p : 'helm'; if(st.active === sel){ st.active = null; st.carry = 0; } } }
   else if(a === 'rpgEq'){   // 투구·갑옷은 가방에서 꺼내 입고(입던 것은 가방으로), 요리·열매는 그 종류를 골라 둔다(전투 중 가방에서 꺼내 먹는다)
@@ -5977,7 +6207,7 @@ function rpgAct(a, b){
       const K = TOOL_SK[t[0]], tsk = st.sk[K];
       if(K === 'combat'){   // 검: 투구·갑옷처럼 가방 ↔ 손. 들고 있던 검은 가방으로 돌아간다
         if(lvOf(tsk.exp) < REQ_LV(t[1])){ rpgToast(`${REQ_LV(t[1])}레벨부터 착용할 수 있어요`); return; }
-        if(tsk.gear === t[1]) return;
+        if(tsk.gear === t[1]){ rpgToast('이미 착용 중이에요'); return; }
         st.inv['sword' + tsk.gear] = (st.inv['sword' + tsk.gear] || 0) + 1;
         st.inv[key]--; if(!st.inv[key]) delete st.inv[key];
         tsk.gear = t[1]; addOwn(tsk, t[1]); SFX.unlock(); SFX.equip('combat'); rpgSave(); render(); return;
@@ -5987,7 +6217,8 @@ function rpgAct(a, b){
       st.inv[key]--; if(!st.inv[key]) delete st.inv[key];
       rpgWear(st, K, tsk, t[1], false); rpgSave(); chipFix(); render(); return;
     }
-    if(sl === 'helm' || sl === 'body' || sl === 'ring' || sl === 'neck'){ if(st.eq[sl]) st.inv[sl + st.eq[sl]] = (st.inv[sl + st.eq[sl]] || 0) + 1; st.inv[key]--; if(!st.inv[key]) delete st.inv[key]; }
+    if(['helm', 'body', 'ring', 'neck', 'pet'].includes(sl) && st.eq[sl] === t[1]){ rpgToast('이미 착용 중이에요'); return; }
+    if(sl === 'helm' || sl === 'body' || sl === 'ring' || sl === 'neck' || sl === 'pet'){ if(st.eq[sl]) st.inv[sl + st.eq[sl]] = (st.inv[sl + st.eq[sl]] || 0) + 1; st.inv[key]--; if(!st.inv[key]) delete st.inv[key]; }
     else {   // 요리·열매·숫돌·미끼: 입력한 개수만큼 가방에서 장비로 옮긴다. 다른 종류가 장착돼 있으면 그건 가방으로 돌려보낸다
       const inp = b.closest('.ivr') && b.closest('.ivr').querySelector('.qty');
       const n = Math.max(0, Math.min(st.inv[key], Math.floor(+(inp ? inp.value : st.inv[key]) || 0)));
@@ -5998,7 +6229,14 @@ function rpgAct(a, b){
     }
     st.eq[sl] = t[1]; SFX.unlock(); SFX.equip(sl === 'helm' || sl === 'body' ? 'mine' : 'fish');
   }
-  else if(a === 'rpgUneq'){ const sl = b.dataset.slot; if(!['helm', 'body', 'ring', 'neck'].concat(QTY_SL).includes(sl) || !st.eq[sl]) return; const back = sl === 'helm' || sl === 'body' || sl === 'ring' || sl === 'neck' ? 1 : st.eq[sl + 'N'] || 0; if(back) st.inv[sl + st.eq[sl]] = (st.inv[sl + st.eq[sl]] || 0) + back; st.eq[sl] = 0; if(QTY_SL.includes(sl)) st.eq[sl + 'N'] = 0; }   // 해제하면 남은 개수 그대로 가방으로
+  else if(a === 'rpgUneq'){ const sl = b.dataset.slot; if(!['helm', 'body', 'ring', 'neck', 'pet'].concat(QTY_SL).includes(sl) || !st.eq[sl]) return; const back = sl === 'helm' || sl === 'body' || sl === 'ring' || sl === 'neck' || sl === 'pet' ? 1 : st.eq[sl + 'N'] || 0; if(back) st.inv[sl + st.eq[sl]] = (st.inv[sl + st.eq[sl]] || 0) + back; st.eq[sl] = 0; if(QTY_SL.includes(sl)) st.eq[sl + 'N'] = 0; }   // 해제하면 남은 개수 그대로 가방으로
+  else if(a === 'rpgBulk'){
+    const L = bulkSellList(st); if(!L.length) return;
+    const v = L.reduce((a2, k) => a2 + itemPrice(k) * st.inv[k], 0), n = L.reduce((a2, k) => a2 + st.inv[k], 0);
+    if(!confirm(`최고 등급만 남기고 장비 ${n.toLocaleString()}개를 팔아 파란 칩 ${v.toLocaleString()}개를 받을까요?`)) return;
+    for(const k of L) delete st.inv[k];
+    st.blue += v; SFX.unlock(); SFX.cash(); rpgToast(`장비 ${n.toLocaleString()}개 일괄 판매 · +${v.toLocaleString()}`);
+  }
   else if(a === 'rpgSell'){ const key = b.dataset.key, have = st.inv[key] || 0, tt = ikParse(key); if(have <= 0 || !tt || !SELL_T.includes(tt[0])) return; const c = have; st.inv[key] = have - c; if(!st.inv[key]) delete st.inv[key]; st.blue += c * itemPrice(key); SFX.unlock(); SFX.cash(); }
   else if(a === 'rpgAcc'){ const sl = b.dataset.slot, g = +b.dataset.g, p = ACC_PRICE[g]; if(!ACC_N[sl] || !(g >= 2 && g <= 10) || st.bought[sl].includes(g)) return; if(st.blue < p){ rpgToast('파란 칩이 부족합니다'); return; } st.blue -= p; st.bought[sl].push(g); st.inv[sl + g] = (st.inv[sl + g] || 0) + 1; SFX.unlock(); SFX.cash(.5); rpgToast(`${TIERS[g-1].n} ${sl === 'ring' ? '반지' : '목걸이'} 구매 완료`); }   // 사면 가방으로(착용은 가방에서), 한 번만
   rpgSave(); chipFix(); render();
@@ -6046,12 +6284,14 @@ document.addEventListener('click', e => {
     case 'help': $modal.innerHTML = helpHTML(); $modal.hidden = false; break;
     case 'closeModal': $modal.hidden = true; break;
     case 'tab': show(b.dataset.t === 'rpg' ? 'rpg' : 'home'); break;
+    case 'adm': if(rpgAdmin()) rpgAdminAct(b); break;
+    case 'slotOpen': UI.invTab = b.dataset.tab; UI.invSub = b.dataset.sub; UI.invPage = 0; render(); { const bags = document.querySelectorAll('.rpg .bag'); const bg = bags[bags.length - 1]; if(bg) bg.scrollIntoView({behavior:'smooth', block:'start'}); } break;   // 장비 칸을 누르면 가방의 그 종류가 열린다
     case 'invTab': UI.invTab = UI.invTab === b.dataset.t ? null : b.dataset.t; UI.invSub = null; UI.invPage = 0; render(); break;
     case 'invSub': UI.invSub = UI.invSub === b.dataset.t ? null : b.dataset.t; UI.invPage = 0; render(); break;   // 탭 안의 탭: 같은 걸 다시 누르면 그 탭 전체
     case 'invPage': UI.invPage = Math.max(0, (UI.invPage || 0) + (+b.dataset.d || 0)); render(); break;   // 가방 쪽 넘기기   // 가방 탭: 같은 탭을 다시 누르면 접힘
     case 'shopTab': UI.shopTab = b.dataset.t; render(); break;   // 상점 탭
     case 'smithTab': UI.smithTab = b.dataset.t; render(); break;   // 대장간 제작법 탭
-    case 'rpgCons': case 'rpgMap': case 'rpgSel': case 'rpgGo': case 'rpgBuy': case 'rpgWear': case 'rpgSkill': case 'rpgRecipe': case 'rpgEq': case 'rpgUneq': case 'rpgSell': case 'rpgAcc': rpgAct(a, b); break;
+    case 'rpgBulk': case 'rpgCons': case 'rpgMap': case 'rpgSel': case 'rpgGo': case 'rpgBuy': case 'rpgWear': case 'rpgSkill': case 'rpgRecipe': case 'rpgEq': case 'rpgUneq': case 'rpgSell': case 'rpgAcc': rpgAct(a, b); break;
     case 'rpgTable': { $modal.innerHTML = rpgTableHTML(); $modal.hidden = false; const c = $modal.querySelector('tr.cur'); if(c) c.scrollIntoView({block:'center'}); break; }
     case 'drillMenu': $modal.innerHTML = drillMenuHTML(); $modal.hidden = false; break;
     case 'recWipe':
@@ -6552,8 +6792,10 @@ document.addEventListener('contextmenu', e => {
 document.addEventListener('keydown', e => {
   if((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[data-tile]')){ e.preventDefault(); onTile(+e.target.dataset.tile); }
 });
+document.addEventListener('input', e => { const t = e.target; if(t.id && t.id.startsWith('adm-')) (UI.admVals || (UI.admVals = {}))[t.id] = t.value; });
 document.addEventListener('change', e => {
   const t = e.target;
+  if(t.id && t.id.startsWith('adm-')){ (UI.admVals || (UI.admVals = {}))[t.id] = t.value; return; }
   if(t.id === 'file' && t.files[0]){
     const fr = new FileReader();
     fr.onload = () => { const m = document.getElementById('iomsg'); try{ const n = importCode(fr.result); if(m) m.textContent = `${n}판을 불러왔어요${UI.importedRpg ? ' · RPG 진행도도 덮어썼어요' : ''}.`; setTimeout(render, 600); }catch(err){ if(m) m.textContent = '불러오지 못했어요: ' + err.message; } };

@@ -5861,7 +5861,7 @@ function consShopItems(st){
 function rpgAccHTML(st){
   const row = s => TIERS.slice(1).map((t, i) => {
     const g = i + 2, sold = st.bought[s].includes(g), p = ACC_PRICE[g];
-    return `<div class="it ${!sold && st.blue < p ? 'lock' : ''}"><span class="n">${itemIcon(s + g)}${t.n} ${s === 'ring' ? '반지' : '목걸이'}<small>경험치 +${g * 5}%</small></span>${sold ? '<span class="d">매진</span>' : `<button class="btn small buy" data-act="rpgAcc" data-slot="${s}" data-g="${g}"><i class="chipi bc"></i>${p >= 1e6 ? fmtNum(p) : p.toLocaleString()}</button>`}</div>`;
+    return `<div class="it"><span class="n">${itemIcon(s + g)}${t.n} ${s === 'ring' ? '반지' : '목걸이'}<small>경험치 +${g * 5}%</small></span>${sold ? '<span class="d">매진</span>' : `<button class="btn small buy" data-act="rpgAcc" data-slot="${s}" data-g="${g}"><i class="chipi bc"></i>${p >= 1e6 ? fmtNum(p) : p.toLocaleString()}</button>`}</div>`;
   }).join('');
   const sel = st.sel || 'combat', tab = SHOP_TABS.some(t => t[0] === UI.shopTab) ? UI.shopTab : 'combat';
   const tabs = `<div class="invtabs">${SHOP_TABS.map(([k, n]) => `<button class="btn small ${k === tab ? 'on' : ''}" data-act="shopTab" data-t="${k}">${n}</button>`).join('')}</div>`;

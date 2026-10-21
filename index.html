@@ -2671,7 +2671,7 @@ function draw(){
   if(UI.screen === 'home'){ $app.innerHTML = homeHTML(); fitStats(); }
   else if(UI.screen === 'game'){ const m = flipCapture(), oldStk = $app.querySelector('.table > .chipstk'); $app.innerHTML = gameHTML(); flipPlay(m);
     const nw = $app.querySelector('.table > .chipstk');   // 축의탑은 다시 그려도 같은 요소를 그대로 둔다(만지작거리는 애니메이션·드래그가 끊기지 않게)
-    if(oldStk && nw && oldStk.dataset.n === nw.dataset.n) nw.replaceWith(oldStk); }
+    if(oldStk && nw && oldStk.dataset.n === nw.dataset.n){ oldStk.querySelectorAll('.hop').forEach(c => c.classList.remove('hop')); nw.replaceWith(oldStk); } }   // 다시 붙이면 CSS 애니메이션이 처음부터 재생되므로, 남은 hop은 떼고 붙인다(CPU 차례에 계속 다시 그려질 때 부르르 떠는 버그)
   else if(UI.screen === 'records') { $app.innerHTML = recordsHTML(); drawChart(); }
   else if(UI.screen === 'review') $app.innerHTML = reviewHTML();
   else if(UI.screen === 'rpg'){ $app.innerHTML = rpgHTML(); fitRpg(); rpgLive(); }
@@ -4464,7 +4464,7 @@ document.documentElement.style.setProperty('--chip-top', CHIP_TOP);
 // 칩 탑을 잡고 위로 드래그하면 포커 플레이어처럼 아래 칩부터 한 장씩 들썩이며 좌르륵. 다시 아래로 내리면 끝
 (() => {
   let drag = null;
-  const hop = (el) => { el.classList.remove('hop'); void el.offsetWidth; el.classList.add('hop'); SFX.chip(); };
+  const hop = (el) => { el.classList.remove('hop'); void el.offsetWidth; el.classList.add('hop'); el.addEventListener('animationend', () => el.classList.remove('hop'), { once:true }); SFX.chip(); };   // 끝나면 hop 클래스를 떼어 둔다(남아 있으면 화면을 다시 그릴 때마다 모든 칩이 동시에 또 튄다)
   document.addEventListener('pointerdown', e => {
     const st = e.target.closest && e.target.closest('.chipstk'); if(!st) return;
     e.preventDefault(); SFX.unlock(); drag = { st, y: e.clientY, acc: 0, k: -1, dir: 0 }; st.classList.add('grab');
@@ -6912,7 +6912,35 @@ document.addEventListener('pointerdown', e => {
   };
   // 우클릭 한 번에 mousedown·contextmenu(·pointermove)가 다 올 수 있어서 한 번만 반응하게 한다: 누를 때 처리하고, 뒤따라오는 contextmenu는 메뉴만 막는다
   let rDone = false;
-  const rdown = ev => { if(ev.button === 2){ ev.preventDefault(); rDone = true; flip(); } };
+  // 우클릭을 꾹 누르고 있으면(220ms~) 손패가 계속 빙글빙글 돌고, 떼면 가까운 180° 지점(상하)에서 멈춘다. 짧게 한 번 누르면 예전처럼 반바퀴
+  let holdT = null, spinning = false, spinCur = 0, spinEl = null, spinAnim = null;
+  const canSpin = () => {
+    if(id == null || mode === 'draw' || mode === 'deal' || mode === 'passdraw') return false;
+    const q = UI.pending;
+    const canRiichi = mode !== 'play' && q && q.kind === 'action' && UI.riichiDiscard == null && q.ctx.riichiOptions.includes(kindOf(id));
+    return !canRiichi;   // 리치 선언패는 우클릭이 가로 꺾기라 그대로 둔다
+  };
+  const startSpin = () => {
+    const t0 = ghost.firstElementChild; if(!t0) return;
+    spinning = true; spinCur = spinAng; spinEl = t0;
+    try{ t0.getAnimations().forEach(a => a.cancel()); }catch(e){}
+    // 자바스크립트로 프레임마다 돌리면 CPU 타패로 화면을 다시 그릴 때 같이 멈칫하므로, 브라우저가 알아서 돌리는 무한 애니메이션으로 둔다(반시계 초당 1150°)
+    try{ spinAnim = t0.animate([{rotate: spinAng + 'deg'}, {rotate: (spinAng - 360) + 'deg'}], {duration: 360 / 1.15, iterations: Infinity, easing: 'linear'}); }catch(e){ spinAnim = null; }
+  };
+  const stopSpin = () => {
+    spinning = false;
+    const t = spinEl; if(!t) return;
+    if(spinAnim){ spinCur = spinAng - (spinAnim.currentTime || 0) * 1.15; try{ spinAnim.cancel(); }catch(e){} spinAnim = null; }
+    const target = Math.round(spinCur / 180) * 180;
+    try{ t.animate([{rotate: spinCur + 'deg'}, {rotate: target + 'deg'}], {duration: 120, easing:'cubic-bezier(.3,.1,.3,1)', fill:'forwards'}); }catch(e){ t.style.rotate = target + 'deg'; }
+    spinAng = target; flips = Math.abs(target / 180);   // 놓는 순간의 상하 상태: 홀수면 뒤집힌 채로 손패에 정리된다
+  };
+  // 왼쪽 버튼을 누른 채 우클릭하면 브라우저가 mousedown/up 대신 pointermove(buttons 비트)만 줄 때가 있어서, 둘 다 듣고 상태(rHeld)로 한 번만 처리한다
+  let rHeld = false;
+  const rPress = () => { if(rHeld) return; rHeld = true; rDone = true; if(canSpin()) holdT = setTimeout(() => { holdT = null; startSpin(); }, 140); else flip(); };
+  const rRelease = () => { if(!rHeld) return; rHeld = false; if(holdT){ clearTimeout(holdT); holdT = null; flip(); } else if(spinning) stopSpin(); };
+  const rdown = ev => { if(ev.button === 2){ ev.preventDefault(); rPress(); } };
+  const rup = ev => { if(ev.button === 2) rRelease(); };
   const cm = ev => { ev.preventDefault(); ev.stopImmediatePropagation(); if(rDone){ rDone = false; return; } flip(); };   // mousedown 없이 메뉴만 온 경우에만 여기서 처리
   let ang = 0, lastWheel = 0;
   let fl = null;   // 굴릴 때만 만드는 입체 패: 앞면 = 손패의 그 패, 뒷면 = 지금 판 색(파랑/노랑)의 엎은 패, 옆면 4개로 두께를 준다
@@ -6965,7 +6993,7 @@ document.addEventListener('pointerdown', e => {
   };
   document.addEventListener('wheel', wheel, {passive:false});
   UI.dragging = true;
-  document.addEventListener('mousedown', rdown, true); document.addEventListener('contextmenu', cm, true);
+  document.addEventListener('mousedown', rdown, true); document.addEventListener('mouseup', rup, true); document.addEventListener('contextmenu', cm, true);
   // 폰 모드: 잡은 패를 점봉 케이스에 담그면 휠·우클릭 대신 — 왼쪽 칸(만점·오천점) 앞휠, 가운데(천점) 가로꺾기/180°, 오른쪽(오백·백점) 뒷휠
   let dipCell = null;
   const dip = ev => {
@@ -6979,7 +7007,20 @@ document.addEventListener('pointerdown', e => {
     cells[now].classList.add('dipped'); setTimeout(() => cells[now] && cells[now].classList.remove('dipped'), 250);
     if(now === 0) roll(true); else if(now === 2) roll(false); else { lastFlip = 0; flip(); }
   };
+  // 패놀음('play') 중에 내 차례가 오면, 들고 있던 패를 그대로 버릴 수 있게 모드를 그 자리에서 바꾼다(잡을 때 정한 모드가 끝까지 가서 못 버리던 문제)
+  const upgrade = () => {
+    if(mode !== 'play' || id == null) return;
+    const pd2 = UI.pending, g2 = UI.game; if(!pd2 || UI.confirm || !g2 || !g2.players[0].hand.includes(id)) return;
+    let m2 = null;
+    if(pd2.kind === 'action' && UI.riichiDiscard == null){ const nk = kindOf(id) === 30 && ((pd2.ctx && pd2.ctx.nuki) || (pd2.kind === 'riichiNuki')); m2 = nk ? 'tile+nuki' : 'tile'; }
+    else if(pd2.kind === 'call') m2 = 'call';
+    if(!m2) return;
+    mode = m2;
+    if(moved){ dropHint({discard: mode.startsWith('tile'), nuki: mode.includes('nuki'), draw: false}); if(mode.startsWith('tile') && UI.dragTile !== id){ UI.dragTile = id; render(); } }
+  };
   const move = ev => {
+    upgrade();
+    if(ev.pointerType === 'mouse'){ if(ev.buttons & 2) rPress(); else rRelease(); }
     if(!moved && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 6){
       moved = true; dragHideStyle.textContent = hideCss;
       try{ document.documentElement.setPointerCapture(ev.pointerId); }catch(_){}   // 끌기 시작한 뒤에만: 손패를 다시 그려도 손가락 움직임을 계속 받는다(누르기만 하면 클릭으로 버리기)
@@ -6993,7 +7034,8 @@ document.addEventListener('pointerdown', e => {
   move(e);
   const up = ev => {
     document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); document.removeEventListener('pointercancel', up);
-    document.removeEventListener('mousedown', rdown, true); document.removeEventListener('wheel', wheel);
+    rRelease();   // 우클릭을 누른 채 왼쪽 버튼을 먼저 떼도 상태를 확정
+    document.removeEventListener('mousedown', rdown, true); document.removeEventListener('mouseup', rup, true); document.removeEventListener('wheel', wheel);
     setTimeout(() => { document.removeEventListener('contextmenu', cm, true); UI.dragging = false; }, 250);   // 손을 뗄 때 따라오는 우클릭 메뉴도 막는다
     ghost.remove(); dropHint(null); dragHideStyle.textContent = '';
     if(UI.dragTile != null){ UI.dragTile = null; if(!moved || ev.type !== 'pointerup') render(); }
@@ -7011,6 +7053,7 @@ document.addEventListener('pointerdown', e => {
       const fr = [...document.querySelectorAll('.wallsc .sk')].some(el => inRect(inflate(el.getBoundingClientRect(), 4), x, y));
       if(fr){ doPrune(id); return; }
     }
+    upgrade();   // 놓는 순간에도 한 번 더: 움직임 없이 차례가 온 경우
     if(mode === 'play') return;
     if(mode === 'draw' || mode === 'deal' || mode === 'passdraw'){
       const hw = document.querySelector('.handwrap'); const r = hw && hw.getBoundingClientRect();

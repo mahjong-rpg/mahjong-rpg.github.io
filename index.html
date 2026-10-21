@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="ko">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yuji+Boku&display=swap">   <!-- 패 한자(만수·자패) 글씨: Yuji Boku -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rye&display=swap&text=RPG">   <!-- 3인 白 R·P·G: Rye(웨스턴) -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>마작 RPG</title>
@@ -92,7 +95,7 @@ h1,h2,h3{margin:0;text-wrap:balance}
   display:flex;align-items:center;justify-content:center;gap:calc(var(--C)*.04);font:700 calc(var(--C)*.105) var(--f-num);color:var(--led-dim);letter-spacing:.02em}
 .strip{font-family:var(--f-con);font-weight:400;color:#f2f2f2;align-items:baseline}
 .strip.on{color:#fff}
-.strip .w{font-family:var(--f-tile);color:#7d8285;font-weight:400}
+.strip .w{font-family:'Yuji Boku',var(--f-tile);color:#7d8285;font-weight:400}
 .strip .w.dealer{color:#fff}
 .strip .sc{font-size:1.25em;line-height:1}
 .strip .df{display:none}
@@ -130,9 +133,9 @@ h1,h2,h3{margin:0;text-wrap:balance}
 @keyframes pop{from{scale:.6;opacity:0}to{scale:1;opacity:1}}
 .center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:calc(var(--C)*.62);display:flex;flex-direction:column;align-items:center;gap:calc(var(--C)*.03);text-align:center;color:var(--ink)}
 .center .rd{font:400 calc(var(--C)*.2) var(--f-con);line-height:1;display:flex;align-items:baseline;gap:.02em;white-space:nowrap}
-.center .rd .rw{font-family:var(--f-tile);color:#7d8285}   /* 東·南도 局과 같은 글씨체·색 */
+.center .rd .rw{font-family:'Yuji Boku',var(--f-tile);color:#7d8285}   /* 東·南도 局과 같은 글씨체·색 */
 .center .rd .rn{color:#fff}
-.center .rd .rk{font-family:var(--f-tile);color:#7d8285}
+.center .rd .rk{font-family:'Yuji Boku',var(--f-tile);color:#7d8285}
 .center .info{display:flex;align-items:center;gap:calc(var(--C)*.035);font:400 calc(var(--C)*.095) var(--f-con);color:#f2f2f2;line-height:1;padding-top:calc(var(--C)*.02);border-top:1px solid #3a4144}
 .center .sub{font:400 calc(var(--C)*.08) var(--f-ui);color:#9aa0a3}
 .ico{display:inline-block;width:calc(var(--C)*.04);height:calc(var(--C)*.085);background:#f4f4ef;border-radius:1px;position:relative;vertical-align:middle}
@@ -244,18 +247,18 @@ h1,h2,h3{margin:0;text-wrap:balance}
 @keyframes wsplit{from{translate:var(--dx,0) var(--dy,0)}to{translate:0 0}}
 @media (prefers-reduced-motion: reduce){.sk.spl,.sk.hl.fin::after,.sk.cnt::after{animation:none}}
 .sk.v{width:calc(var(--ww)*1.34);height:calc(var(--ww)*1.58);--e1:.3;--e2:.3}   /* 좌·우 벽: 앞면이 위인 패(도라·아리스·튤립)는 상아색 두께만, 뒷판 띠는 붙이지 않는다 */
-.sk i{position:absolute;left:0;right:0;border-radius:calc(var(--ww)*.06);box-shadow:0 0 0 .5px rgba(0,0,0,.65)}
+.sk i{position:absolute;left:0;right:0;border-radius:calc(var(--ww)*.13);box-shadow:0 0 0 .5px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.3),inset 0 0 0 1px rgba(255,255,255,.06),0 2px 3px rgba(0,0,0,.32)}   /* 손패 뒷면과 같은 둥근 모서리·윗면 광·그림자 */
 .sk.h i{height:calc(var(--ww)*1.4);background:linear-gradient(var(--tile-back-hi) 0%,var(--tile-back) 71.4%,var(--tile-back-dk) 71.4%,var(--tile-back-dk) 85.7%,#f4f1e6 85.7%,#d6d2c2 100%)}
 .sk.h i.t{bottom:calc(var(--ww)*.4)}
 .sk.v i{height:calc(var(--ww)*1.32);background:linear-gradient(var(--tile-back-hi) 0%,var(--tile-back) 80%,var(--tile-back-dk) 80%,var(--tile-back-dk) 90%,#f4f1e6 90%,#d6d2c2 100%)}
 /* 옆 벽에 내려 둔 영상패: 누운 패라 내 쪽에서는 뒷면만 보이고 하얀 옆면은 보이지 않는다 */
-.sk.v.side1 i{box-shadow:0 0 0 .5px rgba(0,0,0,.65),inset 2px 0 0 rgba(0,0,0,.28)}
-.sk.v.side3 i{box-shadow:0 0 0 .5px rgba(0,0,0,.65),inset -2px 0 0 rgba(0,0,0,.28)}
+.sk.v.side1 i{box-shadow:0 0 0 .5px rgba(0,0,0,.6),inset 2px 0 0 rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.3),0 2px 3px rgba(0,0,0,.32)}
+.sk.v.side3 i{box-shadow:0 0 0 .5px rgba(0,0,0,.6),inset -2px 0 0 rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.3),0 2px 3px rgba(0,0,0,.32)}
 .sk i.b{bottom:0}
 .smoke{position:fixed;pointer-events:none;z-index:9000;width:0;height:0}   /* 광맥 탐지 실패: 도라 표시패 자리에 검은 연기가 피었다 사라진다 */
 .smoke i{position:absolute;left:0;top:0;width:var(--s);height:var(--s);margin:calc(var(--s)/-2) 0 0 calc(var(--s)/-2);border-radius:50%;background:radial-gradient(circle at 45% 40%,rgba(40,36,40,.95),rgba(15,12,15,.8) 45%,rgba(0,0,0,0) 72%);filter:blur(1.5px);opacity:0;animation:smk var(--d) ease-out var(--dl) forwards}
 @keyframes smk{0%{opacity:0;transform:translate(0,0) scale(.3)}18%{opacity:.95}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(1.9)}}
-.sk i.t{bottom:calc(var(--ww)*.26);box-shadow:0 0 0 .5px rgba(0,0,0,.65),0 1px 0 rgba(0,0,0,.55)}
+.sk i.t{bottom:calc(var(--ww)*.26);box-shadow:0 0 0 .5px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.3),0 1px 2px rgba(0,0,0,.45)}
 .sk .tf{position:absolute;left:0;right:0;bottom:calc(var(--ww)*.26);display:flex;align-items:center;justify-content:center;border-radius:calc(var(--ww)*.06);background:linear-gradient(#fbf9f1,#efecdf);box-shadow:0 0 0 .5px rgba(0,0,0,.6),0 calc(var(--ww)*var(--e1,.15)) 0 #e2ddcd,0 calc(var(--ww)*var(--e2,.3)) 0 var(--tile-back-dk)}
 .sk.h .tf{height:calc(var(--ww)*1.0);bottom:calc(var(--ww)*.8)}
 .sk.h .tf .tile,.sk.h .urap .tile{transform:scaleY(.8)}   /* 위에서 비스듬히 본 앞면: 세로로 살짝 눌러 보인다 */
@@ -422,7 +425,7 @@ h1,h2,h3{margin:0;text-wrap:balance}
 /* 자동 화료·대기패 표시: 탁 밖, 점봉 케이스 왼쪽에 고정. 버튼 둘은 제자리, 대기패는 버튼 아래로 펼쳐진다 */
 .table > .tblwait{left:auto;bottom:auto;top:calc(100% + var(--hw)*1.75 + 8px);right:calc(50% + 145px);max-width:none;width:132px;gap:4px;align-items:stretch}
 .table > .tblwait .awrap{padding:0}
-.tblwait .awrap .wtog{width:8.6em!important;padding:0 4px;text-align:center}   /* ON·OFF 글자 폭이 달라도 버튼 크기 그대로 */
+.tblwait .awrap{display:flex;flex-direction:column;gap:4px}.tblwait .awrap .wtog{width:100%!important;padding:0 4px;text-align:center}   /* ON·OFF 글자 폭이 달라도 버튼 크기 그대로 */
 .table > .tblwait .wtog{width:100%}
 .table > .tblwait .waitbar{flex-direction:column;padding:0;background:none;gap:4px;align-items:stretch}
 .tblact > .twpanel{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 6px;max-width:100%;padding:3px 10px;border-radius:10px;background:rgba(6,20,14,.85);pointer-events:none}   /* 대기패: 내 패산과 손패 사이 작탁 위, 버튼들 바로 위에 한 줄(길면 두 줄) */
@@ -435,7 +438,7 @@ h1,h2,h3{margin:0;text-wrap:balance}
 @media (min-width:601px){.tblact > .twpanel{flex-wrap:nowrap;white-space:nowrap}.twpanel .wrow{flex-wrap:nowrap}}   /* 넓은 화면: 한 줄로 낮게(패산을 덜 가리게) */
 .table > .tblwait .wpanel{position:absolute;right:calc(100% + 6px);top:0;width:max-content;max-width:calc(var(--hw)*7);background:rgba(6,20,14,.85);border-radius:10px;padding:5px 8px}   /* 펼치면 버튼 왼쪽에 뜬다(버튼·손패를 밀지 않게) */
 .table > .tblsort{position:absolute;z-index:4;top:calc(100% + var(--hw)*1.75 + 8px);left:calc(50% + 145px)}   /* 자동 정리: 점봉 케이스 오른쪽 */
-.tblsort .wtog{width:8.6em;padding:0 4px;text-align:center}
+.tblsort{display:flex;flex-direction:column;gap:4px}.tblsort .wtog{width:132px;padding:0 4px;text-align:center}   /* 오른쪽: 자동 정리·쯔모기리·북빼기 (왼쪽 자동 화료·대기패와 같은 폭) */
 @media (max-width:600px){.table > .tblsort{left:auto;right:4px;top:calc(100% + var(--hw)*1.75 + 8px + 52px + 22px)}}
 @media (max-width:600px){.table > .tblwait .wpanel{position:static;max-width:none}.table > .tblwait{right:auto;left:4px;top:calc(100% + var(--hw)*1.75 + 8px + 52px + 22px);width:auto;flex-direction:row;align-items:flex-start}.table > .tblwait .wtog{width:auto}}
 .tblsort .wtog,.tblwait .wtog,.waitbar .wtog{height:24px;padding:0 9px;font-size:12px;font-weight:700;pointer-events:auto}
@@ -486,7 +489,7 @@ table.y td:last-child{text-align:right}
 
 /* 홈 */
 .hero{padding:20px 4px 4px;display:flex;flex-direction:column;gap:6px}
-.hero h1{font-family:var(--f-tile);font-size:clamp(34px,8vw,52px);letter-spacing:.06em}
+.hero h1{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK JP","Noto Serif KR","Batang",serif;font-size:clamp(34px,8vw,52px);letter-spacing:.06em}
 .hero .tiles{display:flex;gap:4px;margin-bottom:6px}
 .card{background:var(--panel);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
 .card h3{font-size:15px;letter-spacing:.02em}
@@ -549,7 +552,13 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .dropcost{display:inline-flex;align-items:center;gap:3px;margin-left:5px;color:#ff4a3a;font-weight:900;text-shadow:0 0 1px rgba(0,0,0,.5)}.chipi{width:12px;height:12px;border-radius:50%;background:var(--chip-icon) center/contain no-repeat;display:inline-block}
 .chipcount{display:inline-flex;align-items:center;gap:6px;font-weight:800;color:#ffe9a8;background:rgba(0,0,0,.28);border-radius:99px;padding:4px 12px;font-size:14px}
 .chipcount i{width:16px;height:16px;border-radius:50%;background:var(--chip-icon) center/contain no-repeat;display:inline-block}
-.table > .chipstk{position:absolute;right:calc(var(--S)*-.1);bottom:0;width:calc(var(--S)*.07);z-index:6;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}.chipstk svg{display:block;width:100%;height:auto}   /* 대국 중 모은 축의칩 탑 */
+.table > .chipstk{position:absolute;right:calc(var(--S)*-.1);bottom:0;--cd:calc(var(--S)*.07);--ct:calc(var(--cd)*.095);width:var(--cd);height:calc(var(--cd)*.56 + var(--ct)*var(--n)*.85);z-index:6;pointer-events:auto;cursor:grab;touch-action:none;user-select:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}   /* 3D 축의칩 탑: 잡고 위아래로 드래그하면 좌르륵 */
+.table > .chipstk.grab{cursor:grabbing}
+.chipstk .c3{position:absolute;left:0;bottom:calc(var(--cd)*-.22);width:var(--cd);height:var(--cd);transform-style:preserve-3d;transform:rotateX(58deg)}
+.chipstk .c3c{position:absolute;inset:0;transform-style:preserve-3d}
+.chipstk .c3c.hop{animation:chop .16s ease-out}@keyframes chop{0%{translate:0 0 0}35%{translate:0 0 calc(var(--ct)*1.6)}100%{translate:0 0 0}}   /* 손가락으로 튕긴 칩이 살짝 떴다 내려앉음 */
+.chipstk .c3c i{position:absolute;left:50%;top:50%;width:calc(var(--cd)*.072);height:var(--ct);margin:calc(var(--ct)*-.5) 0 0 calc(var(--cd)*-.036);backface-visibility:hidden;translate:0 0 calc(var(--ct)*.5)}
+.chipstk .c3t{position:absolute;inset:0;border-radius:50%;background:var(--chip-top) center/100% 100%;transform:translateZ(var(--ct))}
 /* ---------- RPG ---------- */
 .rpg{position:relative;width:100%;box-sizing:border-box;max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:10px;padding:0 4px 30px}
 .rpg .scene{width:80%;align-self:center;position:relative;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.45);background:#000;aspect-ratio:360/210}
@@ -2257,12 +2266,14 @@ else root.MJ = MJ;
 // 패 그림: 60x80 좌표계 SVG <symbol>을 문서에 한 번 심어 두고 <use>로 재사용
 (function (root) {
   'use strict';
-  const RED = '#c4122f', GREEN = '#0f7a3c', BLUE = '#1b4f9c', INK = '#16161d', CREAM = '#f7f2e6', GOLD = '#d39a1c', PIN = '#1b2130';
-  const BLUE_T = '#1d5fd6', GOLD_T = '#d9a21e';   // 청도라·금도라 무늬색
+  const RED = '#ae2233', GREEN = '#0f7a3c', BLUE = '#1b4f9c', INK = '#16161d', CREAM = '#f7f2e6', GOLD = '#d39a1c', PIN = '#141419';
+  const BLUE_T = 'url(#bluG)', GOLD_T = 'url(#gldG)', SOU = '#26272a';   // 채도를 낮춘 색: 오래 쓴 작장 패처럼   // 청도라·금도라 무늬색
   const NUM = ['一', '二', '三', '四', '五', '六', '七', '八', '九'];
   const FONT = 'font-family:var(--f-tile);font-weight:900;paint-order:stroke;stroke-linejoin:round';
+  const FONT_MAN = "font-family:'Yuji Boku',var(--f-tile);font-weight:400;paint-order:stroke;stroke-linejoin:round";   // 만수: 거친 붓
+  const FONT_HON = "font-family:'Yuji Boku',var(--f-tile);font-weight:400;paint-order:stroke;stroke-linejoin:round";   // 자패: 옛 활자
   // 글씨가 얇게 보이지 않도록 같은 색 테두리를 둘러 굵게 만든다
-  const T = (x, y, size, col, sw, ch) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${size}" fill="${col}" stroke="${col}" stroke-width="${sw}" style="${FONT}">${ch}</text>`;
+  const T = (x, y, size, col, sw, ch, ff) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${size}" fill="${col}" stroke="${col}" stroke-width="${sw}" style="${ff || FONT}">${ch}</text>`;
 
   // 굵은 통: 진한 원판 위에 가는 상아색 고리와 꽃 모양 가운데 (천봉 패처럼 원이 크고 서로 거의 붙는다)
   // 굵은 바깥 원 + 가는 밝은 고리 + 가운데 꽃무늬. 작게 보여도 진한 원으로 또렷하다
@@ -2272,97 +2283,141 @@ else root.MJ = MJ;
       const a = i * Math.PI / 3;
       petals += `<circle cx="${(x + Math.cos(a) * r * .34).toFixed(2)}" cy="${(y + Math.sin(a) * r * .34).toFixed(2)}" r="${(r * .1).toFixed(2)}" fill="${CREAM}"/>`;
     }
-    return `<circle cx="${x}" cy="${y}" r="${r}" fill="${col}"/>` +
+    // 각인: 판 홈의 아래 가장자리에 빛(밝은 테), 위쪽에 그늘(어두운 테) → 그 위에 칠한 알. 칠은 윗왼쪽에 은은한 광택
+    const f = v => v.toFixed(2), e = Math.max(.9, r * .12);
+    // 홈 3겹(빛·벽·그늘)은 층마다 따로 표시해 두었다가 pins()에서 모든 알의 같은 층끼리 먼저 그린다 → 맞닿은 알은 홈이 하나로 합쳐진다
+    return `\u0001<circle cx="${x}" cy="${f(y + e * .7)}" r="${f(r + e * .8)}" fill="#fffef8"/>\u0004` +   // 홈 아래 가장자리에 걸린 빛
+      `\u0002<circle cx="${x}" cy="${y}" r="${f(r + e * .75)}" fill="#b3a68f"/>\u0004` +                       // 판 홈의 벽
+      `\u0003<circle cx="${x}" cy="${f(y - e * .45)}" r="${f(r + e * .5)}" fill="#3a3027"/>\u0004` +   // 위쪽 그늘
+
+      `<circle cx="${x}" cy="${y}" r="${r}" fill="${col}"/>` +
+      (() => { const q = r * .87, a1 = Math.PI * 1.08, a2 = Math.PI * 1.42; return `<path d="M${f(x + q * Math.cos(a1))} ${f(y + q * Math.sin(a1))} A${f(q)} ${f(q)} 0 0 1 ${f(x + q * Math.cos(a2))} ${f(y + q * Math.sin(a2))}" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="${f(r * .075)}" stroke-linecap="round"/>`; })() +   // 윗왼쪽 가장자리의 가는 광택
       `<circle cx="${x}" cy="${y}" r="${(r * .74).toFixed(2)}" fill="none" stroke="${CREAM}" stroke-width="${(r * .1).toFixed(2)}"/>` +
       petals + `<circle cx="${x}" cy="${y}" r="${(r * .12).toFixed(2)}" fill="${CREAM}"/>`;
   }
   // 삭수 줄기: 위아래 끝과 가운데 마디가 옆으로 튀어나온 I자 모양. 진한 테두리로 길고 굵게 보이게
   function bamboo(x, y, h, col, a, w) {
-    w = w || 12;                                   // 튀어나온 마디의 폭
-    const sw = w * .66, k = Math.max(3, h * .12), top = y - h / 2, bot = top + h;   // k: 마디(위·가운데·아래) 높이
-    const out = col === RED ? '#6a0815' : col === BLUE_T ? '#0a2a6e' : col === GOLD_T ? '#6e4a00' : '#05391c';
-    // 몸통 + 위·가운데·아래 마디: 둥글게 굵게 튀어나온 덩어리
-    const knob = (cy, rx, ry) => `<ellipse cx="${x}" cy="${cy}" rx="${rx}" ry="${ry}"/>`;
-    const shapes =
-      `<rect x="${x - sw / 2}" y="${top + k * .3}" width="${sw}" height="${h - k * .6}" rx="${sw * .3}"/>` +
-      knob(top + k * .5, w / 2, k * .62) + knob(bot - k * .5, w / 2, k * .62) + knob(y, w * .46, k * .58);
-    const t = a ? ` transform="rotate(${a} ${x} ${y})"` : '';
-    // 마디 사이 몸통 속은 패 바탕색으로 고르게 파낸다
-    const cw = Math.max(1.2, sw * .3), y1 = top + k * 1.15, y2 = y - k * .62, y3 = y + k * .62, y4 = bot - k * 1.15;
-    const hl = `<rect x="${x - cw / 2}" y="${y1}" width="${cw}" height="${Math.max(0, y2 - y1)}" rx="${cw / 2}" fill="${CREAM}"/>` +
-               `<rect x="${x - cw / 2}" y="${y3}" width="${cw}" height="${Math.max(0, y4 - y3)}" rx="${cw / 2}" fill="${CREAM}"/>`;
-    return `<g${t}><g fill="${out}" stroke="${out}" stroke-width="1.15" stroke-linejoin="round">${shapes}</g><g fill="${col}">${shapes}</g>${hl}</g>`;
+    // 레퍼런스 삭: 위 끝은 가운데가 살짝 솟은 둥근 두 갈래(화살촉처럼), 아래 끝은 납작한 두 갈래, 가운데 마디도 두 갈래로 불룩.
+    // 진한 테두리 실루엣이 방향(위·아래)을 만들고, 줄기 속은 길쭉한 흰 직사각형 결
+    w = w || 11;
+    const out = col === SOU ? '#000' : col === RED ? '#62141c' : col === BLUE_T ? '#172f5e' : col === GOLD_T ? '#7a5208' : '#05391c';
+    const f = v => v.toFixed(2), t = y - h / 2, b = y + h / 2, k = h * .12, R = w / 2;
+    const side = sg => { const X = v => f(x + sg * v); return [
+      `Q${X(R * .4)} ${f(t)} ${X(R * .95)} ${f(t + k * .75)}`,            // 위 갈래
+      `Q${X(R * 1.05)} ${f(t + k * 1.35)} ${X(R * .44)} ${f(t + k * 1.45)}`,   // 목
+      `L${X(R * .4)} ${f(y - k * .75)}`,
+      `Q${X(R * .98)} ${f(y - k * .7)} ${X(R * .95)} ${f(y)}`,             // 가운데 마디
+      `Q${X(R * .98)} ${f(y + k * .7)} ${X(R * .4)} ${f(y + k * .75)}`,
+      `L${X(R * .44)} ${f(b - k * 1.45)}`,
+      `Q${X(R * 1.05)} ${f(b - k * 1.3)} ${X(R * .98)} ${f(b - k * .55)}`,   // 아래 갈래
+      `Q${X(R * .9)} ${f(b)} ${X(R * .42)} ${f(b)}`,
+      `Q${X(R * .15)} ${f(b)} ${f(x)} ${f(b - k * .3)}`];               // 아래 가운데 살짝 패임
+    };
+    const rs = side(1), ls = side(-1);
+    // 왼쪽은 오른쪽을 거울에 비춘 것을 거꾸로 따라 올라간다
+    const rev = (() => { const pts = [[x, t]]; const segs = [];
+      const parse = c => c.slice(1).split(' ').map(Number);
+      let cur = [x, t];
+      const list = ls.map(c => { const n = parse(c); const seg = c[0] === 'Q' ? { c: [n[0], n[1]], p: [n[2], n[3]], from: cur } : { p: [n[0], n[1]], from: cur }; cur = seg.p; return seg; });
+      return list.reverse().map(sg => sg.c ? `Q${f(sg.c[0])} ${f(sg.c[1])} ${f(sg.from[0])} ${f(sg.from[1])}` : `L${f(sg.from[0])} ${f(sg.from[1])}`).join(' '); })();
+    const d = `M${f(x)} ${f(t)} ${rs.join(' ')} ${ls.length ? '' : ''}` ;
+    const lastL = (() => { const n = ls[ls.length - 1].slice(1).split(' ').map(Number); return [n[2], n[3]]; })();   // 왼쪽 맨 끝점(아래 가운데)
+    const path = `M${f(x)} ${f(t)} ${rs.join(' ')} L${f(lastL[0])} ${f(lastL[1])} ${rev} Z`;
+    const slit = (y1, y2) => `<rect x="${f(x - w * .11)}" y="${f(y1)}" width="${f(w * .22)}" height="${f(y2 - y1)}" rx="${f(w * .11)}" fill="${CREAM}"/>`;   // 대나무 심지(흰 결): 굵게
+    const tr = a ? ` transform="rotate(${a} ${x} ${y})"` : '';
+    // 테두리·칠·결을 층으로 나눠 표시 → sous()에서 모든 줄기의 테두리를 먼저, 칠을 다음에 그려 겹친 줄기가 한 홈으로 합쳐진다
+    return `\u0001<path d="${path}"${tr} fill="${out}" stroke="${out}" stroke-width="1.8" stroke-linejoin="round"/>\u0004` +
+      `\u0002<path d="${path}"${tr} fill="${col}"/>\u0004<g${tr}>` +
+      slit(t + k * .9, y - k * .5) + slit(y + k * .5, b - k * .9) +
+      `<circle cx="${f(x - R * .5)}" cy="${f(y)}" r="${f(w * .06)}" fill="${CREAM}" opacity=".8"/><circle cx="${f(x + R * .5)}" cy="${f(y)}" r="${f(w * .06)}" fill="${CREAM}" opacity=".8"/></g>`;   // 마디의 작은 점
   }
+
+
+
   function man(n, red) {
-    return T(30, 35, 31, red ? RED : INK, 1.6, red ? '伍' : NUM[n]) + T(30, 73, 31, RED, .8, '萬');
+    return T(30, 37, 33, red ? RED : INK, 2.1, NUM[n], FONT_MAN) + T(30, 69, 33, RED, .6, '萬', FONT_MAN);   // 숫자와 萬을 가깝게
   }
   function pins(n, red) {
+    const s = pinsRaw(n, red), L = ['', '', ''];
+    const body = s.replace(/([\u0001-\u0003])([\s\S]*?)\u0004/g, (m, k, g) => { L[k.charCodeAt(0) - 1] += g; return ''; });
+    return L[0] + L[1] + `<g opacity=".8">${L[2]}</g>` + body;   // 그늘은 한 덩어리로 묶어 반투명(겹친 곳이 더 진해지지 않게)
+  }
+  function pinsRaw(n, red) {
     const c = red ? (typeof red === 'string' ? red : RED) : PIN;
+    const rr = red ? c : RED;   // 일반 통수패의 빨간 알(1통 속, 3통·5통 가운데, 6통 아래 4개, 9통 가운데 줄). 적·청·금도라는 한 색 그대로
     switch (n) {
       case 0: return `<circle cx="30" cy="40" r="27" fill="${c}"/>` +
         `<circle cx="30" cy="40" r="22" fill="none" stroke="${CREAM}" stroke-width="2.2"/>` +
         `<circle cx="30" cy="40" r="17" fill="none" stroke="${CREAM}" stroke-width="2.6" stroke-dasharray="3 2.4"/>` +
-        `<circle cx="30" cy="40" r="10.5" fill="none" stroke="${CREAM}" stroke-width="2"/>` + pin(30, 40, 7.5, c).replace(/^<circle[^>]*>/, '') +
+        `<circle cx="30" cy="40" r="10.5" fill="none" stroke="${CREAM}" stroke-width="2"/>` + (red ? pin(30, 40, 7.5, c).replace(/^<circle[^>]*>/, '') : pin(30, 40, 8.6, rr)) +
         `<circle cx="30" cy="40" r="2.2" fill="${CREAM}"/>`;
-      case 1: return pin(30, 21, 17, c) + pin(30, 59, 17, c);
-      case 2: return pin(15, 15, 13, c) + pin(30, 40, 13, c) + pin(45, 65, 13, c);
-      case 3: return pin(17, 21, 12.8, c) + pin(43, 21, 12.8, c) + pin(17, 59, 12.8, c) + pin(43, 59, 12.8, c);
-      case 4: return pin(16, 16, 11.5, c) + pin(44, 16, 11.5, c) + pin(30, 40, 11.5, c) + pin(16, 64, 11.5, c) + pin(44, 64, 11.5, c);
-      case 5: return pin(18, 14, 11, c) + pin(42, 14, 11, c) + pin(18, 45, 11, c) + pin(42, 45, 11, c) + pin(18, 67, 11, c) + pin(42, 67, 11, c);
-      case 6: return pin(13, 10.5, 9, c) + pin(30, 18.5, 9, c) + pin(47, 26.5, 9, c) +
-        pin(18, 48, 10.6, c) + pin(42, 48, 10.6, c) + pin(18, 69, 10.6, c) + pin(42, 69, 10.6, c);
-      case 7: { let s = ''; for (const y of [11, 30.4, 49.6, 69]) s += pin(18, y, 9.8, c) + pin(42, y, 9.8, c); return s; }
-      case 8: { let s = ''; for (const y of [13, 40, 67]) for (const x of [11.5, 30, 48.5]) s += pin(x, y, 9.4, c); return s; }
+      // 2~9통: 레퍼런스 패를 실측해 옮긴 배치(8통처럼 알이 거의 맞닿게 오밀조밀). 알 크기는 1통 > 2통 > 3·4·5통 > 6통 > 7통 > 8통 > 9통
+      case 1: return pin(30, 22.1, 15.6, c) + pin(30, 57.9, 15.6, c);   /* 2~6통: 위아래 변과의 여백을 9통과 같게(6.5) */
+      case 2: return pin(15, 18.8, 12.3, c) + pin(30, 40, 12.3, rr) + pin(45, 61.2, 12.3, c);
+      case 3: return pin(17.4, 18.8, 12.3, c) + pin(42.6, 18.8, 12.3, c) + pin(17.4, 61.2, 12.3, c) + pin(42.6, 61.2, 12.3, c);
+      case 4: return pin(16.9, 18.8, 12.3, c) + pin(43.1, 18.8, 12.3, c) + pin(30, 40, 12.3, rr) + pin(16.9, 61.2, 12.3, c) + pin(43.1, 61.2, 12.3, c);
+      case 5: { let s = pin(19.8, 16.7, 10.2, c) + pin(40.2, 16.7, 10.2, c); for (const y of [43.3, 63.3]) s += pin(19.8, y, 10.2, rr) + pin(40.2, y, 10.2, rr); return s; }
+      case 6: { const r = 9.6; let s = pin(14.4, 14.4, r, c) + pin(30.6, 22.5, r, c) + pin(45.4, 32.4, r, c); /* 대각선 3개를 아래로 붙여 2×2와 홈 한 줄을 공유 */ for (const y of [48.6, 67.8]) s += pin(20.4, y, r, c) + pin(39.6, y, r, c); return s; }
+      case 7: { let s = ''; for (const y of [12.1, 30.7, 49.3, 67.9]) s += pin(20.7, y, 9.3, c) + pin(39.3, y, 9.3, c); return s; }
+      case 8: { let s = ''; for (const y of [15.5, 40, 64.5]) for (const x of [12.5, 30, 47.5]) s += pin(x, y, 9, y === 40 ? rr : c); return s; }
     }
   }
+  const W = 11;   // 삭수 줄기 폭(마디)
   function sous(n, red) {
-    const g = red ? (typeof red === 'string' ? red : RED) : GREEN;
+    const s = sousRaw(n, red), L = ['', ''];
+    const body = s.replace(/([\u0001\u0002])([\s\S]*?)\u0004/g, (m, k, g) => { L[k.charCodeAt(0) - 1] += g; return ''; });
+    return L[0] + L[1] + body;
+  }
+  function sousRaw(n, red) {
+    const g = red ? (typeof red === 'string' ? red : RED) : SOU;   // 삭수는 레퍼런스처럼 먹색(검정) 줄기, 빨강은 포인트만
     switch (n) {
-      case 0: {   // 1삭: 위에 촘촘히 붙은 둥근 꽃송이, 아래에 날개에 빗금이 있는 새
-        const D = '#123f2a', LN = '#16161d';
+      case 0: {   // 1삭: 위에 짙은 꽃송이(무늬 위에서부터 2·3·4·3, 가운데로 모임), 아래에 날개에 빗금이 있는 새(몸통은 작게)
+        const D = '#4b3a32', LN = '#16161d';
         const rows = [[11, [23.2, 30, 36.8]], [17.2, [19.8, 26.6, 33.4, 40.2]], [23.4, [16.4, 23.2, 30, 36.8, 43.6]], [29.6, [19.8, 26.6, 33.4, 40.2]], [35.4, [23.2, 30, 36.8]]];
         let back = '', cells = '';
-        for (const [y, xs] of rows) for (const x of xs) {
-          back += `<circle cx="${x}" cy="${y}" r="4.6"/>`;
-          cells += `<circle cx="${x}" cy="${y}" r="2.5" fill="${CREAM}"/><circle cx="${x}" cy="${y}" r="1.2" fill="${D}"/>`;
-        }
+        for (const [y, xs] of rows) for (const x of xs) back += `<circle cx="${x}" cy="${y}" r="4.6"/>`;
+        [[2, 14], [3, 19.8], [4, 25.6], [3, 31.4]].forEach(([n, y]) => { for (let i = 0; i < n; i++){ const x = 30 + (i - (n - 1) / 2) * 6.2;
+          cells += `<circle cx="${x}" cy="${y}" r="2.3" fill="${CREAM}"/><circle cx="${x}" cy="${y}" r="1.05" fill="${D}"/>`; } });
         const flower = `<g fill="${D}" stroke="${D}" stroke-width="1.2">${back}</g>${cells}`;
         const bird =
-          // 꼬리 깃
           `<path d="M44 55 C47 51 50 48 53 46 M45 57 C48 55 51 53.5 54 52.5 M45 59 C48 59 51 59 54 59.5" stroke="${LN}" stroke-width="2" fill="none" stroke-linecap="round"/>` +
-          // 몸통과 목
           `<path d="M17 50 C20 55 25 58 32 57.5 C38 57 42 55 46 54 C47 59 44 64 37 66.5 C29 69 21 67.5 17.5 63 C15 60 15 56.5 17 53 Z" fill="${CREAM}" stroke="${LN}" stroke-width="2" stroke-linejoin="round"/>` +
           `<path d="M17 53 C14 50 12.5 47.5 13 45" stroke="${LN}" stroke-width="3.2" fill="none" stroke-linecap="round"/>` +
-          // 머리와 부리, 눈
           `<circle cx="13.6" cy="44.2" r="3.6" fill="${CREAM}" stroke="${LN}" stroke-width="1.5"/>` +
           `<path d="M10.4 43.4 L7.4 44.6 L10.3 46" fill="${LN}"/>` +
           `<circle cx="13.2" cy="43.6" r=".9" fill="${LN}"/>` +
-          // 날개: 진한 바탕에 밝은 빗금
           `<path d="M24 60.5 C29 55.5 37 53.5 44.5 55.5 C41 61.5 33.5 64.5 26 63.5 Z" fill="${D}" stroke="${LN}" stroke-width="1.2" stroke-linejoin="round"/>` +
           `<path d="M28 62.6 L32.5 56.6 M31.5 63.4 L36 56 M35 63 L39.5 55.6 M38.6 61.8 L42.4 56.4" stroke="${CREAM}" stroke-width="1.1" stroke-linecap="round"/>` +
-          // 빨간 다리와 발가락
           `<path d="M29 67.5 L28 74 M28 74 L25 76.5 M28 74 L28.5 77.5 M28 74 L31 76.6 M35 67.2 L35.8 74 M35.8 74 L33 76.6 M35.8 74 L36.4 77.6 M35.8 74 L39 76.4" stroke="${RED}" stroke-width="1.8" stroke-linecap="round"/>`;
-        return flower + `<g transform="translate(30 57) scale(1.2) translate(-31 -60)">${bird}</g>`;
+        // 날개: 새 몸통에서 좌우 윗방향으로 퍼지는 그물 부채꼴(살 + 가로 호)
+        const fan = (cx, cy, a1, a2, r) => { const P = (a, rr) => [cx + Math.cos(a) * rr, cy + Math.sin(a) * rr].map(v => v.toFixed(2)).join(' ');
+          let net = ''; for (let i = 0; i <= 5; i++){ const a = a1 + (a2 - a1) * i / 5; net += `M${cx} ${cy} L${P(a, r)} `; }
+          for (const rr of [r * .45, r * .7, r * .92]) net += `M${P(a1, rr)} A${rr} ${rr} 0 0 1 ${P(a2, rr)} `;
+          return `<path d="M${cx} ${cy} L${P(a1, r)} A${r} ${r} 0 0 1 ${P(a2, r)} Z" fill="${D}" stroke="${LN}" stroke-width="1" stroke-linejoin="round"/><path d="${net}" stroke="${CREAM}" stroke-width=".7" fill="none"/>`; };
+        const wings = fan(25, 52, Math.PI * 1.02, Math.PI * 1.4, 19) + fan(36, 51, Math.PI * 1.6, Math.PI * 1.98, 19);
+        return `<g transform="translate(0 3)">${flower}</g>` + wings + `<g transform="translate(30 52) scale(.98) translate(-31 -60)">${bird}</g>`;   // 몸통을 예전(1.2배)보다 작게
       }
-      case 1: return bamboo(30, 21, 31, g) + bamboo(30, 59, 31, g);
-      case 2: return bamboo(30, 21, 31, g) + bamboo(18, 59, 31, g) + bamboo(42, 59, 31, g);
-      case 3: return bamboo(18, 21, 31, g) + bamboo(42, 21, 31, g) + bamboo(18, 59, 31, g) + bamboo(42, 59, 31, g);
-      case 4: return bamboo(13, 21, 31, g) + bamboo(47, 21, 31, g) + bamboo(30, 40, 28, typeof red === 'string' ? g : RED) + bamboo(13, 59, 31, g) + bamboo(47, 59, 31, g);
-      case 5: { let s = ''; for (const y of [21, 59]) for (const x of [12, 30, 48]) s += bamboo(x, y, 31, g); return s; }
-      case 6: { let s = bamboo(30, 12, 20, RED); for (const y of [40, 66]) for (const x of [12, 30, 48]) s += bamboo(x, y, 23, g); return s; }
+      // 2~7·9삭: 레퍼런스 실측 배치 — 가는 줄기(폭 W), 두 줄 패는 길이 29, 세 줄 패는 길이 20.5
+      case 1: return bamboo(30, 21, 29, g, 0, W) + bamboo(30, 59, 29, g, 0, W);
+      case 2: return bamboo(30, 21, 29, g, 0, W) + bamboo(13, 59, 29, g, 0, W) + bamboo(47, 59, 29, g, 0, W);
+      case 3: return bamboo(17.1, 21, 29, g, 0, W) + bamboo(42.9, 21, 29, g, 0, W) + bamboo(17.1, 59, 29, g, 0, W) + bamboo(42.9, 59, 29, g, 0, W);
+      case 4: return bamboo(14.3, 21, 29, g, 0, W) + bamboo(45.7, 21, 29, g, 0, W) + bamboo(30, 40, 29, typeof red === 'string' ? g : RED, 0, W) + bamboo(14.3, 59, 29, g, 0, W) + bamboo(45.7, 59, 29, g, 0, W);
+      case 5: { let s = ''; for (const y of [21, 59]) for (const x of [13.7, 30, 46.3]) s += bamboo(x, y, 29, g, 0, W); return s; }
+      case 6: { let s = bamboo(30, 15.5, 19, RED, 0, W); for (const y of [41.5, 64.5]) for (const x of [14.3, 30, 45.7]) s += bamboo(x, y, 20.5, g, 0, W); return s; }
       case 7: {   // 8삭: 위는 Λ(안쪽 두 줄이 꼭대기에서 겹쳐 만남), 아래는 V(바닥에서 겹쳐 만남). 바깥 세로 줄이 맨 위에 겹친다
-        const w = 9.6, d = 30;
-        return bamboo(24, 23.5, 29, g, d, w) + bamboo(36, 23.5, 29, g, -d, w) + bamboo(24, 58.5, 29, g, -d, w) + bamboo(36, 58.5, 29, g, d, w) +   // 꼭짓점에서 끝이 확 겹쳐 얹히게
-               bamboo(9.5, 22, 30, g, 0, w) + bamboo(50.5, 22, 30, g, 0, w) + bamboo(9.5, 60, 30, g, 0, w) + bamboo(50.5, 60, 30, g, 0, w);
+        // 그림 기준: 위는 W(가운데 ㅅ의 두 다리가 양 세로줄 아래 뿌리에 붙음), 아래는 M(ㅅ을 뒤집은 V의 두 끝이 세로줄 위 뿌리에 붙음) → 모양이 패 가운데로 모인다
+        const w = W, d = 47;
+        return bamboo(23.5, 26.5, 19, g, d, w) + bamboo(36.5, 26.5, 19, g, -d, w) + bamboo(23.5, 53.5, 19, g, -d, w) + bamboo(36.5, 53.5, 19, g, d, w) +
+               bamboo(14, 20, 30, g, 0, w) + bamboo(46, 20, 30, g, 0, w) + bamboo(14, 60, 30, g, 0, w) + bamboo(46, 60, 30, g, 0, w);
       }
-      case 8: { let s = ''; for (const y of [13, 40, 67]) [12, 30, 48].forEach(x => { s += bamboo(x, y, 23, x === 30 ? RED : g); }); return s; }
+      case 8: { let s = ''; for (const y of [17, 40, 63]) [14.3, 30, 45.7].forEach(x => { s += bamboo(x, y, 20.5, x === 30 ? RED : g, 0, W); }); return s; }
     }
   }
   function honor(i) {
     if (i === 4) return '';   // 白: 아무 무늬 없는 깨끗한 흰 패
     const ch = '東南西北白發中'[i];
     const col = i === 5 ? GREEN : i === 6 ? RED : INK;
-    return T(30, 56, 44, col, 2.2, ch);
+    return T(30, 59, 52, col, i === 5 ? .3 : .7, ch, FONT_HON);   // 붓글씨는 작게 나와 크게(發은 획이 많아 테두리를 더 가늘게)
   }
   function symbols() {
     let out = '';
@@ -2382,11 +2437,55 @@ else root.MJ = MJ;
     out += `<symbol id="f22b" viewBox="0 0 60 80">${sous(4, BLUE_T)}</symbol><symbol id="f22g" viewBox="0 0 60 80">${sous(4, GOLD_T)}</symbol>`;
     // 3인 白: 파란 테두리(틀 白) 안에 시로폿치 · R · P · G — 테두리로 한눈에 白임을 알 수 있게
     const FR = `<rect x="8.5" y="9" width="43" height="62" rx="4.5" fill="none" stroke="#2f6fb3" stroke-width="3.2"/><rect x="13" y="13.5" width="34" height="53" rx="2.2" fill="none" stroke="#2f6fb3" stroke-width="1.1"/>`;
-    out += `<symbol id="f31s" viewBox="0 0 60 80">${FR}<circle cx="30" cy="40" r="8.5" fill="${RED}"/><circle cx="30" cy="40" r="8.5" fill="none" stroke="#7a0a1c" stroke-width="1" opacity=".5"/><ellipse cx="27.3" cy="36.8" rx="2.7" ry="1.8" fill="#fff" opacity=".35"/></symbol>`;   // 시로폿치
+    out += `<symbol id="f31s" viewBox="0 0 60 80">${FR}<circle cx="30" cy="40" r="8.5" fill="${RED}"/><circle cx="30" cy="40" r="8.5" fill="none" stroke="#6a1420" stroke-width="1" opacity=".5"/><ellipse cx="27.3" cy="36.8" rx="2.7" ry="1.8" fill="#fff" opacity=".35"/></symbol>`;   // 시로폿치
     // 3인 白: 시로폿치가 아닌 세 장에 R·P·G 문양 (위아래가 있는 패)
     // 패에 새긴 각인: 아래쪽 밝은 테(빛이 홈 아래 가장자리에 닿음) + 검은 글자 + 위쪽 그늘
-    ['R', 'P', 'G'].forEach(ch => { const T = (dx, dy, fill, extra) => `<text x="${30 + dx}" y="${51.5 + dy}" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-weight="900" font-size="33" ${extra || ''} fill="${fill}">${ch}</text>`;
-      out += `<symbol id="f31${ch}" viewBox="0 0 60 80">${FR}${T(.9, 1.3, 'rgba(255,255,255,.95)', 'stroke="rgba(255,255,255,.95)" stroke-width="2" stroke-linejoin="round"')}${T(0, 0, '#4a4a52', 'stroke="#4a4a52" stroke-width="2" stroke-linejoin="round"')}${T(0, .5, '#000')}</symbol>`; });
+    ['R', 'P', 'G'].forEach(ch => { const T = (dx, dy, fill, extra) => `<text x="${30 + dx}" y="${51.5 + dy}" text-anchor="middle" font-family="Rye,Georgia,'Times New Roman',serif" font-weight="400" font-size="30" ${extra || ''} fill="${fill}">${ch}</text>`;
+      out += `<symbol id="f31${ch}" viewBox="0 0 60 80">${FR}${T(0, 0, '#fbfaf4', 'stroke="#fbfaf4" stroke-width=".6" stroke-linejoin="round"')}</symbol>`; });
+    // 각인 음영(통수 알과 같은 느낌): 글자·줄기를 조금 불린 모양으로 홈(아래 빛 · 벽 · 위 그늘)을 깔고 그 위에 칠. 통수는 pins()에서 직접 그린다
+    const engr = (id, d) => `<filter id="${id}" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">` +
+      `<feMorphology in="SourceAlpha" operator="dilate" radius="${d}" result="a"/>` +
+      `<feOffset in="a" dy="${(d * .75).toFixed(2)}" result="ah"/><feFlood flood-color="#fffef8"/><feComposite in2="ah" operator="in" result="hi"/>` +
+      `<feFlood flood-color="#b3a68f"/><feComposite in2="a" operator="in" result="wall"/>` +
+      `<feMorphology in="SourceAlpha" operator="dilate" radius="${(d * .65).toFixed(2)}" result="b"/><feOffset in="b" dy="${(-d * .5).toFixed(2)}" result="bs"/><feFlood flood-color="#3a3027" flood-opacity=".8"/><feComposite in2="bs" operator="in" result="sh"/>` +
+      `<feMerge><feMergeNode in="hi"/><feMergeNode in="wall"/><feMergeNode in="sh"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
+    const PIN_IDS = /^f(1[0-7]|13[rbg])$/, TXT_IDS = /^f([0-8]|4r|2[7-9]|3[0-3]|31[sRPG])$/;
+    out = out.replace(/<symbol id="(\w+)" viewBox="0 0 60 80">([\s\S]*?)<\/symbol>/g, (m, id, body) =>
+      PIN_IDS.test(id) ? m : /^f31[RPG]$/.test(id) ? body.replace(/^([\s\S]*?)(<text[\s\S]*<\/text>)$/, `<symbol id="${id}" viewBox="0 0 60 80">$1<g filter="url(#engrD)">$2</g></symbol>`) : id === 'f31s' && body.startsWith(FR) ? `<symbol id="${id}" viewBox="0 0 60 80">${FR}<g filter="url(#engrT)">${body.slice(FR.length)}</g></symbol>` : `<symbol id="${id}" viewBox="0 0 60 80"><g filter="url(#${TXT_IDS.test(id) ? 'engrI' : 'engrB'})">${body}</g></symbol>`);
+    // R·P·G: 칠 없이 하얀 글자를 움푹 파낸 모양 — 획 안쪽 위·왼쪽에 그늘, 아래쪽 가장자리에 빛
+    const engrD = `<filter id="engrD" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">` +
+      `<feOffset in="SourceAlpha" dx=".9" dy="1.4" result="o"/><feComposite in="SourceAlpha" in2="o" operator="out" result="rim"/><feGaussianBlur in="rim" stdDeviation=".7" result="rb"/>` +
+      `<feFlood flood-color="#3a3428" flood-opacity=".75"/><feComposite in2="rb" operator="in"/><feComposite in2="SourceAlpha" operator="in" result="sh"/>` +
+      `<feFlood flood-color="#c9c2ae"/><feComposite in2="SourceAlpha" operator="in" result="base"/>` +
+      `<feOffset in="SourceAlpha" dy="-.8" result="u"/><feComposite in="SourceAlpha" in2="u" operator="out" result="lo"/><feFlood flood-color="#fff"/><feComposite in2="lo" operator="in" result="hl"/>` +
+      `<feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="sh"/><feMergeNode in="hl"/></feMerge></filter>`;
+    // 만수·자패: R·P·G처럼 움푹 판 홈 안에 먹(색)을 채운 느낌 — 획 안쪽 위·왼쪽은 패 표면이 드리운 그늘, 아래쪽 가장자리는 빛 받은 홈 벽
+    const engrI = `<filter id="engrI" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">` +
+      `<feOffset in="SourceAlpha" dx=".7" dy="1.1" result="o"/><feComposite in="SourceAlpha" in2="o" operator="out" result="rim"/><feGaussianBlur in="rim" stdDeviation=".55" result="rb"/>` +
+      `<feFlood flood-color="#000" flood-opacity=".7"/><feComposite in2="rb" operator="in"/><feComposite in2="SourceAlpha" operator="in" result="sh"/>` +
+      `<feOffset in="SourceAlpha" dx="-.3" dy="-.75" result="u"/><feComposite in="SourceAlpha" in2="u" operator="out" result="lo"/><feGaussianBlur in="lo" stdDeviation=".2" result="lob"/>` +
+      `<feFlood flood-color="#fff3dc" flood-opacity=".8"/><feComposite in2="lob" operator="in"/><feComposite in2="SourceAlpha" operator="in" result="hl"/>` +
+      `<feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="sh"/><feMergeNode in="hl"/></feMerge></filter>`;
+    out = engrD + engrI + out;
+    // 글자(만수·자패·R/P/G): 실물 패처럼 글자 자체가 파인 홈이고 칠은 그 안에 있다 → 바깥으로 불리지 않고, 위에서 보면
+    // 획 안쪽 위 가장자리에 홈 벽의 그늘, 아래 가장자리에 빛 받은 벽이 가늘게 보인다(글자 굵기는 그대로)
+    const engrIn = (id, d) => `<filter id="${id}" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">` +
+      `<feOffset in="SourceAlpha" dy="${d}" result="dn"/><feComposite in="SourceAlpha" in2="dn" operator="out" result="tb"/><feGaussianBlur in="tb" stdDeviation=".25" result="tbb"/>` +
+      `<feFlood flood-color="#000" flood-opacity=".6"/><feComposite in2="tbb" operator="in"/><feComposite in2="SourceAlpha" operator="in" result="sh"/>` +
+      `<feOffset in="SourceAlpha" dy="${-d}" result="up"/><feComposite in="SourceAlpha" in2="up" operator="out" result="bb"/><feGaussianBlur in="bb" stdDeviation=".25" result="bbb"/>` +
+      `<feFlood flood-color="#fff6e0" flood-opacity=".55"/><feComposite in2="bbb" operator="in"/><feComposite in2="SourceAlpha" operator="in" result="hl"/>` +
+      `<feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="sh"/><feMergeNode in="hl"/></feMerge></filter>`;
+    out = `<linearGradient id="gldG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe27a"/><stop offset=".35" stop-color="#e2a91c"/><stop offset=".62" stop-color="#a8700a"/><stop offset=".85" stop-color="#e8b52e"/><stop offset="1" stop-color="#ffd65a"/></linearGradient>` + `<linearGradient id="bluG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9cc4ff"/><stop offset=".35" stop-color="#3a74d8"/><stop offset=".62" stop-color="#163f8e"/><stop offset=".85" stop-color="#3f7ee0"/><stop offset="1" stop-color="#8cb8ff"/></linearGradient>` + out;   // 금도라: 반짝이는 금박
+    // 글자용: 통수와 같은 결 — 가는 홈 테두리(아래 빛·벽·위 그늘, 아주 얇게 불려 글자가 뭉개지지 않게) + 칠 위의 하얀 윤기(획 위 가장자리)
+    const engrTxt = (id, d) => `<filter id="${id}" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">` +
+      `<feMorphology in="SourceAlpha" operator="dilate" radius="${d}" result="a"/>` +
+      `<feOffset in="a" dy="${(d * .9).toFixed(2)}" result="ah"/><feFlood flood-color="#fffef8"/><feComposite in2="ah" operator="in" result="hi"/>` +
+      `<feFlood flood-color="#b3a68f"/><feComposite in2="a" operator="in" result="wall"/>` +
+      `<feOffset in="a" dy="${(-d * .6).toFixed(2)}" result="as"/><feFlood flood-color="#3a3027" flood-opacity=".75"/><feComposite in2="as" operator="in" result="sh"/>` +
+      `<feOffset in="SourceAlpha" dx=".35" dy=".7" result="dn"/><feComposite in="SourceAlpha" in2="dn" operator="out" result="gb"/><feGaussianBlur in="gb" stdDeviation=".22" result="gbb"/>` +
+      `<feFlood flood-color="#fff" flood-opacity=".55"/><feComposite in2="gbb" operator="in"/><feComposite in2="SourceAlpha" operator="in" result="gl"/>` +
+      `<feMerge><feMergeNode in="hi"/><feMergeNode in="wall"/><feMergeNode in="sh"/><feMergeNode in="SourceGraphic"/><feMergeNode in="gl"/></feMerge></filter>`;
+    out = engrTxt('engrT', .5) + engrTxt('engrB', .95) + out;   // 만수·자패·삭수 모두 통수와 같은 결: 홈(아래 빛·벽·위 그늘) + 칠 위의 하얀 윤기
     return `<svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false"><defs>${out}</defs></svg>`;
   }
   root.TileFaces = { symbols };
@@ -2729,7 +2828,8 @@ const SFX = (() => {
     unlock: ac,
     now(){ const c = ac(); return c ? c.currentTime : null; },   // 오디오 시계(초). 소리가 꺼져 있으면 null
     draw(){ clack('draw', .28); },                                         // 패 집는 소리
-    discard(){ clack('discard', 1.0); },                                   // 딱! 내려놓는 소리
+    discard(){ clack('discard', 1.0); },
+    chip(){ clack('discard', .16, 1.7 + Math.random() * .35); },   // 축의칩끼리 탁: 패보다 높고 가볍게                                   // 딱! 내려놓는 소리
     call(){ clack('discard', .6); tone(587, .12, .16, 'triangle', .02); tone(784, .18, .16, 'triangle', .1); },
     riichi(){},   // 리치는 가로 타패에서 이미 한 것: 따로 효과음 없음
     // 점봉: 플라스틱 막대가 콘솔에 떨어져 '따각' 두어 번 튄다
@@ -3000,6 +3100,19 @@ const BGM = (() => {
 // ---------- 대국 ----------
 function sleep(ms){ const t = UI.token; return new Promise(res => setTimeout(()=>{ if(t === UI.token) res(); }, ms)); }
 // 자동 화료: 론·쯔모를 물으면(내 차례 쯔모 화료 포함) 저절로 화료
+// 자동 북빼기: 北을 뺄 수 있으면 바로 뺀다. 자동 쯔모기리: 뽑은 패를 그대로 버린다(쯔모 화료가 가능하면 멈추고 고르게 한다)
+function autoAct(g, s, ctx){
+  if(!ctx || !g || !g.drawn || g.drawn.seat !== s) return null;
+  if(UI.autoNuki && ctx.nuki) return {type:'nuki'};
+  if(UI.autoTsumogiri && !ctx.tsumo && g.players[s].hand.includes(g.drawn.id)) return {type:'discard', id:g.drawn.id, riichi:false};
+  return null;
+}
+// 버튼을 켠 순간 이미 내 차례로 기다리는 중이면 바로 처리
+function autoActCheck(){
+  const q = UI.pending; if(!q || UI.drill || UI.confirm) return;
+  if(q.kind === 'riichiNuki' && UI.autoNuki){ choose(true); return; }
+  if(q.kind === 'action' && UI.riichiDiscard == null){ const a = autoAct(UI.game, 0, q.ctx); if(a) choose(a); }
+}
 function autoWinCheck(){
   const q = UI.pending; if(!q || !UI.autoWin || UI.drill) return;
   if(q.kind === 'ron' || q.kind === 'tsumo') choose(true);
@@ -3218,7 +3331,8 @@ function skillBadges(){
   return SK_KEYS.map(k => { const p = mjSkillPct(k); return `<span class="skb ${p ? '' : 'off'}" style="--gc:${mjSkillColor(k)}" title="${MJSK[k].n} ${p}%">${MJSK[k].icon}<small>${p}%</small></span>`; }).join('');   // 0%여도 아이콘은 보인다
 }
 const Human = {
-  async chooseAction(g,s,ctx){ await takeDraw(); if(ctx && ctx.tsumo && UI.autoWin && !UI.drill){ render(); await sleep(settings.speed === 'fast' ? 550 : 1100); return {type:'tsumo'}; }   /* 자동 화료: 쯔모 버튼·안내 없이 평소 템포 뒤 쯔모 */ if(!UI.drill){ rollPeek(g); rollPrune(g, ctx); } return ask({kind:'action', ctx}); },
+  async chooseAction(g,s,ctx){ await takeDraw(); if(ctx && ctx.tsumo && UI.autoWin && !UI.drill){ render(); await sleep(settings.speed === 'fast' ? 550 : 1100); return {type:'tsumo'}; }   /* 자동 화료: 쯔모 버튼·안내 없이 평소 템포 뒤 쯔모 */
+    if(!UI.drill){ const a = autoAct(g, s, ctx); if(a){ render(); await sleep(settings.speed === 'fast' ? 160 : 380); return a; } }   /* 손에 들어온 뒤 짧게 한 박자: CPU 타패와 같은 리듬 */   /* 자동 북빼기·자동 쯔모기리 */ if(!UI.drill){ rollPeek(g); rollPrune(g, ctx); } return ask({kind:'action', ctx}); },
   async decideTsumo(){ await takeDraw(); if(UI.autoWin && !UI.drill){ render(); await sleep(settings.speed === 'fast' ? 550 : 1100); return true; } return ask({kind:'tsumo'}); },
   decideRon(g,s,r,id,chankan){
     // 자동 화료: 론 버튼 없이, 방총패가 강에 놓이는 걸 평소 템포로 보여 준 뒤 화료(결과창)
@@ -3226,7 +3340,7 @@ const Human = {
     return ask({kind:'ron', tile:id, chankan:!!chankan});
   },
   async decideRiichiKan(g,s,opts){ await takeDraw(); return ask({kind:'riichiKan', opts}); },
-  async decideRiichiNuki(){ await takeDraw(); return ask({kind:'riichiNuki'}); },
+  async decideRiichiNuki(){ await takeDraw(); if(UI.autoNuki && !UI.drill){ render(); await sleep(settings.speed === 'fast' ? 160 : 380); return true; } return ask({kind:'riichiNuki'}); },
   decideCall(g,s,opts){ return ask({kind:'call', opts}); },
   async onAuto(g, s){ if(g.players[s].riichi && !UI.pendingDraw){ UI.autoTG = false; return sleep(SPEED[settings.speed]); }   /* 뽑은 패를 CPU가 치는 템포만큼 보여 준 뒤 쯔모기리 */ await takeDraw(); UI.autoTG = false; return sleep(Math.max(250, SPEED[settings.speed])); }
 };
@@ -3276,7 +3390,7 @@ function trayHTML(g){
       const slots = L % 2 ? 5 : 6;
       for(let j = 0; j < slots && i < seq.length; j++, i++){
         const pos = L % 2 ? j + .5 : j;
-        h += `<span class="tst ${L ? 'up' : ''}" style="--sp:${pos};--sl:${L};--sx:${[0, 5, -4, 4][L]}px">${stickSVG(seq[i])}</span>`;
+        h += `<span class="tst ${L ? 'up' : ''}" style="--sp:${pos};--sl:${L};--sx:0px">${stickSVG(seq[i])}</span>`;
       }
       L++;
     }
@@ -3340,7 +3454,7 @@ function startGame(mode, saved, practice, drill, ym){
       const tk0 = UI.token, sleepT = async ms => { await sleep(ms); if(tk0 !== UI.token) await HALT(); };   // 나간 게임의 배패 연출은 멈춘다
       UI.frozen = null; UI.endRes = null; UI.winOpen = null; UI.peekEnd = false; UI.cpuOut = {}; UI.handSet = game.results.length % 2; document.documentElement.classList.toggle('setb', UI.handSet === 1);
       UI.callouts = {}; UI.carryKyotaku = game.kyotaku;
-      UI.kyokuSerial = (UI.kyokuSerial || 0) + 1; UI.skDice = {}; UI.kyokuChips = UI.pendingChips || 0;   /* 축의 탑은 국이 시작할 때의 값(이번 국에 얻은 건 다음 국부터) */ UI.kyokuReady = true; UI.order = null; UI.riichiCalled = false; UI.riichiDiscard = null; UI.riichiClacked = false; UI.autoWin = false; UI.wasTenpai = false;   /* 자동 화료는 국마다 꺼진 채로 시작 */ UI.doraAt = {}; UI.sense = null; UI.swapIn = null; UI.peek = null; UI.prune = null; uraState(); kskRestore(game);
+      UI.kyokuSerial = (UI.kyokuSerial || 0) + 1; UI.autoWin = UI.autoNuki = UI.autoTsumogiri = false;   /* 국마다 화료·북빼기·쯔모기리는 OFF로 */ UI.skDice = {}; UI.kyokuChips = UI.pendingChips || 0;   /* 축의 탑은 국이 시작할 때의 값(이번 국에 얻은 건 다음 국부터) */ UI.kyokuReady = true; UI.order = null; UI.riichiCalled = false; UI.riichiDiscard = null; UI.riichiClacked = false; UI.autoWin = false; UI.wasTenpai = false;   /* 자동 화료는 국마다 꺼진 채로 시작 */ UI.doraAt = {}; UI.sense = null; UI.swapIn = null; UI.peek = null; UI.prune = null; uraState(); kskRestore(game);
       UI.inv = new Set();   // 처음 배패된 손패는 상하가 정리되지 않은 채로 온다(끌면서 우클릭해 180도 돌려 다시 손패에 놓아 정리)
       if(!UI.drill && !settings.skipDeal) game.players[0].hand.forEach(id => { if(asymId(id) && Math.random() < .5) UI.inv.add(id); });
       if(game.resumed){   // 국 도중 이어하기: 연출 없이 멈췄던 그 순간의 판으로
@@ -3482,7 +3596,7 @@ function startGame(mode, saved, practice, drill, ym){
         UI.pendingDraw = { id: d.id, rinshan: !!d.rinshan };
         const at = UI.autoTake; UI.autoTake = null;
         if(at && Date.now() - at.at < 4000 && !d.rinshan) requestAnimationFrame(() => requestAnimationFrame(() => flyIn(at)));   // 울기 대신 쯔모한 패: 놓은 자리에서 바로 손으로
-        else if(settings.phone && !UI.drill){   // 폰 모드: 내 차례 쯔모·깡·북 빼고 받는 영상패 모두 저절로 손으로
+        else if((settings.phone || UI.autoTsumogiri || UI.autoNuki) && !UI.drill){   // 폰 모드(또는 쯔모기리·북빼기 ON): 내 차례 쯔모·깡·북 빼고 받는 영상패 모두 저절로 손으로
           const pd = UI.pendingDraw; setTimeout(() => { if(UI.pendingDraw === pd && !pd.flying){ pd.earlySnd = true; flyIn(); } }, settings.speed === 'fast' ? 250 : 650);   // CPU가 뽑기 전에 두는 것과 같은 템포
         }
         UI.nukiDraw = false;
@@ -4173,9 +4287,9 @@ function confirmHTML(){
 // 내가 텐파이일 때 대기패와 남은 장수 (내 손패·모든 강·울은 패·도라 표시패처럼 보이는 패만 빼고 센다)
 // 손패 순서: 데스크톱은 끌어서 마음대로 늘어놓을 수 있다(UI.order). 폰 모드·국 시작·화료 때는 정렬
 function orderRest(ids){
-  if(settings.phone || settings.autoSort !== false){   // 자동 정리 ON: 늘 순서대로, 상하도 바로
+  if(settings.autoSort !== false){   // 자동 정리 ON(폰 모드도 같은 버튼을 따른다): 늘 순서대로, 상하도 바로
     UI.order = null;
-    if(!settings.phone && UI.inv && UI.game) UI.game.players[0].hand.forEach(id => UI.inv.delete(id));
+    if(UI.inv && UI.game) UI.game.players[0].hand.forEach(id => UI.inv.delete(id));
     return ids.slice().sort((a, b) => a - b);
   }
   // 자동 정리 OFF: 지금 늘어놓은 자리를 그대로 지키고(저절로 움직이지 않음), 새로 들어온 패(타패 후 합쳐진 쯔모 패·바꿔치기 패 등)는 오른쪽 끝에 붙인다
@@ -4215,29 +4329,48 @@ document.documentElement.style.setProperty('--chip-icon', CHIP_ICON);
 document.documentElement.style.setProperty('--chip-blue', `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'>${chipFaceSVG().replace(/#efbd2c/g, '#2f7fe8').replace(/#a87a12/g, '#123f8a').replace(/#f3c63a/g, '#3d8cf0').replace(/#d29e1f/g, '#1f58c0').replace(/"/g, "'")}</svg>`)}")`);   // 파란 칩: 같은 칩, 색만 파랑
 // 대국 중 모은 축의(게임이 끝나면 지급): 작탁 오른쪽 아래 바깥에 얻은 장수만큼 한 탑으로 쌓는다(거의 위에서 내려다본 모습)
 function chipStackHTML(){
+  // 3D로 칩을 한 장씩 만들어 쌓는다(패 뒤집기와 같은 CSS 3D): 옆면은 48조각 원기둥, 맨 위 칩만 윗면 무늬
   const total = UI.kyokuChips || 0; if(!total || UI.drill || UI.ymTest != null) return '';
-  const n = Math.min(10, total);   // 10장부터는 탑 높이를 10장으로 고정
-  const rx = 30, ry = 27, T = 2.8, W = 64, H = ry * 2 + T * n + 6, cx = W / 2;
-  let s = '';
+  const n = total, SEG = 48;   // 모은 만큼 제한 없이 쌓는다
+  const hx = h => [1, 3, 5].map(k => parseInt(h.slice(k, k + 2), 16));
+  const sh = (h, f) => `rgb(${hx(h).map(v => Math.round(Math.min(255, v * f))).join(',')})`;
+  let html = '';
   for(let i = 0; i < n; i++){
-    const yb = H - 3 - ry - i * T, yt = yb - T, rot = (i * 37) % 45;
-    s += `<path d="M${cx - rx} ${yt} L${cx - rx} ${yb} A${rx} ${ry} 0 0 0 ${cx + rx} ${yb} L${cx + rx} ${yt} A${rx} ${ry} 0 0 1 ${cx - rx} ${yt}Z" fill="#d9a92c" stroke="#8a620f" stroke-width=".7"/>`;
-    // 옆면 흰 줄: 원기둥 곡면을 따라 휘어지게(위·아래 타원 위의 두 점씩을 이은 조각). 앞쪽 반만 보인다
-    const P = (ang, y) => `${(cx + rx * Math.sin(ang)).toFixed(2)} ${(y + ry * Math.cos(ang)).toFixed(2)}`;
-    for(let k = 0; k < 8; k++){
-      const c = ((k * 45 + rot) % 360) * Math.PI / 180, d = 0.105;   // 줄 폭(각도)
-      let a0 = c - d, a1 = c + d; const lim = Math.PI / 2;
-      const wrap = x => { while(x > Math.PI) x -= 2 * Math.PI; while(x < -Math.PI) x += 2 * Math.PI; return x; };
-      a0 = wrap(a0); a1 = wrap(a1); if(a1 < a0) continue;
-      a0 = Math.max(a0, -lim); a1 = Math.min(a1, lim); if(a1 - a0 < .01) continue;
-      const m = (a0 + a1) / 2;
-      s += `<path d="M${P(a0, yt + .4)} Q${P(m, yt + .4).split(' ').map((v, i) => i ? (+v + (ry * (Math.cos(m) - (Math.cos(a0) + Math.cos(a1)) / 2))).toFixed(2) : v).join(' ')} ${P(a1, yt + .4)} L${P(a1, yb - .4)} L${P(a0, yb - .4)}Z" fill="#f6f0dc"/>`;
+    const rot = i === n - 1 ? 0 : (i * 37) % 45;   // 맨 위 칩은 윗면 흰 칸과 옆면 흰 줄이 같은 자리
+    let side = '';
+    for(let k = 0; k < SEG; k++){
+      const a = k * 360 / SEG + 360 / SEG / 2, d = ((a - 22.5) % 45 + 45) % 45, white = d < 7.5 || d > 37.5;
+      const lit = .86 + .16 * Math.cos((a + rot - 35) * Math.PI / 180);   // 왼쪽 앞에서 오는 빛(앞면이 밝고 뒤로 갈수록 살짝 어둡게)
+      side += `<i style="transform:rotateZ(${a}deg) translateY(calc(var(--cd)*.5)) rotateX(-90deg);background:${sh(white ? '#efe6cc' : '#d4a32a', lit)}"></i>`;
     }
+    html += `<div class="c3c" style="transform:translateZ(calc(var(--ct)*${i})) rotateZ(${rot}deg)">${side}${i === n - 1 ? '<b class="c3t"></b>' : ''}</div>`;
   }
-  const yTop = H - 3 - ry - n * T;
-  s += `<g transform="translate(${cx - rx} ${yTop - ry}) scale(1 ${(ry / rx).toFixed(3)}) translate(-1 -1) scale(${(62 / 60).toFixed(3)})">${chipFaceSVG()}</g>`;
-  return `<div class="chipstk" title="이번 대국에서 모은 축의칩 ${total}개 (대국이 끝나면 지급)"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMax meet">${s}</svg></div>`;
+  return `<div class="chipstk" style="--n:${n}" title="이번 대국에서 모은 축의칩 ${total}개 (대국이 끝나면 지급)"><div class="c3">${html}</div></div>`;
 }
+const CHIP_TOP = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><defs><clipPath id='c'><circle cx='30' cy='30' r='30'/></clipPath></defs>${chipFaceSVG().replace(/#fbf7ea/g, '#efe6cc').replace('r="29"', 'r="30"').replace('stroke="#a87a12" stroke-width="1"', 'stroke="none"').replace(/y="1.2" width="6.8" height="9"/g, 'y="-1" width="6.8" height="11.2" clip-path="url(#c)"').replace(/"/g, "'")}</svg>`)}")`;
+document.documentElement.style.setProperty('--chip-top', CHIP_TOP);
+// 칩 탑을 잡고 위로 드래그하면 포커 플레이어처럼 아래 칩부터 한 장씩 들썩이며 좌르륵. 다시 아래로 내리면 끝
+(() => {
+  let drag = null;
+  const hop = (el) => { el.classList.remove('hop'); void el.offsetWidth; el.classList.add('hop'); SFX.chip(); };
+  document.addEventListener('pointerdown', e => {
+    const st = e.target.closest && e.target.closest('.chipstk'); if(!st) return;
+    e.preventDefault(); SFX.unlock(); drag = { st, y: e.clientY, acc: 0, k: -1, dir: 0 }; st.classList.add('grab');
+    try{ st.setPointerCapture(e.pointerId); }catch(_){}
+  });
+  document.addEventListener('pointermove', e => {
+    if(!drag) return;
+    const cs = [...drag.st.querySelectorAll('.c3c')]; if(!cs.length) return;
+    const dy = e.clientY - drag.y; drag.y = e.clientY;
+    if(drag.done || !dy) return;
+    if(dy > 0){ if(drag.dir < 0) drag.done = true; return; }   // 위로만 좌르륵. 올리다가 아래로 내리면 이번 누름은 끝
+    drag.dir = -1; drag.acc -= dy;
+    const step = 5;   // 5px마다 한 장(아래 칩부터)
+    while(drag.acc >= step){ drag.acc -= step; drag.k = (drag.k + 1) % cs.length; hop(cs[drag.k]); }
+  });
+  const end = () => { if(drag){ drag.st.classList.remove('grab'); drag = null; } };
+  document.addEventListener('pointerup', end); document.addEventListener('pointercancel', end);
+})();
 function tableMeld(){ return UI.claim && UI.claim.seat === 0 ? UI.claim.m : (UI.selfKan || null); }
 function tableMeldHTML(staged){
   const m = tableMeld();
@@ -4396,8 +4529,8 @@ function gameHTML(){
       ${cf ? confirmHTML() : ''}
       ${actions ? `<div class="actions">${actions}</div>` : ''}
     </div>
-    ${UI.dealing || settings.phone || UI.drill ? '' : `<div class="tblsort"><button class="btn small wtog ${settings.autoSort !== false ? 'on' : ''}" data-act="autoSort" aria-pressed="${settings.autoSort !== false}">자동 정리 ${settings.autoSort !== false ? 'ON' : 'OFF'}</button></div>`}
-    ${UI.dealing ? '' : `<div class="tblwait">${UI.drill ? '' : `<div class="awrap"><button class="btn small wtog ${UI.autoWin ? 'on' : ''}" data-act="autoWin" aria-pressed="${!!UI.autoWin}">자동 화료 ${UI.autoWin ? 'ON' : 'OFF'}</button></div>`}${UI._wbar || '<div class="waitbar wclosed" style="visibility:hidden"><button class="btn small wtog" tabindex="-1">대기패 표시</button></div>'}</div>`}
+    ${UI.dealing || UI.drill ? '' : `<div class="tblsort"><button class="btn small wtog ${settings.autoSort !== false ? 'on' : ''}" data-act="autoSort" aria-pressed="${settings.autoSort !== false}">정리 ${settings.autoSort !== false ? 'ON' : 'OFF'}</button>${NP === 3 ? `<button class="btn small wtog ${UI.autoNuki ? 'on' : ''}" data-act="autoNuki" aria-pressed="${!!UI.autoNuki}">북빼기 ${UI.autoNuki ? 'ON' : 'OFF'}</button>` : ''}</div>`}
+    ${UI.dealing ? '' : `<div class="tblwait">${UI.drill ? '' : `<div class="awrap"><button class="btn small wtog ${UI.autoWin ? 'on' : ''}" data-act="autoWin" aria-pressed="${!!UI.autoWin}">화료 ${UI.autoWin ? 'ON' : 'OFF'}</button><button class="btn small wtog ${UI.autoTsumogiri ? 'on' : ''}" data-act="autoTsumogiri" aria-pressed="${!!UI.autoTsumogiri}">쯔모기리 ${UI.autoTsumogiri ? 'ON' : 'OFF'}</button></div>`}${UI._wbar || '<div class="waitbar wclosed" style="visibility:hidden"><button class="btn small wtog" tabindex="-1">대기패 표시</button></div>'}</div>`}
     ${UI.seating ? '' : trayHTML(g)}
   </div>
   <div class="myarea">
@@ -6301,6 +6434,8 @@ document.addEventListener('click', e => {
     case 'recWipeGo': store.del(KEY.rec); store.del(KEY.save);   /* 이어하기도 함께 지운다 */ UI.last = null; settings = Object.assign({}, SETTINGS0); store.set(KEY.set, settings); store.del(RPG_KEY); RPG.st = rpgLoad(); RPG.away = null; rpgSave(); chipFix(); $modal.hidden = true; render(); break;
     case 'autoSort': settings.autoSort = settings.autoSort === false; store.set(KEY.set, settings); UI.order = null; render(); break;   // 켜면 바로 정렬
     case 'autoWin': UI.autoWin = !UI.autoWin; render(); if(UI.autoWin) autoWinCheck(); break;
+    case 'autoTsumogiri': UI.autoTsumogiri = !UI.autoTsumogiri; render(); if(UI.autoTsumogiri) autoActCheck(); break;
+    case 'autoNuki': UI.autoNuki = !UI.autoNuki; render(); if(UI.autoNuki) autoActCheck(); break;
     case 'waitToggle': UI.waitOpen = !UI.waitOpen; render(); break;
     case 'drill': { const k = b.dataset.d; $modal.hidden = true; startGame(DRILLS[k].mode, null, true, k); break; }
     case 'tsumo': if(pd && UI.riichiDiscard == null) pd.resolve({type:'tsumo'}); break;
@@ -6665,11 +6800,12 @@ document.addEventListener('pointerdown', e => {
   const move = ev => {
     if(!moved && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 6){
       moved = true; dragHideStyle.textContent = hideCss;
+      try{ document.documentElement.setPointerCapture(ev.pointerId); }catch(_){}   // 끌기 시작한 뒤에만: 손패를 다시 그려도 손가락 움직임을 계속 받는다(누르기만 하면 클릭으로 버리기)
       if(mode.startsWith('tile') && id != null && UI.dragTile !== id){ UI.dragTile = id; render(); }   // 잡고 있는 패를 버린다고 보고 대기패를 보여 준다
       dropHint({discard: mode.startsWith('tile'), nuki: mode.includes('nuki'), draw: mode === 'draw'});
     }
     if(moved) dip(ev);
-    if(moved && id != null && !settings.phone && settings.autoSort === false && mode !== 'deal') reorderAt(ev.clientX + ox, ev.clientY + oy, id);
+    if(moved && id != null && settings.autoSort === false && mode !== 'deal') reorderAt(ev.clientX + ox, ev.clientY + oy, id);
     ghost.style.left = (ev.clientX + ox) + 'px'; ghost.style.top = (ev.clientY + oy) + 'px'; ghost.style.opacity = moved ? 1 : 0;
   };
   move(e);
@@ -6786,7 +6922,7 @@ document.addEventListener('contextmenu', e => {
   if(!g.players[0].hand.includes(id)) return;
   const k = kindOf(id);
   if(UI.riichiMode && !pd.ctx.riichiOptions.includes(k)) return;
-  if(pd.ctx.riichiOptions.includes(k)){ setRiichiDiscard(id); return; }
+  if(UI.riichiMode && pd.ctx.riichiOptions.includes(k)){ setRiichiDiscard(id); return; }   // 리치 모드를 켰을 때만 리치. 그 밖의 우클릭 쯔모기리는 리치할 수 있어도 다마
   choose({type:'discard', id, riichi:false});
 });
 document.addEventListener('keydown', e => {

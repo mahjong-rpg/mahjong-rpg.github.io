@@ -445,7 +445,7 @@ h1,h2,h3{margin:0;text-wrap:balance}
 @media (min-width:601px){.tblact > .twpanel{flex-wrap:nowrap;white-space:nowrap}.twpanel .wrow{flex-wrap:nowrap}}   /* 넓은 화면: 한 줄로 낮게(패산을 덜 가리게) */
 .table > .tblwait .wpanel{position:absolute;right:calc(100% + 6px);top:0;width:max-content;max-width:calc(var(--hw)*7);background:rgba(6,20,14,.85);border-radius:10px;padding:5px 8px}   /* 펼치면 버튼 왼쪽에 뜬다(버튼·손패를 밀지 않게) */
 .table > .tblsort{position:absolute;z-index:4;top:calc(100% + var(--hw)*1.75 + 8px);left:calc(50% + 145px)}   /* 자동 정리: 점봉 케이스 오른쪽 */
-.tblsort{display:flex;flex-direction:column;gap:4px}.tblsort .wtog{width:132px;padding:0 4px;text-align:center}   /* 오른쪽: 자동 정리·쯔모기리·북빼기 (왼쪽 자동 화료·대기패와 같은 폭) */
+.tblsort{display:flex;flex-direction:column;gap:4px}.tblsort .waitbar{padding:0;background:none;display:flex;flex-direction:column}.tblsort .waitbar .wtog{width:132px}.tblsort .wtog{width:132px;padding:0 4px;text-align:center}   /* 오른쪽: 자동 정리·쯔모기리·북빼기 (왼쪽 자동 화료·대기패와 같은 폭) */
 @media (max-width:600px){.table > .tblsort{left:auto;right:4px;top:calc(100% + var(--hw)*1.75 + 8px + 52px + 22px)}}
 @media (max-width:600px){.table > .tblwait .wpanel{position:static;max-width:none}.table > .tblwait{right:auto;left:4px;top:calc(100% + var(--hw)*1.75 + 8px + 52px + 22px);width:auto;flex-direction:row;align-items:flex-start}.table > .tblwait .wtog{width:auto}}
 .tblsort .wtog,.tblwait .wtog,.waitbar .wtog{height:24px;padding:0 9px;font-size:12px;font-weight:700;pointer-events:auto}
@@ -502,7 +502,8 @@ table.y td:last-child{text-align:right}
 .card h3{font-size:15px;letter-spacing:.02em}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
 .stat{background:var(--panel-2);border-radius:10px;padding:10px;container-type:inline-size;min-width:0}
-.stat .v{font-size:24px;font-weight:700;white-space:nowrap;line-height:30px;height:30px;overflow:hidden}   /* 판수가 늘어도 한 줄·같은 크기 박스: 넘칠 때만 글자가 줄어든다 */
+.stat .v .ssl{font-style:normal;font-weight:400;opacity:.35;margin:0 .28em}
+.stat .v{font-family:var(--f-ui);font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:24px;font-weight:800;white-space:nowrap;line-height:30px;height:30px;overflow:hidden}   /* 판수가 늘어도 한 줄·같은 크기 박스: 넘칠 때만 글자가 줄어든다 */
 .stat .l{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stat .l{font-size:12px;color:var(--ink-dim)}
 .ptabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--panel-2);border-radius:12px;padding:4px;margin:0 0 12px}
@@ -542,6 +543,16 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:middle}
 @media (prefers-reduced-motion: reduce){.hand .tile{transition:none}}
 /* ---------- 앱 탭(마작 / RPG) ---------- */
+.hero .htitle{display:flex;justify-content:flex-start;text-align:left;width:100%;user-select:none;margin:0}
+.hero .hsw{--sd:.22s;position:relative;margin:0!important;display:inline-grid!important;grid-template-columns:auto auto;column-gap:.35em;width:auto!important;padding:0 0 .16em}   /* 제목 스위치: 고른 글자 밑으로 금색 막대가 미끄러진다(화면 슬라이드와 같은 시간) */
+.hsw .knob{position:absolute;bottom:.3em;left:0;height:4px;border-radius:4px;background:linear-gradient(90deg,#c9972e,#f3d27a,#c9972e);box-shadow:0 0 10px rgba(243,210,122,.55);width:100px;transform-origin:0 50%;transform:translateX(var(--kx,0)) scaleX(var(--ks,.7));will-change:transform;transition:transform var(--sd) cubic-bezier(.3,.9,.3,1)}
+.hero .hsw .ht{all:unset;display:block;position:relative;cursor:pointer;color:var(--ink);opacity:.28;transition:opacity var(--sd),color var(--sd)}
+.hsw .ht.on{opacity:1;cursor:default}
+.hsw .ht:not(.on):hover{opacity:.55}
+.hsw .ht:focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:6px}
+.scrin{animation:var(--sin) .34s cubic-bezier(.2,.8,.3,1) both}   /* 화면 바뀔 때 옆으로 미끄러져 들어온다 */
+@keyframes slL{from{transform:translateX(60px);opacity:0}to{transform:none;opacity:1}}
+@keyframes slR{from{transform:translateX(-60px);opacity:0}to{transform:none;opacity:1}}
 .apptabs{position:fixed;top:5px;left:50%;transform:translateX(-50%);z-index:60;display:flex;gap:6px;justify-content:center;align-items:center}
 .apptabs .btn{min-width:72px;height:28px;padding:0 12px;display:inline-grid;place-items:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
 .wrap:has(.apptabs){padding-top:44px}
@@ -556,10 +567,32 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .apptabs .btn.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass)}
 #chipfix{position:fixed;top:calc(8px + env(safe-area-inset-top, 0px));left:calc(8px + env(safe-area-inset-left, 0px));z-index:60;height:28px;box-sizing:border-box;padding:0 12px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
 .btn:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(.6)}
+section.card.resume{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;text-align:left;gap:12px 20px}
+section.card.resume .rsinfo{align-items:flex-start}
+.resume .rsinfo{flex:1;min-width:220px;display:flex;flex-direction:column;gap:8px}
+.resume h3{margin:0}
+.resume .rstags{display:flex;flex-wrap:wrap;gap:6px}
+.resume .rstags span{font-size:12px;padding:3px 9px;border-radius:99px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:var(--ink-dim)}
+.resume .rsscore{font-size:13px;color:var(--ink-dim)}.resume .rsscore b{color:var(--ink);font-size:16px;margin-left:4px}
+.resume .rsbtns{display:flex;gap:8px;flex:none}
+.resume .rsbtns .btn{min-width:124px;height:44px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:15px}
+.resume .rsnote{flex-basis:100%;margin:0;font-size:12px}
+@media (max-width:560px){.resume .rsbtns{width:100%}.resume .rsbtns .btn{flex:1;min-width:0}}
+.reccard{gap:6px}
+.reccard > *{align-self:stretch;width:100%;box-sizing:border-box}
+.rchd{display:flex;justify-content:space-between;align-items:center;width:100%;padding:8px 12px;border:0;border-radius:8px;background:var(--panel-2);color:var(--ink);font:700 15px var(--f-ui);cursor:pointer}
+.rchd i{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:7px solid var(--ink-dim);transition:transform .2s}
+.rchd.on i{transform:rotate(180deg)}
+.rcbody{display:grid;grid-template-columns:repeat(3,minmax(0,220px));justify-content:space-between;gap:4px 22px;padding:6px 12px 10px}
+.rccol{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:baseline}
+.rcbody .rl{color:var(--ink-dim);font:500 13px var(--f-ui);white-space:nowrap}
+.rcbody .rv{color:var(--ink);font:800 15px var(--f-ui);font-variant-numeric:tabular-nums;white-space:nowrap;justify-self:end}
+.rcbody.yk{grid-template-columns:repeat(3,minmax(0,150px) 50px);gap:6px 12px;column-gap:26px}
+@media (max-width:640px){.rcbody{grid-template-columns:1fr;gap:6px 0}.rccol + .rccol{border-top:1px dashed rgba(255,255,255,.1);padding-top:6px}.rcbody.yk{grid-template-columns:auto 1fr auto 1fr}}
 .dropcost{display:inline-flex;align-items:center;gap:3px;margin-left:5px;color:#ff4a3a;font-weight:900;text-shadow:0 0 1px rgba(0,0,0,.5)}.chipi{width:12px;height:12px;border-radius:50%;background:var(--chip-icon) center/contain no-repeat;display:inline-block}
 .chipcount{display:inline-flex;align-items:center;gap:6px;font-weight:800;color:#ffe9a8;background:rgba(0,0,0,.28);border-radius:99px;padding:4px 12px;font-size:14px}
 .chipcount i{width:16px;height:16px;border-radius:50%;background:var(--chip-icon) center/contain no-repeat;display:inline-block}
-.table > .chipstk{position:absolute;right:calc(var(--S)*-.1);bottom:0;--cd:calc(var(--S)*.07);--ct:calc(var(--cd)*.095);width:var(--cd);height:calc(var(--cd)*.56 + var(--ct)*var(--n)*.85);z-index:6;pointer-events:auto;cursor:grab;touch-action:none;user-select:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}   /* 3D 축의칩 탑: 잡고 위아래로 드래그하면 좌르륵 */
+.table > .chipstk{position:absolute;right:calc(var(--cd)*-1 - var(--S)*.035);bottom:0;--cd:calc(var(--S)*.0945);--ct:calc(var(--cd)*.095);width:var(--cd);height:calc(var(--cd)*.56 + var(--ct)*var(--n)*.85);z-index:6;pointer-events:auto;cursor:grab;touch-action:none;user-select:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}   /* 3D 축의칩 탑: 잡고 위아래로 드래그하면 좌르륵 */
 .table > .chipstk.grab{cursor:grabbing}
 .chipstk .c3{position:absolute;left:0;bottom:calc(var(--cd)*-.22);width:var(--cd);height:var(--cd);transform-style:preserve-3d;transform:rotateX(58deg)}
 .chipstk .c3c{position:absolute;inset:0;transform-style:preserve-3d}
@@ -658,7 +691,7 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .shop h3 > .invtabs{display:inline-flex;margin:0 auto 0 12px;font-size:13px;font-weight:400}   /* 탭은 제목 바로 오른쪽 */
 .rpg .shop h3.hrow{display:flex;align-items:center;flex-wrap:wrap;gap:4px}
 .rpg .shop > h3:not(.acch){display:flex;align-items:center;min-height:26px}   /* 탭이 있든 없든 제목 줄 높이를 같게(행동을 바꿔도 화면이 흔들리지 않게) */
-.rpg .invtabs .btn{padding:3px 10px;font-size:12px;display:inline-flex;align-items:center;gap:4px}
+.rpg .invtabs .btn,.rpg .baghd .btn{padding:3px 10px;font-size:12px;display:inline-flex;align-items:center;gap:4px}   /* 일괄 장비·일괄 판매도 탭과 같은 크기 */
 .rpg .invtabs .btn .chev{font-style:normal;font-size:8px;opacity:.7;margin-left:1px}
 .rpg .invpager{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:6px;font:700 13px var(--f-num);color:var(--ink-dim)}
 .rpg .invpager .btn{padding:2px 12px}
@@ -683,6 +716,9 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .rpg .ivr .p.on{color:var(--brass);font-weight:800}
 .rpg .ivr .qty{width:4.6em;padding:2px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.35);color:var(--ink);font:700 12px var(--f-num);text-align:right}
 .rpg .ivr .btn{padding:2px 8px;font-size:12px;white-space:nowrap}
+.rpg .ivr .eqc{display:inline-flex;justify-content:center;align-items:center;gap:6px;min-width:4.6em;flex:none}   /* 착용·착용 중 칸 폭 고정 */
+.rpg .ivr .btn[data-act="rpgSell"]{min-width:11.2em;justify-content:flex-end;display:inline-flex;align-items:center;gap:3px;font-variant-numeric:tabular-nums;flex:none}   /* 판매 버튼 폭 고정: 줄마다 오른쪽 끝이 맞는다 */
+.rpg .ivr .c{font-variant-numeric:tabular-nums;flex:none}
 @media (max-width:560px){.rpg .ivr{gap:4px;padding:0 6px}.rpg .ivr .btn{padding:2px 6px;font-size:11px}.rpg .ivr .qty{width:3.6em}}
 .rpg .shead .shp{display:inline-flex;align-items:center;gap:6px}
 .rpg .shead{align-items:flex-start}
@@ -1538,7 +1574,9 @@ class Game {
       // 다음 국 번호·본장은 결과창을 닫을 때 반영한다. 그 전까지는 끝난 국 그대로(친·자풍·패산 위치가 바뀌어 보이지 않게)
       this._next = { kyoku: this.kyoku, honba: this.honba }; this.kyoku = k0; this.honba = h0;
       res.scores = this.scores.slice();
-      this.results.push({ type: res.type, winners: res.winners || [], from: res.from, tsumo: !!res.tsumo, riichi: this.players.map(p => !!p.riichi), furo: this.players.map(p => p.melds.some(m => m.type !== 'ankan')), deltas: res.deltas, label: res.label });   // furo: 울어서 손을 연 국(안깡은 제외)
+      const hs = this.humanSeat || 0, mw = res.type === 'win' && (res.wins || []).find(w => w.winner === hs);   // 내 화료 정보(기록 통계용): 점수·순목·역
+      const myWin = mw ? { pts: (res.deltas || [])[hs] || 0, turn: this.players[hs].discards.length + (res.tsumo ? 1 : 0), yaku: ((mw.res && mw.res.yaku) || []).map(y => Array.isArray(y) ? y[0] : (y && y.name) || String(y)) } : null;
+      this.results.push({ dealer: res.dealer, myWin, type: res.type, winners: res.winners || [], from: res.from, tsumo: !!res.tsumo, riichi: this.players.map(p => !!p.riichi), furo: this.players.map(p => p.melds.some(m => m.type !== 'ankan')), deltas: res.deltas, label: res.label });   // furo: 울어서 손을 연 국(안깡은 제외)
       this.emit('kyokuEnd', res);
       if (this.opts.onKyokuEnd) await this.opts.onKyokuEnd(res, this);
       this.kyoku = this._next.kyoku; this.honba = this._next.honba; this._next = null;
@@ -1687,7 +1725,7 @@ class Game {
           if (rec) this.recordDecision(s, rec, action, drawn);
         }
       }
-      if (action.type === 'nuki' && nuki) {
+      if (action.type === 'nuki' && (nuki || this.canNuki(s))) {   // 바꿔치기로 들어온 北도 뺄 수 있다
         this.doNuki(s, action.id);
         draw = 'rinshan';
         continue;
@@ -2132,7 +2170,11 @@ class Game {
       riichi: rs.filter(r => r.riichi && r.riichi[me]).length,
       win: rs.filter(r => r.type === 'win' && r.winners.includes(me)).length,
       dealIn: rs.filter(r => r.type === 'win' && !r.tsumo && r.from === me).length,
-      furo: rs.filter(r => r.furo && r.furo[me]).length };
+      furo: rs.filter(r => r.furo && r.furo[me]).length,
+      tsumo: rs.filter(r => r.type === 'win' && r.tsumo && r.winners.includes(me)).length,
+      winPts: rs.reduce((a, r) => a + (r.myWin ? r.myWin.pts : 0), 0), winTurn: rs.reduce((a, r) => a + (r.myWin ? r.myWin.turn : 0), 0), winN: rs.filter(r => r.myWin).length,
+      renchan: (() => { let mx = 0, c = 0; for(const r of rs){ if(r.dealer === me){ mx = Math.max(mx, c); c++; } else c = 0; } return mx; })(),   // 내 친이 이어진 최대 연장(첫 친 국은 0)
+      yaku: rs.reduce((o, r) => { if(r.myWin) for(const y of r.myWin.yaku) o[y] = (o[y] || 0) + 1; return o; }, {}) };
     return { scores: this.scores.slice(), ranks, order, decisions: n, matches: m, rate: n ? m / n : 0, stats };
   }
 }
@@ -2625,16 +2667,53 @@ function flipPlay(m){
   });
 }
 function draw(){
+  if(UI.slideLock){ UI.slidePend = true; return; }   // 화면 슬라이드 중에는 다시 그리지 않는다(끝나면 한 번 그림)
   if(UI.screen === 'home'){ $app.innerHTML = homeHTML(); fitStats(); }
-  else if(UI.screen === 'game'){ const m = flipCapture(); $app.innerHTML = gameHTML(); flipPlay(m); }
+  else if(UI.screen === 'game'){ const m = flipCapture(), oldStk = $app.querySelector('.table > .chipstk'); $app.innerHTML = gameHTML(); flipPlay(m);
+    const nw = $app.querySelector('.table > .chipstk');   // 축의탑은 다시 그려도 같은 요소를 그대로 둔다(만지작거리는 애니메이션·드래그가 끊기지 않게)
+    if(oldStk && nw && oldStk.dataset.n === nw.dataset.n) nw.replaceWith(oldStk); }
   else if(UI.screen === 'records') { $app.innerHTML = recordsHTML(); drawChart(); }
   else if(UI.screen === 'review') $app.innerHTML = reviewHTML();
   else if(UI.screen === 'rpg'){ $app.innerHTML = rpgHTML(); fitRpg(); rpgLive(); }
   BGM.sync();
+  if(UI.screen === 'home' || UI.screen === 'rpg') requestAnimationFrame(() => { const sw = $app.querySelector('.hsw'), k = sw && sw.querySelector('.knob'); if(sw && !UI.sliding){ if(k) k.style.transition = 'none'; hswPlace(sw, UI.screen === 'rpg' ? 'rpg' : 'mj'); void sw.offsetWidth; if(k) k.style.transition = ''; } });   // 제목 스위치 막대 위치
 }
 
 // ---------- 홈 ----------
 function recTabs(){ return `<span class="row tabs" style="gap:4px"><button class="btn small ${UI.recP===4?'primary':''}" data-act="recP" data-p="4">4인</button><button class="btn small ${UI.recP===3?'primary':''}" data-act="recP" data-p="3">3인</button></span>`; }
+// 내 기록(작혼 스타일): 동풍전·반장전·역 완성 횟수를 접었다 펴는 금색 띠로
+function recStats(list, N){
+  const w = list.filter(x => x.stats && x.stats.kyoku), K = w.reduce((a, x) => a + x.stats.kyoku, 0);
+  const sum = key => w.reduce((a, x) => a + (x.stats[key] || 0), 0), has = key => w.filter(x => x.stats[key] != null);
+  const n = list.length, pct = v => v == null ? '–' : (v * 100).toFixed(2) + '%';
+  const wins = sum('win'), nw = has('winN'), winN = nw.reduce((a, x) => a + x.stats.winN, 0);
+  const ranks = Array.from({length: N}, (_, i) => n ? list.filter(x => x.rank === i + 1).length / n : null);
+  return {
+    ranks: ranks.map(pct), tobi: pct(n ? list.filter(x => x.score < 0).length / n : null),
+    games: n.toLocaleString(), avgPts: winN ? Math.round(nw.reduce((a, x) => a + x.stats.winPts, 0) / winN).toLocaleString() : '–',
+    rank: n ? (list.reduce((a, x) => a + x.rank, 0) / n).toFixed(2) : '–',
+    renchan: has('renchan').length ? Math.max(...has('renchan').map(x => x.stats.renchan)) : '–',
+    turn: winN ? (nw.reduce((a, x) => a + x.stats.winTurn, 0) / winN).toFixed(2) : '–',
+    win: pct(K ? wins / K : null), tsumo: (() => { const t = has('tsumo'), ww = t.reduce((a, x) => a + x.stats.win, 0); return pct(ww ? t.reduce((a, x) => a + x.stats.tsumo, 0) / ww : null); })(),
+    dealIn: pct(K ? sum('dealIn') / K : null), furo: pct(K ? sum('furo') / K : null), riichi: pct(K ? sum('riichi') / K : null)
+  };
+}
+function recordHTML(games){
+  const N = UI.recP === 3 ? 3 : 4, open = UI.recOpen || (UI.recOpen = { east: false, south: false, yaku: false });
+  const head = (k, t) => `<button class="rchd ${open[k] ? 'on' : ''}" data-act="recOpen" data-k="${k}" aria-expanded="${!!open[k]}"><span>${t}</span><i></i></button>`;
+  const sec = (k, t) => {
+    const S = recStats(games.filter(x => x.mode && x.mode.startsWith(k)), N);
+    const c1 = S.ranks.map((v, i) => [`${i + 1}위`, v]).concat([['토비', S.tobi]]);
+    const c2 = [['총 대국 수', S.games], ['평균 타점', S.avgPts], ['평균 순위', S.rank], ['최대 연장', S.renchan], ['평균 화료 순', S.turn]];
+    const c3 = [['화료', S.win], ['쯔모', S.tsumo], ['방총', S.dealIn], ['후로', S.furo], ['리치', S.riichi]];
+    const col = c => `<div class="rccol">${c.map(([l, v]) => `<span class="rl">${l}</span><span class="rv">${v}</span>`).join('')}</div>`;
+    return head(k, t) + (open[k] ? `<div class="rcbody">${col(c1)}${col(c2)}${col(c3)}</div>` : '');
+  };
+  const yk = {}; games.forEach(x => { const y = x.stats && x.stats.yaku; if(y) for(const [k, v] of Object.entries(y)) if(!/도라|북/.test(k)) yk[k] = (yk[k] || 0) + v; });
+  const yl = Object.entries(yk).sort((a, b) => b[1] - a[1]);
+  const yaku = head('yaku', '역 완성 횟수') + (open.yaku ? `<div class="rcbody yk">${yl.length ? yl.map(([k, v]) => `<span class="rl">${esc(k)}</span><span class="rv">${v}</span>`).join('') : '<span class="rl">아직 없어요</span>'}</div>` : '');
+  return `<section class="card reccard"><h3>내 기록</h3>${sec('east', '동풍전')}${sec('south', '반장전')}${yaku}</section>`;
+}
 function statsOf(list){
   const w = list.filter(x => x.stats && x.stats.kyoku);
   const k = w.reduce((a,x)=>a+x.stats.kyoku,0), f = key => k ? w.reduce((a,x)=>a+x.stats[key],0) / k : null;
@@ -2682,28 +2761,16 @@ function homeHTML(){
   const last = records().find(x => x.id === UI.last);
   const SN = last && last.mode.endsWith('3') ? SEATS3 : SEATS4;
   const P = v => v == null ? '–' : (v*100).toFixed(1) + '%';
-  const stat = (lbl, a, b, main) => `<div class="stat${main?' main':''}"><div class="v num">${a}</div><div class="l">${lbl}</div></div>`;
+  const stat = (lbl, a, b, main) => `<div class="stat${main?' main':''}"><div class="v">${String(a).replace(' / ', '<i class="ssl">/</i>')}</div><div class="l">${lbl}</div></div>`;
   const sv = store.get(KEY.save, null);
   const K = UI.recP === 3 ? '3' : '';
-  return `${appTabs('mj')}
-  <header class="hero">
-    <div class="tiles" title="누적 축의 ${rpgEarnedAll().toLocaleString()}개">${chipTilesHTML(rpgEarnedAll())}</div>
-    <h1 style="cursor:default;user-select:none">마작 RPG</h1>
-  </header>
-  ${sv ? `<section class="card"><h3>이어하기</h3><p class="muted">${modeName(sv.mode)} · ${esc(sv.label)} ${sv.mid ? '도중(나간 순간)부터' : '시작부터'} · 내 점수 <span class="num">${sv.state.scores[0]}</span></p>
-    <div class="row"><button class="btn primary" data-act="resume">이어서 하기</button><button class="btn small" data-act="dropSave" ${RPG.st.chips < 1 ? 'disabled title="축의칩이 없어서 게임 종료할 수 없어요"' : 'title="게임 종료하면 축의칩 1개를 냅니다"'}>게임 종료 <span class="dropcost"><i class="chipi"></i>1</span></button></div>${RPG.st.chips < 1 ? '<p class="muted" style="margin:6px 0 0;font-size:12px">축의칩이 없어서 게임 종료할 수 없어요. 이어서 끝까지 두세요</p>' : ''}</section>` : ''}
-  <nav class="ptabs" role="tablist">${[4,3].map(n => `<button role="tab" aria-selected="${UI.recP===n}" class="${UI.recP===n?'on':''}" data-act="recP" data-p="${n}">${n}인 마작</button>`).join('')}</nav>
-  <div class="pstart"><button class="btn" data-act="start" data-mode="south${K}" ${sv ? 'disabled' : ''}>반장전</button><button class="btn" data-act="start" data-mode="east${K}" ${sv ? 'disabled' : ''}>동풍전</button></div>${sv ? '<p class="muted" style="margin:4px 0 0;font-size:12px;text-align:center">이어하기 중인 대국을 끝내거나 게임 종료해야 새 대국을 시작할 수 있어요</p>' : ''}
+  return `${appTabs('mj')}${heroHTML('mj')}
+  ${sv ? `<section class="card resume"><div class="rsinfo"><h3>이어하기</h3><div class="rstags"><span>${modeName(sv.mode)}</span><span>${esc(sv.label)}</span></div></div>
+    <div class="rsbtns"><button class="btn primary" data-act="resume">이어서 하기</button><button class="btn" data-act="dropSave" ${RPG.st.chips < 1 ? 'disabled title="축의칩 부족으로 게임 종료 불가"' : 'title="게임 종료 시 축의칩 1개 지불"'}>게임 종료 <span class="dropcost"><i class="chipi"></i>1</span></button></div>${RPG.st.chips < 1 ? '<p class="muted rsnote">축의칩이 없어서 게임 종료할 수 없어요. 이어서 끝까지 두세요</p>' : ''}</section>` : ''}
+  <nav class="ptabs" role="tablist">${[3,4].map(n => `<button role="tab" aria-selected="${UI.recP===n}" class="${UI.recP===n?'on':''}" data-act="recP" data-p="${n}">${n}인 마작</button>`).join('')}</nav>
+  <div class="pstart"><button class="btn" data-act="start" data-mode="east${K}" ${sv ? 'disabled' : ''}>동풍전</button><button class="btn" data-act="start" data-mode="south${K}" ${sv ? 'disabled' : ''}>반장전</button></div>${sv ? '<p class="muted" style="margin:4px 0 0;font-size:12px;text-align:center">이어하기 중인 대국을 끝내거나 게임 종료해야 새 대국을 시작할 수 있어요</p>' : ''}
 
-  <section class="card">
-    <h3>내 기록</h3>
-    <div class="stats">
-      ${stat('판수 / 순위', `${A.games.toLocaleString()}<small style="font-size:.6em;opacity:.7"> 판</small> / ${A.rank==null?'–':A.rank.toFixed(2)}`, '', true)}
-      ${stat('연대율 / 라스율', `${P(A.rentai)} / ${P(A.last)}`)}
-      ${stat('리치율 / 후로율', `${P(A.riichi)} / ${P(A.furo)}`)}
-      ${stat('화료율 / 방총률', `${P(A.win)} / ${P(A.dealIn)}`)}
-    </div>
-  </section>
+  ${recordHTML(games)}
   <section class="card">
     <h3>설정</h3>
     <div class="tgrid">
@@ -2882,6 +2949,7 @@ const SFX = (() => {
     // ---- RPG 행동 효과음(짧게) ----
     combat(){ noise(.11, 2600, 1.2, .25, 0); noise(.16, 1300, .8, .16, .05); clack('discard', .17); },
     // 장비 착용 소리: 검 챙~ · 도끼 탁! · 곡괭이 깡! · 낚싯대 휙!
+    unequip(){ noise(.07, 1800, 1.1, .1, 0); blip(900, 420, .14, .045, .01, 'triangle'); clack('discard', .14, .8, .09); },   // 장비 해제: 스윽 풀고 가방에 툭
     equip(k){
       ({
         combat: () => { noise(.02, 6000, 2, .12, 0); tone(2350, .55, .05, 'triangle', 0); tone(3520, .45, .03, 'sine', .005); tone(4700, .3, .015, 'sine', .01); },
@@ -2936,6 +3004,7 @@ const SFX = (() => {
       [523.3, 659.3, 784].forEach((f, i) => tone(f, 1.9, .035, 'triangle', .55 + i * .05));
       tone(55, 1.2, .22, 'sine', .55); noise(.4, 110, .6, .2, .55);
     },
+    heal(){ [523.3, 659.3, 784, 1046.5].forEach((f, i) => tone(f, .32, .05, 'sine', .04 + i * .065)); tone(1568, .4, .02, 'sine', .3); noise(.25, 6500, 1.2, .025, .26); },   // 회복: 맑게 올라가는 아르페지오 + 반짝
     hurt(){ noise(.035, 1300, 1.6, .16, 0); blip(300, 160, .05, .07, 0, 'triangle'); noise(.11, 4600, 1.1, .12, .045); noise(.08, 2600, 1.4, .05, .05); },   // 투쉭! 용사가 맞음(짧은 '투' + 베이는 '쉭')
     farm(){ noise(.16, 3200, .7, .13, 0); noise(.12, 1100, .9, .1, .02); },                                                          // 쉭! 괭이로 흙을 긁음
     smelt(){ noise(.42, 5200, .7, .12, 0); noise(.3, 2800, .9, .06, .03); blip(380, 620, .05, .012, .26, 'sine'); },                 // 치익 (달군 바를 불에 넣을 때)
@@ -2965,6 +3034,18 @@ const SFX = (() => {
       tone(2637, .5, .11 * v, 'sine', .07); tone(3951, .45, .06 * v, 'sine', .07);
       tone(3136, .7, .11 * v, 'sine', .19); tone(4699, .6, .06 * v, 'sine', .19);
       [.3, .36, .43].forEach((d, i) => tone(5200 + i * 600, .12, .025 * v, 'triangle', d));
+    },
+    slide(dir){   // 화면 슬라이드: 부드러운 바람 소리(방향 따라 위/아래로 훑음)만. 음높이가 있는 소리는 넣지 않는다
+      const c = ac(); if(!c) return;
+      const t0 = c.currentTime + base, dur = .26, len = Math.floor(c.sampleRate * dur);
+      const buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+      for(let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      const src = c.createBufferSource(); src.buffer = buf;
+      const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = .8;
+      bp.frequency.setValueAtTime(dir < 0 ? 600 : 1500, t0); bp.frequency.exponentialRampToValueAtTime(dir < 0 ? 1500 : 600, t0 + dur * .85);
+      const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2400;   // 쉭 하는 높은 소리를 눌러 편안하게
+      const g = c.createGain(); g.gain.setValueAtTime(.0001, t0); g.gain.linearRampToValueAtTime(dir < 0 ? 1.2 : 1.1, t0 + .07); g.gain.exponentialRampToValueAtTime(.0001, t0 + dur);
+      src.connect(bp); bp.connect(lp); lp.connect(g); g.connect(OUT || MAIN(c)); src.start(t0); src.stop(t0 + dur + .02);
     },
     skWarn(){   // 위험! 짧은 경고음 두 번
       [0, .2].forEach(d => { tone(880, .13, .11, 'square', d); tone(660, .13, .09, 'square', d + .07); });
@@ -3284,7 +3365,7 @@ function doPrune(id){
   // 손패가 바뀌었으니 이번 차례의 선택지를 다시 계산한다. 엔진이 미리 잡아 둔 값과 어긋나지 않게 '둘 다 될 때만' 남긴다
   ctx.tsumo = null;
   ctx.kyuushu = !!(ctx.kyuushu && g.canKyuushu(0));
-  ctx.nuki = !!(ctx.nuki && g.canNuki(0));
+  ctx.nuki = !!g.canNuki(0);   // 바꿔치기로 北이 들어오면 북 빼기도 새로 생긴다
   ctx.riichiOptions = g.riichiOptions(0);
   ctx.kanOptions = g.selfKanOptions(0, g.drawn ? g.drawn.id : t);
   ctx.rec = advise(g, 0, ctx.forbidden);
@@ -3295,6 +3376,7 @@ function doPrune(id){
   UI.swapIn = { key: turnKey(), ids: fresh.concat([t]) };
   (UI.swapAt = UI.swapAt || {})[t] = Date.now(); setTimeout(render, SWFLIP_MS + 60);   // 바꿔 들어온 패: 뒷면으로 들어와 세로로 휘리릭 돌며 앞면이 된다
   callout(0, '바꿔치기'); SFX.swap(); render();
+  if(ctx.nuki && UI.autoNuki) setTimeout(autoActCheck, SWFLIP_MS + 120);   // 북빼기 ON이면 들어온 北을 바로 뺀다
 }
 // 광맥 탐지: 국마다 1번, 처음 도라 표시패를 누르면 판정. 성공하면 그 아래 뒷도라 표시패가 콘솔 쪽으로 밀려 나온다
 // 광맥 탐지: 도라 표시패(깡도라 포함)마다 1번씩, 누르면 판정. 성공하면 그 아래 뒷도라 표시패가 콘솔 쪽으로 밀려 나온다
@@ -3356,7 +3438,7 @@ const Human = {
   },
   async decideRiichiKan(g,s,opts){ await takeDraw(); return ask({kind:'riichiKan', opts}); },
   async decideRiichiNuki(){ await takeDraw(); if(UI.autoNuki && !UI.drill){ render(); await sleep(settings.speed === 'fast' ? 160 : 380); return true; } return ask({kind:'riichiNuki'}); },
-  decideCall(g,s,opts){ return ask({kind:'call', opts}); },
+  decideCall(g,s,opts){ if(UI.skipCall && !UI.drill) return Promise.resolve(null); return ask({kind:'call', opts}); },   // 후로 스킵 ON: 치·퐁·깡을 묻지 않고 그냥 넘긴다
   async onAuto(g, s){ if(g.players[s].riichi && !UI.pendingDraw){ UI.autoTG = false; return sleep(SPEED[settings.speed]); }   /* 뽑은 패를 CPU가 치는 템포만큼 보여 준 뒤 쯔모기리 */ await takeDraw(); UI.autoTG = false; return sleep(Math.max(250, SPEED[settings.speed])); }
 };
 
@@ -3412,7 +3494,7 @@ function trayHTML(g){
     return h + (seq.length > i ? `<i class="more">+${seq.length - i}</i>` : '');
   };
   const seqOf = cs => cs.slice().reverse().flatMap(c => Array(n[c]).fill(c));   // 아래 단부터: 노랑 → 빨강, 하양 → 초록
-  const cell = (cs, extra) => `<div class="tcell ${extra||''}" ${extra==='can'?'data-stickdrag="1" title="누르거나 콘솔로 끌어 놓으면 리치"':''} aria-label="${cs.map(c => ({r:'만점봉',y:'오천점봉',b:'천점봉',g:'오백점봉',w:'백점봉'}[c]) + ' ' + n[c] + '개').join(', ')}">${stack(seqOf(cs))}</div>`;
+  const cell = (cs, extra) => `<div class="tcell ${extra||''}" ${extra==='can'?'data-stickdrag="1" title="클릭 또는 콘솔로 드래그 시 리치"':''} aria-label="${cs.map(c => ({r:'만점봉',y:'오천점봉',b:'천점봉',g:'오백점봉',w:'백점봉'}[c]) + ' ' + n[c] + '개').join(', ')}">${stack(seqOf(cs))}</div>`;
   return `<div class="tray">${cell(['r','y'])}${cell(['b'], can ? 'can' : '')}${cell(['g','w'])}</div>`;
 }
 function speakerSVG(on){
@@ -3469,7 +3551,7 @@ function startGame(mode, saved, practice, drill, ym){
       const tk0 = UI.token, sleepT = async ms => { await sleep(ms); if(tk0 !== UI.token) await HALT(); };   // 나간 게임의 배패 연출은 멈춘다
       UI.frozen = null; UI.endRes = null; UI.winOpen = null; UI.peekEnd = false; UI.cpuOut = {}; UI.handSet = game.results.length % 2; document.documentElement.classList.toggle('setb', UI.handSet === 1);
       UI.callouts = {}; UI.carryKyotaku = game.kyotaku;
-      UI.kyokuSerial = (UI.kyokuSerial || 0) + 1; UI.autoWin = UI.autoNuki = UI.autoTsumogiri = false;   /* 국마다 화료·북빼기·쯔모기리는 OFF로 */ UI.skDice = {}; UI.kyokuChips = UI.pendingChips || 0;   /* 축의 탑은 국이 시작할 때의 값(이번 국에 얻은 건 다음 국부터) */ UI.kyokuReady = true; UI.order = null; UI.riichiCalled = false; UI.riichiDiscard = null; UI.riichiClacked = false; UI.autoWin = false; UI.wasTenpai = false;   /* 자동 화료는 국마다 꺼진 채로 시작 */ UI.doraAt = {}; UI.sense = null; UI.swapIn = null; UI.peek = null; UI.prune = null; uraState(); kskRestore(game);
+      UI.kyokuSerial = (UI.kyokuSerial || 0) + 1; UI.autoWin = UI.autoTsumogiri = UI.skipCall = false; UI.autoNuki = UI.waitOpen = true; settings.autoSort = true;   /* 국마다: 왼쪽(화료·쯔모기리·후로 스킵) OFF, 오른쪽(정리·북빼기·대기패) ON */   /* 국마다 화료·북빼기·쯔모기리는 OFF로 */ UI.skDice = {}; UI.kyokuChips = UI.pendingChips || 0;   /* 축의 탑은 국이 시작할 때의 값(이번 국에 얻은 건 다음 국부터) */ UI.kyokuReady = true; UI.order = null; UI.riichiCalled = false; UI.riichiDiscard = null; UI.riichiClacked = false; UI.autoWin = false; UI.wasTenpai = false;   /* 자동 화료는 국마다 꺼진 채로 시작 */ UI.doraAt = {}; UI.sense = null; UI.swapIn = null; UI.peek = null; UI.prune = null; uraState(); kskRestore(game);
       UI.inv = new Set();   // 처음 배패된 손패는 상하가 정리되지 않은 채로 온다(끌면서 우클릭해 180도 돌려 다시 손패에 놓아 정리)
       if(!UI.drill && !settings.skipDeal) game.players[0].hand.forEach(id => { if(asymId(id) && Math.random() < .5) UI.inv.add(id); });
       if(game.resumed){   // 국 도중 이어하기: 연출 없이 멈췄던 그 순간의 판으로
@@ -4373,9 +4455,9 @@ function chipStackHTML(){
       const lit = .86 + .16 * Math.cos((a + rot - 35) * Math.PI / 180);   // 왼쪽 앞에서 오는 빛(앞면이 밝고 뒤로 갈수록 살짝 어둡게)
       side += `<i style="transform:rotateZ(${a}deg) translateY(calc(var(--cd)*.5)) rotateX(-90deg);background:${sh(white ? '#efe6cc' : '#d4a32a', lit)}"></i>`;
     }
-    html += `<div class="c3c" style="transform:translateZ(calc(var(--ct)*${i})) rotateZ(${rot}deg)">${side}${i === n - 1 ? '<b class="c3t"></b>' : ''}</div>`;
+    html += `<div class="c3c" style="transform:translateZ(calc(var(--ct)*${i})) rotateZ(${rot}deg)">${side}<b class="c3t"></b></div>`;   // 모든 칩에 윗면: 위 칩이 들릴 때 아래 칩 앞면이 보인다
   }
-  return `<div class="chipstk" style="--n:${n}" title="이번 대국에서 모은 축의칩 ${total}개 (대국이 끝나면 지급)"><div class="c3">${html}</div></div>`;
+  return `<div class="chipstk" data-n="${n}" style="--n:${n}"><div class="c3">${html}</div></div>`;
 }
 const CHIP_TOP = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><defs><clipPath id='c'><circle cx='30' cy='30' r='30'/></clipPath></defs>${chipFaceSVG().replace(/#fbf7ea/g, '#efe6cc').replace('r="29"', 'r="30"').replace('stroke="#a87a12" stroke-width="1"', 'stroke="none"').replace(/y="1.2" width="6.8" height="9"/g, 'y="-1" width="6.8" height="11.2" clip-path="url(#c)"').replace(/"/g, "'")}</svg>`)}")`;
 document.documentElement.style.setProperty('--chip-top', CHIP_TOP);
@@ -4395,8 +4477,8 @@ document.documentElement.style.setProperty('--chip-top', CHIP_TOP);
     if(drag.done || !dy) return;
     if(dy > 0){ if(drag.dir < 0) drag.done = true; return; }   // 위로만 좌르륵. 올리다가 아래로 내리면 이번 누름은 끝
     drag.dir = -1; drag.acc -= dy;
-    const step = 5;   // 5px마다 한 장(아래 칩부터)
-    while(drag.acc >= step){ drag.acc -= step; drag.k = (drag.k + 1) % cs.length; hop(cs[drag.k]); }
+    const step = 13, now = performance.now();   // 13px마다 한 장(아래 칩부터), 빨리 긁어도 한 장씩 최소 40ms 간격
+    if(drag.acc >= step && now - (drag.t || 0) >= 40){ drag.acc = Math.min(drag.acc - step, step); drag.t = now; drag.k = drag.k + 1; if(drag.k >= cs.length){ drag.done = true; return; } hop(cs[drag.k]); }   // 가진 칩 수만큼만 넘기고 끝
   });
   const end = () => { if(drag){ drag.st.classList.remove('grab'); drag = null; } };
   document.addEventListener('pointerup', end); document.addEventListener('pointercancel', end);
@@ -4411,6 +4493,7 @@ function tableMeldHTML(staged){
   return `<div class="tblmeld" style="--mr:${mr.toFixed(4)}">${staged.length ? `<span class="mymeld staging">${staged.map(id => tileId(id, {size:'lg'})).join('')}</span>` : ''}${m ? meldHTML(m, 'lg', 'mymeld', 0) : ''}</div>`;
 }
 function waitsHTML(g){
+  const wbtn = (on, hov) => `<div class="waitbar ${on ? '' : 'wclosed'} ${hov ? 'hov' : ''}"><button class="btn small wtog ${on ? 'on' : ''}" data-act="waitToggle" aria-expanded="${!!on}">대기패 ${on ? 'ON' : 'OFF'}</button></div>`;   // 텐파이가 아니어도 버튼은 늘 보인다
   const me = g.players[0];
   let hand = UI.pendingDraw ? me.hand.filter(id => id !== UI.pendingDraw.id) : me.hand, label = '대기', out = null;
   const hv0 = UI.riichiDiscard != null ? UI.riichiDiscard : UI.dragTile != null ? UI.dragTile : UI.hoverDiscard;
@@ -4420,16 +4503,15 @@ function waitsHTML(g){
 
   } else if(hand.length % 3 === 2 && !UI.pendingDraw){   // 내 차례: 방금 뽑은 패를 그대로 버린다고 보고 계산
     const d = g.drawn && g.drawn.seat === 0 ? g.drawn.id : null;
-    if(d == null) return '';
+    if(d == null) return wbtn(UI.waitOpen, false);   // 친 첫 차례(14장, 쯔모 패 없음)에도 버튼은 보인다
     hand = hand.filter(id => id !== d); out = d;
   }
   const waits = MJ.waitsOf(MJ.countsOf(hand), me.melds.length);
   if(hv == null && out == null){   // 버리고 난 손(13장꼴): 텐파이가 되는 순간 자동으로 펼친다(닫으면 다음 텐파이까지 닫힌 채)
     const tp = waits.length > 0;
-    if(tp && !UI.wasTenpai) UI.waitOpen = true;
     UI.wasTenpai = tp;
   }
-  if(!waits.length) return '';
+  if(!waits.length) return wbtn(UI.waitOpen, false);
   const vis = g.visibleCounts(0);
   // 카타아가리: 론·쯔모 어느 쪽으로도 역이 없는 대기패는 매수 대신 '역없음'(리치 선언 중이면 리치가 역)
   const rii = me.riichi || UI.riichiDiscard != null;
@@ -4447,8 +4529,7 @@ function waitsHTML(g){
   UI.wpanelHTML = (UI.waitOpen || hv != null) ? `<b class="wsum">${total}장</b><span class="wrow">${items}</span>${furiten?'<span class="fbadge">후리텐</span>':''}` : '';
   // 패산을 가리지 않게 평소엔 '대기패 표시' 버튼만, 누르면 펼쳐진다
   // 손패에 마우스를 올려 '이 패를 버리면' 대기를 볼 때는 바로 펼쳐 보인다. 이미 텐파이일 때만 버튼으로 여닫는다
-  if(!UI.waitOpen && hv == null) return `<div class="waitbar wclosed"><button class="btn small wtog" data-act="waitToggle" aria-expanded="false">대기패 표시</button></div>`;
-  return `<div class="waitbar ${hv!=null?'hov':''}"><button class="btn small wtog on" data-act="waitToggle" aria-expanded="true">대기패 표시</button></div>`;
+  return wbtn(UI.waitOpen, hv != null);
 }
 function gameHTML(){
   const g = UI.game;
@@ -4559,8 +4640,8 @@ function gameHTML(){
       ${cf ? confirmHTML() : ''}
       ${actions ? `<div class="actions">${actions}</div>` : ''}
     </div>
-    ${UI.dealing || UI.drill ? '' : `<div class="tblsort"><button class="btn small wtog ${settings.autoSort !== false ? 'on' : ''}" data-act="autoSort" aria-pressed="${settings.autoSort !== false}">정리 ${settings.autoSort !== false ? 'ON' : 'OFF'}</button>${NP === 3 ? `<button class="btn small wtog ${UI.autoNuki ? 'on' : ''}" data-act="autoNuki" aria-pressed="${!!UI.autoNuki}">북빼기 ${UI.autoNuki ? 'ON' : 'OFF'}</button>` : ''}</div>`}
-    ${UI.dealing ? '' : `<div class="tblwait">${UI.drill ? '' : `<div class="awrap"><button class="btn small wtog ${UI.autoWin ? 'on' : ''}" data-act="autoWin" aria-pressed="${!!UI.autoWin}">화료 ${UI.autoWin ? 'ON' : 'OFF'}</button><button class="btn small wtog ${UI.autoTsumogiri ? 'on' : ''}" data-act="autoTsumogiri" aria-pressed="${!!UI.autoTsumogiri}">쯔모기리 ${UI.autoTsumogiri ? 'ON' : 'OFF'}</button></div>`}${UI._wbar || '<div class="waitbar wclosed" style="visibility:hidden"><button class="btn small wtog" tabindex="-1">대기패 표시</button></div>'}</div>`}
+    ${UI.dealing || UI.drill ? '' : `<div class="tblsort"><button class="btn small wtog ${settings.autoSort !== false ? 'on' : ''}" data-act="autoSort" aria-pressed="${settings.autoSort !== false}">정리 ${settings.autoSort !== false ? 'ON' : 'OFF'}</button>${NP === 3 ? `<button class="btn small wtog ${UI.autoNuki ? 'on' : ''}" data-act="autoNuki" aria-pressed="${!!UI.autoNuki}">북빼기 ${UI.autoNuki ? 'ON' : 'OFF'}</button>` : ''}${UI._wbar || ''}</div>`}
+    ${UI.dealing ? '' : `<div class="tblwait">${UI.drill ? '' : `<div class="awrap"><button class="btn small wtog ${UI.autoWin ? 'on' : ''}" data-act="autoWin" aria-pressed="${!!UI.autoWin}">화료 ${UI.autoWin ? 'ON' : 'OFF'}</button><button class="btn small wtog ${UI.autoTsumogiri ? 'on' : ''}" data-act="autoTsumogiri" aria-pressed="${!!UI.autoTsumogiri}">쯔모기리 ${UI.autoTsumogiri ? 'ON' : 'OFF'}</button><button class="btn small wtog ${UI.skipCall ? 'on' : ''}" data-act="skipCall" aria-pressed="${!!UI.skipCall}">후로 스킵 ${UI.skipCall ? 'ON' : 'OFF'}</button></div>`}</div>`}
     ${UI.seating ? '' : trayHTML(g)}
   </div>
   <div class="myarea">
@@ -4640,7 +4721,7 @@ function chipsOfWin(w, res){
 //  3인 깡도라는 패산 꽁무니 줄을 넘겨받으므로 자리는 패산 꽁무니부터 줄마다 윗패 → 패산이 다할 때까지.
 // 튤립(3인 전용, 아리스의 발전형): 리치 화료만. 뒤집은 패와 그 양옆 패까지 내 패에 있는 만큼 축의.
 //  수패는 1·9가 이어진다(1 → 9·1·2, 9 → 8·9·1). 바람패는 동남서북이 돌고(동 → 북·동·남), 삼원패는 셋 다.
-const ALICE_LV = 80, TULIP_LV = 160;   // 아리스·튤립을 쓰려면 필요한 총합 레벨
+const ALICE_LV = 30, TULIP_LV = 60;   // 아리스·튤립을 쓰려면 필요한 총합 레벨
 const aliceOpen = m => rpgTotalLv() >= (m === 'tulip' ? TULIP_LV : ALICE_LV);
 function aliceMode(){
   const T = UI.ymTest != null ? YM_TESTS[UI.ymTest] : null;
@@ -5165,13 +5246,13 @@ const gearSpeed = (sk) => { const d = sk.gear - sk.stage; return d < 0 ? [5, 10,
 const hitBase = (g, s) => { if(g < s) return ATK(g); const h = HITS(s) * OVER[Math.min(9, g - s)]; return h <= 1 ? monHp(s) : monHp(s) / (h * (1 + CRIT(g))); };   // 평균 1대 이하면 치명타 없이도 한 방
 const speedLabel = sk => { const f = gearSpeed(sk); return f > 1 ? `장비 부족 · ${f}배 느림` : f < 1 ? `${Math.round((1 - f) * 100)}% 빠름` : ''; };
 const josa = (w, a, b) => { const c = (w || '').charCodeAt(w.length - 1); return c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 ? a : b; };   // 받침 있으면 a(이·을·은), 없으면 b(가·를·는)
-// 펫: 행동마다 아주 드물게(Melvor 공식: 틱 시간(초) × (레벨 + 1) ÷ 2,500만) 한 번만. 그 행동 펫을 장착하면 그 행동 속도 +10%
+// 펫: 행동마다 아주 드물게(Melvor 공식: 틱 시간(초) × (레벨 + 1) ÷ 2,500만) 한 번만. 그 행동 펫을 장착하면 그 행동 속도 +15%
 const PETS = [
   { k:'wood', n:'다람쥐' }, { k:'mine', n:'박쥐' }, { k:'fish', n:'고양이' }, { k:'combat', n:'강아지' },
   { k:'farm', n:'토끼' }, { k:'smelt', n:'아기 용' }, { k:'smith', n:'고슴도치' }, { k:'cook', n:'햄스터' }
 ];
 const petOf = k => PETS.findIndex(p => p.k === k) + 1;   // 행동 → 펫 번호(1~8)
-const petBoost = k => RPG.st.eq.pet && PETS[RPG.st.eq.pet - 1].k === k ? 1.1 : 1;
+const petBoost = k => RPG.st.eq.pet && PETS[RPG.st.eq.pet - 1].k === k ? 1.15 : 1;
 const monMs = s => Math.round(2600 - (s - 1) * 800 / 9);   // 몬스터 공격 틱: 초원 2.6초 … 공허 1.8초(완만하게 빨라진다)
 const combatMs = () => COMBAT_MS / (typeof RPG !== 'undefined' ? petBoost('combat') : 1);
 function petSVG(i){   // 24×24, 오른쪽을 본다
@@ -5385,7 +5466,7 @@ function combatAdvance(st, sk, dt, T){
   let pc = st.carry, mc = +st.mcarry || 0, t = 0, gain = 0, done = 0, stop = null, eqOut = false, last = null;
   if(!(st.mhp > 0) || st.mhp > mMax) st.mhp = mMax;
   const L = () => last || (last = { swing:false, hit:0, crit:false, miss:false, kill:false, mon:false, taken:0, dodge:false });
-  const eat = () => { st.hp = Math.min(hpMax(st), Math.max(0, st.hp) + HEAL(st.eq.food)); st.eq.foodN--; if(!st.eq.foodN){ st.eq.food = 0; eqOut = true; } };
+  const eat = () => { L().ate = true; st.hp = Math.min(hpMax(st), Math.max(0, st.hp) + HEAL(st.eq.food)); st.eq.foodN--; if(!st.eq.foodN){ st.eq.food = 0; eqOut = true; } };
   while(!stop){
     const step = Math.min(T - pc, M - mc);
     if(t + step > dt) break;
@@ -5479,6 +5560,7 @@ function rpgFx(r){
   const fl = (txt, x, y, cls) => { const e = document.createElement('div'); e.className = 'floatexp ' + (cls || ''); e.style.left = x + '%'; e.style.top = y + '%'; e.textContent = txt; sc.appendChild(e); setTimeout(() => e.remove(), 1200); };
   if(r.last && r.last.mon){ const h = sc.querySelector('.hero'); if(h && !r.last.dodge){ h.classList.remove('hurt'); void h.getBoundingClientRect(); h.classList.add('hurt'); SFX.hurt(); } if(r.last.dodge){ const c = document.createElement('div'); c.className = 'floatexp dodge'; c.style.left = '30%'; c.style.top = '50%'; c.textContent = 'Dodge'; sc.appendChild(c); setTimeout(() => c.remove(), 1200); } }   // 몬스터 공격: 맞으면 용사가 빨갛게 한 번 번쩍
   if(r.last && r.last.miss){ const c = document.createElement('div'); c.className = 'floatexp miss'; c.style.left = '70%'; c.style.top = '52%'; c.textContent = 'Miss'; sc.appendChild(c); setTimeout(() => c.remove(), 1750); }   // 빗나감: 몬스터 위에 빨간 Miss
+  if(r.last && r.last.ate) SFX.heal();   // 요리를 먹으면 회복음
   if(r.last && r.last.kill) SFX.die(SKILLS.combat.stages[RPG.st.sk.combat.stage - 1][5]);   // 처치: 몬스터별 쓰러지는 소리
   if(r.last && r.last.crit){ const c = document.createElement('div'); c.className = 'floatexp crit'; c.style.left = '70%'; c.style.top = '52%'; c.textContent = 'Critical'; sc.appendChild(c); SFX.crit(); setTimeout(() => c.remove(), 1200); }   // 치명타: 몬스터 위에 Critical
   const f = document.createElement('div'); f.className = 'floatexp';
@@ -5510,6 +5592,7 @@ function rpgLive(){
   document.querySelectorAll('.rpg [data-cnt]').forEach(el => { el.textContent = fmtNum(st.inv[el.dataset.cnt] || 0); });
   document.querySelectorAll('.rpg [data-sellv]').forEach(el => { el.textContent = (itemPrice(el.dataset.sellv) * (st.inv[el.dataset.sellv] || 0)).toLocaleString(); });
   document.querySelectorAll('.rpg [data-eqn]').forEach(el => { el.textContent = fmtNum(st.eq[el.dataset.eqn + 'N'] || 0); });
+  document.querySelectorAll('.rpg [data-eqc]').forEach(el => { el.textContent = cntShort(st.eq[el.dataset.eqc + 'N'] || 0); });
   const hm = hpMax(st), hp = Math.max(0, Math.min(hm, st.hp));
   document.querySelectorAll('.rpg [data-hpb]').forEach(el => { el.style.width = (hp / hm * 100) + '%'; });
   const mm = monHp(st.sk.combat.stage), mh = st.mhp > 0 ? Math.min(mm, st.mhp) : mm;
@@ -5521,7 +5604,7 @@ function rpgLive(){
 }
 // 휘두르는 애니메이션(swing, 1.15초 주기)의 타격 시점(약 55%)에 맞춰 효과음을 낸다
 const SWING_MS = 1150, SWING_HIT = 0.55;
-const swingMs = () => RPG.st.active === 'combat' ? combatMs() : SWING_MS;   // 전투는 강아지 펫이면 10% 빨리 휘두른다
+const swingMs = () => RPG.st.active === 'combat' ? combatMs() : SWING_MS;   // 전투는 강아지 펫이면 15% 빨리 휘두른다
 const SWING = { el:null, last:0, nextA:null };
 function swingAnim(){
   const el = document.querySelector('.rpg .scene:not(.idle) .hero:not(.fish) .arm');
@@ -5604,11 +5687,15 @@ function rpgToolIcon(k, g){
 }
 // 모든 행동 레벨의 합(총합 레벨): 주인공 머리 위에 띄운다
 function rpgTotalLv(){ return ALL_KEYS.reduce((a, k) => a + lvOf(RPG.st.sk[k].exp), 0); }   // 행동 8개(전투·채집 4 + 제작 4) 레벨의 합, 최대 800
+const cntShort = n => n < 1000 ? String(n) : n < 10000 ? (Math.floor(n / 100) / 10) + 'k' : Math.floor(n / 1000) + 'k';   // 캐릭터 위 소모품 개수: 짧게(48 · 1.2k · 12k)
 function rpgLvTag(k){
-  const X = k === 'fish' ? 70 : k === 'combat' ? 150 : k === 'smelt' ? 160 : k === 'cook' ? 140 : 112, HY = 170 - (k === 'fish' ? 72 : 80) + 4, y = HY - 36, t = `Lv ${rpgTotalLv()}`, w = 8 + t.length * 5.6;
+  const X = k === 'fish' ? 70 : k === 'combat' ? 150 : k === 'smelt' ? 160 : k === 'cook' ? 140 : 112, HY = 170 - (k === 'fish' ? 72 : 80) + 4, y = HY - 36, t = `Lv ${rpgTotalLv()}`, w = 8 + 7 * 5.6;   // 레벨 바 폭은 'Lv 1000' 기준으로 고정(레벨이 올라도 늘지 않음)
   const st = RPG.st, eqs = k === 'combat' ? ['food', 'fruit'] : k === 'fish' ? ['bait'] : [];   // 장착한 소모품: 레벨 표시 바로 위에 아이콘
-  const ic = eqs.filter(sl => st.eq[sl]).map(sl => sl + st.eq[sl]);
-  const icons = ic.map((key, i) => `<g transform="translate(${X + 1 - ic.length * 6.5 + i * 13} ${y - 21}) scale(.5)"><rect x="-1" y="-1" width="26" height="26" rx="6" fill="rgba(0,0,0,.5)"/>${itemIcon(key, {raw:true})}</g>`).join('');
+  const ic = eqs;   // 장착을 빼도 칸은 그대로(비어 있는 채로)
+  const S = .66, D = 26 * S + 2;   // 아이콘끼리 바짝, 레벨 바 바로 위에 한 덩어리로   // 아이콘 조금 크게(약 17px) + 위에 남은 개수 ×N
+  const icons = ic.map((sl, i) => { const key = st.eq[sl] ? sl + st.eq[sl] : null, x0 = X + 1 - (ic.length * D - 2) / 2 + i * D, y0 = y - 10 - 25 * S;
+    return `<g transform="translate(${x0.toFixed(1)} ${y0.toFixed(1)}) scale(${S})"><rect x="-1" y="-1" width="26" height="26" rx="6" fill="rgba(0,0,0,.5)"${key ? '' : ' stroke="rgba(255,255,255,.28)" stroke-width="1.2" stroke-dasharray="3 2.5"'}/>${key ? itemIcon(key, {raw:true}) : ''}</g>` + (!key ? '' :
+      `<text x="${(x0 + 12 * S).toFixed(1)}" y="${(y0 + 24.5 * S).toFixed(1)}" text-anchor="middle" font-size="6.2" font-weight="900" fill="#fff" stroke="rgba(0,0,0,.85)" stroke-width="2" paint-order="stroke" stroke-linejoin="round" font-family="var(--f-num), monospace">×<tspan data-eqc="${sl}">${cntShort(st.eq[sl + 'N'] || 0)}</tspan></text>`); }).join('');
   return `${icons}<g class="lvtag"><rect x="${X + 1 - w / 2}" y="${y - 8}" width="${w}" height="13" rx="6.5" fill="rgba(0,0,0,.55)" stroke="rgba(255,233,168,.55)" stroke-width=".8"/><text x="${X + 1}" y="${y + 1.8}" text-anchor="middle" font-size="9" font-weight="800" fill="#ffe9a8" font-family="var(--f-num), monospace">${t}</text></g>`;
 }
 // 갑옷·투구 색: 장착한 등급의 색(없으면 천옷·가죽 모자 색)으로 같은 모양을 칠한다
@@ -6073,9 +6160,18 @@ function rpgScene(k){
   return `<svg viewBox="0 0 360 210" aria-label="${esc(SKILLS[k].name)} · ${esc(nm)}">${fx}${bg}<rect width="360" height="210" fill="url(#sHaze)"/><g filter="url(#sDrop)">${target}${boatFront ? `<g class="boatbob">${rpgPerson(k, tierC).replace(/<g class="chair">[\s\S]*?<\/g>/, '')}${boatFront}</g>` : rpgPerson(k, tierC)}</g>${fg}<rect width="360" height="210" fill="url(#sRim)" style="mix-blend-mode:soft-light"/>${rpgParticles(wx)}${rpgPetSVG(k)}${rpgLvTag(k)}</svg>`;
 }
 // ---------- 화면 ----------
+// 제목 '마작 RPG' 자체가 화면 스위치: 누른 쪽 글자가 밝게, 그 아래로 그 화면이 나온다
+function hswPlace(sw, on){   // 금색 막대를 고른 글자 폭·위치에 맞춘다
+  if(!sw) return; const b = sw.querySelector(`.ht[data-t="${on}"]`); if(!b) return;
+  sw.style.setProperty('--kx', b.offsetLeft + 'px'); sw.style.setProperty('--ks', b.offsetWidth / 100);   /* 폭도 transform(scaleX)로 움직여야 화면을 다시 그리는 동안에도 막대가 끊기지 않는다 */
+}
+function heroHTML(on){
+  return `<header class="hero"><div class="tiles" title="누적 축의 ${rpgEarnedAll().toLocaleString()}개">${chipTilesHTML(rpgEarnedAll())}</div>
+    <h1 class="htitle"><span class="hsw ${on}" role="radiogroup" aria-label="화면"><i class="knob"></i><button class="ht ${on === 'mj' ? 'on' : ''}" data-act="tab" data-t="mj" role="radio" aria-checked="${on === 'mj'}">마작</button><button class="ht ${on === 'rpg' ? 'on' : ''}" data-act="tab" data-t="rpg" role="radio" aria-checked="${on === 'rpg'}">RPG</button></span></h1></header>`;
+}
 function appTabs(on){
   const snd = settings.sound !== false;
-  return `<div class="apptabs"><button class="btn ${on==='mj'?'on':''}" data-act="tab" data-t="mj">마작</button><button class="btn ${on==='rpg'?'on':''}" data-act="tab" data-t="rpg">RPG</button></div><div class="apptools"><button class="btn small spk hbtn" data-act="${on === 'rpg' ? 'rpgHelp' : 'help'}" aria-label="${on === 'rpg' ? 'RPG 도움말' : '도움말'}" title="${on === 'rpg' ? 'RPG 도움말' : '도움말'}">?</button><button class="btn small spk ${snd?'spkon':''}" data-act="toggleSound" aria-label="효과음 ${snd?'끄기':'켜기'}" aria-pressed="${snd}">${speakerSVG(snd)}</button></div>`;
+  return `<div class="apptools"><button class="btn small spk hbtn" data-act="${on === 'rpg' ? 'rpgHelp' : 'help'}" aria-label="${on === 'rpg' ? 'RPG 도움말' : '도움말'}" title="${on === 'rpg' ? 'RPG 도움말' : '도움말'}">?</button><button class="btn small spk ${snd?'spkon':''}" data-act="toggleSound" aria-label="효과음 ${snd?'끄기':'켜기'}" aria-pressed="${snd}">${speakerSVG(snd)}</button></div>`;
 }
 
 function rpgHTML(){
@@ -6095,7 +6191,7 @@ function rpgHTML(){
   const away = RPG.away;   // 확인을 누를 때까지 남는다
   const M = MJSK[sel], on = sk.skillOn !== false, ok = !craft && sk.gear >= 2, gc = tier.gl || tier.c;
   const rate = capped(sk) ? `<b>Lv ${LV_CAP(sk.gMax)} 상한</b> · 다음 장비 필요` : `시간당 ${fmtNum(X * 1000)} · ${sk.gear >= 10 ? '만렙' : '~Lv ' + LV_CAP(sk.gear)}`;
-  return `${appTabs('rpg')}<div class="rpg">
+  return `${appTabs('rpg')}${heroHTML('rpg')}<div class="rpg">
     ${away ? `<div class="welcome">자리 비운 동안 ${esc(SKILLS[away.k].name)} +${fmtNum(away.gain)} exp${away.after > away.before ? ` · Lv ${away.before}→${away.after}` : ''}${away.cap ? ' · 상한' : ''}${away.stop ? ` · ${away.stop === 'hp' ? 'HP 소진' : away.stop === 'bait' ? '미끼 소진' : away.stop === 'ko' ? '한 방에 쓰러짐' : '재료 소진'}으로 멈춤` : ''}${rpgAwayItems(away.items)}<button class="btn small primary" data-act="awayOk">확인</button></div>` : ''}
     <div class="stage"><div class="skills side l">${CR_KEYS.map(card).join('')}</div>
     <div class="scene ${st.active === sel ? '' : 'idle'}" style="--swd:${sel === 'combat' ? combatMs() / 1000 : 1.15}s">${rpgScene(sel)}
@@ -6139,7 +6235,7 @@ function itemEffect(key){
   if(t === 'fruit') return `회피 ${DODGE(g)}%`;
   if(t === 'bait') return '낚시 속도 2배';
   if(t === 'ring' || t === 'neck') return `경험치 +${ACC_XP[g]}%`;
-  if(t === 'pet') return `${SKILLS[PETS[g-1].k].name} 속도 +10%`;
+  if(t === 'pet') return `${SKILLS[PETS[g-1].k].name} 속도 +15%`;
   return '';
 }
 function rpgBagHTML(st){
@@ -6149,7 +6245,7 @@ function rpgBagHTML(st){
   const tool = k => { const g = st.sk[k].gear; return `<div class="slot" data-act="slotOpen" data-tab="gear" data-sub="${TOOL_T[k]}" title="가방에서 ${SKILLS[k].tool} 보기"><span class="sl">${SKILLS[k].tool === '검' ? '무기' : SKILLS[k].tool}</span><span class="sv">${itemIcon(TOOL_T[k] + g)}${TIERS[g-1].n} ${SKILLS[k].tool}</span><span class="sl"><span>${k === 'combat' ? `공격력 +${ATK(g)}${CRIT(g) ? ` · 치명 ${Math.round(CRIT(g) * 100)}%` : ''}` : speedLabel(st.sk[k]) || '속도 보통'}</span></span></div>`; };
   const slots = tool('combat')   // 검 · 투구 · 갑옷 · 펫 · 반지 · 목걸이 · 도끼 · 곡괭이 · 낚싯대 · 요리 · 열매 · 미끼
     + slot('투구', 'helm', eq.helm ? `방어력 +${DEF_H(eq.helm)}` : '', true) + slot('갑옷', 'body', eq.body ? `방어력 +${DEF_B(eq.body)}` : '', true)
-    + slot('펫', 'pet', eq.pet ? `${SKILLS[PETS[eq.pet - 1].k].name} 속도 +10%` : '', true)
+    + slot('펫', 'pet', eq.pet ? `${SKILLS[PETS[eq.pet - 1].k].name} 속도 +15%` : '', true)
     + slot('반지', 'ring', eq.ring ? `경험치 +${ACC_XP[eq.ring]}%` : '', true) + slot('목걸이', 'neck', eq.neck ? `경험치 +${ACC_XP[eq.neck]}%` : '', true)
     + ['wood', 'mine', 'fish'].map(tool).join('')
     + slot('요리', 'food', eq.food ? `회복 ${HEAL(eq.food)} · ${cnt('food')}` : '', true)
@@ -6162,18 +6258,18 @@ function rpgBagHTML(st){
   const SUBN = { log:'목재', seed:'씨앗', ore:'원석', fish:'생선', bar:'주괴', sword:'검', food:'요리', fruit:'열매', bait:'미끼', pet:'펫', helm:'투구', body:'갑옷', ring:'반지', neck:'목걸이', axe:'도끼', pick:'곡괭이', rod:'낚싯대' };
   const subs = tab && tab[2] && tab[2].length > 1 ? tab[2] : null, sub = subs ? (subs.includes(UI.invSub) ? UI.invSub : subs[0]) : null;   // 늘 세부 탭 하나(처음엔 검)   // 탭 안의 탭(장비 → 검·투구…)
   const subtabs = subs ? `<div class="invtabs sub">${subs.map(t => { const n = allKeys.filter(key => ikParse(key)[0] === t).length; return `<button class="btn small ${t === sub ? 'on' : ''} ${n && SELL_T.includes(t) ? 'sell' : ''} ${n ? '' : 'empty'}" data-act="invSub" data-t="${t}">${SUBN[t]}${n ? `<small>${n}</small>` : ''}</button>`; }).join('')}</div>` : '';
-  const keys = !tab ? [] : allKeys.filter(key => inTab(tab, key) && (!sub || ikParse(key)[0] === sub)).sort((a, b) => { const A = ikParse(a), B = ikParse(b); return ITEM_ORDER.indexOf(A[0]) - ITEM_ORDER.indexOf(B[0]) || A[1] - B[1]; });
+  const keys = !tab ? [] : allKeys.filter(key => inTab(tab, key) && (!sub || ikParse(key)[0] === sub)).sort((a, b) => { const A = ikParse(a), B = ikParse(b); return ITEM_ORDER.indexOf(A[0]) - ITEM_ORDER.indexOf(B[0]) || (A[0] === 'pet' ? A[1] - B[1] : B[1] - A[1]); });   // 높은 등급(쓸 것)이 위로, 펫만 번호순
   const PER = 99, pg = 0;   // 세부 탭마다 등급 10개 이하라 쪽 넘기기 없음
   const pager = '';
   const rows = keys.slice(pg * PER, pg * PER + PER).map(key => {
     const [t, g] = ikParse(key), sl = ITEM[t].eq;
     const eqB = !sl ? '' : (sl === 'tool' ? st.sk[TOOL_SK[t]].gear === g : !QTY_SL.includes(sl) && st.eq[sl] === g) ? '<span class="p on">착용 중</span>' : QTY_SL.includes(sl) ? `<input class="qty" type="number" inputmode="numeric" min="1" max="${st.inv[key]}" value="${st.inv[key]}" aria-label="장착할 개수"><button class="btn small" data-act="rpgEq" data-key="${key}">장착</button>` : `<button class="btn small" data-act="rpgEq" data-key="${key}">착용</button>`;
     const ef = itemEffect(key);
-    return `<div class="ivr"><span class="n">${itemIcon(key)}${esc(itemName(key))}${ef ? `<small class="eff">${ef}</small>` : ''}</span><b class="c" data-cnt="${key}">${fmtNum(st.inv[key])}</b>${eqB}${SELL_T.includes(t) ? `<button class="btn small" data-act="rpgSell" data-key="${key}"><i class="chipi bc"></i><span data-sellv="${key}">${(itemPrice(key) * st.inv[key]).toLocaleString()}</span> 전부 판매</button>` : ''}</div>`;   // 장비(투구·갑옷)만, 가진 개수 전부를 판다
+    return `<div class="ivr"><span class="n">${itemIcon(key)}${esc(itemName(key))}${ef ? `<small class="eff">${ef}</small>` : ''}</span><b class="c" data-cnt="${key}">${fmtNum(st.inv[key])}</b>${eqB ? `<span class="eqc">${eqB}</span>` : ''}${SELL_T.includes(t) ? `<button class="btn small" data-act="rpgSell" data-key="${key}"><i class="chipi bc"></i><span data-sellv="${key}">${(itemPrice(key) * st.inv[key]).toLocaleString()}</span> 전부 판매</button>` : ''}</div>`;   // 장비(투구·갑옷)만, 가진 개수 전부를 판다
   }).join('') + '<div class="ivr empty" aria-hidden="true"></div>'.repeat(Math.max(0, 10 - keys.length) - (keys.length ? 0 : 1));   // 늘 10줄 높이(탭을 바꿔도 가방 높이 그대로)
   return `<div class="shop bag"><h3>장비</h3>
     <div class="eqs">${slots}</div></div>
-    <div class="shop bag invbag"><h3>가방 ${tabs}<span class="baghd">${(() => { const L = bulkSellList(st), v = L.reduce((a, k) => a + itemPrice(k) * st.inv[k], 0); return L.length ? `<button class="btn small bulk" data-act="rpgBulk" title="종류마다 가진 최고 등급만 남기고 아래 등급 장비를 전부 판다"><i class="chipi bc"></i>${v.toLocaleString()} 일괄 판매</button>` : ''; })()}<span class="bluec" title="파란 칩"><i class="chipi bc"></i><b data-blue>${Math.floor(st.blue).toLocaleString()}</b></span></span></h3>
+    <div class="shop bag invbag"><h3>가방 ${tabs}<span class="baghd">${(() => { const L = bulkSellList(st), v = L.reduce((a, k) => a + itemPrice(k) * st.inv[k], 0); return `<button class="btn small" data-act="rpgBest" title="착용 가능한 최고 등급으로 일괄 장비">일괄 장비</button>` + (L.length ? `<button class="btn small bulk" data-act="rpgBulk" title="종류마다 가진 최고 등급만 남기고 아래 등급 장비 전부 판매"><i class="chipi bc"></i>${v.toLocaleString()} 일괄 판매</button>` : ''); })()}<span class="bluec" title="파란 칩"><i class="chipi bc"></i><b data-blue>${Math.floor(st.blue).toLocaleString()}</b></span></span></h3>
     ${subtabs}${!tab ? '' : `<div class="inv">${keys.length ? rows : `<div class="ivr empty"><p class="muted" style="margin:0">${(n => `${n}${josa(n, '이', '가')} 없어요`)(sub ? SUBN[sub] : tab[1])}</p></div>${rows}`}</div>${pager}`}</div>`;
 }
 // 맵: 그 등급의 배경(움직이는 날씨 포함). 가진 장비 등급까지 들어갈 수 있고, 들어가면 그 등급 장비를 든다
@@ -6252,7 +6348,36 @@ function bulkSellList(st){
     let top = eqG; for(let g = 1; g <= 10; g++) if((st.inv[t + g] || 0) > 0) top = Math.max(top, g);
     for(let g = 1; g < top; g++) if((st.inv[t + g] || 0) > 0) out.push(t + g);
   }
+  for(const t of QTY_SL){   // 요리·열매·미끼: 장착한 등급(또는 가방 최고 등급)보다 낮은 것은 판다
+    let top = st.eq[t] || 0; for(let g = 1; g <= 10; g++) if((st.inv[t + g] || 0) > 0) top = Math.max(top, g);
+    for(let g = 1; g < top; g++) if((st.inv[t + g] || 0) > 0) out.push(t + g);
+  }
   return out;
+}
+// 최고 장비: 가방에서 지금 착용할 수 있는 가장 높은 등급으로 모두 갈아입는다(요리·열매·미끼는 최고 등급을 전부 장착)
+function bestGear(st){
+  let n = 0;
+  const topIn = t => { for(let g = 10; g >= 1; g--) if((st.inv[t + g] || 0) > 0) return g; return 0; };
+  const take = key => { st.inv[key]--; if(!st.inv[key]) delete st.inv[key]; };
+  const put = (key, c) => { st.inv[key] = (st.inv[key] || 0) + c; };
+  for(const t of ['sword', 'axe', 'pick', 'rod']){   // 무기·도구: 레벨이 되는 것 중 최고 등급
+    const K = TOOL_SK[t], tsk = st.sk[K], L = lvOf(tsk.exp);
+    let best = 0; for(let g = 10; g > tsk.gear; g--) if(L >= REQ_LV(g) && ((st.inv[t + g] || 0) > 0 || (t !== 'sword' && owns(tsk, g)))){ best = g; break; }
+    if(!best) continue;
+    if(t === 'sword'){ put('sword' + tsk.gear, 1); take('sword' + best); tsk.gear = best; addOwn(tsk, best); }
+    else { if(!owns(tsk, best)) take(t + best); rpgWear(st, K, tsk, best, false, true); }
+    n++;
+  }
+  for(const sl of ['helm', 'body', 'ring', 'neck']){
+    const g = topIn(sl); if(g <= (st.eq[sl] || 0)) continue;
+    if(st.eq[sl]) put(sl + st.eq[sl], 1); take(sl + g); st.eq[sl] = g; n++;
+  }
+  for(const sl of QTY_SL){
+    const g = topIn(sl), cur = st.eq[sl] || 0; if(!g || g < cur) continue;
+    if(cur && cur !== g){ put(sl + cur, st.eq[sl + 'N'] || 0); st.eq[sl + 'N'] = 0; }
+    st.eq[sl] = g; st.eq[sl + 'N'] = (st.eq[sl + 'N'] || 0) + st.inv[sl + g]; delete st.inv[sl + g]; n++;
+  }
+  return n;
 }
 function rpgAccHTML(st){
   const row = s => TIERS.slice(1).map((t, i) => {
@@ -6301,7 +6426,7 @@ function rpgHelpHTML(){
     <ul>
       <li><b>행동</b> 오프라인 최대 24시간 누적 경험치 획득 가능</li>
       <li><b>전투</b> 요리를 장착하여 HP 회복이 가능하고,<br>열매를 장착하여 적의 공격이 회피 가능</li>
-      <li><b>펫</b> 행동마다 아주 드물게 1마리 획득. 그 행동 펫을 장착하면 속도 +10%</li>
+      <li><b>펫</b> 행동마다 아주 드물게 1마리 획득. 그 행동 펫을 장착하면 속도 +15%</li>
       <li><b>파란 칩</b>(<i class="chipi bc"></i>) 장비를 팔아 획득. 상점에서 반지·목걸이 구매 가능</li>
       <li><b>재화</b> 축의칩(<i class="chipi rc"></i>). 3인 마작에서 획득 가능</li>
       <li><b>총 레벨</b> ${ALICE_LV}에 설정 '아리스(3인 마작)' 개방</li>
@@ -6398,7 +6523,8 @@ function rpgAct(a, b){
     }
     st.eq[sl] = t[1]; SFX.unlock(); SFX.equip(sl === 'helm' || sl === 'body' ? 'mine' : 'fish');
   }
-  else if(a === 'rpgUneq'){ const sl = b.dataset.slot; if(!['helm', 'body', 'ring', 'neck', 'pet'].concat(QTY_SL).includes(sl) || !st.eq[sl]) return; const back = sl === 'helm' || sl === 'body' || sl === 'ring' || sl === 'neck' || sl === 'pet' ? 1 : st.eq[sl + 'N'] || 0; if(back) st.inv[sl + st.eq[sl]] = (st.inv[sl + st.eq[sl]] || 0) + back; st.eq[sl] = 0; if(QTY_SL.includes(sl)) st.eq[sl + 'N'] = 0; }   // 해제하면 남은 개수 그대로 가방으로
+  else if(a === 'rpgBest'){ const n = bestGear(st); if(n){ SFX.unlock(); SFX.equip('combat'); rpgToast(`최고 등급으로 ${n}개 갈아입었어요`); } else rpgToast('이미 최고 장비예요'); rpgSave(); chipFix(); render(); return; }
+  else if(a === 'rpgUneq'){ const sl = b.dataset.slot; if(!['helm', 'body', 'ring', 'neck', 'pet'].concat(QTY_SL).includes(sl) || !st.eq[sl]) return; const back = sl === 'helm' || sl === 'body' || sl === 'ring' || sl === 'neck' || sl === 'pet' ? 1 : st.eq[sl + 'N'] || 0; if(back) st.inv[sl + st.eq[sl]] = (st.inv[sl + st.eq[sl]] || 0) + back; st.eq[sl] = 0; if(QTY_SL.includes(sl)) st.eq[sl + 'N'] = 0; SFX.unlock(); SFX.unequip(); }   // 해제하면 남은 개수 그대로 가방으로 + 해제음
   else if(a === 'rpgBulk'){
     const L = bulkSellList(st); if(!L.length) return;
     const v = L.reduce((a2, k) => a2 + itemPrice(k) * st.inv[k], 0), n = L.reduce((a2, k) => a2 + st.inv[k], 0);
@@ -6452,7 +6578,25 @@ document.addEventListener('click', e => {
       $modal.hidden = false; break;
     case 'help': $modal.innerHTML = helpHTML(); $modal.hidden = false; break;
     case 'closeModal': $modal.hidden = true; break;
-    case 'tab': show(b.dataset.t === 'rpg' ? 'rpg' : 'home'); break;
+    case 'tab': { const to = b.dataset.t === 'rpg' ? 'rpg' : 'home'; if(to === UI.screen || UI.sliding) break;
+      SFX.unlock(); SFX.slide(to === 'rpg' ? -1 : 1);   // 슬라이드 효과음
+      // 홈 화면 전체가 옆으로 밀려 나가고 새 화면이 반대쪽에서 밀려 들어온다(제목 스위치는 제자리)
+      const sw = document.querySelector('.hsw'); if(sw){ sw.querySelectorAll('.ht').forEach(x => x.classList.toggle('on', x.dataset.t === (to === 'rpg' ? 'rpg' : 'mj'))); hswPlace(sw, to === 'rpg' ? 'rpg' : 'mj'); }
+      const dir = to === 'rpg' ? -1 : 1, outs = [...$app.querySelectorAll('.hero ~ *')];
+      UI.sliding = true; document.documentElement.style.overflowX = 'hidden';
+      outs.forEach(el => { el.style.transition = 'transform .09s cubic-bezier(.5,0,1,1), opacity .09s'; el.style.transform = `translateX(${dir * 100}vw)`; el.style.opacity = '0'; });
+      setTimeout(() => {
+        const keepHero = $app.querySelector('.hero');   // 달리는 중인 금색 막대 요소를 그대로 살려 둔다(새로 그리면 막대가 처음 자리로 튀었다)
+        rq = true; show(to); rq = false;   // show()가 예약하는 두 번째 전체 재그리기를 막는다(draw 한 번만)
+        UI.slideLock = false; draw(); UI.slideLock = true; UI.slidePend = false;
+        { const nh = $app.querySelector('.hero'); if(keepHero && nh){ nh.replaceWith(keepHero); const sw2 = keepHero.querySelector('.hsw'); if(sw2){ sw2.classList.remove('mj', 'rpg'); sw2.classList.add(to === 'rpg' ? 'rpg' : 'mj'); sw2.querySelectorAll('.ht').forEach(x => { const on2 = x.dataset.t === (to === 'rpg' ? 'rpg' : 'mj'); x.classList.toggle('on', on2); x.setAttribute('aria-checked', on2); }); } } }
+        const ins = [...$app.querySelectorAll('.hero ~ *')];
+        ins.forEach(el => { el.style.transition = 'none'; el.style.transform = `translateX(${-dir * 100}vw)`; el.style.opacity = '0'; });
+        void document.body.offsetWidth;
+        ins.forEach(el => { el.style.transition = 'transform .13s cubic-bezier(0,0,.3,1), opacity .13s'; el.style.transform = ''; el.style.opacity = ''; });
+        setTimeout(() => { ins.forEach(el => { el.style.transition = ''; }); UI.sliding = false; UI.slideLock = false; document.documentElement.style.overflowX = ''; if(UI.slidePend){ UI.slidePend = false; render(); } }, 150);
+      }, 90);
+      break; }
     case 'adm': if(rpgAdmin()) rpgAdminAct(b); break;
     case 'slotOpen': UI.invTab = b.dataset.tab; UI.invSub = b.dataset.sub; UI.invPage = 0; render(); { const bags = document.querySelectorAll('.rpg .bag'); const bg = bags[bags.length - 1]; if(bg) bg.scrollIntoView({behavior:'smooth', block:'start'}); } break;   // 장비 칸을 누르면 가방의 그 종류가 열린다
     case 'invTab': UI.invTab = b.dataset.t; UI.invSub = null; UI.invPage = 0; render(); break;
@@ -6460,7 +6604,7 @@ document.addEventListener('click', e => {
     case 'invPage': UI.invPage = Math.max(0, (UI.invPage || 0) + (+b.dataset.d || 0)); render(); break;   // 가방 쪽 넘기기   // 가방 탭: 같은 탭을 다시 누르면 접힘
     case 'shopTab': UI.shopTab = b.dataset.t; render(); break;   // 상점 탭
     case 'smithTab': UI.smithTab = b.dataset.t; render(); break;   // 대장간 제작법 탭
-    case 'rpgBulk': case 'rpgCons': case 'rpgMap': case 'rpgSel': case 'rpgGo': case 'rpgBuy': case 'rpgWear': case 'rpgSkill': case 'rpgRecipe': case 'rpgEq': case 'rpgUneq': case 'rpgSell': case 'rpgAcc': rpgAct(a, b); break;
+    case 'rpgBulk': case 'rpgCons': case 'rpgMap': case 'rpgSel': case 'rpgGo': case 'rpgBuy': case 'rpgWear': case 'rpgSkill': case 'rpgRecipe': case 'rpgEq': case 'rpgUneq': case 'rpgBest': case 'rpgSell': case 'rpgAcc': rpgAct(a, b); break;
     case 'rpgTable': { $modal.innerHTML = rpgTableHTML(); $modal.hidden = false; const c = $modal.querySelector('tr.cur'); if(c) c.scrollIntoView({block:'center'}); break; }
     case 'drillMenu': $modal.innerHTML = drillMenuHTML(); $modal.hidden = false; break;
     case 'recWipe':
@@ -6471,6 +6615,7 @@ document.addEventListener('click', e => {
     case 'autoSort': settings.autoSort = settings.autoSort === false; store.set(KEY.set, settings); UI.order = null; render(); break;   // 켜면 바로 정렬
     case 'autoWin': UI.autoWin = !UI.autoWin; render(); if(UI.autoWin) autoWinCheck(); break;
     case 'autoTsumogiri': UI.autoTsumogiri = !UI.autoTsumogiri; render(); if(UI.autoTsumogiri) autoActCheck(); break;
+    case 'skipCall': UI.skipCall = !UI.skipCall; render(); if(UI.skipCall && UI.pending && UI.pending.kind === 'call' && !UI.confirm) choose(null); break;
     case 'autoNuki': UI.autoNuki = !UI.autoNuki; render(); if(UI.autoNuki) autoActCheck(); break;
     case 'waitToggle': UI.waitOpen = !UI.waitOpen; render(); break;
     case 'drill': { const k = b.dataset.d; $modal.hidden = true; startGame(DRILLS[k].mode, null, true, k); break; }
@@ -6491,6 +6636,7 @@ document.addEventListener('click', e => {
     } break;
     case 'nuki': if(pd && pd.kind === 'riichiNuki') choose(true); else if(pd && pd.kind === 'action' && pd.ctx.nuki && UI.riichiDiscard == null) choose({type:'nuki'}); break;
     case 'recP': UI.recP = +b.dataset.p; render(); break;
+    case 'recOpen': { const o = UI.recOpen || (UI.recOpen = {}); o[b.dataset.k] = !o[b.dataset.k]; render(); break; }
     case 'confirmOK': { const c = UI.confirm; UI.confirm = null; if(pd && c) pd.resolve(c.value); break; }
     case 'riichi': UI.riichiMode = !UI.riichiMode; UI.sel = null; UI.hoverDiscard = null; render(); break;
     case 'discard': if(pd && UI.sel != null) choose({type:'discard', id:UI.sel, riichi:UI.riichiMode}); break;

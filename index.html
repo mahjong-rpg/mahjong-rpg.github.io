@@ -667,8 +667,8 @@ section.card.resume .rsinfo{align-items:flex-start}
 .rpg .runt{position:absolute;right:8px;top:-8px;z-index:2;white-space:nowrap;background:#21b14b;color:#fff;font-size:11px;font-weight:800;border-radius:99px;padding:1px 8px;box-shadow:0 0 8px rgba(33,177,75,.8)}   /* 행동 카드의 '진행 중'과 똑같이 */
 .rpg .floatexp.miss{color:#ff4a4a;font-size:19px;font-style:italic;letter-spacing:.5px;text-shadow:0 2px 0 rgba(0,0,0,.7),0 0 8px rgba(255,40,40,.7)}
 .rpg .floatexp.crit{color:#ffd23a;font-size:19px;font-style:italic;letter-spacing:.5px;text-shadow:0 2px 0 rgba(0,0,0,.7),0 0 10px rgba(255,160,40,.9)}
-.rpg .floatexp.item{font-size:13px;color:#e8f6ff;display:flex;align-items:center;gap:3px}.rpg .floatexp.item .iic{width:16px;height:16px;margin:0}
-.rpg .welcome .awitems{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 10px;margin:6px 0 2px;font-size:12px}.rpg .welcome .awitems span{display:inline-flex;align-items:center;white-space:nowrap}
+.rpg .floatexp.item{font-size:13px;color:#e8f6ff;display:flex;align-items:center;gap:3px}.rpg .floatexp.item .tot,.rpg .awitems .tot{color:#ffe24a;margin-left:2px}   /* 가진 총 개수 */.rpg .floatexp.item .iic{width:16px;height:16px;margin:0}
+.rpg .welcome .awitems{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 10px;margin:6px 0 2px;font-size:12px}.rpg .welcome .awitems span{display:inline-flex;align-items:center;white-space:nowrap;gap:3px}
 .rpg .floatexp.dmg{color:#fff;font-size:15px;text-shadow:0 2px 0 rgba(0,0,0,.7)}.rpg .floatexp.dmg.crit{color:#ffd23a;font-size:20px}.rpg .floatexp.dmg.me{color:#ff6a5a}
 .rpg .floatexp{position:absolute;font:800 16px var(--f-ui);color:#fffbe0;text-shadow:0 2px 0 rgba(0,0,0,.6),0 0 8px rgba(255,230,120,.8);pointer-events:none;animation:fexp 1.65s ease-out forwards;white-space:nowrap}
 @keyframes fexp{0%{opacity:0;transform:translate(-50%,6px) scale(.8)}12%{opacity:1;transform:translate(-50%,-4px) scale(1.08)}82%{opacity:1;transform:translate(-50%,-36px) scale(1)}100%{opacity:0;transform:translate(-50%,-46px) scale(1)}}   /* 오래 또렷이 보이다가 짧게 사라짐 */
@@ -687,33 +687,7 @@ section.card.resume .rsinfo{align-items:flex-start}
 @media (max-width:720px){.rpg .stage{grid-template-columns:1fr 1fr}.rpg .stage > .scene{grid-column:1/-1}.rpg .stage > .side{grid-row:2}.rpg .stage > .side.l{grid-column:1}.rpg .stage > .side.r{grid-column:2}}
 .rpg .it.cons .cbuy{display:inline-flex;gap:4px;align-items:center;flex:none}
 .rpg .it.cons .qty{width:4.6em;padding:2px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.35);color:var(--ink);font:700 12px var(--f-num);text-align:right}
-.rpg .admin{border:1px dashed #ff9a3a}
 .rpg .items.acc3 .it .n{flex:1;min-width:0}.rpg .items.acc3 .it .n small{white-space:normal;word-break:keep-all}.rpg .items.acc3 .it .btn{flex:none}   /* 설명 글이 가격 버튼과 겹치지 않게(넘치면 줄바꿈) */
-.rpg .admin .arow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px}
-.rpg .admin .arow > b{min-width:3em}
-#sndp{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:12px}
-#sndp .sbox{background:#14261c;color:#e8efe9;border:1px solid #2f5a40;border-radius:12px;width:min(720px,100%);max-height:92vh;display:flex;flex-direction:column;padding:12px;gap:8px;font-size:12px}
-#sndp .shd{display:flex;justify-content:space-between;align-items:center;font-size:15px}
-#sndp .stl{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-#sndp .xsw{display:flex;gap:4px;align-items:center;margin-right:auto}
-#sndp .shelp{margin:0;font-size:11px;line-height:1.5}
-#sndp .slist{overflow-y:auto;flex:1;min-height:0;padding-right:4px}
-#sndp h4{margin:10px 0 4px;font-size:12px;color:#9fd6b0}
-#sndp .xr{display:grid;grid-template-columns:34px 7.5em 1fr 4.2em 90px 3.2em;gap:6px;align-items:center;padding:2px 0}
-#sndp .xl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#sndp .xt{font-style:normal;font-size:9px;margin-left:4px;padding:0 4px;border-radius:4px;background:#2a3d31;color:#9db}
-#sndp .xt.ts{background:#5a4314;color:#ffd77a}#sndp .xt.tf{color:#8aa}
-#sndp .xbar{position:relative;height:12px;background:#0b1510;border-radius:3px;overflow:hidden}
-#sndp .xbar i{position:absolute;left:0;width:0;transition:width .2s}
-#sndp .xbar .xbo{top:0;height:5px;background:#6c7f73}
-#sndp .xbar .xbn{bottom:0;height:6px;background:#5fd08a}
-#sndp .xlg{display:inline-block;width:14px;height:6px;vertical-align:middle;margin:0 3px 0 6px}
-#sndp .xlg.xbo{background:#6c7f73}#sndp .xlg.xbn{background:#5fd08a}
-#sndp .xdb,#sndp .xpv{text-align:right;font-variant-numeric:tabular-nums}
-#sndp input[type=range]{width:100%}
-@media (max-width:520px){#sndp .xr{grid-template-columns:30px 5.5em 1fr 3.8em;}#sndp .xr input,#sndp .xr .xpv{grid-column:span 2}#sndp .xr .xpv{display:none}#sndp .xr input{grid-column:2/-1}}
-.rpg .admin select{background:rgba(0,0,0,.35);color:var(--ink);border:1px solid rgba(255,255,255,.18);border-radius:6px;padding:3px 4px;font-size:12px}
-.rpg .admin .qty{width:5em;padding:3px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.35);color:var(--ink);font:700 12px var(--f-num);text-align:right}
 .rpg .items.acc3{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:560px){.rpg .items.acc3 .it{flex-direction:column;align-items:stretch;gap:4px}.rpg .items.acc3 .it .n{white-space:normal;word-break:keep-all;font-size:12px}.rpg .items.acc3 .it .btn,.rpg .items.acc3 .it .d{align-self:flex-end}}
 .rpg .shop h3.acch small{font-weight:600;font-size:11px;margin-left:6px}
@@ -919,6 +893,8 @@ section.card.resume .rsinfo{align-items:flex-start}
 .sk.urahost{pointer-events:none}
 .ura-v0{bottom:calc(100% + var(--ww)*.45)}.ura-v2{top:calc(100% + var(--ww)*.12)}
 .sk.v.side1 .ura-v1{left:auto;right:calc(100% + var(--ww)*.12)}.sk.v.side3 .ura-v3{left:calc(100% + var(--ww)*.12)}
+.sk.urahost.uraswap.a{animation:uraSwA 2s step-end infinite}.sk.urahost.uraswap.b{animation:uraSwB 2s step-end infinite}   /* 모서리에서 겹친 뒷도라 두 장: 1초씩 번갈아 위로 */
+@keyframes uraSwA{0%{z-index:99999}50%{z-index:99998}}@keyframes uraSwB{0%{z-index:99998}50%{z-index:99999}}
 .sk .tf.uratap{pointer-events:auto;cursor:pointer;box-shadow:0 0 0 .5px rgba(0,0,0,.6),0 calc(var(--ww)*var(--e1,.15)) 0 #e2ddcd,0 calc(var(--ww)*var(--e2,.3)) 0 var(--tile-back-dk),0 0 0 1.5px var(--gc);animation:uraflash 2.4s ease-out infinite}
 /* 광맥 탐지를 쓸 수 있는 도라 표시패: 2.4초마다 번쩍 */
 @keyframes uraflash{
@@ -1088,7 +1064,7 @@ section.card.resume .rsinfo{align-items:flex-start}
 .rpg .scene:not(.idle) .pj{animation:phop 7s ease-in-out infinite}   /* 행동 중: 가끔 깡총깡총 + 하트 */
 .rpg .pj.owl .pb{animation:owlfly 12s ease-in-out infinite}@keyframes owlfly{0%,6%,12%,18%,24%,30%,36%,42%{transform:none}3%,9%,15%,21%,27%,33%,39%{transform:scaleY(.96) scaleX(1.03)}45%{transform:scaleY(.9) scaleX(1.08)}50%{transform:translateY(-15px)}54%{transform:translateY(-13px) scaleX(.95)}58%{transform:translateY(-16px) scaleX(.95)}62%{transform:translateY(-13px) scaleX(.95)}66%{transform:translateY(-16px) scaleX(.95)}70%{transform:translateY(-13px) scaleX(.95)}74%{transform:translateY(-16px) scaleX(.95)}78%{transform:translateY(-13px) scaleX(.95)}82%{transform:translateY(-16px) scaleX(.95)}86%{transform:translateY(-13px) scaleX(.95)}92%{transform:translateY(0)}95%{transform:scaleY(.88) scaleX(1.1)}98%,100%{transform:none}}   /* 부엉이: 가끔 날아올라 박쥐처럼 둥둥 떠 있다가 내려앉는다 */
 .rpg .scene:not(.idle) .pj.owl{animation:none}   /* 나는 동안 깡총은 안 한다 */
-.rpg .pj.owl .ow{transform-box:fill-box;transform-origin:50% 0;animation:owlwing 12s linear infinite}@keyframes owlwing{0%,47%,92%,100%{transform:none}48%{transform:scaleY(.55)}50%{transform:scaleY(1)}52%{transform:scaleY(.55)}54%{transform:scaleY(1)}56%{transform:scaleY(.55)}58%{transform:scaleY(1)}60%{transform:scaleY(.55)}62%{transform:scaleY(1)}64%{transform:scaleY(.55)}66%{transform:scaleY(1)}68%{transform:scaleY(.55)}70%{transform:scaleY(1)}72%{transform:scaleY(.55)}74%{transform:scaleY(1)}76%{transform:scaleY(.55)}78%{transform:scaleY(1)}80%{transform:scaleY(.55)}82%{transform:scaleY(1)}84%{transform:scaleY(.55)}86%{transform:scaleY(1)}88%{transform:scaleY(.55)}90%{transform:scaleY(1)}}   /* 날 때만 날갯짓 */
+.rpg .pj.owl .owL,.rpg .pj.owl .owR{transform-box:fill-box}.rpg .pj.owl .owL{transform-origin:100% 0;animation:owlL 12s linear infinite}.rpg .pj.owl .owR{transform-origin:0 0;animation:owlR 12s linear infinite}@keyframes owlL{0%,46%,92%,100%{transform:none}47.5%{transform:rotate(78deg)}49%{transform:rotate(18deg)}50.5%{transform:rotate(78deg)}52%{transform:rotate(18deg)}53.5%{transform:rotate(78deg)}55%{transform:rotate(18deg)}56.5%{transform:rotate(78deg)}58%{transform:rotate(18deg)}59.5%{transform:rotate(78deg)}61%{transform:rotate(18deg)}62.5%{transform:rotate(78deg)}64%{transform:rotate(18deg)}65.5%{transform:rotate(78deg)}67%{transform:rotate(18deg)}68.5%{transform:rotate(78deg)}70%{transform:rotate(18deg)}71.5%{transform:rotate(78deg)}73%{transform:rotate(18deg)}74.5%{transform:rotate(78deg)}76%{transform:rotate(18deg)}77.5%{transform:rotate(78deg)}79%{transform:rotate(18deg)}80.5%{transform:rotate(78deg)}82%{transform:rotate(18deg)}83.5%{transform:rotate(78deg)}85%{transform:rotate(18deg)}86.5%{transform:rotate(78deg)}88%{transform:rotate(18deg)}89.5%{transform:rotate(78deg)}}@keyframes owlR{0%,46%,92%,100%{transform:none}47.5%{transform:rotate(-78deg)}49%{transform:rotate(-18deg)}50.5%{transform:rotate(-78deg)}52%{transform:rotate(-18deg)}53.5%{transform:rotate(-78deg)}55%{transform:rotate(-18deg)}56.5%{transform:rotate(-78deg)}58%{transform:rotate(-18deg)}59.5%{transform:rotate(-78deg)}61%{transform:rotate(-18deg)}62.5%{transform:rotate(-78deg)}64%{transform:rotate(-18deg)}65.5%{transform:rotate(-78deg)}67%{transform:rotate(-18deg)}68.5%{transform:rotate(-78deg)}70%{transform:rotate(-18deg)}71.5%{transform:rotate(-78deg)}73%{transform:rotate(-18deg)}74.5%{transform:rotate(-78deg)}76%{transform:rotate(-18deg)}77.5%{transform:rotate(-78deg)}79%{transform:rotate(-18deg)}80.5%{transform:rotate(-78deg)}82%{transform:rotate(-18deg)}83.5%{transform:rotate(-78deg)}85%{transform:rotate(-18deg)}86.5%{transform:rotate(-78deg)}88%{transform:rotate(-18deg)}89.5%{transform:rotate(-78deg)}}   /* 날 때만 양 날개를 어깨에서 펼쳐 파닥 */
 
 @keyframes phop{0%,72%,100%{transform:none}76%{transform:translateY(-7px) rotate(-6deg)}80%{transform:none}84%{transform:translateY(-5px) rotate(5deg)}88%{transform:none}}
 .rpg .scene:not(.idle) .ph{animation:pheart 7s ease-out infinite;transform-box:fill-box;transform-origin:50% 50%}
@@ -3301,7 +3277,7 @@ const SFX = (() => {
       tone(3136, .7, .11 * v, 'sine', .19); tone(4699, .6, .06 * v, 'sine', .19);
       [.3, .36, .43].forEach((d, i) => tone(5200 + i * 600, .12, .025 * v, 'triangle', d));
     },
-    slide(dir){   // 화면 슬라이드: 부드러운 바람 소리(방향 따라 위/아래로 훑음)만. 음높이가 있는 소리는 넣지 않는다
+    slide(dir){   // dir -1: 작은음 · 1: 큰음. 화면 슬라이드: 부드러운 바람 소리(방향 따라 위/아래로 훑음)만. 음높이가 있는 소리는 넣지 않는다
       const c = ac(); if(!c) return;
       const t0 = c.currentTime + base, dur = .26, len = Math.floor(c.sampleRate * dur);
       const buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
@@ -3320,8 +3296,9 @@ const SFX = (() => {
   api.ctx = ac;
   // ---- 소리별 볼륨(운영자 모드 효과음 테스트에서 맞추고 저장) ----
   const VKEY = 'rm.sfxvol';
-  const VDEF = {"discard":0.35,"chip":2,"flipTick":2.7,"stick":1.95,"dice":0.9,"call":0.5,"swap":1.1,"jjan":0.45,"miss":1.15,"ching":0.6,"drumroll.1.3":2.65,"win":0.4,"result":0.3,"cash":0.45,"allLast":0.35,"fanfare":0.45,"slide.1":0.45,"slide.-1":0.5,"wood":0.65,"mine":1.2,"fish":0.95,"farm":1.55,"smelt":0.9,"smith":0.5,"cook":1.1,"gain":0.85,"crit":1.2,"hurt":2.75,"combat":1.2,"skOk":0.5,"skFail":0.5,"skWarn":0.7,"lvup":0.5,"equip.combat":1.45,"equip.wood":0.75,"equip.mine":2.45,"equip.fish":2.05,"unequip":1.9,"hit.slime":0.95,"hit.wolf":1.35,"hit.lizard":1.25,"hit.scorpion":3,"hit.yeti":3,"hit.skeleton":0.65,"hit.golem":0.85,"hit.demon":1.2,"hit.dragon":0.6,"die.slime":3,"die.wolf":1.35,"die.lizard":1.55,"die.scorpion":3,"die.yeti":1.45,"die.skeleton":1.1,"die.golem":2.55,"die.demon":2.1,"die.dragon":1.7};   // 운영자 모드에서 맞춘 기본 볼륨(10/22)
-  let VOL = store.get(VKEY, null) || { ...VDEF }, PREV = null;   // PREV: 테스트 재생 때 쓸 배율(null이면 저장된 값)
+  const VDEF = {"discard":0.35,"chip":2,"flipTick":2.7,"stick":1.95,"dice":0.9,"call":0.5,"swap":1.1,"jjan":0.45,"miss":1.15,"ching":0.6,"drumroll.1.3":2.65,"win":0.4,"result":0.3,"cash":0.45,"allLast":0.35,"fanfare":0.45,"slide.1":0.75,"slide.-1":0.5,"wood":0.65,"mine":1.2,"fish":0.95,"farm":1.55,"smelt":0.9,"smith":0.5,"cook":1.1,"gain":0.85,"crit":1.2,"hurt":2.75,"combat":1.2,"skOk":0.5,"skFail":0.5,"skWarn":0.7,"lvup":0.5,"equip.combat":1.45,"equip.wood":0.75,"equip.mine":2.45,"equip.fish":2.05,"unequip":1.9,"hit.slime":0.95,"hit.wolf":1.35,"hit.lizard":1.25,"hit.scorpion":3,"hit.yeti":3,"hit.skeleton":0.65,"hit.golem":0.85,"hit.demon":1.2,"hit.dragon":0.6,"die.slime":3,"die.wolf":1.35,"die.lizard":1.55,"die.scorpion":3,"die.yeti":1.45,"die.skeleton":1.1,"die.golem":2.55,"die.demon":2.1,"die.dragon":1.7};   // 운영자 모드에서 맞춘 기본 볼륨(10/22)
+  let VOL = store.get(VKEY, null) || { ...VDEF }, PREV = null;
+  if(!store.get('rm.sfx.s75', 0)){ VOL['slide.1'] = .75; store.set(VKEY, VOL); store.set('rm.sfx.s75', 1); }   // 슬라이드 큰음 볼륨 75%(저장해 둔 볼륨에도 한 번 적용)   // PREV: 테스트 재생 때 쓸 배율(null이면 저장된 값)
   const volOf = (n, a) => PREV != null ? PREV : (VOL[n + '.' + a] ?? VOL[n] ?? 1);
   for(const n of Object.keys(api)){
     if(n === 'unlock' || n === 'now' || n === 'ctx' || typeof api[n] !== 'function') continue;
@@ -4221,6 +4198,19 @@ function wallsScreenHTML(walls, fx, uraGc){
   let out = '', front = '';
   const split = !!(fx && fx.split);
   const np = walls.length, vsOf = s => np === 3 ? [0, 1, 3][s] : s;
+  // 광맥 탐지: 패산 모서리에서 두 벽의 뒷도라가 같은 자리로 밀려 나와 겹치면, 겹친 두 패만 1초씩 번갈아 위로 올라온다
+  const sidePos = slots => { const pos = []; let u = 0; slots.forEach((sl, j) => { if(j > 0 && !!sl.dead !== !!slots[j-1].dead) u += (WW + WGAP) * ((sl.drop !== undefined || slots[j-1].drop !== undefined) ? 2 : 1); pos.push(u); u += WW + WGAP; }); return { pos, mid: (pos[0] + pos[pos.length-1]) / 2 }; };
+  const xyOf = (v, off) => v === 0 ? [.5 + off, .5 + WD] : v === 2 ? [.5 - off, .5 - WD] : v === 3 ? [.5 - WD, .5 + off] : [.5 + WD, .5 - off];
+  const UOFF = [[0, -1.82], [-1.41, -.09], [0, 1.5], [1.41, -.09]];   // 밀려 나온 뒷도라 중심(패 폭 단위)
+  const uraPts = [];
+  for(const s of seatsBy(np)){ const v = vsOf(s), sl0 = walls[s]; if(!sl0) continue; const { pos, mid } = sidePos(sl0);
+    sl0.forEach((sl, j) => { if(sl.ura == null || !sl.t || sl.dora == null) return; const [x, y] = xyOf(v, pos[j] - mid); uraPts.push({ v, j, x: x + UOFF[v][0] * WW, y: y + UOFF[v][1] * WW }); }); }
+  const uraSwap = (v, j) => {   // 겹치는 짝이 있으면 'a'(위·아래 벽) / 'b'(좌·우 벽)
+    const a = uraPts.find(p => p.v === v && p.j === j); if(!a) return '';
+    const hz = v === 0 || v === 2;
+    return uraPts.some(p => (p.v === 0 || p.v === 2) !== hz && Math.abs(a.x - p.x) < 1.1 * WW && Math.abs(a.y - p.y) < .95 * WW) ? (hz ? 'a' : 'b') : '';
+  };
+  let swapOut = '';   // 번갈아 보이는 두 패는 같은 층(앞 레이어)에 같이 그려야 위아래를 바꿀 수 있다
   for(const v of [2,1,3,0]){
     const s = seatsBy(np).find(x => vsOf(x) === v); if(s == null) continue;
     if(v === 0){ const o0 = out; out = ''; wallSide(); front = out; out = o0; continue; }
@@ -4277,17 +4267,18 @@ function wallsScreenHTML(walls, fx, uraGc){
       // 입질: 그 자리에 놓인 방향 그대로 앞면을 보인다. 아랫패면 윗패를 반투명하게 해서 비쳐 보이게
       const pkNext = sl.pk && ((!sl.pk.lower && nt) || (sl.pk.lower && nb));   // 입질로 본 패가 바로 지금 뽑을 패면, 앞면 그대로 끌어 온다
       const pkf = sl.pk ? `<span class="tf pk ${sl.pk.lower ? 'pkb' : ''} ${pkNext ? 'wnext' : ''}" ${pkNext ? `data-act="takeDraw" ${sl.pk.lower ? wiB : wiT}` : ''} style="--gc:${sl.pk.gc}">${tile(kindOf(sl.pk.id), {size:'wl', id: sl.pk.id, cls: vert ? 'rot' + v : ''})}</span>` : '';
+      const ud = sl.ura != null && sl.t && sl.dora != null ? uraSwap(v, j) : '';
       const urap = sl.ura != null && sl.t && sl.dora != null ? `<span class="urap ura-v${v}" style="--gc:${uraGc};animation-delay:-${Date.now() - (sl.uraAt || 0)}ms" title="광맥 탐지: 뒷도라 표시패">${tile(sl.ura, {size:'wl', cls: vert ? 'rot' + v : ''})}</span>` : '';
       // 광맥 탐지: 뒷도라 표시패를 콘솔 쪽으로 완전히 빼서 붙여 둔다. 강보다 위에 보이도록 앞 레이어에 따로 그린다
       // 아랫칸에서 빼내는 패라 어느 벽이든 위에 얹힌 도라 표시패(패산) 밑으로 지나가며 밀려 나온다
-      if(urap) out += `<span class="sk ${vert?'v side'+v:'h'} urahost" style="left:calc(var(--S)*${x.toFixed(4)});top:calc(var(--S)*${y.toFixed(4)});z-index:${Math.round(y*1000) - 1}">${urap}</span>`;
+      if(urap){ const hs = `<span class="sk ${vert?'v side'+v:'h'} urahost ${ud ? 'uraswap ' + ud : ''}" style="left:calc(var(--S)*${x.toFixed(4)});top:calc(var(--S)*${y.toFixed(4)});z-index:${Math.round(y*1000) - 1};${ud ? `animation-delay:-${Date.now() % 2000}ms` : ''}">${urap}</span>`; if(ud) swapOut += hs; else out += hs; }
       const [sc, sv] = splitVars(j);
       const fxc = [sl.hl?'hl':'', sl.fin?'fin':'', sl.cnt?'cnt':'', sl.out?'out':'', sl.dn?'dnext':'', sl.ablk?'ablk':'', sl.amiss?'amiss':'', sc].join(' ');
       out += `<span class="sk ${vert?'v side'+v:'h'} ${sl.dead?'dead':''} ${fxc}" style="${sv}left:calc(var(--S)*${x.toFixed(4)});top:calc(var(--S)*${y.toFixed(4)});z-index:${Math.round(y*1000)}">${sl.pk && !sl.pk.lower ? inner.replace(/<i class="t[^"]*"[^>]*><\/i>/, '') + pkf : sl.pk ? inner.replace(/<i class="b[^"]*"[^>]*><\/i>/, pkf) : inner}</span>`;
     });
     }
   }
-  return `<div class="wallsc">${out}</div><div class="wallsc front">${front}</div>`;
+  return `<div class="wallsc">${out}</div><div class="wallsc front">${front}${swapOut}</div>`;
 }
 function wallRowHTML(slots){
   return `<div class="wall">${slots.map(sl => `<span class="stk ${sl.dead?'dead':''}">${sl.b?'<i class="b"></i>':''}${sl.t ? (sl.dora != null ? `<span class="tf">${tile(sl.dora,{size:'wl'})}</span>` : '<i class="t"></i>') : ''}</span>`).join('')}</div>`;
@@ -5094,7 +5085,7 @@ function aliceOf(w, g){
   const mine = w.hand.concat([w.winTile], ...w.melds.map(m => m.ids)).map(kindOf);
   const flips = [];
   let n = 0;
-  for(let i = 0; i < g.wall.length; i += 2){
+  for(let i = 0; i + 1 < g.wall.length; i += 2){   // 1장만 남은 줄은 윗패(표시패)가 없고 아랫패(뒷도라 자리)뿐이라 뒤집지 않는다
     const id = g.wall[i], ks = mode === 'tulip' ? tulipKinds(kindOf(id)) : [kindOf(id)];
     const c = mine.filter(k => ks.includes(k)).length;
     flips.push({ id, c, ks });
@@ -5493,10 +5484,17 @@ const FISH_N = ['새우', '정어리', '송어', '연어', '참치', '랍스터'
 const LOOT_N = ['슬라임 젤리', '늑대 가죽', '리자드맨 비늘', '전갈 독침', '예티 털', '뼈다귀', '골렘 핵', '악마 뿔', '용 비늘', '공허 결정'];
 const LOOT_V = [2, 4, 8, 13, 21, 27, 36, 46, 60, 73], LOOT_P = .5;
 // 전리품 확률: 맵보다 높은 무기로 빨리 잡으면 그만큼 낮춘다(같은 등급 무기로 잡을 때의 시간당 전리품을 넘지 않게)
+// 처치에 드는 평균 타수(빗나감 10%·치명타 3배를 그대로 계산 — 한 대 남은 피도 한 대가 더 드니 평균 피해로 나누면 안 된다)
+const SWINGS = {};
+function swingsPerKill(g, s){
+  const key = g + '-' + s; if(SWINGS[key]) return SWINGS[key];
+  const n = Math.ceil(monHp(s) / ATK(g)), m = .1, c = CRIT(g), E = [0];   // E[r]: 일반 타격 r대 분량의 피가 남았을 때 남은 평균 타수
+  for(let r = 1; r <= n; r++) E[r] = (1 + (1 - m) * (1 - c) * E[r - 1] + (1 - m) * c * E[Math.max(0, r - 3)]) / (1 - m);
+  return SWINGS[key] = E[n];
+}
 function lootP(g, s){
   if(g <= s) return LOOT_P;
-  const avg = x => ATK(x) * (1 + 2 * CRIT(x)), matchRate = 1 / HITS(s), myRate = Math.min(1, avg(g) / monHp(s));   // 틱당 처치 수
-  return LOOT_P * Math.min(1, matchRate / myRate);
+  return LOOT_P * Math.min(1, swingsPerKill(g, s) / swingsPerKill(s, s));
 }
 const ITEM = {
   log:   { n: g => TREE_N[g-1] + ' 목재', v: 1 },
@@ -5719,10 +5717,10 @@ function petSVG(i){   // 24×24, 오른쪽을 본다
      <path d="M11 16.6 Q12 18.8 13 16.6" fill="#3a2a1a"/><ellipse cx="12" cy="18.6" rx="1.4" ry="2" fill="#5a4a3a" transform="rotate(20 12 18.6)"/><path d="M9.6 18 q1 -.8 1.8 .4 M14.4 18 q-1 -.8 -1.8 .4" stroke="#e8a85a" stroke-width="1.4" fill="none" stroke-linecap="round"/>`,
     // 전설의 부엉이(공허): 검보라 깃털, 보랏빛 눈, 배에 별, 뒤로 공허의 기운
     `<ellipse cx="12" cy="13.5" rx="11.6" ry="10.6" fill="#a070ff" opacity=".12"/><ellipse cx="12" cy="13.8" rx="10" ry="9.6" fill="#a070ff" opacity=".14"/>
-     <path d="M5.2 6.2 L4.4 1.6 L8.6 4.6 Z M18.8 6.2 L19.6 1.6 L15.4 4.6 Z" fill="#2a1a48" stroke="#0c0618" stroke-width=".7" stroke-linejoin="round"/>
+     <path d="M5.4 9.8 L4.2 3.4 L9.8 7.6 Z M18.6 9.8 L19.8 3.4 L14.2 7.6 Z" fill="#2a1a48" stroke="#0c0618" stroke-width=".7" stroke-linejoin="round"/>
      <ellipse cx="12" cy="14.4" rx="8" ry="8.4" fill="#2a1a48" stroke="#0c0618" stroke-width=".8"/>
-     <path class="ow" d="M4.4 12 Q2.2 17 5.6 21.4 Q7 17.6 6.6 12.6 Z M19.6 12 Q21.8 17 18.4 21.4 Q17 17.6 17.4 12.6 Z" fill="#1c1034" stroke="#0c0618" stroke-width=".7" stroke-linejoin="round"/>
-     <path d="M5.2 15 q.9 .5 .8 1.6 M5.4 17.6 q.8 .5 .7 1.5 M18.8 15 q-.9 .5 -.8 1.6 M18.6 17.6 q-.8 .5 -.7 1.5" stroke="#6a4ab0" stroke-width=".5" fill="none"/>
+     <g class="owL"><path d="M6.6 12.2 Q1.6 15.6 4.6 21.6 Q6.8 18 7.2 13 Z" fill="#1c1034" stroke="#0c0618" stroke-width=".7" stroke-linejoin="round"/><path d="M5 15 q.9 .5 .8 1.6 M5 17.8 q.8 .5 .7 1.5" stroke="#8a6ad0" stroke-width=".5" fill="none"/></g>
+     <g class="owR"><path d="M17.4 12.2 Q22.4 15.6 19.4 21.6 Q17.2 18 16.8 13 Z" fill="#1c1034" stroke="#0c0618" stroke-width=".7" stroke-linejoin="round"/><path d="M19 15 q-.9 .5 -.8 1.6 M19 17.8 q-.8 .5 -.7 1.5" stroke="#8a6ad0" stroke-width=".5" fill="none"/></g>
      <ellipse cx="12" cy="17" rx="4.6" ry="4.6" fill="#3e2a6e"/>
      <path d="M9.6 15.6 q1 .8 2 0 q1 .8 2 0 q1 .8 2 0 M9.4 18 q1.2 .8 2.4 0 q1.2 .8 2.4 0" stroke="#5a40a0" stroke-width=".5" fill="none"/>
      <path d="M10.4 19.4 l.3 .7 l.7 .1 l-.6 .4 l.2 .7 l-.6 -.4 l-.6 .4 l.2 -.7 l-.6 -.4 l.7 -.1 Z" fill="#e8d8ff"/><circle cx="14" cy="16.6" r=".35" fill="#e8d8ff"/><circle cx="13.2" cy="20.4" r=".3" fill="#c8b0ff"/>
@@ -5740,7 +5738,7 @@ function rpgPetSVG(k){
   const st = RPG.st, i = st.eq.pet; if(!i) return '';
   const X = heroX(k), fly = PETS[i - 1].k === 'mine';
   const sc = 1.55, h = 24 * sc, px = Math.max(2, X - (k === 'fish' ? 68 : 64)), py = (k === 'fish' ? 151 : 173) - h - (fly ? 22 : 0);
-  return `<g transform="translate(${px} ${py.toFixed(1)}) scale(${sc})"><g class="pj ${fly ? 'fly' : ''} ${i === OWL ? 'owl' : ''}"><g class="pb">${petSVG(i)}</g><path class="ph" d="M18 0 q-1.6 -2 -3 -.4 q-1.4 1.4 3 4.4 q4.4 -3 3 -4.4 q-1.4 -1.6 -3 .4 Z" fill="#ff5a7a" opacity="0"/></g></g>`;
+  return `<g transform="translate(${px} ${py.toFixed(1)}) scale(${sc})"><g class="pj ${fly ? 'fly' : ''} ${i === OWL ? 'owl' : ''}"><g class="pb">${petSVG(i)}</g>${i === OWL ? '' : `<path class="ph" d="M18 0 q-1.6 -2 -3 -.4 q-1.4 1.4 3 4.4 q4.4 -3 3 -4.4 q-1.4 -1.6 -3 .4 Z" fill="#ff5a7a" opacity="0"/>`}</g></g>`;
 }
 // 펫 획득: 행동마다 한 번만, 가방으로
 function petGain(k, quiet){   // quiet: 이미 그 자리에서 알렸다(펫 소환 티켓) → 나중에 다시 알리지 않는다
@@ -5759,6 +5757,7 @@ function petAnnounce(){   // 미뤄 둔 펫 획득 알림: RPG 화면이 보일 
 const ITEM_ORDER = ['sword', 'helm', 'body', 'pet', 'ring', 'neck', 'axe', 'pick', 'rod', 'food', 'fruit', 'bait', 'seed', 'log', 'coal', 'ore', 'fish', 'bar', 'loot'];
 const ikParse = key => { const m = /^([a-z]+)(\d+)$/.exec(key || ''); return m && ITEM[m[1]] ? [m[1], +m[2]] : null; };
 const itemName = key => { const t = ikParse(key); return t ? ITEM[t[0]].n(t[1]) : key; };
+const accOwned = (st, sl, g) => st.eq[sl] === g || (st.inv[sl + g] || 0) > 0;   // 반지·목걸이를 지금 가지고 있나
 const itemPrice = key => { const t = ikParse(key); if(!t) return 0; const [k, g] = t;   // 판매가(1개, 파란 칩): 제작품은 재료값 + 이익, 반지·목걸이는 산 값의 반, 미끼·목탄·펫은 0
   if(k === 'ring' || k === 'neck') return Math.floor((ACC_PRICE[g] || 0) / 2);
   if(k === 'bait' || k === 'coal' || k === 'pet') return 0;   // 목탄: 목재 1 → 목탄 2g개라 값을 매기면 공짜로 칩이 생긴다
@@ -5819,6 +5818,7 @@ function tickMs0(k){ const sk = k && typeof RPG !== 'undefined' && RPG.st.sk[k];
 const XP_PER_HOUR = [13000, 25000, 30000, 34000, 37000, 41000, 44000, 47000, 50000, 53000];
 const expPer = s => XP_PER_HOUR[s - 1] / 1000;
 const fmtDur = ms => { const s = ms / 1000; return s < 60 ? `${s.toFixed(s < 10 ? 1 : 0)}초` : s < 3600 ? `${Math.floor(s/60)}분 ${Math.round(s%60)}초` : `${Math.floor(s/3600)}시간 ${Math.round(s%3600/60)}분`; };
+const fmtOS = n => { n = Math.max(0, Math.floor(n || 0)); return n >= 1e7 ? Math.floor(n / 1e6) + 'M' : n >= 1e5 ? Math.floor(n / 1e3) + 'K' : n.toLocaleString(); };   // OSRS 단위: 10만 미만 그대로 · 10만부터 K · 1000만부터 M (내림)
 const fmtNum = n => n >= 1e9 ? (n/1e9).toFixed(n >= 1e11 ? 0 : 2) + 'B' : n >= 1e6 ? (n/1e6).toFixed(n >= 1e8 ? 0 : 1) + 'M' : n >= 1e4 ? (n/1e3).toFixed(n >= 1e6 ? 0 : 1) + 'K' : Math.floor(n).toLocaleString();
 function rpgLoad(){
   let st = null; try{ st = JSON.parse(localStorage.getItem(RPG_KEY) || 'null'); }catch(e){}
@@ -6034,7 +6034,7 @@ function rpgFx(r){
   f.textContent = `+${fmtNum(r.gain)} exp`; if(r.gain > 0){ sc.appendChild(f); setTimeout(() => f.remove(), 1750); }
   const got = Object.entries(r.items || {}).filter(([, c]) => c > 0);   // 이번 틱에 얻은 재료(제작 결과물 포함)
   if(got.length && !(r.after > r.before)) SFX.gain();   // 획득음(레벨업과 겹치면 빵빠레만)
-  got.forEach(([key, c], i) => { const e = document.createElement('div'); e.className = 'floatexp item'; e.style.left = pos[0] + '%'; e.style.top = (pos[1] + 9 + i * 8) + '%'; e.innerHTML = `${itemIcon(key)}+${fmtNum(c)} ${esc(itemName(key))}`; sc.appendChild(e); setTimeout(() => e.remove(), 1750); });
+  got.forEach(([key, c], i) => { const e = document.createElement('div'); e.className = 'floatexp item'; e.style.left = pos[0] + '%'; e.style.top = (pos[1] + 9 + i * 8) + '%'; e.innerHTML = `${itemIcon(key)}+${fmtNum(c)} ${esc(itemName(key))} <b class="tot">${fmtOS(RPG.st.inv[key])}</b>`;   /* 뒤에 지금 가진 총 개수(노랑, OSRS 단위) */ sc.appendChild(e); setTimeout(() => e.remove(), 1750); });
   if(SFX[r.k] && (r.k === 'fish' || !swingAnim())){ if(r.k === 'combat') SFX.hit(SKILLS.combat.stages[RPG.st.sk.combat.stage - 1][5]); else SFX[r.k](); }   // 낚시는 틱(물고기 점프)에, 나머지는 휘두르는 타이밍(rpgFrame)에 소리가 난다. 애니메이션이 없는 환경(모션 줄이기)이면 틱에
   if(r.after > r.before){
     const l = document.createElement('div'); l.className = 'lvup'; l.textContent = 'LEVEL UP!';
@@ -6773,13 +6773,12 @@ function rpgHTML(){
     ${craft ? `<div class="shop"><h3 class="hrow"><span class="httl">${S.name === '제작' ? '' : esc(S.name) + ' '}제작법</span>${sel === 'smith' ? `<div class="invtabs">${SMITH_PARTS.map(pt => `<button class="btn small ${pt === (SMITH_PARTS.includes(UI.smithTab) ? UI.smithTab : sk.part) ? 'on' : ''}" data-act="smithTab" data-t="${pt}">${{ helm:'투구', body:'갑옷', sword:'검', axe:'도끼', pick:'곡괭이', rod:'낚싯대' }[pt]}${st.active === sel && sk.part === pt && pt !== (SMITH_PARTS.includes(UI.smithTab) ? UI.smithTab : sk.part) ? '<span class="runt">진행 중</span>' : ''}</button>`).join('')}</div>` : sel === 'smelt' ? `<div class="invtabs">${SMELT_PARTS.map(pt => `<button class="btn small ${pt === smeltTab(sk) ? 'on' : ''}" data-act="smeltTab" data-t="${pt}">${{ bar:'주괴', coal:'목탄' }[pt]}${st.active === sel && (sk.part || 'bar') === pt && pt !== smeltTab(sk) ? '<span class="runt">진행 중</span>' : ''}</button>`).join('')}</div>` : ''}</h3><div class="rcps ${sel === 'smith' || sel === 'smelt' ? 'tabp' : ''}">${rpgRecipes(st, sel, sk)}</div></div>` : gradeItems ? `<div class="shop"><h3>${{ combat:'던전', wood:'숲', mine:'광산', fish:'낚시터' }[sel]}</h3><div class="items">${gradeItems}</div></div>` : ''}
     ${rpgBagHTML(st)}
     ${rpgAccHTML(st)}
-    ${rpgAdmin() ? rpgAdminHTML(st) : ''}
   </div>`;
 }
 function rpgAwayItems(items){
   const pos = Object.entries(items || {}).filter(([, c]) => c > 0);
   if(!pos.length) return '';
-  return `<div class="awitems">${pos.map(([key, c]) => `<span>${itemIcon(key)}${esc(itemName(key))} <b>+${fmtNum(c)}</b></span>`).join('')}</div>`;   // 얻은 재료 전부
+  return `<div class="awitems">${pos.map(([key, c]) => `<span>${itemIcon(key)}${esc(itemName(key))} <b>+${fmtNum(c)}</b> <b class="tot">${fmtOS(RPG.st.inv[key])}</b></span>`).join('')}</div>`;   // 얻은 재료 전부
 }
 // 화면 왼쪽 스테이터스(맵 이름 아래): 0인 것은 숨긴다. 전투에서만 CRIT·DODGE·ACC
 function rpgStatsHTML(sel){
@@ -6877,116 +6876,6 @@ function mapItems(k){   // 맵: 그 행동 레벨이 맵 등급의 요구 레벨
   }).join('');
 }
 // 상점 탭의 도구 줄: 아이콘 + 이름 + (착용 레벨) + 축의칩 가격 / 착용 / 착용 중
-// ---------- 운영자 모드: 효과음 테스트(소리마다 크기 재기·비교·볼륨 저장) ----------
-// [이름, 표시, 인자, 등급] 등급 f: 자주 나는 소리(기준보다 -3dB), e: 이벤트(기준), s: 특별(+3dB)
-const SND_LIST = [
-  ['마작', [['draw','쯔모',,'f'],['discard','타패',,'f'],['chip','칩',,'f'],['flipTick','패 넘김',,'f'],['stick','리치봉',,'f'],['dice','주사위',,'e'],['call','후로',,'e'],['swap','바꿔치기',,'e'],['jjan','짠',,'e'],['miss','꽝',,'e'],['ching','칭',,'e'],['drumroll','두구두구',1.3,'e'],['win','화료',,'e'],['result','결과창',,'e'],['cash','카칭',,'e'],['allLast','오라스',,'s'],['fanfare','역만',,'s']]],
-  ['화면', [['slide','슬라이드 →',1,'f'],['slide','슬라이드 ←',-1,'f']]],
-  ['RPG 행동', [['wood','벌목',,'f'],['mine','채광',,'f'],['fish','낚시',,'f'],['farm','수확',,'f'],['smelt','제련',,'f'],['smith','제작',,'f'],['cook','요리',,'f'],['gain','아이템 획득',,'f'],['crit','치명타',,'e'],['heal','회복',,'e'],['hurt','피격',,'e'],['combat','전투 시작',,'e'],['skOk','성공',,'e'],['skFail','실패',,'e'],['skWarn','경고',,'e'],['lvup','레벨업',,'e']]],
-  ['장비', [['equip','검 장착','combat','e'],['equip','도끼 장착','wood','e'],['equip','곡괭이 장착','mine','e'],['equip','낚싯대 장착','fish','e'],['unequip','장비 해제',,'e']]],
-  ['타격', Object.keys(MON_N).map(m => ['hit', MON_N[m], m, 'f'])],
-  ['처치', Object.keys(MON_N).map(m => ['die', MON_N[m], m, 'e'])],
-];
-const SND_ROWS = SND_LIST.flatMap(([, r]) => r).filter(([n]) => typeof SFX[n] === 'function').map(([n, l, a, t]) => ({ id: a === undefined ? n : n + '.' + a, n, l, a, t }));
-const SND = { draft: null, meas: {}, orig: false };
-function sndPanel(){
-  let el = document.getElementById('sndp'); if(el){ el.remove(); return; }
-  SFX.unlock();
-  const saved = SFX.vol.all(); SND.draft = {}; for(const r of SND_ROWS) SND.draft[r.id] = saved[r.id] ?? saved[r.n] ?? 1;
-  el = document.createElement('div'); el.id = 'sndp';
-  const grp = SND_LIST.map(([g, rows]) => { const rs = SND_ROWS.filter(r => rows.some(x => (x[2] === undefined ? x[0] : x[0] + '.' + x[2]) === r.id)); return rs.length ? `<h4>${g}</h4>` + rs.map(r => `<div class="xr" data-id="${r.id}"><button class="btn small xplay" data-id="${r.id}">▶</button><span class="xl">${r.l}<i class="xt t${r.t}">${{ f:'자주', e:'이벤트', s:'특별' }[r.t]}</i></span><span class="xbar"><i class="xbo"></i><i class="xbn"></i></span><span class="xdb">–</span><input type="range" class="xv" min="0" max="300" step="5" value="${Math.round(SND.draft[r.id] * 100)}"><span class="xpv">${Math.round(SND.draft[r.id] * 100)}%</span></div>`).join('') : ''; }).join('');
-  el.innerHTML = `<div class="sbox"><div class="shd"><b>효과음 테스트</b><button class="btn small" data-s="x">닫기</button></div>
-    <div class="stl"><label class="xsw"><input type="checkbox" id="sndOrig"> 원래 크기로 듣기</label><button class="btn small" data-s="m">크기 재기</button><button class="btn small" data-s="auto">자동 맞춤</button><button class="btn small" data-s="def">기본값</button><button class="btn small" data-s="one">전부 100%</button><button class="btn small primary" data-s="save">적용·저장</button><button class="btn small" data-s="copy">값 복사</button></div>
-    <p class="muted shelp">막대: <i class="xlg xbo"></i>원래 크기 <i class="xlg xbn"></i>볼륨 적용 후 (체감 크기, 가장 큰 0.3초 기준). 자동 맞춤: 자주 나는 소리 -3dB, 이벤트 0dB, 특별 +3dB에 맞춰요. 저장 전에는 게임에 반영되지 않아요.</p>
-    <div class="slist">${grp}</div><p class="muted shelp" id="sndMsg"></p></div>`;
-  document.body.appendChild(el);
-  const msg = t => { const m = el.querySelector('#sndMsg'); if(m) m.textContent = t; };
-  const row = id => SND_ROWS.find(r => r.id === id);
-  const paint = id => {
-    const d = el.querySelector(`.xr[data-id="${CSS.escape(id)}"]`); if(!d) return;
-    const v = SND.draft[id], m = SND.meas[id];
-    d.querySelector('.xv').value = Math.round(v * 100); d.querySelector('.xpv').textContent = Math.round(v * 100) + '%';
-    const W = x => Math.max(0, Math.min(100, (x + 50) / 35 * 100)) + '%';   // -50dB ~ -15dB
-    if(m){ const after = m.rms + (v > 0 ? 20 * Math.log10(v) : -99); d.querySelector('.xbo').style.width = W(m.rms); d.querySelector('.xbn').style.width = W(after);
-      d.querySelector('.xdb').textContent = (v > 0 ? after.toFixed(1) : '–') + 'dB'; d.querySelector('.xdb').title = `원래 ${m.rms.toFixed(1)}dB · 최대값 ${m.peak.toFixed(1)}dB`; }
-  };
-  const measureAll = async () => { msg('재는 중…'); let i = 0; for(const r of SND_ROWS){ if(!document.body.contains(el)) return; SND.meas[r.id] = await SFX.vol.measure(r.n, r.a); paint(r.id); i++; if(i % 6 === 0) msg(`재는 중… ${i}/${SND_ROWS.length}`); } msg('다 쟀어요. 숫자 위에 올리면 원래 크기·최대값이 보여요.'); };
-  el.addEventListener('click', async e => {
-    const b = e.target.closest('button'); if(!b) return;
-    if(b.classList.contains('xplay')){ const r = row(b.dataset.id); SFX.vol.play(r.n, r.a, el.querySelector('#sndOrig').checked ? 1 : SND.draft[r.id]); return; }
-    const s = b.dataset.s;
-    if(s === 'x') el.remove();
-    else if(s === 'm') measureAll();
-    else if(s === 'def'){ const d = SFX.vol.def(); for(const r of SND_ROWS){ SND.draft[r.id] = d[r.id] ?? 1; paint(r.id); } msg('기본값으로 돌렸어요(아직 저장 전).'); }
-    else if(s === 'one'){ for(const r of SND_ROWS){ SND.draft[r.id] = 1; paint(r.id); } msg('전부 100%로 돌렸어요(아직 저장 전).'); }
-    else if(s === 'auto'){
-      if(SND_ROWS.some(r => !SND.meas[r.id])) await measureAll();
-      const ev = SND_ROWS.filter(r => r.t === 'e' && SND.meas[r.id]).map(r => SND.meas[r.id].rms).sort((a, b) => a - b);
-      const ref = ev[Math.floor(ev.length / 2)];   // 기준: 이벤트 소리들의 가운데 크기
-      for(const r of SND_ROWS){ const m = SND.meas[r.id]; if(!m || m.rms < -90) continue;
-        const want = ref + { f:-3, e:0, s:3 }[r.t];
-        let v = Math.pow(10, (want - m.rms) / 20); v = Math.min(v, Math.pow(10, (-0.5 - m.peak) / 20), 3);   // 찢어지지 않게 최대값 -0.5dB까지만
-        SND.draft[r.id] = Math.max(.05, Math.round(v * 20) / 20); paint(r.id); }
-      msg(`기준 ${ref.toFixed(1)}dB로 맞췄어요. 들어보고 괜찮으면 적용·저장.`);
-    }
-    else if(s === 'copy'){
-      const o = {}; for(const r of SND_ROWS) if(Math.abs(SND.draft[r.id] - 1) > .001) o[r.id] = SND.draft[r.id];
-      const txt = 'SFXVOL ' + JSON.stringify(o);
-      try{ await navigator.clipboard.writeText(txt); msg('복사했어요. 그대로 붙여넣어 보내 주세요.'); }
-      catch(e){ const ta = document.createElement('textarea'); ta.value = txt; el.querySelector('.sbox').appendChild(ta); ta.select(); try{ document.execCommand('copy'); msg('복사했어요. 그대로 붙여넣어 보내 주세요.'); }catch(_){ msg('아래 글자를 직접 복사해 보내 주세요.'); } }
-    }
-    else if(s === 'save'){ SFX.vol.save(SND.draft); msg('저장했어요. 이제 게임에 이 볼륨이 쓰여요.'); }
-  });
-  el.addEventListener('input', e => { const t = e.target; if(!t.classList.contains('xv')) return; const id = t.closest('.xr').dataset.id; SND.draft[id] = (+t.value) / 100; paint(id); });
-  el.addEventListener('change', e => { const t = e.target; if(!t.classList.contains('xv')) return; const r = row(t.closest('.xr').dataset.id); SFX.vol.play(r.n, r.a, SND.draft[r.id]); });
-  el.addEventListener('click', e => { if(e.target === el) el.remove(); });
-  measureAll();
-}
-// ---------- 운영자 모드(시험용): 주소 끝에 #admin ----------
-const rpgAdmin = () => /(^|[#&])admin\b/.test(location.hash);   // 주소 끝에 #admin 을 붙였을 때만
-function rpgAdminHTML(st){
-  const AV = UI.admVals || (UI.admVals = { 'adm-t':'log', 'adm-g':'1', 'adm-n':'100', 'adm-k':'wood', 'adm-l':'50' });
-  const TN = { loot:'전리품', log:'목재', coal:'목탄', seed:'씨앗', ore:'원석', fish:'생선', fruit:'열매', bar:'주괴', food:'요리', sword:'검', axe:'도끼', pick:'곡괭이', rod:'낚싯대', helm:'투구', body:'갑옷', ring:'반지', neck:'목걸이', bait:'미끼', pet:'펫' };
-  const types = ITEM_ORDER.filter(t => t !== 'pet').map(t => `<option value="${t}"${AV['adm-t'] === t ? ' selected' : ''}>${TN[t] || t}</option>`).join('');
-  const grades = TIERS.map((t, i) => `<option value="${i + 1}"${AV['adm-g'] === String(i + 1) ? ' selected' : ''}>${i + 1} ${t.n}</option>`).join('');
-  const skills = ALL_KEYS.map(k => `<option value="${k}"${AV['adm-k'] === k ? ' selected' : ''}>${SKILLS[k].name}</option>`).join('');
-  const B = (op, label, extra) => `<button class="btn small" data-act="adm" data-op="${op}"${extra || ''}>${label}</button>`;
-  return `<div class="shop admin"><h3>운영자 모드 <small class="muted">주소의 #admin 을 지우면 사라져요</small></h3>
-    <div class="arow"><b>아이템</b><select id="adm-t">${types}</select><select id="adm-g">${grades}</select><input id="adm-n" class="qty" type="number" min="1" value="${esc(AV['adm-n'])}">${B('give', '지급')}${B('giveAll', '모든 아이템 ×100')}${B('clearInv', '가방 비우기')}</div>
-    <div class="arow"><b>칩</b>${B('blue', '파란 칩 +1억')}${B('blue0', '파란 칩 0')}${B('chips', '축의칩 +100')}${B('rage10', '포효 10초')}${B('red', '빨간 칩 +10')}${B('red0', '빨간 칩 0')}${B('shopReset', '상점 매진 초기화')}</div>
-    <div class="arow"><b>레벨</b><select id="adm-k">${skills}</select><input id="adm-l" class="qty" type="number" min="1" max="${MAXLV}" value="${esc(AV['adm-l'])}">${B('lv', '설정')}${B('lvAll', `전부 ${MAXLV}`)}${B('gearAll', '도구 전 등급 열기')}</div>
-    <div class="arow"><b>소리</b>${B('snd', '효과음 테스트')}<small class="muted">소리마다 크기 재고 맞추기</small></div>
-    <div class="arow"><b>전투</b>${B('hp0', 'HP 1')}${B('hpFull', 'HP 가득')}${B('unEq', '장착 전부 해제')}</div>
-    <div class="arow"><b>펫</b>${ALL_KEYS.map(k => PETS.find(p => p.k === k)).concat([PETS[OWL - 1]]).map(p => B('pet', `${p.n}${st.pets[p.k] ? ' ✓' : ''}`, ` data-k="${p.k}"`)).join('')}${B('petAll', '펫 전부')}${B('petReset', '펫 초기화')}</div>
-    <div class="arow"><b>시간</b>${B('ff', '+1분', ' data-m="1"')}${B('ff', '+10분', ' data-m="10"')}${B('ff', '+1시간', ' data-m="60"')}${B('ff', '+10시간', ' data-m="600"')}<small class="muted">진행 중인 행동을 그만큼 돌린다</small></div>
-  </div>`;
-}
-function rpgAdminAct(b){
-  const ONCE = ['sword', 'ring', 'neck'];   // 상점에서 등급마다 한 번만 살 수 있는 것: 1개만
-  const st = RPG.st, op = b.dataset.op, v = id => (document.getElementById(id) || {}).value;
-  const add = (key, n) => { st.inv[key] = (st.inv[key] || 0) + n; if(st.inv[key] <= 0) delete st.inv[key]; };
-  if(op === 'give'){ const t = v('adm-t'), g = (t === 'bait' || t === 'coal') ? 1 : (t === 'ring' || t === 'neck') ? Math.max(2, +v('adm-g')) : +v('adm-g'); if(ONCE.includes(t)) st.inv[t + g] = 1; else add(t + g, Math.max(1, Math.floor(+v('adm-n') || 1))); }
-  else if(op === 'giveAll'){ for(const t of ITEM_ORDER) if(t !== 'pet') for(let g = (t === 'ring' || t === 'neck') ? 2 : 1; g <= ((t === 'bait' || t === 'coal') ? 1 : 10); g++){ if(ONCE.includes(t)) st.inv[t + g] = 1; else add(t + g, 100); } }
-  else if(op === 'clearInv') st.inv = {};
-  else if(op === 'blue') st.blue += 1e8;
-  else if(op === 'blue0') st.blue = 0;
-  else if(op === 'chips') st.chips += 100;
-  else if(op === 'rage10'){ st.rage = Date.now() + 10000; }
-  else if(op === 'red'){ PK.st.red = (PK.st.red || 0) + 10; pkSave(); }
-  else if(op === 'red0'){ PK.st.red = 0; pkSave(); }
-  else if(op === 'shopReset') st.bought = { sword:[], ring:[], neck:[] };
-  else if(op === 'lv' || op === 'lvAll'){ const L = Math.max(1, Math.min(MAXLV, Math.floor(+v('adm-l') || 1))); for(const k of op === 'lvAll' ? ALL_KEYS : [v('adm-k')]) st.sk[k].exp = CUM[op === 'lvAll' ? MAXLV : L]; }
-  else if(op === 'gearAll'){ for(const k of SK_KEYS) for(let g = 1; g <= 10; g++) addOwn(st.sk[k], g); }
-  else if(op === 'hp0') st.hp = 1;
-  else if(op === 'hpFull') st.hp = hpMax(st);
-  else if(op === 'unEq'){ for(const sl of ['helm', 'body', 'ring', 'neck', 'pet']) if(st.eq[sl]){ add(sl + st.eq[sl], 1); st.eq[sl] = 0; } for(const sl of QTY_SL) if(st.eq[sl]){ add(sl + st.eq[sl], st.eq[sl + 'N']); st.eq[sl] = 0; st.eq[sl + 'N'] = 0; } }
-  else if(op === 'pet') petGain(b.dataset.k);                                  // 실제 획득과 같은 경로(알림·가방)
-  else if(op === 'petAll') PETS.forEach(p => petGain(p.k));
-  else if(op === 'petReset'){ st.pets = {}; st.eq.pet = 0; for(const k of Object.keys(st.inv)) if(/^pet\d/.test(k)) delete st.inv[k]; }
-  else if(op === 'snd'){ sndPanel(); return; }
-  else if(op === 'ff'){ st.last -= (+b.dataset.m || 1) * 60000; rpgTick(); }
-  rpgSave(); chipFix(); render();
-}
 const SHOP_TABS = [['ring', '반지'], ['neck', '목걸이'], ['cons', '소모품']];   // 검은 대장간에서 만든다   // 도끼·곡괭이·낚싯대는 대장간에서 만들어 착용
 // 소모품: 개수를 넣고 산다(개당 파란 칩 1)
 const BAIT_PACK = 1000, BAIT_COST = 1;   // 미끼 1000개 = 노란 축의칩 1개
@@ -7042,7 +6931,7 @@ function bestGear(st){
 }
 function rpgAccHTML(st){
   const row = s => TIERS.slice(1).map((t, i) => {
-    const g = i + 2, sold = st.bought[s].includes(g), p = ACC_PRICE[g];
+    const g = i + 2, sold = accOwned(st, s, g), p = ACC_PRICE[g];   // 매진 = 지금 가지고 있음(장착·가방). 팔면 다시 살 수 있다
     return `<div class="it"><span class="n">${itemIcon(s + g)}${t.n} ${s === 'ring' ? '반지' : '목걸이'}<small><span class="wlv${rpgTotalLv() < ACC_LV(g) ? ' miss' : ''}">총합 ${ACC_LV(g)}레벨 이상</span><br>경험치 +${ACC_XP[g]}%</small></span>${sold ? '<span class="d">매진</span>' : `<button class="btn small buy" data-act="rpgAcc" data-slot="${s}" data-g="${g}"><i class="chipi bc"></i>${p.toLocaleString()}</button>`}</div>`;
   }).join('');
   const sel = st.sel || 'combat', tab = SHOP_TABS.some(t => t[0] === UI.shopTab) ? UI.shopTab : 'ring';
@@ -7186,7 +7075,7 @@ function rpgAct(a, b){
     st.blue += v; SFX.unlock(); SFX.cash(); rpgToast('', `<i class="chipi bc"></i> +${v.toLocaleString()}`);   // 얻은 파란 칩만
   }
   else if(a === 'rpgSell'){ const key = b.dataset.key, have = st.inv[key] || 0, tt = ikParse(key); if(have <= 0 || !tt || !SELL_T.includes(tt[0])) return; const c = have; st.inv[key] = have - c; if(!st.inv[key]) delete st.inv[key]; const gv = c * itemPrice(key); if(itemCur(key) === 'chips') st.chips += gv; else st.blue += gv; if(tt[0] === 'sword' || tt[0] === 'ring' || tt[0] === 'neck'){ const on = tt[0] === 'sword' ? st.sk.combat.gear === tt[1] : st.eq[tt[0]] === tt[1]; if(!on) st.bought[tt[0]] = st.bought[tt[0]].filter(x => x !== tt[1]); }   /* 팔면 상점에서 다시 살 수 있다(매진 풀림, 착용 중인 등급은 그대로 매진) */ SFX.unlock(); SFX.cash(); rpgToast('', `${curIcon(key)} +${gv.toLocaleString()}`); }   // 검은 축의칩, 나머지는 파란 칩   // 개별 판매도 얻은 파란 칩만
-  else if(a === 'rpgAcc'){ const sl = b.dataset.slot, g = +b.dataset.g, p = ACC_PRICE[g]; if(!ACC_N[sl] || !(g >= 2 && g <= 10) || st.bought[sl].includes(g)) return; if(st.blue < p){ rpgToast('파란 칩이 부족합니다'); return; } st.blue -= p; st.bought[sl].push(g); st.inv[sl + g] = (st.inv[sl + g] || 0) + 1; SFX.unlock(); SFX.cash(.5); rpgToast(`${TIERS[g-1].n} ${sl === 'ring' ? '반지' : '목걸이'} 구매 완료`); }   // 사면 가방으로(착용은 가방에서), 한 번만
+  else if(a === 'rpgAcc'){ const sl = b.dataset.slot, g = +b.dataset.g, p = ACC_PRICE[g]; if(!ACC_N[sl] || !(g >= 2 && g <= 10) || accOwned(st, sl, g)) return; if(st.blue < p){ rpgToast('파란 칩이 부족합니다'); return; } st.blue -= p; st.bought[sl].push(g); st.inv[sl + g] = (st.inv[sl + g] || 0) + 1; SFX.unlock(); SFX.cash(.5); rpgToast(`${TIERS[g-1].n} ${sl === 'ring' ? '반지' : '목걸이'} 구매 완료`); }   // 사면 가방으로(착용은 가방에서), 한 번만
   rpgSave(); chipFix(); render();
 }
 // ---------- 포커(텍사스 홀덤 대회) ----------
@@ -7693,7 +7582,7 @@ document.addEventListener('click', e => {
     case 'closeModal': $modal.hidden = true; break;
     case 'tab': { window.removeEventListener('scroll', relMinH); const tk = ['mj', 'rpg', 'pk'], scr = { mj:'home', rpg:'rpg', pk:'poker' }, tt = tk.includes(b.dataset.t) ? b.dataset.t : 'mj', to = scr[tt]; if(to === UI.screen || UI.sliding) break;
       const fromT = UI.screen === 'rpg' ? 'rpg' : UI.screen === 'poker' ? 'pk' : 'mj';   // 마작 - RPG - 포커 순: 오른쪽 것을 고르면 왼쪽으로 밀려 나간다
-      SFX.unlock(); SFX.slide(tk.indexOf(tt) > tk.indexOf(fromT) ? -1 : 1);   // 슬라이드 효과음
+      SFX.unlock(); SFX.slide((tt === 'mj' && fromT === 'pk') || (tt === 'pk' && fromT === 'mj') ? 1 : -1);   // 슬라이드 효과음: 마작↔포커는 큰음, RPG를 오가면 작은음
       // 홈 화면 전체가 옆으로 밀려 나가고 새 화면이 반대쪽에서 밀려 들어온다(제목 스위치는 제자리)
       const sw = document.querySelector('.hsw'); if(sw){ sw.querySelectorAll('.ht').forEach(x => x.classList.toggle('on', x.dataset.t === tt)); hswPlace(sw, tt); }
       const dir = tk.indexOf(tt) > tk.indexOf(fromT) ? -1 : 1, outs = [...$app.querySelectorAll('.hero ~ *')];
@@ -7711,7 +7600,7 @@ document.addEventListener('click', e => {
         setTimeout(() => { ins.forEach(el => { el.style.transition = ''; }); UI.sliding = false; document.body.classList.remove('sliding'); if(UI.screen === 'poker') pkRender(); UI.slideLock = false; relMinH(); if(UI.slidePend){ UI.slidePend = false; render(); } }, 150);
       }, 90);
       break; }
-    case 'adm': if(rpgAdmin()) rpgAdminAct(b); break;
+
     case 'pk': pokerAct(b); break;
     case 'pkQuit': $modal.innerHTML = `<div class="sheet"><h2>대회 나가기</h2><p class="muted" style="margin:0">지금까지 진행 저장. 대회장에서 이어서 하기 가능.</p>
         <div class="row"><button class="btn warn" data-act="pk" data-op="leave">나가기</button><button class="btn" data-act="closeModal">계속하기</button></div></div>`; $modal.hidden = false; break;

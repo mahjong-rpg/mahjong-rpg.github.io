@@ -517,6 +517,40 @@ table.y td:last-child{text-align:right}
 .pstart .btn:active{transform:translateY(1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
 .pstart .btn{padding:14px 10px;font-size:17px;display:flex;flex-direction:column;align-items:center;gap:2px}
 .pstart .btn small{font-size:11px;font-weight:500;opacity:.7}
+/* 역만 이샹텐 보유: 동풍전·반장전이 금박 각인처럼 빛난다(테두리를 도는 금빛 + 지나가는 광택) */
+.pstart.ymleg .btn{position:relative;overflow:hidden;isolation:isolate;border:1px solid transparent;background:linear-gradient(160deg,#1d1709,#0b0905 70%) padding-box,linear-gradient(120deg,#7a5a14,#f6e08a,#a8801e,#fff3c4,#7a5a14) border-box;color:#f6e3a0;box-shadow:0 0 18px rgba(243,200,90,.18),inset 0 0 24px rgba(243,200,90,.08)}
+.pstart.ymleg .btn::before{content:'';position:absolute;inset:-60%;z-index:-1;background:conic-gradient(from 0deg,transparent 0 70%,rgba(255,230,150,.22) 80%,transparent 90%);animation:ymSpin 4.5s linear infinite}
+.pstart.ymleg .btn::after{content:'';position:absolute;top:0;bottom:0;width:40%;left:-60%;z-index:-1;background:linear-gradient(100deg,transparent,rgba(255,240,190,.28),transparent);animation:ymSweep 3.2s ease-in-out infinite}
+.pstart.ymleg .btn .lbl{letter-spacing:.12em;text-shadow:0 0 10px rgba(243,200,90,.45)}
+.pstart.ymleg .btn .ymtag{opacity:1;display:inline-flex;align-items:center;gap:6px;color:#e9c86a;font-weight:700;letter-spacing:.14em}
+.pstart.ymleg .btn .ymtag i{font:900 10px/1 serif;font-style:normal;color:#fff3c4;background:#a3121a;border:1px solid #e9c86a;border-radius:3px;padding:2px 3px;letter-spacing:0}
+@keyframes ymSpin{to{transform:rotate(360deg)}}
+@keyframes ymSweep{0%,35%{left:-60%}75%,100%{left:130%}}
+/* 상점 아이콘: 붉은 인장 '役満' */
+.skpill{display:inline-flex;align-items:center;gap:4px;margin:2px 4px 2px 0;padding:1px 9px 1px 6px;border-radius:99px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);font-size:13px;white-space:nowrap;vertical-align:middle}   /* 도움말: 아이콘+행동 이름 한 덩어리 */
+.ymseal i{font-style:normal}
+.ymseal.tks{padding:0}.ymseal.tks svg{width:24px;height:24px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}.ymseal.rage svg{width:26px;height:32px;position:relative;top:-2px}
+/* 광전사의 포효 중 전투 화면: 동풍전·반장전 '역만의 꿈'처럼 금박 테두리 + 도는 금빛 + 지나가는 광택 */
+.rpg .scene.rage{box-shadow:0 0 0 2px #e9c86a,0 0 22px rgba(243,200,90,.45),0 8px 24px rgba(0,0,0,.45);transition:box-shadow 1.1s ease}
+.rpg .scene.rage.rageend{box-shadow:0 0 0 0 rgba(233,200,106,0),0 0 0 rgba(243,200,90,0),0 8px 24px rgba(0,0,0,.45)}.rpg .scene.rageend .ragefx,.rpg .scene.rageend .ragetag{opacity:0;transition:opacity 1.1s ease}
+.rpg .scene .ragefx{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden;border-radius:inherit;mix-blend-mode:screen}
+.rpg .scene .ragefx .spin{position:absolute;inset:-60%;background:conic-gradient(from 0deg,transparent 0 72%,rgba(255,220,130,.16) 82%,transparent 92%);animation:ymSpin 6s linear infinite}
+.rpg .scene .ragefx .sweep{position:absolute;top:0;bottom:0;width:30%;left:-40%;background:linear-gradient(100deg,transparent,rgba(255,236,180,.22),transparent);animation:ymSweep 3.6s ease-in-out infinite}
+.rpg .scene .ragetag{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:4;display:flex;align-items:center;gap:6px;padding:3px 10px 3px 6px;border-radius:99px;font:800 12px/1 var(--f-ui);letter-spacing:.06em;color:#f6e3a0;background:linear-gradient(160deg,#2a1608,#0b0905);border:1px solid #c9a24a;box-shadow:0 0 10px rgba(243,200,90,.35);pointer-events:none;white-space:nowrap}
+.rpg .scene .ragetag svg{width:16px;height:18px}.rpg .scene .ragetag b,.pkshi small b{font:800 12px/1 var(--f-num);font-variant-numeric:tabular-nums}
+.ymseal.rage{background:radial-gradient(circle at 35% 30%,#6a1a12,#240707)}   /* 광전사: 검붉은 인장 */
+.ymseal.pet{background:radial-gradient(circle at 35% 30%,#2f6a5a,#0f2a24)}     /* 펫: 청록 인장 */
+.pkshop + .pkshop{margin-top:-2px}.ymseal{flex:none;width:34px;height:38px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font:900 14px/1 'Noto Serif KR',serif;color:#fff3c4;background:radial-gradient(circle at 35% 30%,#d02a2a,#8e0f14);border:1.5px solid #e9c86a;border-radius:6px;box-shadow:0 0 10px rgba(233,200,106,.35),inset 0 0 6px rgba(0,0,0,.35)}
+.pkshop{background:linear-gradient(90deg,rgba(233,200,106,.1),rgba(0,0,0,.18))!important;border-color:rgba(233,200,106,.35)!important}
+/* 대국 시작: 금빛 후광 속 '役満' */
+.ymbanner{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);z-index:200;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:8px;padding:30px 60px;animation:ymBan 2.8s ease-out both}
+.ymbanner::before{content:'';position:absolute;left:50%;top:50%;width:560px;height:300px;margin:-150px 0 0 -280px;z-index:-2;border-radius:50%;background:radial-gradient(ellipse,rgba(8,6,2,.92) 0,rgba(8,6,2,.8) 45%,transparent 72%)}   /* 뒤 판이 비쳐 글씨가 묻히지 않게 */
+.ymbanner .ymray{position:absolute;left:50%;top:50%;width:520px;height:520px;margin:-260px 0 0 -260px;z-index:-1;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(255,225,140,.22) 0 4deg,transparent 4deg 15deg);-webkit-mask:radial-gradient(circle,#000 0,rgba(0,0,0,.6) 30%,transparent 68%);mask:radial-gradient(circle,#000 0,rgba(0,0,0,.6) 30%,transparent 68%);animation:ymSpin 9s linear infinite}
+.ymbanner .ymkan{font:900 64px/1 'Noto Serif KR',serif;letter-spacing:.06em;background:linear-gradient(180deg,#fff7d6,#f0c85a 45%,#a8761a 55%,#ffe9a0);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 14px rgba(243,200,90,.65)) drop-shadow(0 3px 0 rgba(60,30,0,.8))}
+.ymbanner .ymkan{animation:ymHit 2.8s ease-out both}@keyframes ymHit{0%,52%{transform:scale(.96)}57%{transform:scale(1.14)}66%,100%{transform:scale(1)}}   /* 드럼롤 끝 '쿵'에 맞춰 한 번 튄다 */
+.ymbanner b{font:800 22px/1 var(--f-ui);letter-spacing:.3em;color:#f6e3a0;text-shadow:0 0 10px rgba(243,200,90,.6)}
+.ymbanner small{font:600 13px/1 var(--f-ui);letter-spacing:.3em;color:rgba(246,227,160,.75)}
+@keyframes ymBan{0%{opacity:0;transform:translate(-50%,-50%) scale(1.25);filter:blur(6px)}14%{opacity:1;transform:translate(-50%,-50%) scale(1);filter:blur(0)}82%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(.98)}}
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
 .iorow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 .iobox{width:100%;min-height:110px;resize:vertical;font:12px/1.4 var(--f-num);background:var(--panel-2);color:var(--ink);border:1px solid var(--felt-line);border-radius:8px;padding:8px;word-break:break-all}
@@ -567,6 +601,8 @@ textarea{width:100%;min-height:120px;background:var(--panel-2);color:var(--ink);
 .apptools .btn.spk.hbtn{min-width:28px;font-size:14px}
 .apptools .btn.spk.spkon{color:inherit}
 .apptabs .btn.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass)}
+#chipfix .bcw{display:inline-flex;align-items:center;gap:5px;margin-left:8px}#chipfix .bcw .chipi{width:16px;height:16px;margin:0}
+#chipfix .rcw{display:inline-flex;align-items:center;margin-left:8px;color:#fff}#chipfix b{color:#fff}   /* 칩 개수는 둘 다 흰색 */#chipfix .rcw .redchip{width:16px;height:16px;margin-right:5px;vertical-align:0}
 #chipfix{position:fixed;top:calc(8px + env(safe-area-inset-top, 0px));left:calc(8px + env(safe-area-inset-left, 0px));z-index:60;height:28px;box-sizing:border-box;padding:0 12px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
 .btn:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(.6)}
 section.card.resume{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;text-align:left;gap:12px 20px}
@@ -601,7 +637,7 @@ section.card.resume .rsinfo{align-items:flex-start}
 .chipstk .c3c{position:absolute;inset:0;transform-style:preserve-3d}
 .chipstk .c3c.hop{animation:chop .16s ease-out}@keyframes chop{0%{translate:0 0 0}35%{translate:0 0 calc(var(--ct)*1.6)}100%{translate:0 0 0}}   /* 손가락으로 튕긴 칩이 살짝 떴다 내려앉음 */
 .chipstk .c3c i{position:absolute;left:50%;top:50%;width:calc(var(--cd)*.072);height:var(--ct);margin:calc(var(--ct)*-.5) 0 0 calc(var(--cd)*-.036);backface-visibility:hidden;translate:0 0 calc(var(--ct)*.5)}
-.chipstk .c3t{position:absolute;inset:0;border-radius:50%;background:var(--chip-top) center/100% 100%;transform:translateZ(var(--ct))}
+.chipstk .c3t{position:absolute;inset:0;border-radius:50%;background:var(--chip-top) center/100% 100%;transform:translateZ(var(--ct))}.chipstk .c3t.bk{background-image:var(--chip-top-bk)}
 /* ---------- RPG ---------- */
 .rpg{position:relative;width:100%;box-sizing:border-box;max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:10px;padding:0 4px 30px}
 .rpg .scene{width:80%;align-self:center;position:relative;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.45);background:#000;aspect-ratio:360/210}
@@ -623,6 +659,12 @@ section.card.resume .rsinfo{align-items:flex-start}
 .rpg .shp .tk.mt.smash b{background:linear-gradient(90deg,#a80c16,#ff3a3a);box-shadow:0 0 6px rgba(255,40,40,.9)}   /* 다음 공격이 강타: 몬스터 틱이 빨갛게 */
 .rpg .scene.shake{animation:sshake .35s ease-out}
 @keyframes sshake{0%,100%{transform:none}20%{transform:translate(-4px,2px)}40%{transform:translate(4px,-2px)}60%{transform:translate(-3px,1px)}80%{transform:translate(2px,0)}}
+.rpg .heroin.pop{transform-box:fill-box;transform-origin:50% 100%;animation:heroPop .45s cubic-bezier(.3,1.7,.5,1)}
+@keyframes heroPop{0%{transform:scale(.1);opacity:0}60%{opacity:1}100%{transform:none}}
+.rpg .heroin .puff circle{transform-box:fill-box;transform-origin:50% 50%;animation:puff .6s ease-out forwards}
+@keyframes puff{0%{transform:scale(.3);opacity:.9}100%{transform:scale(1.8);opacity:0}}
+.rpg .it.rcp,.rpg .it.map{position:relative;overflow:visible}
+.rpg .runt{position:absolute;right:8px;top:-8px;z-index:2;white-space:nowrap;background:#21b14b;color:#fff;font-size:11px;font-weight:800;border-radius:99px;padding:1px 8px;box-shadow:0 0 8px rgba(33,177,75,.8)}   /* 행동 카드의 '진행 중'과 똑같이 */
 .rpg .floatexp.miss{color:#ff4a4a;font-size:19px;font-style:italic;letter-spacing:.5px;text-shadow:0 2px 0 rgba(0,0,0,.7),0 0 8px rgba(255,40,40,.7)}
 .rpg .floatexp.crit{color:#ffd23a;font-size:19px;font-style:italic;letter-spacing:.5px;text-shadow:0 2px 0 rgba(0,0,0,.7),0 0 10px rgba(255,160,40,.9)}
 .rpg .floatexp.item{font-size:13px;color:#e8f6ff;display:flex;align-items:center;gap:3px}.rpg .floatexp.item .iic{width:16px;height:16px;margin:0}
@@ -646,6 +688,7 @@ section.card.resume .rsinfo{align-items:flex-start}
 .rpg .it.cons .cbuy{display:inline-flex;gap:4px;align-items:center;flex:none}
 .rpg .it.cons .qty{width:4.6em;padding:2px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.35);color:var(--ink);font:700 12px var(--f-num);text-align:right}
 .rpg .admin{border:1px dashed #ff9a3a}
+.rpg .items.acc3 .it .n{flex:1;min-width:0}.rpg .items.acc3 .it .n small{white-space:normal;word-break:keep-all}.rpg .items.acc3 .it .btn{flex:none}   /* 설명 글이 가격 버튼과 겹치지 않게(넘치면 줄바꿈) */
 .rpg .admin .arow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px}
 .rpg .admin .arow > b{min-width:3em}
 #sndp{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:12px}
@@ -678,11 +721,26 @@ section.card.resume .rsinfo{align-items:flex-start}
 .rpg .sklbl{font-size:12px;font-weight:800;color:var(--ink-dim);margin:0 2px -5px}
 .rpg .rcp,.rpg .items .wshop.map{height:80px;box-sizing:border-box;padding:7px 9px;gap:6px;justify-content:flex-start}   /* 8개 행동 카드 크기 통일 */
 .rpg .items .wshop.map .rack{height:34px;flex:none}
-.rpg .rcps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}   /* 제작법도 맵처럼 2×5 */
+.rpg .rcps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+/* 세부 탭(검·투구… / 주괴·목탄): 고른 탭이 노란 판으로 이어지고, 그 판 위에 제작법이 올려진다 */
+.rpg .shop:has(.rcps.tabp){gap:0}
+.rpg .shop:has(.rcps.tabp) h3.hrow{align-items:flex-end}
+.rpg .shop:has(.rcps.tabp) h3.hrow > .httl{margin-bottom:5px;height:26px;display:inline-flex;align-items:center}   /* 제목 글씨를 세부 탭 글씨와 같은 높이에 */
+.rpg .shop:has(.rcps.tabp) h3 > .invtabs{align-self:flex-end;margin-bottom:0}
+.rpg .shop:has(.rcps.tabp) .invtabs .btn.on{background:#204635;color:#cfeedd;border-color:transparent;border-bottom-left-radius:0;border-bottom-right-radius:0;padding-bottom:9px;margin-bottom:0;border-bottom-width:0}
+.rpg .shop:has(.rcps.tabp) .invtabs .btn:not(.on){margin-bottom:4px;height:26px;box-sizing:border-box}
+.rpg .shop:has(.rcps.tabp) .invtabs .btn.on{position:relative;z-index:1;overflow:visible;margin-bottom:-1px!important;padding-bottom:10px!important}   /* 1px 겹쳐 이음매가 보이지 않게 */
+.rpg .shop:has(.rcps.tabp) .invtabs .btn.on::before,.rpg .shop:has(.rcps.tabp) .invtabs .btn.on::after{content:'';position:absolute;bottom:0;width:10px;height:10px;pointer-events:none}
+.rpg .shop:has(.rcps.tabp) .invtabs .btn.on::before{left:-10.5px;background:radial-gradient(circle at 0 0,transparent 9.5px,#204635 10px)}
+.rpg .shop:has(.rcps.tabp) .invtabs .btn.on::after{right:-10.5px;background:radial-gradient(circle at 100% 0,transparent 9.5px,#204635 10px)}   /* 탭 밑동을 안쪽으로 둥글게(브라우저 탭처럼) */
+.rpg .rcps.tabp{background:#204635;padding:6px;border-radius:10px}
+.rpg .rcps.tabp .it{background:linear-gradient(rgba(0,0,0,.34),rgba(0,0,0,.34)),#16382c;box-shadow:0 1px 3px rgba(0,0,0,.35)}   /* 노란 판 위에 어두운 카드가 올려진 느낌 */
+.rpg .rcps.tabp .it.lock{opacity:1}.rpg .rcps.tabp .it.lock > *{opacity:.45}   /* 잠긴 카드도 판은 불투명, 내용만 흐리게 */
+.rpg .shop:has(.rcps.tabp) h3.hrow{padding-bottom:0}   /* 제작법도 맵처럼 2×5 */
 @media (max-width:760px){.rpg .rcps{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .rpg .rcp{gap:3px;padding:7px 9px}
 .rpg .nrow{display:flex;align-items:center;justify-content:space-between;gap:4px;min-width:0}
-.rpg .rnb{font:inherit;font-weight:800;font-size:13px;color:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;text-align:left;padding:2px 7px;margin-left:-7px;border:1px solid rgba(255,255,255,.28);border-radius:7px;background:rgba(255,255,255,.06);cursor:pointer}
+.rpg .rnb{font:inherit;font-weight:800;font-size:13px;color:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;text-align:left;padding:2px 6px 2px 3px;margin-left:-3px;border:1px solid rgba(255,255,255,.28);border-radius:7px;background:rgba(255,255,255,.06);cursor:pointer}
 .rpg button.rnb:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.5)}
 .rpg .rnb.off{border-color:transparent;background:none;cursor:default}
 .rpg .rnb .iic{width:18px;height:18px;vertical-align:-4px;margin-right:4px}
@@ -701,7 +759,7 @@ section.card.resume .rsinfo{align-items:flex-start}
 .rpg .bag h3{display:flex;justify-content:space-between;align-items:center}
 .rpg .invbag{box-sizing:border-box}
 .rpg .shopstack{display:grid}.rpg .shopstack > .items{grid-area:1/1;align-content:start}.rpg .shopstack > .items.off{visibility:hidden}   /* 상점: 소모품 탭도 무기 탭과 같은 높이 */   /* 가방: 탭을 바꾸거나 다 팔아도 높이가 그대로(화면이 출렁이지 않게) */
-.rpg .baghd{display:inline-flex;align-items:center;gap:8px}
+.rpg .baghd{display:inline-flex;align-items:center;gap:8px;margin-left:auto}
 .rpg .btn.bulk{font-size:12px;padding:3px 10px}
 .rpg .bluec{display:inline-flex;align-items:center;font:800 14px var(--f-num);color:#bfe0ff;background:rgba(0,0,0,.28);border-radius:99px;padding:3px 10px}
 .rpg .eqs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
@@ -729,6 +787,7 @@ section.card.resume .rsinfo{align-items:flex-start}
 .rpg .invopen:hover{background:rgba(255,255,255,.05);color:var(--ink)}
 .rpg .invopen .chev{font-style:normal;font-size:10px}
 .rpg .invtabs .btn small{font:700 10px var(--f-num);opacity:.75}
+.rpg .invtabs .btn:has(.runt){position:relative;overflow:visible}.rpg .invtabs .btn .runt{right:50%;transform:translateX(50%);top:-11px;font-size:9.5px;line-height:1.5;padding:0 6px;font-weight:800;letter-spacing:0}   /* 진행 중인 세부 탭 위에 */
 .rpg .invtabs .btn.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass)}
 .rpg .invtabs .btn.empty{opacity:.45}
 .rpg .inv{display:flex;flex-direction:column;gap:4px}
@@ -805,7 +864,7 @@ section.card.resume .rsinfo{align-items:flex-start}
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:9500;overflow:hidden}
 .rpg .scene > .sconf{position:absolute;z-index:0;filter:url(#crt)}   /* 레벨업 색종이: 화면 안에서만, 주사선 아래 */
 .sconf i{animation-name:cfs!important;width:5px;height:9px}
-@keyframes cfs{0%{opacity:1;top:-12px;transform:translateX(0) rotate(0)}100%{opacity:1;top:105%;transform:translateX(var(--x)) rotate(var(--r))}}
+@keyframes cfs{0%{opacity:1;top:-8px;transform:translateX(0) rotate(0)}100%{opacity:1;top:105%;transform:translateX(var(--x)) rotate(var(--r))}}
 .confetti i{position:absolute;top:-20px;width:8px;height:14px;border-radius:2px;animation:cf var(--t) cubic-bezier(.3,.4,.6,1) var(--dl) forwards;opacity:0}
 @keyframes cf{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:1;transform:translate(var(--x),110vh) rotate(var(--r))}}
 @media (max-width:520px){.topbar .row > .muted{display:none}.skb{padding:4px 5px;font-size:12px}}   /* 좁은 화면: 모드 이름 대신 스킬 표시를 남긴다 */
@@ -900,14 +959,23 @@ section.card.resume .rsinfo{align-items:flex-start}
   box-shadow:inset 0 0 0 1px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12)}
 .rpg .wshop .wicon{position:relative;z-index:2;width:100%;height:100%;filter:drop-shadow(0 2px 1.5px rgba(0,0,0,.6))}
 .rpg .wshop .rbot{position:absolute;left:0;right:0;bottom:0;height:42%;width:100%;z-index:1}
+.pkbg .rbot{position:absolute;left:0;right:0;bottom:0;height:42%;width:100%;z-index:1}
 .rpg .rfx{position:absolute;inset:0;z-index:1;pointer-events:none}
+.pkbg .rfx{position:absolute;inset:0;z-index:1;pointer-events:none}
 .rpg .rfx i{position:absolute;top:0;display:block}
+.pkbg .rfx i{position:absolute;top:0;display:block}
 .rpg .rfx-ember i{top:auto;bottom:0;width:3px;height:3px;border-radius:50%;background:#ffb24a;box-shadow:0 0 4px #ff7a1a;animation:rEmber 3s linear infinite}
+.pkbg .rfx-ember i{top:auto;bottom:0;width:3px;height:3px;border-radius:50%;background:#ffb24a;box-shadow:0 0 4px #ff7a1a;animation:rEmber 3s linear infinite}
 .rpg .rfx-snow i{width:3px;height:3px;border-radius:50%;background:#fff;opacity:.9;animation:rSnow 3s linear infinite}
+.pkbg .rfx-snow i{width:3px;height:3px;border-radius:50%;background:#fff;opacity:.9;animation:rSnow 3s linear infinite}
 .rpg .rfx-glint i{top:30%;width:5px;height:5px;background:radial-gradient(#fff 30%,transparent 70%);animation:rGlint 3s ease-in-out infinite}
+.pkbg .rfx-glint i{top:30%;width:5px;height:5px;background:radial-gradient(#fff 30%,transparent 70%);animation:rGlint 3s ease-in-out infinite}
 .rpg .rfx-glint i:nth-child(2n){top:60%}.rpg .rfx-glint i:nth-child(3n){top:15%}
+.pkbg .rfx-glint i:nth-child(2n){top:60%}.pkbg .rfx-glint i:nth-child(3n){top:15%}
 .rpg .rfx-rain i{width:1px;height:8px;background:rgba(210,225,255,.7);animation:rRain 1s linear infinite}
+.pkbg .rfx-rain i{width:1px;height:8px;background:rgba(210,225,255,.7);animation:rRain 1s linear infinite}
 .rpg .rfx-leaf i{width:4px;height:2.5px;border-radius:50%;background:#e8823a;animation:rLeaf 3s linear infinite}
+.pkbg .rfx-leaf i{width:4px;height:2.5px;border-radius:50%;background:#e8823a;animation:rLeaf 3s linear infinite}
 @keyframes rEmber{from{transform:translateY(0);opacity:1}to{transform:translateY(-44px);opacity:0}}
 @keyframes rSnow{from{transform:translateY(-6px)}to{transform:translateY(44px)}}
 @keyframes rGlint{0%,100%{opacity:0;transform:scale(.4)}50%{opacity:1;transform:scale(1.2)}}
@@ -1046,6 +1114,120 @@ section.card.resume .rsinfo{align-items:flex-start}
 .rpg .scene.idle .fline,.rpg .scene.idle .rodA,.rpg .scene:not(.idle) .rodS{display:none}
 .rpg .scene.idle .ripple,.rpg .scene.idle .spark{opacity:0}
 @media (prefers-reduced-motion: reduce){.rpg *{animation:none !important}}
+
+/* ---------- 포커 ---------- */
+.redchip{display:inline-block;width:15px;height:15px;vertical-align:-3px;margin-right:4px}.redchip svg{width:100%;height:100%;display:block}
+.redchip.sw{width:.95em;height:.95em;margin:0;vertical-align:-.12em;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+.redchip.big{width:30px;height:30px;vertical-align:-9px}
+.hero .hsw{grid-template-columns:auto auto auto}
+.hero .hsw .ht.pkt{display:flex;align-items:center}
+.hero .hsw .ht.pkt .redchip.sw{position:relative;top:-.025em}   /* 제목 글자의 세로 중앙에 맞춤 */
+.wallet{position:fixed;left:max(10px,env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + 8px);z-index:40;display:flex;gap:8px;padding:4px 10px;border-radius:99px;background:rgba(0,0,0,.45);border:1px solid var(--felt-line);color:var(--ink);font:700 13px/1.2 var(--f-num);backdrop-filter:blur(3px);pointer-events:none}
+.wallet span{display:inline-flex;align-items:center}
+.poker{display:flex;flex-direction:column;gap:14px}
+.pklobby h3,.pkrec h3{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.pkrow{display:flex;align-items:center;gap:6px}
+.pkarr{flex:none;width:30px;height:30px;padding:0;font-size:18px}
+.pkcards{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 10px;flex:1;min-width:0;scrollbar-width:thin}
+.pkgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:6px 0 4px}@media (max-width:560px){.pkgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}}
+.pkcard{flex:0 0 calc((100% - 36px) / 4);min-width:0;scroll-snap-align:start;border-radius:14px;padding:12px 11px;display:flex;flex-direction:column;gap:6px;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(0,0,0,.25));border:1px solid var(--felt-line);position:relative}
+.pkcard .pkt{font:900 12px/1 var(--f-num);letter-spacing:.08em;color:#f3d27a}
+.pkcard.t8,.pkcard.t9,.pkcard.t10{border-color:rgba(243,210,122,.45);box-shadow:inset 0 0 18px rgba(243,210,122,.08)}
+.pkcity{font-weight:800;font-size:13px;letter-spacing:-.05em;white-space:nowrap}
+.pkcard dd,.pkcard dt{white-space:nowrap}.pkcard .btn{white-space:nowrap;padding-inline:8px}.pkcard dl{gap:3px 7px}
+.pkwhen{font-size:12px;color:var(--ink-dim)}.pkwhen b{color:#7ee08a}
+.pkcard dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin:4px 0;font-size:12.5px}.pkcard dt{color:var(--ink-dim)}.pkcard dd{margin:0;font-family:var(--f-num);display:flex;align-items:center;gap:2px}
+.pkcard dd small{font-family:inherit;color:var(--ink-dim);margin-left:4px}
+.pkcard .btn{margin-top:auto;height:44px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:9px;font:700 13px/1 var(--f-ui);letter-spacing:.08em}
+.pkcard .btn[data-op="join"]{gap:7px;letter-spacing:0;padding-inline:6px}.pkcard .btn[data-op="join"] .pkc{gap:3px;font-size:12.5px}   /* 입장 + 노란·파란 칩이 한 줄에 들어가게 */
+.pkcard .btn .pkc{margin:0;display:inline-flex;align-items:center;gap:5px;font:800 13.5px/1 var(--f-num);letter-spacing:0}.pkcard .btn .pkc .chipi{width:14px;height:14px;margin:0;vertical-align:0}
+.pkcard{overflow:hidden}.pkcard > *:not(.pkbg){position:relative;z-index:1}
+.pkbg{position:absolute;inset:0;z-index:0;pointer-events:none}.pkbg .rack{position:absolute;inset:0;border-radius:0}
+/* 3~7티어: 카지노 펠트 + 금색 안쪽 테두리 + 구석 문양으로 통일 */
+.pkcard.low{padding:14px 15px;border-color:rgba(243,210,122,.28);background:radial-gradient(120% 90% at 30% 0%,rgba(255,255,255,.07),transparent 55%),repeating-linear-gradient(45deg,rgba(255,255,255,.018) 0 2px,transparent 2px 6px),linear-gradient(165deg,#1e5a3d,#123a28 70%,#0e2f20)}
+.pkcard.low::before{content:'';position:absolute;inset:5px;border:1px solid rgba(243,210,122,.32);border-radius:10px;box-shadow:inset 0 0 0 3px rgba(0,0,0,.12),inset 0 0 22px rgba(0,0,0,.28);pointer-events:none;z-index:0}
+.pkcard.low::after{content:attr(data-suit);position:absolute;right:10px;bottom:-14px;font:400 92px/1 serif;color:rgba(243,210,122,.07);pointer-events:none;z-index:0}
+/* 티어가 오를수록 화려하게: 3 클로버 → 4 다이아 → 5 하트 → 6 스페이드 → 7 조커 */
+.pkcard.t4.low::after,.pkcard.t5.low::after{color:rgba(230,80,80,.11)}
+.pkcard.t4.low{border-color:rgba(243,210,122,.36)}
+.pkcard.t5.low{border-color:rgba(243,210,122,.42)}.pkcard.t5.low::before{border-color:rgba(243,210,122,.42);box-shadow:inset 0 0 0 3px rgba(0,0,0,.12),inset 0 0 0 4px rgba(243,210,122,.16),inset 0 0 22px rgba(0,0,0,.28)}
+.pkcard.t6.low{border-color:rgba(243,210,122,.55);box-shadow:0 0 12px rgba(243,210,122,.12)}.pkcard.t6.low::before{border-color:rgba(243,210,122,.55);box-shadow:inset 0 0 0 3px rgba(0,0,0,.12),inset 0 0 0 4px rgba(243,210,122,.22),inset 0 0 26px rgba(0,0,0,.3)}.pkcard.t6.low::after{color:rgba(243,210,122,.12)}
+.pkcard.t7.low{border-color:rgba(255,215,110,.75);box-shadow:0 0 16px rgba(243,210,122,.28)}
+.pkcard.t7.low::before{border-color:rgba(243,210,122,.7);box-shadow:inset 0 0 0 3px rgba(0,0,0,.12),inset 0 0 0 4px rgba(243,210,122,.3),inset 0 0 0 7px rgba(0,0,0,.1),inset 0 0 0 8px rgba(243,210,122,.18),inset 0 0 26px rgba(0,0,0,.3)}
+.pkcard.t7.low::after{content:'';right:8px;bottom:8px;width:96px;height:78px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%2080%27%3E%3Cg%20fill%3D%27%23f3d27a%27%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%279%27%20r%3D%276%27%2F%3E%3Ccircle%20cx%3D%2710%27%20cy%3D%2737%27%20r%3D%276%27%2F%3E%3Ccircle%20cx%3D%2790%27%20cy%3D%2737%27%20r%3D%276%27%2F%3E%3Cpath%20d%3D%27M50%2015%20C42%2030%2038%2046%2036%2062%20C30%2052%2022%2044%2014%2041%20C20%2050%2024%2062%2024%2074%20C40%2068%2060%2068%2076%2074%20C76%2062%2080%2050%2086%2041%20C78%2044%2070%2052%2064%2062%20C62%2046%2058%2030%2050%2015%20Z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") center/contain no-repeat;opacity:.12}   /* 조커: 광대 모자 문양 */
+.pkbg::after{content:'';position:absolute;inset:0;background:linear-gradient(rgba(8,12,14,.5),rgba(8,12,14,.22) 55%,rgba(8,12,14,0))}   /* 글씨가 읽히게 위쪽을 어둡게 */
+.pkc{display:inline-flex;align-items:center;margin-left:6px;font-family:var(--f-num)}
+.pkst{margin-top:auto;text-align:center;font-size:14px;font-weight:700;height:44px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:7px;border-radius:10px;background:rgba(0,0,0,.25);color:var(--ink-dim)}.pkst.good{color:#ffd23a;font-weight:800}
+.pknote{font-size:12px;margin:2px 0 0}
+.pkshop{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 12px;margin:0 0 8px;border-radius:10px;background:linear-gradient(90deg,rgba(255,120,40,.12),rgba(0,0,0,.18));border:1px solid rgba(255,150,60,.3)}
+.pkshi{display:flex;align-items:center;gap:10px}.pkshi div{display:flex;flex-direction:column;gap:2px}.pkshi b{font-size:15px}.pkshi small{font-size:12px;color:var(--ink-dim)}
+.ymico{font-size:24px;filter:drop-shadow(0 0 6px rgba(255,120,40,.7))}
+.pkshop .pksold{font-size:11.5px;font-weight:400;color:var(--ink-dim);padding:0 6px}   /* RPG 상점 '매진'과 같은 글씨 */
+.pkshop .pkbuy,.pkshop .pkst{margin:0;height:40px;min-width:120px;display:flex;align-items:center;justify-content:center;gap:8px;font:700 13px/1 var(--f-ui);letter-spacing:.06em;box-sizing:border-box;padding:0 14px}.pkshop .pkbuy .pkc{margin:0;display:inline-flex;align-items:center;gap:4px;font:800 13.5px/1 var(--f-num)}
+.pkrec ul{list-style:none;margin:8px 0 0;padding:0 4px 0 0;display:flex;flex-direction:column;gap:6px;max-height:calc(5 * 36px + 4 * 6px);overflow-y:auto;scrollbar-width:thin}.pkrec ul li{min-height:36px;box-sizing:border-box;flex:none}.pkrec > .muted{margin:8px 0 0}
+.pkrec li{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;background:rgba(0,0,0,.2);font-size:13px;flex-wrap:wrap}
+.pkrec li b{min-width:3.6em;color:#ffd23a}.pkrec li.second b{color:#cfd6e0}.pkrec li small{color:var(--ink-dim)}.pkrec li span{margin-left:auto;font-family:var(--f-num);display:inline-flex;align-items:center}
+.pktable{display:flex;flex-direction:column;gap:10px}
+.pkhead{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px}.pkhead span{color:var(--ink-dim)}
+.pkfelt{position:relative;aspect-ratio:16/10;max-width:100%;border-radius:50%/42%;background:radial-gradient(ellipse at 50% 40%,#2f8a52,#1d5a36 60%,#123c24);border:10px solid #5a3a1e;box-shadow:inset 0 0 30px rgba(0,0,0,.55),0 8px 22px rgba(0,0,0,.4);margin:6px 4px}
+.pkboard{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);display:flex;gap:5px}
+.pkpot{position:absolute;left:50%;top:60%;transform:translateX(-50%);font:800 13px var(--f-num);background:rgba(0,0,0,.45);padding:3px 12px;border-radius:99px;white-space:nowrap}
+.pkmsg{position:absolute;left:50%;top:22%;transform:translateX(-50%);font-size:12.5px;font-weight:700;color:#ffe27a;text-shadow:0 1px 2px #000;white-space:nowrap;max-width:70%;overflow:hidden;text-overflow:ellipsis}
+.pc{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:34px;height:48px;border-radius:5px;background:#fbfaf6;color:#1a1a1a;box-shadow:0 2px 4px rgba(0,0,0,.45);font:800 15px/1 var(--f-num);gap:1px}
+.pc i{font-style:normal;font-size:16px}.pc.red{color:#d0202a}
+.pc.back{background:repeating-linear-gradient(45deg,#a8141e 0 4px,#c8202a 4px 8px);border:2px solid #fff}
+.pc.empty{background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
+.pc.dim{opacity:.35}
+.pkseat{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;min-width:82px;padding:4px 8px;border-radius:12px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.12);font-size:12px;transition:box-shadow .2s}
+.pkseat .pkcards2{display:flex;gap:2px;margin-top:-26px}.pkseat .pc{width:26px;height:37px;font-size:12px}.pkseat .pc i{font-size:12px}
+.pkseat.me .pc{width:34px;height:48px;font-size:15px}.pkseat.me .pc i{font-size:16px}.pkseat.me .pkcards2{margin-top:-34px}
+.pkseat.act{box-shadow:0 0 0 2px #ffd23a,0 0 14px rgba(255,210,58,.6)}
+.pkseat.win{box-shadow:0 0 0 2px #7ee08a,0 0 16px rgba(126,224,138,.7)}
+.pkseat.out{opacity:.35}
+.pkhead b{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pkskbs .pkskb{cursor:default;opacity:.55}.pkskbs .pkskb.can{cursor:pointer;opacity:1;border-color:var(--gc)}.pkskbs .pkskb.can:hover{box-shadow:0 0 8px var(--gc)}
+.pkskbs .pkskb.arm{opacity:1;border-color:#ffd23a;box-shadow:0 0 10px rgba(255,210,58,.7);animation:pkBlink 1s infinite}
+.pkskbs .pkskb.used{opacity:.35}.pkskbs .pkskb.fail{opacity:1;background:#0a0a0a;border-color:#333;color:#888}.pkskbs .pkskb.fail .ski{opacity:.4}
+.pc.pick{cursor:pointer;outline:2px solid #ffd23a;outline-offset:2px;animation:pkBlink 1s infinite}
+.pkseat.pick{cursor:pointer;box-shadow:0 0 0 2px #ffd23a,0 0 14px rgba(255,210,58,.6)}
+.pc.peek{outline:2px solid #7fd4ff;outline-offset:1px}
+.pkread{position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-size:11.5px;font-weight:800;padding:2px 9px;border-radius:99px;white-space:nowrap;z-index:3}.pkread.r{background:#e0453a;color:#fff}.pkread.b{background:#3fbf6a;color:#06210f}
+.pkstk{position:absolute;left:calc(50% + 52px);bottom:5%;width:1px;height:1px;--ro:14px;z-index:6}   /* 3D 칩에 filter 그림자는 무거워서 바닥 그림자를 따로 깐다 */
+.sliding .pkstk,.sliding .pkbg .rfx{visibility:hidden}.pkstk{animation:pkStkIn .2s ease-out}@keyframes pkStkIn{from{opacity:0}}   /* 화면 넘길 땐 3D 칩 탑·배경 입자를 잠깐 숨겨 가볍게 */
+.pkstk .pkrw::before{content:'';position:absolute;left:-4px;right:-4px;bottom:-9px;height:12px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);pointer-events:none}
+.pkstk .pkrw{position:absolute;display:flex;gap:4px;align-items:flex-end}   /* 테이블 위에 살짝 떠 있는 내 칩 */
+.pkstk .chipstk{position:relative;--cd:28px;--ct:calc(var(--cd)*.095);width:var(--cd);height:calc(var(--cd)*.56 + var(--ct)*var(--n)*.85);pointer-events:auto;cursor:grab;touch-action:none;user-select:none}.pkstk .chipstk.grab{cursor:grabbing}
+@media (max-width:560px){.pkstk{left:calc(50% + 44px);bottom:4%;--ro:8px}.pkstk .chipstk{--cd:17px}.pkstk .pkrw{gap:3px}}
+.ycn{width:12px;height:12px;border-radius:50%;background:var(--chip-icon) center/contain no-repeat;display:inline-block;vertical-align:-1px;margin-right:3px}.ycn.big{width:28px;height:28px;margin:0}
+.pc.deal{animation:pkDeal .32s cubic-bezier(.2,.8,.3,1) both}
+@keyframes pkDeal{from{transform:translateY(-46px) scale(.5) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
+.pc.flip{animation:pkFlip .42s ease-out both}
+@keyframes pkFlip{0%{transform:perspective(300px) rotateY(90deg) translateY(-6px);opacity:0}100%{transform:none;opacity:1}}
+.pksay{position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-size:11.5px;font-weight:800;padding:2px 9px;border-radius:99px;background:#f1f1ea;color:#1d2a22;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.5);animation:pkSay 2.2s ease-out both;pointer-events:none;z-index:2}
+.pksay.f{background:#5c6168;color:#e8e8e8}.pksay.r{background:#ffd23a;color:#3a2600}
+@keyframes pkSay{0%{opacity:0;transform:translate(-50%,6px) scale(.8)}12%{opacity:1;transform:translate(-50%,0) scale(1)}80%{opacity:1}100%{opacity:0}}
+.pkseat.act .pkname::after{content:'';width:6px;height:6px;border-radius:50%;background:#ffd23a;animation:pkBlink 1s infinite}
+@keyframes pkBlink{50%{opacity:.2}}
+.pkname{font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.dbtn{font-style:normal;display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;background:#fff;color:#111;font:900 9px var(--f-num)}
+.pkstack{font-family:var(--f-num);color:#ffe27a}
+.pkstat{font-size:11px;color:#ff8a6a;font-weight:800}
+.pkbest{font-size:11px;color:#7ee08a;font-weight:800;white-space:nowrap}
+.pkbet{position:absolute;bottom:-20px;font:800 11px var(--f-num);color:#fff;background:#b8862a;border-radius:99px;padding:1px 8px;white-space:nowrap}
+.pkbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;min-height:42px}
+.pkbar.wait{color:var(--ink-dim);font-size:13px}
+.pkraise{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}.pkraise input{width:150px}
+.pkraise b{font-family:var(--f-num)}
+.pklog{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--ink-dim);min-height:60px}
+.pktable{position:relative}@media (min-width:761px){.pktable .pklog{position:absolute;left:16px;bottom:68px;min-height:0;max-width:26%;pointer-events:none}.pktable .pklog span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}   /* 기록은 테이블 왼쪽 아래 빈 곳에 겹쳐 둔다(아래로 늘어나 스크롤이 생기지 않게) */
+@media (max-width:760px){.pktable .pklog span:nth-child(n+4){display:none}}.pklog span:first-child{color:var(--ink)}
+.pkover{text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;padding:28px 16px}
+.pkover h2{margin:0;font-size:30px;color:#ffd23a}
+.pkover > p{margin:0 0 12px}
+.pkover h2.silver{color:#cfd6e0}
+.pkprizes{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-bottom:18px}.pkprizes .pkprize{margin:0}.pkprizes .redchip.big{margin:0}
+.pkprize{font:800 18px var(--f-num);display:flex;align-items:center;gap:8px}
+@media (max-width:560px){.pkseat{min-width:64px;padding:3px 5px;font-size:11px}.pkfelt{aspect-ratio:4/5;border-radius:44%/40%}.pc{width:28px;height:40px;font-size:13px}.pkcard{flex-basis:78%}}
 </style>
 
 </head>
@@ -2730,9 +2912,12 @@ function draw(){
     if(oldStk && nw && oldStk.dataset.n === nw.dataset.n){ oldStk.querySelectorAll('.hop').forEach(c => c.classList.remove('hop')); nw.replaceWith(oldStk); } }   // 다시 붙이면 CSS 애니메이션이 처음부터 재생되므로, 남은 hop은 떼고 붙인다(CPU 차례에 계속 다시 그려질 때 부르르 떠는 버그)
   else if(UI.screen === 'records') { $app.innerHTML = recordsHTML(); drawChart(); }
   else if(UI.screen === 'review') $app.innerHTML = reviewHTML();
-  else if(UI.screen === 'rpg'){ $app.innerHTML = rpgHTML(); fitRpg(); rpgLive(); if(RPG.petPend && RPG.petPend.length) setTimeout(petAnnounce, 500); }
+  else if(UI.screen === 'poker'){ $app.innerHTML = pokerHTML(); pkRecBottom(); setTimeout(pkLoop, 300); }
+  else if(UI.screen === 'rpg'){ const osc = $app.querySelector('.rpg .scene'), tmp = document.createElement('div'); tmp.innerHTML = rpgHTML(); const nsc = tmp.querySelector('.rpg .scene');
+    if($app.querySelector('.rpg') && tmp.querySelector('.rpg')) domMorph($app, tmp);   /* 바뀐 곳만 고친다: 그대로인 요소(장면·맵 배경 등)는 화면에서 떼지 않아 애니메이션이 이어진다 */
+    else { $app.textContent = ''; while(tmp.firstChild) $app.appendChild(tmp.firstChild); }   /* 장면은 그대로(애니메이션 유지), 버튼만 새로 */   /* 장면이 그대로면 옛 요소를 살려 애니메이션이 처음부터 다시 돌지 않게 */ fitRpg(); rpgLive(); if(RPG.petPend && RPG.petPend.length) setTimeout(petAnnounce, 500); }
   BGM.sync();
-  if(UI.screen === 'home' || UI.screen === 'rpg') requestAnimationFrame(() => { const sw = $app.querySelector('.hsw'), k = sw && sw.querySelector('.knob'); if(sw && !UI.sliding){ if(k) k.style.transition = 'none'; hswPlace(sw, UI.screen === 'rpg' ? 'rpg' : 'mj'); void sw.offsetWidth; if(k) k.style.transition = ''; } });   // 제목 스위치 막대 위치
+  if(UI.screen === 'home' || UI.screen === 'rpg' || UI.screen === 'poker') requestAnimationFrame(() => { const sw = $app.querySelector('.hsw'), k = sw && sw.querySelector('.knob'); if(sw && !UI.sliding){ if(k) k.style.transition = 'none'; hswPlace(sw, UI.screen === 'rpg' ? 'rpg' : UI.screen === 'poker' ? 'pk' : 'mj'); void sw.offsetWidth; if(k) k.style.transition = ''; } });   // 제목 스위치 막대 위치
 }
 
 // ---------- 홈 ----------
@@ -2824,7 +3009,7 @@ function homeHTML(){
   ${sv ? `<section class="card resume"><div class="rsinfo"><h3>이어하기</h3><div class="rstags"><span>${modeName(sv.mode)}</span><span>${esc(sv.label)}</span></div></div>
     <div class="rsbtns"><button class="btn primary" data-act="resume">이어서 하기</button><button class="btn" data-act="dropSave" ${RPG.st.chips < 1 ? 'disabled title="축의칩 부족으로 게임 종료 불가"' : 'title="게임 종료 시 축의칩 1개 지불"'}>게임 종료 <span class="dropcost"><i class="chipi"></i>1</span></button></div></section>` : ''}
   <nav class="ptabs" role="tablist">${[3,4].map(n => `<button role="tab" aria-selected="${UI.recP===n}" class="${UI.recP===n?'on':''}" data-act="recP" data-p="${n}">${n}인 마작</button>`).join('')}</nav>
-  <div class="pstart"><button class="btn" data-act="start" data-mode="east${K}" ${sv ? 'disabled' : ''}>동풍전</button><button class="btn" data-act="start" data-mode="south${K}" ${sv ? 'disabled' : ''}>반장전</button></div>${sv ? '<p class="muted" style="margin:4px 0 0;font-size:12px;text-align:center">이어하기 중인 대국을 끝내거나 게임 종료해야 새 대국을 시작할 수 있어요</p>' : ''}
+  <div class="pstart ${PK.st.ym && !sv ? 'ymleg' : ''}">${[['east', '동풍전'], ['south', '반장전']].map(([m, nm]) => `<button class="btn" data-act="start" data-mode="${m}${K}" ${sv ? 'disabled' : ''}><span class="lbl">${nm}</span>${PK.st.ym && !sv ? '<small class="ymtag"><i>役満</i>역만의 꿈</small>' : ''}</button>`).join('')}</div>${sv ? '<p class="muted" style="margin:4px 0 0;font-size:12px;text-align:center">이어하기 중인 대국을 끝내거나 게임 종료해야 새 대국을 시작할 수 있어요</p>' : ''}
 
   ${recordHTML(games)}
   <section class="card">
@@ -2997,6 +3182,12 @@ const SFX = (() => {
     },
     flipTick(){ clack('draw', .2, 1.1 + Math.random() * .15); },   // 결과창 손패가 뒤집히는 소리
     // 역만 빵빠레: 전통 나팔 신호 'Charge!'(퍼블릭 도메인)를 8비트 사각파로 — 솔도미솔— 미솔—— 짠!
+    drumroll(){   // 두구두구: 스네어를 잘게 굴리며 점점 커지다 마지막에 '쿵·챙'
+      const n = 42, step = .036;
+      for(let i = 0; i < n; i++){ const k = i / n; noise(.05, 1700 + Math.random() * 300, .9, .05 + .22 * k * k, i * step + (i % 2 ? .006 : 0)); }
+      const end = n * step + .04;
+      tone(92, .45, .5, 'sine', end); tone(61, .5, .35, 'triangle', end); noise(.18, 2200, .7, .35, end); noise(.9, 7200, .5, .12, end + .01);
+    },
     fanfare(v){   // v: 크기 배율(RPG 레벨업은 절반)
       v = v || 1;
       const L = (f, t, d, g) => { tone(f, d, g, 'square', t); tone(f / 2, d, g * .7, 'triangle', t); };   // 리드 + 한 옥타브 아래 받침
@@ -3281,7 +3472,7 @@ const BGM = (() => {
   return {
     sync(){   // 화면이 바뀔 때마다 부른다: RPG 화면이고 소리·BGM이 켜져 있으면 지금 던전의 BGM
       if(UI.screen === 'rpg' && settings.sound !== false){   // 스피커 하나로 효과음과 BGM을 함께 켜고 끈다
-        const st = RPG.st, k = st.sel || 'combat', sg = st.sk[k].stage;
+        const st = RPG.st, k = st.active || st.sel || 'combat', sg = st.sk[k].stage;   // 하는 중인 행동의 환경음(다른 탭을 봐도 계속)
         play(k + sg, BGM_ENV[k][sg - 1]);
       } else stop();
     },
@@ -3366,8 +3557,8 @@ const MJSK = {
 function mjSkillPct(k){
   if(UI.drill || typeof RPG === 'undefined') return 0;
   const sk = RPG.st.sk[k];
-  if(!sk || sk.gear < 2) return 0;   // 켜고 끄는 스위치 없이, 실버 장비부터 자동 적용
-  return Math.min(100, sk.gear * 10);
+  if(!sk) return 0;
+  const L = lvOf(sk.exp); return L >= 20 ? Math.min(100, Math.floor(L / 10) * 10) : 0;   // 행동 레벨 10마다 10%(Lv 20부터). 포커 스킬과 같은 기준
 }
 function mjSkillRoll(k){   // 켜져 있지 않으면 null, 켜져 있으면 성공 여부
   const p = mjSkillPct(k);
@@ -3388,7 +3579,7 @@ function skillDice(k){
   h = Math.imul(h ^ (h >>> 13), 0xC2B2AE35) >>> 0; h ^= h >>> 16;
   return (h >>> 0) / 4294967296;
 }
-const mjSkillColor = k => { const t = TIERS[(RPG.st.sk[k].gear || 1) - 1]; return t.gl || t.c; };
+const mjSkillColor = k => { const sk = RPG.st.sk[k], L = sk ? lvOf(sk.exp) : 1, t = TIERS[Math.max(0, Math.min(9, Math.floor(L / 10) - 1))]; return t.gl || t.c; };   // 확률 단계(레벨)에 맞는 등급 색
 const turnKey = () => UI.game ? `${UI.kyokuSerial || 0}-${UI.game.players[0].discards.length}` : '';
 // 살기 감지: 이 패를 지금 내면 누가 론하는지
 function trySense(id){
@@ -3618,6 +3809,9 @@ function startGame(mode, saved, practice, drill, ym){
   UI.mode = saved ? saved.mode : mode;
   const YT = UI.ymTest != null ? YM_TESTS[UI.ymTest] : null;
   const D = drill ? DRILLS[drill] : YT ? { dealer: YT.oya || 'me', rig: gg => YT.rig ? YT.rig(gg) : ymRig(gg, YT) } : null;
+  const ymBuff = !saved && !drill && ym == null && !practice && PK.st.ym;   // 상점의 역만 이샹텐: 새 대국 시작에 쓰인다
+  if(ymBuff){ PK.st.ym = false; pkSave(); setTimeout(ymFireBanner, 350); }
+  let ymDone = false;
   const P3 = UI.mode.endsWith('3');
   setNP(P3 ? 3 : 4);
   UI.usedHint = saved ? !!saved.usedHint : false;
@@ -3642,7 +3836,7 @@ function startGame(mode, saved, practice, drill, ym){
     return { kariton, d1, kario, d2 };
   };
   const dstate = D ? { scores: seatsBy(N0).map(() => P3 ? 35000 : 25000), kyoku: 0, honba: 0, kyotaku: 0, decisions: [], results: [], oya0: D.dealer === 'kami' ? N0 - 1 : 0, seatDraw: D.full ? forcedSeatDraw(N0) : null } : null;
-  const g = new Game({ sanDora: P3 ? (aliceMode() ? 'on' : 'off') : null, controllers: ctrls, players: P3 ? 3 : 4, length: UI.mode.replace('3',''), aka:UI.aka, state: saved ? saved.state : dstate, resume: saved && saved.mid ? saved.mid : null, onSnap: snap => midSave(snap), rigTenpai: !!window.__rig, beforeDraw: () => sleep(settings.speed === 'fast' ? 250 : 650),rig: D ? (gg => D.rig(gg)) : null, 
+  const g = new Game({ sanDora: P3 ? (aliceMode() ? 'on' : 'off') : null, controllers: ctrls, players: P3 ? 3 : 4, length: UI.mode.replace('3',''), aka:UI.aka, state: saved ? saved.state : dstate, resume: saved && saved.mid ? saved.mid : null, onSnap: snap => midSave(snap), rigTenpai: !!window.__rig, beforeDraw: () => sleep(settings.speed === 'fast' ? 250 : 650),rig: D ? (gg => D.rig(gg)) : ymBuff ? (gg => { if(!ymDone && gg.results.length === 0){ ymDone = true; ymShantenRig(gg); } }) : null, 
     onKyokuStart: async (game) => {
       const tk0 = UI.token, sleepT = async ms => { await sleep(ms); if(tk0 !== UI.token) await HALT(); };   // 나간 게임의 배패 연출은 멈춘다
       UI.frozen = null; UI.endRes = null; UI.winOpen = null; UI.peekEnd = false; UI.cpuOut = {}; UI.handSet = game.results.length % 2; document.documentElement.classList.toggle('setb', UI.handSet === 1);
@@ -3899,7 +4093,7 @@ async function countSeats(game, start, n, token){
   await sleep(Math.round(420 * fk));
   return token === UI.token;
 }
-function rollWaitHTML(w){ return `<div class="dicebox"><div class="dt">${esc(w.title)}</div><div class="dx">주사위를 끌어서<br>가운데에 놓으세요</div></div>`; }
+function rollWaitHTML(w){ return `<div class="dicebox"><div class="dt">${esc(w.title)}</div><div class="dx">${settings.phone ? '주사위를 눌러<br>굴리세요' : '주사위를 끌어서<br>가운데에 놓으세요'}</div></div>`; }
 // 내가 굴릴 차례면 홈의 주사위를 가운데로 끌어 놓아야 굴러가고, 아니면 바로 굴러 나온다
 // 게임을 나가면(토큰이 바뀌면) 앞 게임의 연출은 거기서 멈춘다: 새 게임의 화면 상태를 건드리지 않게
 const HALT = () => new Promise(() => {});
@@ -4274,6 +4468,42 @@ function drillMenuHTML(){
 // 운영자 모드: 역만 바로 나기 — 손패를 짜 두고 첫 쯔모에 화료패가 오게 한다. 결과창을 본 뒤 홈으로
 // hand: 손패 종류(퐁·깡 제외), pon/kan: 울어 둔 종류, win: 화료패 종류, dora: 도라 표시패 종류, oya: 'kami'면 상가가 친(지화)
 const YM_TESTS = [];   // (운영자 시험 모드는 없앴다)
+// 역만 이샹텐: 역만 완성형 14장에서 1장을 빼고(화료패), 2장을 상관없는 패로 바꿔 13장을 만든다. 3인 마작에 없는 2~8만은 쓰지 않는다
+// 역만 이샹텐: 역만 종류를 고르고, 그 역만의 몸통·머리까지 매번 무작위로 짠 14장에서 1장을 빼고(화료패) 1장을 상관없는 패로 바꿔 13장을 만든다
+function ymTemplate(N){
+  const R = n => Math.floor(Math.random() * n), pick = a => a[R(a.length)];
+  const ok = k => N !== 3 || !((k >= 1 && k <= 7) || k === 30);   // 3인: 2~8만·北 없음
+  const shuffle = a => { for(let i = a.length - 1; i > 0; i--){ const j = R(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const cnt = {}, can = (k, n) => ok(k) && (cnt[k] || 0) + n <= 4, put = (k, n) => { cnt[k] = (cnt[k] || 0) + n; return Array(n).fill(k); };
+  const trip = ks => { const k = shuffle(ks.filter(x => can(x, 3)))[0]; return k == null ? null : put(k, 3); };
+  const pair = ks => { const k = shuffle(ks.filter(x => can(x, 2)))[0]; return k == null ? null : put(k, 2); };
+  const anySet = () => { if(R(2)){ const suits = N === 3 ? [1, 2] : [0, 1, 2]; for(let t = 0; t < 20; t++){ const b = pick(suits) * 9 + R(7); if([b, b + 1, b + 2].every(x => can(x, 1))) return [b, b + 1, b + 2].flatMap(x => put(x, 1)); } } return trip([...Array(34).keys()]); };
+  const ALL = [...Array(34).keys()], TERM = [0, 8, 9, 17, 18, 26], WIND = [27, 28, 29, 30], DRAG = [31, 32, 33], HON = WIND.concat(DRAG);
+  const kinds = ['suuankou', 'daisangen', 'chinroutou', 'ryuuiisou', 'tsuuiisou', 'shousuushii'].concat(N === 3 ? [] : ['kokushi']).filter(y => N !== 3 || y !== 'shousuushii');
+  const y = pick(kinds), out = [];
+  const add = a => { if(!a) throw 0; out.push(...a); };
+  try{
+    if(y === 'suuankou'){ for(let n = 0; n < 4; n++) add(trip(ALL)); add(pair(ALL)); }   // 사암각: 아무 패 넷 + 머리
+    else if(y === 'daisangen'){ DRAG.forEach(k => add(put(k, 3))); add(anySet()); add(pair(ALL.filter(k => !DRAG.includes(k)))); }
+    else if(y === 'chinroutou'){ for(let n = 0; n < 4; n++) add(trip(TERM)); add(pair(TERM)); }
+    else if(y === 'ryuuiisou'){ const G = [19, 20, 21, 23, 25, 32]; for(let n = 0; n < 4; n++){ if(R(3) === 0 && can(19, 1) && can(20, 1) && can(21, 1)) add([19, 20, 21].flatMap(x => put(x, 1))); else add(trip(G)); } add(pair(G)); }
+    else if(y === 'tsuuiisou'){ for(let n = 0; n < 4; n++) add(trip(HON)); add(pair(HON)); }
+    else if(y === 'shousuushii'){ const w = shuffle(WIND.slice()); w.slice(0, 3).forEach(k => add(put(k, 3))); add(put(w[3], 2)); add(anySet()); }
+    else { [0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33].forEach(k => out.push(k)); out.push(pick(TERM.concat(HON))); }   // 국사무쌍
+  }catch(e){ return ymTemplate(N); }   // 겹쳐서 못 짜면 다시
+  return out;
+}
+function ymShantenRig(g){
+  const tpl = ymTemplate(g.N);
+  for(let i = tpl.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [tpl[i], tpl[j]] = [tpl[j], tpl[i]]; }
+  const win = tpl.pop(), set = new Set(tpl.concat(win)), junk = [10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25].filter(k => !set.has(k));
+  { const i = Math.floor(Math.random() * tpl.length); tpl[i] = junk.splice(Math.floor(Math.random() * junk.length), 1)[0]; }   // 1장만 바꾼다: 텐파이에서 한 걸음(이샹텐)
+  ymRig(g, { hand: tpl, win });
+}
+function ymFireBanner(){   // 대국 시작: 불타는 '역만 이샹텐' 알림
+  const el = document.createElement('div'); el.className = 'ymbanner'; el.innerHTML = '<div class="ymray"></div><div class="ymkan">役満</div><b>역만의 꿈</b>';
+  document.body.appendChild(el); SFX.drumroll(); setTimeout(() => el.remove(), 2800);
+}
 function ymRig(g, T0){
   const me = g.players[0], N = g.N, cpus = [...Array(N).keys()].filter(s => s !== 0);
   const inDead = id => g.dead.includes(id);
@@ -4389,18 +4619,20 @@ function drillGuideHTML(g){
   if(!UI.drill || UI.drillDone || UI.drillFail || !g) return '';
   const D = UI.drill, pd = UI.pending;
   const T = k => `<b>${kname(k)}</b>`;
-  const MELD = '작탁 오른쪽 아래';
+  const MELD = '작탁 오른쪽 아래', P = !!settings.phone;   // P: 폰 모드(끌기 대신 누르기·버튼)
+  const DISC = () => { l1 = P ? '버릴 패 1장을 누르세요' : '버릴 패 1장을 끌어 놓으세요'; l2 = P ? '' : '→ 작탁 안으로'; };
   let l1 = '', l2 = '', cls = '';
   if(D === 'deal'){   // 자리 정하기 → 패산 가르기 → 배패 → 첫 타패
     if(UI.windPick && UI.windPick.picked == null){ l1 = '바람패 한 장을 눌러 고르세요'; l2 = '자리 정하기'; cls = 'up'; }
-    else if(UI.rollWait){ l1 = '주사위를 가운데로 끌어 놓으세요'; l2 = esc(UI.rollWait.title); cls = 'up'; }
-    else if(UI.dealWait){ l1 = `패산에서 빛나는 ${UI.dealWait.n}장을 끌어 오세요`; l2 = '→ 내 손패로 (우클릭: 바로 가져오기)'; cls = 'up'; }
-    else if(pd && pd.kind === 'action' && !UI.confirm){ l1 = '버릴 패 1장을 끌어 놓으세요'; l2 = '→ 작탁 안으로'; }
+    else if(UI.rollWait){ l1 = P ? '주사위를 눌러 굴리세요' : '주사위를 가운데로 끌어 놓으세요'; l2 = esc(UI.rollWait.title); cls = 'up'; }
+    else if(UI.dealWait){ l1 = P ? `패산에서 빛나는 ${UI.dealWait.n}장을 누르세요` : `패산에서 빛나는 ${UI.dealWait.n}장을 끌어 오세요`; l2 = P ? '→ 내 손패로' : '→ 내 손패로 (우클릭: 바로 가져오기)'; cls = 'up'; }
+    else if(pd && pd.kind === 'action' && !UI.confirm) DISC();
   }
-  else if(UI.pendingDraw && UI.pendingDraw.rinshan && !UI.pendingDraw.flying && DRILL_RINSHAN.includes(D)){ l1 = '영상패를 뽑으세요'; l2 = '→ 패산에서 손패로 끌어 오기'; }
+  else if(UI.pendingDraw && UI.pendingDraw.rinshan && !UI.pendingDraw.flying && DRILL_RINSHAN.includes(D)){ l1 = '영상패를 뽑으세요'; l2 = P ? '→ 패산의 영상패 누르기' : '→ 패산에서 손패로 끌어 오기'; }
   else if(pd && pd.kind === 'call' && !UI.confirm){
     const t = kindOf(pd.opts.tile);
-    if(UI.callStage && UI.callStage.wait){ l1 = '한 장을 더 끌어 놓으세요'; l2 = '→ 작탁 오른쪽 아래'; }
+    if(P){ const nm = { chi:'치', pon:'퐁', minkan:'깡' }[D]; if(nm){ l1 = `<b>${nm}</b> 버튼을 누르세요`; l2 = '→ 아래 버튼'; } }
+    else if(UI.callStage && UI.callStage.wait){ l1 = '한 장을 더 끌어 놓으세요'; l2 = '→ 작탁 오른쪽 아래'; }
     else if(D === 'chi'){
       l1 = '치를 받을 두 장을 끌어 놓으세요'; l2 = '→ 작탁 오른쪽 아래';
     }
@@ -4409,22 +4641,23 @@ function drillGuideHTML(g){
   }
   else if(pd && pd.kind === 'action' && !UI.confirm){
     const ko = (pd.ctx.kanOptions || []);
-    if(UI.drillRinshan && DRILL_RINSHAN.includes(D)){ l1 = '버릴 패 1장을 끌어 놓으세요'; l2 = '→ 작탁 안으로'; }
+    if(UI.drillRinshan && DRILL_RINSHAN.includes(D)) DISC();
     else if(D === 'ankan'){
       const o = ko.find(x => x.type === 'ankan');
-      if(o){ l1 = '안깡할 패 1장을 끌어 놓으세요'; l2 = '→ ' + MELD; }
+      if(o){ if(P){ l1 = '<b>안깡</b> 버튼을 누르세요'; l2 = '→ 아래 버튼'; } else { l1 = '안깡할 패 1장을 끌어 놓으세요'; l2 = '→ ' + MELD; } }
     } else if(D === 'kakan'){
       const o = ko.find(x => x.type === 'kakan');
-      if(o){ l1 = '가깡할 패를 끌어 놓으세요'; l2 = '→ 내 퐁 위로'; }
+      if(o){ if(P){ l1 = '<b>가깡</b> 버튼을 누르세요'; l2 = '→ 아래 버튼'; } else { l1 = '가깡할 패를 끌어 놓으세요'; l2 = '→ 내 퐁 위로'; } }
     } else if(D === 'nuki'){
-      if(pd.ctx.nuki){ l1 = `손패의 ${T(30)}을 끌어 놓으세요`; l2 = '→ 작탁 오른쪽 아래'; }
+      if(pd.ctx.nuki){ if(P){ l1 = '<b>북 빼기</b> 버튼을 누르세요'; l2 = '→ 아래 버튼'; } else { l1 = `손패의 ${T(30)}을 끌어 놓으세요`; l2 = '→ 작탁 오른쪽 아래'; } }
     } else if(D === 'riichi'){
-      if(UI.riichiDiscard != null){ l1 = '파란 점봉을 던지세요'; l2 = '→ 가운데 콘솔'; cls = 'up'; }
+      if(UI.riichiDiscard != null){ l1 = P ? '파란 점봉을 누르세요' : '파란 점봉을 던지세요'; l2 = P ? '' : '→ 가운데 콘솔'; cls = 'up'; }
       else if(pd.ctx.riichiOptions.length){
-        l1 = '리치 선언패를 끌어 우클릭으로 가로 타패 하세요';
+        if(P){ l1 = UI.sel != null && pd.ctx.riichiOptions.includes(kindOf(UI.sel)) ? '<b>리치</b> 버튼을 누르세요' : '리치 선언패를 누르세요'; l2 = UI.sel != null && pd.ctx.riichiOptions.includes(kindOf(UI.sel)) ? '→ 아래 버튼' : '→ 텐파이가 되는 패'; }
+        else l1 = '리치 선언패를 끌어 우클릭으로 가로 타패 하세요';
       }
     } else if(UI.claim){   // 치·퐁·대명깡 뒤: 이제 버릴 차례
-      l1 = '버릴 패 1장을 끌어 놓으세요'; l2 = '→ 작탁 안으로';
+      DISC();
     }
   }
   if(!l1) return '';
@@ -4536,10 +4769,10 @@ const CHIP_ICON = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='htt
 document.documentElement.style.setProperty('--chip-icon', CHIP_ICON);
 document.documentElement.style.setProperty('--chip-blue', `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'>${chipFaceSVG().replace(/#efbd2c/g, '#2f7fe8').replace(/#a87a12/g, '#123f8a').replace(/#f3c63a/g, '#3d8cf0').replace(/#d29e1f/g, '#1f58c0').replace(/"/g, "'")}</svg>`)}")`);   // 파란 칩: 같은 칩, 색만 파랑
 // 대국 중 모은 축의(게임이 끝나면 지급): 작탁 오른쪽 아래 바깥에 얻은 장수만큼 한 탑으로 쌓는다(거의 위에서 내려다본 모습)
-function chipStackHTML(){
+function chipStackHTML(nArg, bk, segN){   // nArg: 포커처럼 개수를 직접 줄 때 · bk: 검정칩(10짜리) · segN: 옆면 조각 수(작은 탑은 줄여 가볍게)
   // 3D로 칩을 한 장씩 만들어 쌓는다(패 뒤집기와 같은 CSS 3D): 옆면은 48조각 원기둥, 맨 위 칩만 윗면 무늬
-  const total = UI.kyokuChips || 0; if(!total || UI.drill || UI.ymTest != null) return '';
-  const n = total, SEG = 48;   // 모은 만큼 제한 없이 쌓는다
+  const total = nArg != null ? nArg : UI.kyokuChips || 0; if(!total || (nArg == null && (UI.drill || UI.ymTest != null))) return '';
+  const n = total, SEG = segN || 48;   // 모은 만큼 제한 없이 쌓는다
   const hx = h => [1, 3, 5].map(k => parseInt(h.slice(k, k + 2), 16));
   const sh = (h, f) => `rgb(${hx(h).map(v => Math.round(Math.min(255, v * f))).join(',')})`;
   let html = '';
@@ -4549,15 +4782,17 @@ function chipStackHTML(){
     for(let k = 0; k < SEG; k++){
       const a = k * 360 / SEG + 360 / SEG / 2, d = ((a - 22.5) % 45 + 45) % 45, white = d < 7.5 || d > 37.5;
       const lit = .86 + .16 * Math.cos((a + rot - 35) * Math.PI / 180);   // 왼쪽 앞에서 오는 빛(앞면이 밝고 뒤로 갈수록 살짝 어둡게)
-      side += `<i style="transform:rotateZ(${a}deg) translateY(calc(var(--cd)*.5)) rotateX(-90deg);background:${sh(white ? '#efe6cc' : '#d4a32a', lit)}"></i>`;
+      side += `<i style="transform:rotateZ(${a}deg) translateY(calc(var(--cd)*.5)) rotateX(-90deg);background:${sh(white ? '#efe6cc' : bk ? '#2a2a2f' : '#d4a32a', lit)}"></i>`;
     }
-    html += `<div class="c3c" style="transform:translateZ(calc(var(--ct)*${i})) rotateZ(${rot}deg)">${side}<b class="c3t"></b></div>`;   // 모든 칩에 윗면: 위 칩이 들릴 때 아래 칩 앞면이 보인다
+    html += `<div class="c3c" style="transform:translateZ(calc(var(--ct)*${i})) rotateZ(${rot}deg)">${side}<b class="c3t${bk ? ' bk' : ''}"></b></div>`;   // 모든 칩에 윗면: 위 칩이 들릴 때 아래 칩 앞면이 보인다
   }
   return `<div class="chipstk" data-n="${n}" style="--n:${n}"><div class="c3">${html}</div></div>`;
 }
 const CHIP_TOP = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><defs><clipPath id='c'><circle cx='30' cy='30' r='30'/></clipPath></defs>${chipFaceSVG().replace(/#fbf7ea/g, '#efe6cc').replace('r="29"', 'r="30"').replace('stroke="#a87a12" stroke-width="1"', 'stroke="none"').replace(/y="1.2" width="6.8" height="9"/g, 'y="-1" width="6.8" height="11.2" clip-path="url(#c)"').replace(/"/g, "'")}</svg>`)}")`;
 document.documentElement.style.setProperty('--chip-top', CHIP_TOP);
-// 칩 탑을 잡고 위로 드래그하면 포커 플레이어처럼 아래 칩부터 한 장씩 들썩이며 좌르륵. 다시 아래로 내리면 끝
+// 검정칩(포커 10짜리): 같은 무늬를 검게, 가운데 10
+document.documentElement.style.setProperty('--chip-top-bk', CHIP_TOP.replace(/%23efbd2c/gi, '%2326262a').replace(/%23f3c63a/gi, '%231c1c1f').replace(/%23d29e1f/gi, '%23505058').replace(encodeURIComponent('</svg>'), encodeURIComponent(`<text x='30' y='35.5' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='15' fill='#efe6cc'>10</text></svg>`)));
+// 칩 탑을 잡고 긁으면 지나간 칩이 한 장씩 들썩이며 좌르륵(마작·포커 같음)
 (() => {
   let drag = null;
   const hop = (el) => { el.classList.remove('hop'); void el.offsetWidth; el.classList.add('hop'); el.addEventListener('animationend', () => el.classList.remove('hop'), { once:true }); SFX.chip(); };   // 끝나면 hop 클래스를 떼어 둔다(남아 있으면 화면을 다시 그릴 때마다 모든 칩이 동시에 또 튄다)
@@ -4569,15 +4804,18 @@ document.documentElement.style.setProperty('--chip-top', CHIP_TOP);
   });
   // 저절로 드르륵: 아래 칩부터 40ms 간격으로 한 장씩(가진 칩 수만큼)
   const riffle = d => { const cs = [...d.st.querySelectorAll('.c3c')]; let i = 0; d.k = 0; const t = setInterval(() => { if(i >= cs.length){ clearInterval(t); return; } hop(cs[i++]); }, 40); };
+  // 손가락(마우스)이 지나간 만큼 칩이 튄다: 칩 1장 높이의 1.1배 움직이면 1장, 위아래 어느 쪽으로 긁어도
+  const pitchOf = (st, n) => { const r = st.getBoundingClientRect(); return Math.max(1, (r.height - r.width * .56) / n) * 1.1; };
+  const chipAt = (st, y, n) => { const r = st.getBoundingClientRect(), cd = r.width, pitch = Math.max(1, (r.height - cd * .56) / n); return Math.max(0, Math.min(n - 1, Math.floor((r.bottom - y - cd * .28) / pitch))); };
+  const queue = (d, el) => { const now = performance.now(), at = Math.max(now, (d.qt || 0) + 16); d.qt = at; setTimeout(() => hop(el), at - now); };   // 한꺼번에 튀지 않게 16ms 간격으로 차례차례
   document.addEventListener('pointermove', e => {
     if(!drag) return;
     const cs = [...drag.st.querySelectorAll('.c3c')]; if(!cs.length) return;
-    const dy = e.clientY - drag.y; drag.y = e.clientY;
-    if(drag.done || !dy) return;
-    if(dy > 0){ if(drag.dir < 0) drag.done = true; return; }   // 위로만 좌르륵. 올리다가 아래로 내리면 이번 누름은 끝
-    drag.dir = -1; drag.acc -= dy;
-    const step = 13, now = performance.now();   // 13px마다 한 장(아래 칩부터), 빨리 긁어도 한 장씩 최소 40ms 간격
-    if(drag.acc >= step && now - (drag.t || 0) >= 40){ drag.acc = Math.min(drag.acc - step, step); drag.t = now; drag.k = drag.k + 1; if(drag.k >= cs.length){ drag.done = true; return; } hop(cs[drag.k]); }   // 가진 칩 수만큼만 넘기고 끝
+    if(drag.k < 0){ if(Math.abs(e.clientY - drag.y) < 2) return; drag.k = chipAt(drag.st, drag.y, cs.length); drag.y0 = drag.y; drag.k0 = drag.k; queue(drag, cs[drag.k]); }
+    const i = Math.max(0, Math.min(cs.length - 1, drag.k0 + Math.round((drag.y0 - e.clientY) / pitchOf(drag.st, cs.length))));
+    if(i === drag.k) return;
+    const d = i > drag.k ? 1 : -1; for(let k = drag.k + d; d > 0 ? k <= i : k >= i; k += d) queue(drag, cs[k]);
+    drag.k = i;
   });
   const end = e => { if(drag){ clearTimeout(drag.hold); if(e && e.type === 'pointerup' && drag.k < 0 && !drag.auto) riffle(drag); drag.st.classList.remove('grab'); drag = null; } };   // 짧게 한 번 눌러도(좌클릭) 드르륵
   document.addEventListener('pointerup', end); document.addEventListener('pointercancel', end);
@@ -4970,7 +5208,7 @@ function helpHTML(){
       <li><b>역만</b> <i class="chipi hc"></i>5(헤아림 역만 포함, 중복 역만은 가산)</li>
       <li><b>3마 토비상</b> 화료로 토비낸 사람 당 <i class="chipi hc"></i>1</li>
     </ul>
-    <h2>장비 레벨에 따라 발동확률을 가진 스킬</h2>
+    <h2>RPG 스킬 레벨에 따라 발동확률을 가진 스킬</h2>
     <ul>
       <li>${MJSK.combat.icon} 살기 감지 — <kbd>좌클릭 드래그</kbd> 중 <kbd>휠</kbd>: 방총 감지<br>(<span style="color:#2fe06a">초록</span> → 안전, <span style="color:#ff3b30">빨강</span> → 방총, <span style="color:#000;text-shadow:.5px 0 #ccc,-.5px 0 #ccc,0 .5px #ccc,0 -.5px #ccc">검정</span> → 스킬 실패)</li>
       <li>${MJSK.wood.icon} 바꿔치기 — 손패를 패산으로 <kbd>좌클릭 드래그</kbd>해 2장까지 바꿔치기</li>
@@ -5141,14 +5379,14 @@ function ioSheet(mode){
   const ex = mode === 'export';
   $modal.innerHTML = `<div class="sheet" role="dialog" aria-modal="true">
     <h2>${ex ? '기록 내보내기' : '기록 가져오기'}</h2>
-    <p class="muted" style="margin:0;font-size:13px">${ex ? '아래 코드를 복사해서 다른 PC의 리치 마작에서 <b>기록 가져오기</b>에 붙여 넣으세요. 4인·3인 기록과 RPG 진행도(레벨·장비·단계·축의칩)가 모두 들어 있어요.' : '다른 PC에서 내보낸 코드를 붙여 넣으세요. 이미 있는 판은 건너뛰고 새 판만 더해지고, RPG 진행도는 가져온 것으로 <b>덮어써져요</b>.'}</p>
+    <p class="muted" style="margin:0;font-size:13px">${ex ? '아래 코드를 복사해서 다른 PC의 리치 마작에서 <b>기록 가져오기</b>에 붙여 넣으세요. 4인·3인 기록과 RPG 진행도(레벨·장비·단계·축의칩)·포커(빨간 칩·대회 기록)가 모두 들어 있어요.' : '다른 PC에서 내보낸 코드를 붙여 넣으세요. 이미 있는 판은 건너뛰고 새 판만 더해지고, RPG·포커 진행도는 가져온 것으로 <b>덮어써져요</b>.'}</p>
     <textarea id="io" class="iobox" spellcheck="false" ${ex ? 'readonly' : 'placeholder="여기에 붙여 넣기"'}>${ex ? esc(exportCode()) : ''}</textarea>
     <p id="iomsg" class="muted" style="margin:0;min-height:1.4em;font-size:13px"></p>
     <div class="row">${ex ? '<button class="btn primary" data-act="copy">복사</button>' : '<button class="btn primary" data-act="import">가져오기</button>'}<button class="btn" data-act="closeModal">닫기</button></div></div>`;
   $modal.hidden = false;
   const io = document.getElementById('io'); if(ex){ io.focus(); io.select(); } else io.focus();
 }
-function exportCode(){ rpgAdvance(false); rpgSave(); return JSON.stringify({app:'tapae-dojo', v:1, records:records(), rpg:RPG.st}); }
+function exportCode(){ rpgAdvance(false); rpgSave(); pkSave(); return JSON.stringify({app:'tapae-dojo', v:1, records:records(), rpg:RPG.st, poker:PK.st}); }
 function importCode(txt){
   const data = JSON.parse(txt);
   if(!data || !Array.isArray(data.records)) throw new Error('리치 마작 백업 코드가 아니에요');
@@ -5165,6 +5403,7 @@ function importCode(txt){
     rpgNorm(st);
     RPG.st = st; rpgSave(); chipFix(); UI.importedRpg = true;
   }
+  if(data.poker && typeof data.poker === 'object'){ pkReset(data.poker); chipFix(); UI.importedRpg = true; }   // 포커도 가져온 것으로 덮어쓴다
   return added;
 }
 
@@ -5235,6 +5474,15 @@ const CROP_SEED = ['사과 씨앗', '포도 씨앗', '딸기 씨앗', '블루베
 const ORE_N = ['구리', '은', '금', '철', '강철', '미스릴', '아다만트', '룬', '드래곤', '옵시디언'];
 const FISH_N = ['새우', '정어리', '송어', '연어', '참치', '랍스터', '황새치', '아귀', '상어', '고래'];
 // v: 등급 1당 판매가(파란 칩). 장비는 만드는 데 드는 틱 수(목재·원석·제련 = 바 1개당 3틱 + 대장간 1틱)와 같게 → 투구 7 · 갑옷 13 · 도구 10, 무엇을 만들어 팔아도 1틱당 등급×1로 같다
+// 전투 전리품: 던전마다 하나. 같은 등급 풀셋으로 12시간 사냥해 판 칩이, 같은 등급으로 12시간 가장 잘 버는 생산(주괴·열매)의 절반이 되게 값을 맞췄다
+const LOOT_N = ['슬라임 젤리', '늑대 가죽', '리자드맨 비늘', '전갈 독침', '예티 털', '뼈다귀', '골렘 핵', '악마 뿔', '용 비늘', '공허 결정'];
+const LOOT_V = [2, 4, 8, 13, 21, 27, 36, 46, 60, 73], LOOT_P = .5;
+// 전리품 확률: 맵보다 높은 무기로 빨리 잡으면 그만큼 낮춘다(같은 등급 무기로 잡을 때의 시간당 전리품을 넘지 않게)
+function lootP(g, s){
+  if(g <= s) return LOOT_P;
+  const avg = x => ATK(x) * (1 + 2 * CRIT(x)), matchRate = 1 / HITS(s), myRate = Math.min(1, avg(g) / monHp(s));   // 틱당 처치 수
+  return LOOT_P * Math.min(1, matchRate / myRate);
+}
 const ITEM = {
   log:   { n: g => TREE_N[g-1] + ' 목재', v: 1 },
   coal:  { n: g => '목탄', v: 1 },   // 제련에서 아무 목재 1개 → 목탄 1개, 주괴 = 목탄 1 + 원석 1
@@ -5245,13 +5493,14 @@ const ITEM = {
   bar:   { n: g => TIERS[g-1].n + ' 주괴', v: 3 },
   food:  { n: g => FISH_N[g-1] + ' 구이', v: 3, eq: 'food' },
   helm:  { n: g => TIERS[g-1].n + ' 투구', v: 7, eq: 'helm' },
-  body:  { n: g => TIERS[g-1].n + ' 갑옷', v: 13, eq: 'body' },
-  sword: { n: g => TIERS[g-1].n + ' 검', v: 10, eq: 'tool' },
-  axe:   { n: g => TIERS[g-1].n + ' 도끼', v: 10, eq: 'tool' },
-  pick:  { n: g => TIERS[g-1].n + ' 곡괭이', v: 10, eq: 'tool' },
-  rod:   { n: g => TIERS[g-1].n + ' 낚싯대', v: 10, eq: 'tool' },
+  body:  { n: g => TIERS[g-1].n + ' 갑옷', v: 14, eq: 'body' },   // 판매가 = 주괴값 + 주괴 1개당 0.5(투구 7 · 도구 10.5 · 갑옷 14): 만드는 시간도 주괴 수에 비례해 시간당 이익·경험치가 같다
+  sword: { n: g => TIERS[g-1].n + ' 검', v: 10.5, eq: 'tool' },
+  axe:   { n: g => TIERS[g-1].n + ' 도끼', v: 10.5, eq: 'tool' },
+  pick:  { n: g => TIERS[g-1].n + ' 곡괭이', v: 10.5, eq: 'tool' },
+  rod:   { n: g => TIERS[g-1].n + ' 낚싯대', v: 10.5, eq: 'tool' },
   ring:  { n: g => TIERS[g-1].n + ' 반지', v: 0, eq: 'ring' },
   bait:  { n: g => '미끼', v: 1, eq: 'bait' },
+  loot:  { n: g => LOOT_N[g-1], v: 1 },   // 전투 전리품: 몬스터를 잡으면 50% 확률로 떨군다(팔기만 하는 것)
   pet:   { n: g => PETS[g-1].n, v: 0, eq: 'pet' },     // 펫: 행동마다 한 번만 얻고 팔 수 없다     // 소모품: 낚시 1번에 1개(없으면 낚시 못 함)
   neck:  { n: g => TIERS[g-1].n + ' 목걸이', v: 0, eq: 'neck' }
 };
@@ -5322,6 +5571,20 @@ function itemIcon(key, opt){
     b = `<path d="M3 21 L20 3" stroke="${c}" stroke-width="2" stroke-linecap="round"/><path d="M3 21 L8 15.7" stroke="#7a4a22" stroke-width="3" stroke-linecap="round"/><circle cx="9.5" cy="16.5" r="2.4" fill="#9aa3ad" ${O}/><path d="M20 3 Q22 10 18 15" stroke="rgba(255,255,255,.75)" stroke-width=".7" fill="none"/><path d="M18 15 q1 3 -1 3" stroke="#ccc" stroke-width=".9" fill="none"/>`; glow = T.gl; }
   else if(t === 'coal'){   // 목탄: 검은 숯덩이 세 개, 갈라진 결 + 붉은 잔불
     b = `<path d="M3 18 L5 12 L10 10 L13 14 L11 20 L5 21 Z" fill="#26221f" ${O}/><path d="M11 13 L15 7 L20 8 L22 14 L19 19 L13 18 Z" fill="#332d29" ${O}/><path d="M7 9 L10 4 L15 5 L15 9 L11 11 Z" fill="#2c2724" ${O}/><path d="M6 15 L9 13 M15 10 L19 12 M17 15 L20 13 M10 6 L13 7" stroke="#6a5f56" stroke-width=".8"/><path d="M14 15 L16.5 13.5" stroke="#ff6a2a" stroke-width="1" opacity=".85"/><circle cx="8" cy="17" r=".8" fill="#ff8a3a" opacity=".8"/>`; }
+  else if(t === 'loot'){   // 전리품: 던전마다 다른 모양
+    b = [
+      `<path d="M4 18 Q3 10 9 7 Q12 4 15 7 Q21 9 20 17 Q20 21 12 21 Q4 21 4 18 Z" fill="#6fe06a" ${O}/><ellipse cx="9" cy="11" rx="2.4" ry="1.6" fill="#fff" opacity=".6"/>`,
+      `<path d="M3 7 L8 4 L12 6 L16 4 L21 7 L19 13 L21 19 L15 20 L12 18 L9 20 L3 19 L5 13 Z" fill="#9a6a3e" ${O}/><path d="M8 9 Q12 12 16 9 M7 15 Q12 18 17 15" stroke="#6a4424" stroke-width="1" fill="none"/>`,
+      `<path d="M12 3 L19 9 L16 20 L8 20 L5 9 Z" fill="#4fae7a" ${O}/><path d="M12 3 L12 20 M5 9 L19 9" stroke="#2a6a48" stroke-width=".9"/>`,
+      `<path d="M5 20 Q6 12 12 9 Q17 6 18 3 Q21 8 17 12 Q13 16 8 21 Z" fill="#c8862a" ${O}/><path d="M18 3 L20 1.5" stroke="#3a1a0a" stroke-width="1.6" stroke-linecap="round"/>`,
+      `<path d="M4 18 Q3 9 9 6 Q11 2 14 6 Q20 6 20 13 Q22 19 15 21 L8 21 Q4 21 4 18 Z" fill="#eef2f6" ${O}/><path d="M8 10 q2 3 0 6 M12 8 q2 4 0 8 M16 10 q2 3 0 6" stroke="#b8c4d0" stroke-width="1" fill="none"/>`,
+      `<path d="M7 6 Q4 3 6 2 Q8 1 9 4 L15 16 Q18 15 19 18 Q20 21 17 21 Q15 21 15 19 L9 7 Q6 8 7 6 Z" fill="#f2ecd8" ${O}/>`,
+      `<path d="M4 15 L7 6 L15 4 L20 10 L18 19 L9 21 Z" fill="#7a746c" ${O}/><circle cx="12" cy="13" r="3.6" fill="#ff8a2a"/><circle cx="12" cy="13" r="1.8" fill="#fff2a0"/>`,
+      `<path d="M8 21 Q5 12 10 6 Q14 2 19 2 Q15 6 15 11 Q15 17 13 21 Z" fill="#3a1a2a" ${O}/><path d="M11 18 Q10 12 13 8" stroke="#8a4a6a" stroke-width="1" fill="none"/>`,
+      `<path d="M12 2 Q20 6 19 13 Q18 20 12 22 Q6 20 5 13 Q4 6 12 2 Z" fill="#d8302a" ${O}/><path d="M7 9 Q12 12 17 9 M7 14 Q12 17 17 14" stroke="#8a1a14" stroke-width="1" fill="none"/>`,
+      `<path d="M12 2 L18 8 L15 21 L9 21 L6 8 Z" fill="#7a3af0" ${O}/><path d="M12 2 L12 21 M6 8 L18 8" stroke="#c89aff" stroke-width=".9"/>`
+    ][g-1] || '';
+    if(g >= 9) glow = g === 10 ? '#b06bff' : '#ff6a4a'; }
   else if(t === 'bait'){   // 지렁이
     b = `<path d="M4 16 Q6 9 11 12 Q15 15 17 9 Q19 5 21 7" fill="none" stroke="rgba(10,8,6,.75)" stroke-width="5" stroke-linecap="round"/><path d="M4 16 Q6 9 11 12 Q15 15 17 9 Q19 5 21 7" fill="none" stroke="#e88a9a" stroke-width="3.4" stroke-linecap="round"/>${[[7,12],[10,11.6],[14,13],[17,9.5]].map(([x, y]) => `<path d="M${x} ${y - 1.4} v2.8" stroke="#b8566a" stroke-width=".7"/>`).join('')}<circle cx="20.6" cy="7" r=".6" fill="#3a1a1a"/>`; }
   else if(t === 'pet'){ b = petSVG(g); }
@@ -5333,12 +5596,12 @@ function itemIcon(key, opt){
   return `<svg class="iic" viewBox="0 0 24 24" aria-hidden="true"${glow ? ` style="filter:drop-shadow(0 0 2px ${glow})"` : ''}>${b}</svg>`;
 }
 // 가방 탭: 전체 · 장비(검·투구·갑옷·반지·목걸이·요리·열매) · 도구(도끼·곡괭이·낚싯대) · 재료(씨앗·목재·원석·생선·주괴)
-const INV_TABS = [['gear', '장비', ['sword', 'helm', 'body', 'pet', 'ring', 'neck', 'axe', 'pick', 'rod', 'food', 'fruit', 'bait']], ['etc', '재료', ['seed', 'log', 'coal', 'ore', 'fish', 'bar']]];
+const INV_TABS = [['gear', '장비', ['sword', 'helm', 'body', 'pet', 'ring', 'neck', 'axe', 'pick', 'rod', 'food', 'fruit', 'bait']], ['etc', '재료', ['seed', 'log', 'coal', 'ore', 'fish', 'bar', 'loot']]];
 const TOOL_T = { combat:'sword', wood:'axe', mine:'pick', fish:'rod' }, TOOL_SK = { sword:'combat', axe:'wood', pick:'mine', rod:'fish' };   // 행동 ↔ 도구 아이템
 const GEAR_T = ['helm', 'body', 'axe', 'pick', 'rod'];
 const QTY_SL = ['food', 'fruit', 'bait'];   // 개수를 정해 장착하는 소모품
-const SELL_T = ['sword', 'helm', 'body', 'ring', 'neck', 'axe', 'pick', 'rod', 'food', 'fruit', 'bait', 'seed', 'log', 'coal', 'ore', 'fish', 'bar'];   // 펫 말고 전부 판다   // 팔 수 있는 것: 장비(등급값) + 요리(등급×2) + 열매(등급×1) + 원석·생선·미끼(1)   // 팔 수 있는 장비(검·반지·목걸이는 등급마다 한 번만 사는 것이라 못 판다)
-const SMITH_PARTS = ['helm', 'body', 'axe', 'pick', 'rod'];
+const SELL_T = ['sword', 'helm', 'body', 'ring', 'neck', 'axe', 'pick', 'rod', 'food', 'fruit', 'bait', 'seed', 'log', 'coal', 'ore', 'fish', 'bar', 'loot'];   // 펫 말고 전부 판다   // 팔 수 있는 것: 장비(등급값) + 요리(등급×2) + 열매(등급×1) + 원석·생선·미끼(1)   // 팔 수 있는 장비(검·반지·목걸이는 등급마다 한 번만 사는 것이라 못 판다)
+const SMITH_PARTS = ['sword', 'helm', 'body', 'axe', 'pick', 'rod'];   // 검도 대장간에서 만든다(상점에서 뺐다)
 const SMELT_PARTS = ['bar', 'coal'];   // 제련 제작법 탭: 주괴(목탄 + 원석) · 목탄(목재 하나를 골라 굽는다)
 const smeltTab = sk => SMELT_PARTS.includes(UI.smeltTab) ? UI.smeltTab : (sk.part === 'coal' ? 'coal' : 'bar');   // 검은 만들 수 없다(축의칩으로만 산다)
 // ---- 전투: 틱(휘두르기 1.15초)마다 서로 한 대씩. 몬스터 HP가 0이 되면 경험치 ----
@@ -5378,7 +5641,9 @@ const petBoost = k => RPG.st.eq.pet && PETS[RPG.st.eq.pet - 1].k === k ? 1.15 : 
 const SMASH = s => s >= 6 ? { p: 1 / [9, 7.5, 6, 5, 4][s - 6], pct: [.30, .34, .38, .42, .45][s - 6] } : null;
 const smashRoll = s => { const S = SMASH(s); return !!S && Math.random() < S.p; };
 const monMs = s => Math.round(2600 - (s - 1) * 800 / 9);   // 몬스터 공격 틱: 초원 2.6초 … 공허 1.8초(완만하게 빨라진다)
-const combatMs = () => COMBAT_MS / (typeof RPG !== 'undefined' ? petBoost('combat') : 1);
+const rageClock = () => { const t = Math.max(0, Math.ceil((RPG.st.rage - Date.now()) / 1000)); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`; };   // 남은 시간 m:ss
+const rageOn = () => typeof RPG !== 'undefined' && RPG.st.rage > Date.now();   // 광전사의 포효: 전투 틱 2배
+const combatMs = () => COMBAT_MS / (typeof RPG !== 'undefined' ? petBoost('combat') : 1) / (rageOn() ? 2 : 1);
 function petSVG(i){   // 24×24, 오른쪽을 본다
   const O = 'stroke="rgba(40,24,14,.7)" stroke-width=".8" stroke-linejoin="round"';
   const eye = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r || 1.25}" fill="#1a1414"/><circle cx="${x + .4}" cy="${y - .45}" r="${(r || 1.25) * .38}" fill="#fff"/>`;
@@ -5443,9 +5708,10 @@ function rpgPetSVG(k){
   return `<g transform="translate(${px} ${py.toFixed(1)}) scale(${sc})"><g class="pj ${fly ? 'fly' : ''}"><g class="pb">${petSVG(i)}</g><path class="ph" d="M18 0 q-1.6 -2 -3 -.4 q-1.4 1.4 3 4.4 q4.4 -3 3 -4.4 q-1.4 -1.6 -3 .4 Z" fill="#ff5a7a" opacity="0"/></g></g>`;
 }
 // 펫 획득: 행동마다 한 번만, 가방으로
-function petGain(k){
-  const st = RPG.st; if(st.pets[k]) return false;
+function petGain(k, quiet){   // quiet: 이미 그 자리에서 알렸다(펫 소환 티켓) → 나중에 다시 알리지 않는다
+  const st = RPG.st; if(st.pets[k] || st.eq.pet === petOf(k) || (st.inv['pet' + petOf(k)] || 0) > 0){ st.pets[k] = 1; return false; }   // 이미 있으면(장착·가방 포함) 절대 하나 더 주지 않는다
   st.pets[k] = 1; const i = petOf(k); st.inv['pet' + i] = (st.inv['pet' + i] || 0) + 1;
+  if(quiet) return true;
   if(UI.screen === 'rpg' && !document.hidden && !RPG.booting){ rpgToast(`펫 획득! ${PETS[i - 1].n}`); SFX.fanfare(.5); confetti(); }   // 역만처럼 색종이
   else (RPG.petPend || (RPG.petPend = [])).push(i);   // 오프라인·다른 화면에서 얻으면 RPG 화면으로 돌아왔을 때 알린다
   return true;
@@ -5455,35 +5721,35 @@ function petAnnounce(){   // 미뤄 둔 펫 획득 알림: RPG 화면이 보일 
   const i = RPG.petPend.shift(); rpgToast(`펫 획득! ${PETS[i - 1].n}`); SFX.unlock(); SFX.fanfare(.5); confetti();
   RPG.petAnnT = setTimeout(() => { RPG.petAnnT = null; petAnnounce(); }, 1800);
 }
-const ITEM_ORDER = ['sword', 'helm', 'body', 'pet', 'ring', 'neck', 'axe', 'pick', 'rod', 'food', 'fruit', 'bait', 'seed', 'log', 'coal', 'ore', 'fish', 'bar'];
+const ITEM_ORDER = ['sword', 'helm', 'body', 'pet', 'ring', 'neck', 'axe', 'pick', 'rod', 'food', 'fruit', 'bait', 'seed', 'log', 'coal', 'ore', 'fish', 'bar', 'loot'];
 const ikParse = key => { const m = /^([a-z]+)(\d+)$/.exec(key || ''); return m && ITEM[m[1]] ? [m[1], +m[2]] : null; };
 const itemName = key => { const t = ikParse(key); return t ? ITEM[t[0]].n(t[1]) : key; };
-const itemPrice = key => { const t = ikParse(key); if(!t) return 0; const [k, g] = t;   // 판매가(1개): 축의칩으로 산 검은 축의칩 반값, 반지·목걸이는 산 값의 반, 미끼·목탄은 0
-  if(k === 'sword') return Math.floor((GRADE_PRICE[g-1] || 0) / 2);
+const itemPrice = key => { const t = ikParse(key); if(!t) return 0; const [k, g] = t;   // 판매가(1개, 파란 칩): 제작품은 재료값 + 이익, 반지·목걸이는 산 값의 반, 미끼·목탄·펫은 0
   if(k === 'ring' || k === 'neck') return Math.floor((ACC_PRICE[g] || 0) / 2);
-  if(k === 'bait' || k === 'coal' || k === 'pet') return 0;   // 목탄: 목재 1 → 목탄 g개라 값을 매기면 공짜로 칩이 생긴다
-  if(GEAR_T.includes(k) || k === 'bar') return ITEM[k].v * g;
-  if(k === 'food') return 2 * g;
+  if(k === 'bait' || k === 'coal' || k === 'pet') return 0;   // 목탄: 목재 1 → 목탄 2g개라 값을 매기면 공짜로 칩이 생긴다
+  if(GEAR_T.includes(k) || k === 'sword' || k === 'bar') return Math.round(ITEM[k].v * g);   // 검·도구 = 주괴 3개값 + 주괴당 0.5
+  if(k === 'food') return 3 * g;   // 요리: 생선 + 목재(목탄) 2틱 + 굽기 1틱 → 주괴(3g)와 같은 효율
   if(k === 'fruit') return g;
+  if(k === 'loot') return LOOT_V[g - 1] || 0;
   return 1; };   // 날것(씨앗·목재·원석·생선)은 1
-const itemCur = key => /^sword\d/.test(key) ? 'chips' : 'blue';   // 받는 칩: 검은 노란 축의칩, 나머지는 파란 칩
+const itemCur = key => 'blue';   // 받는 칩: 모두 파란 칩(검도 이제 만들어서 판다)
 const curIcon = key => itemCur(key) === 'chips' ? '<i class="chipi"></i>' : '<i class="chipi bc"></i>';
 // 제작법: 농사 씨앗 1 → 열매 5 · 제련 목재 1 + 원석 1 → 바 · 대장간 바 2 → 투구, 바 4 → 갑옷 · 요리 목재 1 + 생선 1 → 구이
 // 경험치 배수 = 그 재료를 모으는 데 든 채집 틱 수(씨앗 1 = 나무베기 1/SEED_P틱, 주괴 1 = 목재·원석 2틱)
 //  → 채집 3개를 올리며 쌓인 재료로 제작 4개도 같이 올라간다(어느 제작도 재료 때문에 혼자 막히지 않게)
 function recipe(k, g, part){
   if(k === 'farm') return { in:{ ['seed' + g]:1 }, out:{ ['fruit' + g]:5 }, xp:Math.round(1 / SEED_P) };
-  if(k === 'smelt') return part === 'coal' ? { in:{ ['log' + g]:1 }, out:{ coal1:g }, xp:0 } : { in:{ coal1:g, ['ore' + g]:1 }, out:{ ['bar' + g]:1 }, xp:2 };   // 목탄: g등급 목재 1 → 목탄 g개(즉시 변환·경험치 없음) / 주괴 g = 목탄 g + 원석 g   // 목탄: 고른 목재 1개 → 목탄 1개
+  if(k === 'smelt') return part === 'coal' ? { in:{ ['log' + g]:1 }, out:{ coal1:2 * g }, xp:0 } : { in:{ coal1:g, ['ore' + g]:1 }, out:{ ['bar' + g]:1 }, xp:2 };   // 목탄: g등급 목재 1 → 목탄 g개(즉시 변환·경험치 없음) / 주괴 g = 목탄 g + 원석 g   // 목탄: 고른 목재 1개 → 목탄 1개
   if(k === 'smith') return part === 'body' ? { in:{ ['bar' + g]:4 }, out:{ ['body' + g]:1 }, xp:8 } : TOOL_SK[part] ? { in:{ ['bar' + g]:3 }, out:{ [part + g]:1 }, xp:6 } : { in:{ ['bar' + g]:2 }, out:{ ['helm' + g]:1 }, xp:4 };
   return { in:{ coal1:g, ['fish' + g]:1 }, out:{ ['food' + g]:1 }, xp:2 };   // 요리 g = 목탄 g + 생선 g
 }
 const hasMats = (st, R) => Object.entries(R.in).every(([key, c]) => (st.inv[key] || 0) >= c);
 const GATHER_OUT = { wood:'log', mine:'ore', fish:'fish' };
-const SEED_P = .1;                                   // 나무베기 틱마다 10% 확률로 씨앗
+const SEED_P = .5;                                   // 나무베기 틱마다 50% 확률로 씨앗
 const HEAL = g => 15 * g;                            // 요리: HP가 0이 되면 그만큼 다시 채운다
 const ACC = g => g;                                  // 열매 정확도: 1~10%. 빗나감(10%)에서 그만큼 빼서, 공허 열매(10%)면 빗나가지 않는다
 const DODGE = g => 5 * g;                            // 열매: 공격마다 1개씩 먹고 이 확률(최대 50%)로 피한다
-const ACC_PRICE = [0, 0, 500, 1400, 4000, 12000, 37000, 100000, 290000, 800000, 2200000];   // 경험치 효율 기준: 살 때부터 남은 플레이 시간 × 5%(한 단계 경험치)가 모으는 시간보다 늘 커서, 건너뛰지 않고 사는 게 이득. 모으는 시간 실버 1h … 옵시디언 120h   // 용사의 반지·목걸이(실버~옵시디언), 파란 칩
+const ACC_PRICE = [0, 0, 650, 1800, 5200, 16000, 48000, 130000, 380000, 1040000, 2900000];   // 전리품(전투 중 파란 칩) 추가로 기존값 ×1.3 · 경험치 효율 기준: 살 때부터 남은 플레이 시간 × 5%(한 단계 경험치)가 모으는 시간보다 늘 커서, 건너뛰지 않고 사는 게 이득. 모으는 시간 실버 1h … 옵시디언 120h   // 용사의 반지·목걸이(실버~옵시디언), 파란 칩
 const ACC_N = { ring:'용사의 반지', neck:'용사의 목걸이' };
 const ACC_LV = g => 160 + (g - 2) * 80;   // 반지·목걸이 착용: 총합 레벨(실버 160 … 옵시디언 800)
 const ACC_XP = [0, 0, 5, 7.5, 10, 12.5, 15, 17.5, 20, 22.5, 25];   // 같은 등급 반지+목걸이 합 = 등급×5%(실버 10% … 옵시디언 50%)   // 반지·목걸이 경험치 %: 비쌀수록 오르는 폭이 커진다(실버 3% … 옵시디언 50%)
@@ -5514,7 +5780,7 @@ const MAXEXP = CUM[MAXLV];   // 만렙(125)이 되는 경험치. 그 뒤로는 �
 const lvOf = e => { let L = 1; while(L < MAXLV && e >= CUM[L+1]) L++; return L; };
 // 틱은 3.6초(시간당 1000틱). 던전(등급)별 시간당 경험치: 13K·25K·30K·34K·37K·41K·44K·47K·50K
 function tickMs(k){ if(k === 'combat') return combatMs(); const pb = typeof RPG !== 'undefined' ? petBoost(k) : 1; return tickMs0(k) / pb; }
-function tickMs0(k){ const sk = k && typeof RPG !== 'undefined' && RPG.st.sk[k]; return sk && SK_KEYS.includes(k) ? 3600 * gearSpeed(sk) * (k === 'fish' && !(RPG.st.eq.bait && RPG.st.eq.baitN > 0) ? 2 : 1) : 3600; }   // 낚시는 미끼가 없으면 2배 느리다
+function tickMs0(k){ const sk = k && typeof RPG !== 'undefined' && RPG.st.sk[k]; return sk && SK_KEYS.includes(k) ? 3600 * gearSpeed(sk) * (k === 'fish' && !(RPG.st.eq.bait && RPG.st.eq.baitN > 0) ? 2 : 1) : k === 'smith' && sk ? 3600 * Object.values(recipe('smith', 1, sk.part).in)[0] : 3600; }   // 낚시는 미끼가 없으면 2배 느리다 · 대장간은 주괴 1개당 1틱(투구 2 · 검·도구 3 · 갑옷 4틱) → 제련 1시간 = 대장간 1시간
 const XP_PER_HOUR = [13000, 25000, 30000, 34000, 37000, 41000, 44000, 47000, 50000, 53000];
 const expPer = s => XP_PER_HOUR[s - 1] / 1000;
 const fmtDur = ms => { const s = ms / 1000; return s < 60 ? `${s.toFixed(s < 10 ? 1 : 0)}초` : s < 3600 ? `${Math.floor(s/60)}분 ${Math.round(s%60)}초` : `${Math.floor(s/3600)}시간 ${Math.round(s%3600/60)}분`; };
@@ -5544,6 +5810,7 @@ function rpgNorm(st){
       sk.gMax = sk.sMax = gm;   // 산 장비 중 최고 등급(낮은 장비를 입고 있어도 유지)
     }
     sk.exp = Math.max(0, +sk.exp || 0);
+    delete sk.nx;   /* 다시 켜면 골라만 둔 티어는 버림 */
     if(!Array.isArray(sk.own)) sk.own = Array.from({length: sk.gMax || 1}, (_, i) => i + 1);   // 가진 장비 등급(예전 저장: 최고 등급 이하 전부)
     sk.own = [...new Set(sk.own.map(Number).filter(g => g >= 1 && g <= 10).concat([1, sk.gear]))].sort((a, b) => a - b);
     st.sk[k] = sk;
@@ -5560,6 +5827,9 @@ function rpgNorm(st){
   st.eq = Object.assign({ helm:0, body:0, food:0, fruit:0, foodN:0, fruitN:0, ring:0, neck:0, bait:0, baitN:0, pet:0 }, st.eq || {});
   delete st.eq.whet; delete st.eq.whetN;
   st.pets = st.pets && typeof st.pets === 'object' ? st.pets : {};   // 얻은 펫(행동마다 한 번만)
+  PETS.forEach((pp, x) => { const i = x + 1, worn = st.eq.pet === i ? 1 : 0, bag = st.inv['pet' + i] || 0;   // 안전장치: 펫은 종류마다 딱 1마리(가방+장착)
+    if(worn + bag > 1){ if(worn) delete st.inv['pet' + i]; else st.inv['pet' + i] = 1; }
+    if(worn + bag > 0) st.pets[pp.k] = 1; });
   for(const sl of QTY_SL){ st.eq[sl + 'N'] = Math.max(0, Math.floor(+st.eq[sl + 'N'] || 0)); if(!st.eq[sl + 'N']) st.eq[sl] = 0; }   // 요리·열매는 장착한 개수만큼 가방에서 옮겨 둔다
   st.blue = Math.max(0, +st.blue || 0);
   st.bought = Object.assign({ sword:[], ring:[], neck:[] }, st.bought || {});   // 상점에서 한 번 산 것(다시 못 산다 = 매진)
@@ -5585,7 +5855,7 @@ function rpgEarned(){
   const st = RPG.st;
   if(!st.earned){
     let spent = 0;
-    for(const k of SK_KEYS){ const sk = st.sk[k]; for(let g = 2; g <= (sk.gMax || sk.gear || 1); g++) spent += GRADE_PRICE[g - 1]; }
+    /* 검·도구는 이제 만들어 쓰므로 '축의칩으로 산 장비'로 세지 않는다 */
     const total = (+st.chips || 0) + spent;
     const rs = records().filter(x => !x.hint), n3 = rs.filter(x => x.mode && x.mode.endsWith('3')).length, n4 = rs.length - n3;
     const e3 = rs.length ? Math.round(total * n3 / rs.length) : 0;
@@ -5597,8 +5867,8 @@ function rpgEarned(){
 // 축의칩 개수: 화면 왼쪽 위에 늘 붙어 있다(홈·마작·RPG 어디서나)
 function chipFix(){
   let el = document.getElementById('chipfix');
-  if(!el){ el = document.createElement('div'); el.id = 'chipfix'; el.className = 'chipcount'; el.title = '축의칩'; el.innerHTML = '<i></i><b></b>'; document.body.appendChild(el); }
-  el.querySelector('b').textContent = RPG.st.chips.toLocaleString();
+  if(!el){ el = document.createElement('div'); el.id = 'chipfix'; el.className = 'chipcount'; el.title = '노란 축의칩 · 파란 칩 · 빨간 칩'; el.innerHTML = '<i></i><b class="yc"></b><span class="bcw"><i class="chipi bc"></i><b class="bc"></b></span><span class="rcw">' + pkRedIcon() + '<b class="rc"></b></span>'; document.body.appendChild(el); }
+  el.querySelector('b.yc').textContent = RPG.st.chips.toLocaleString(); el.querySelector('b.bc').textContent = Math.floor(RPG.st.blue || 0).toLocaleString();   /* 파란 칩(가방 위에서 옮겨 옴) */ el.querySelector('b.rc').textContent = (PK.st.red || 0).toLocaleString();   // 빨간 칩(포커 우승)도 같이
 }
 // 시간 흐름 처리: 지난 시간만큼 틱을 돌려 exp를 준다
 // 전투: 플레이어 틱(휘두르기)과 몬스터 틱(공격)이 따로 돈다. 시간 순서대로 처리
@@ -5621,14 +5891,14 @@ function combatAdvance(st, sk, dt, T){
       if(sk.exp + gain >= capE) break;
       const miss = Math.random() < Math.max(0, .1 - (st.eq.fruit && st.eq.fruitN > 0 ? ACC(st.eq.fruit) : 0) / 100), crit = !miss && Math.random() < CRIT(sk.gear), hit = miss ? 0 : hitBase(sk.gear, ms) * (crit ? 3 : 1);
       st.mhp -= hit; const l = L(); l.swing = true; l.hit = hit; l.crit = crit; l.miss = miss;
-      if(st.mhp <= 0){ st.mhp = mMax; mc = 0; st.msm = smashRoll(ms); l.kill = true; gain += Math.min(per * killXp(ms) * xpCap('combat', st, lvOf(sk.exp + gain)), capE - sk.exp - gain); done++; }   // 처치: 경험치, 다음 몬스터(공격 틱도 처음부터)
+      if(st.mhp <= 0){ st.mhp = mMax; mc = 0; st.msm = smashRoll(ms); l.kill = true; if(Math.random() < lootP(sk.gear, ms)){ const lk = 'loot' + ms; st.inv[lk] = (st.inv[lk] || 0) + 1; items[lk] = (items[lk] || 0) + 1; } gain += Math.min(per * killXp(ms) * xpCap('combat', st, lvOf(sk.exp + gain)), capE - sk.exp - gain); done++; }   // 처치: 경험치, 다음 몬스터(공격 틱도 처음부터)
       if(!st.pets[k] && Math.random() < (T / 1000) * (lvOf(sk.exp + gain) + 1) / 25e6 && petGain(k)) items['pet' + petOf(k)] = 1;   // 펫: 아주 드물게 한 번
     }
     if(mc >= Mx - 1e-6){   // 몬스터가 한 대
       mc = 0; const l = L(); l.mon = true;
       const smash = !!SM && !!st.msm; st.msm = smashRoll(ms); l.smash = smash;   // 이번 공격이 강타인지(미리 정해 둔 것) → 다음 공격을 새로 정한다
       let dodge = false;
-      if(st.eq.fruit && st.eq.fruitN > 0){ st.eq.fruitN--; dodge = Math.random() * 100 < DODGE(st.eq.fruit); if(!st.eq.fruitN){ st.eq.fruit = 0; eqOut = true; } }   // 장착한 열매에서 1개: 피하지 못해도 먹는다
+      if(st.eq.fruit && st.eq.fruitN > 0){ st.fruitUse = (st.fruitUse || 0) + 1; if(st.fruitUse >= 5){ st.fruitUse = 0; st.eq.fruitN--; }   /* 열매 1개로 5번 */ dodge = Math.random() * 100 < DODGE(st.eq.fruit); if(!st.eq.fruitN){ st.eq.fruit = 0; eqOut = true; } }   // 장착한 열매에서 1개: 피하지 못해도 먹는다
       if(dodge){ l.dodge = true; continue; }
       const d = smash ? Math.round(hpMax(st) * SM.pct) : dmgPerHit(st); l.taken += d; if(smash) l.smashD = d;   // 강타는 방어력 무시
       if(d >= hpMax(st)){ st.hp = 0; stop = 'ko'; break; }   // 최대 HP 이상을 한 방에 맞으면 요리를 먹을 틈도 없이 쓰러진다
@@ -5701,6 +5971,15 @@ function rpgTick(){
   if(on) rpgLive();
 }
 function rpgFx(r){
+  if(RPG.st.sel !== r.k){   // 다른 행동 탭을 보는 중: 그림 효과 없이 소리만(하고 있다는 걸 귀로 알 수 있게)
+    const L = r.last || {};
+    if(L.smash && !L.dodge) SFX.crit(); if(L.mon && !L.dodge) SFX.hurt(); if(L.ate) SFX.heal(); if(L.crit) SFX.crit();
+    if(L.kill) SFX.die(SKILLS.combat.stages[RPG.st.sk.combat.stage - 1][5]);
+    if(Object.values(r.items || {}).some(c => c > 0) && !(r.after > r.before)) SFX.gain();
+    if(SFX[r.k]){ if(r.k === 'combat'){ if(L.swing) SFX.hit(SKILLS.combat.stages[RPG.st.sk.combat.stage - 1][5]); } else if(r.k === 'fish') SFX.fish(); }   // 나머지 행동은 rpgSwingSfx가 박자대로 친다
+    if(r.after > r.before){ SFX.fanfare(.5); rpgToast(`${SKILLS[r.k].name} LEVEL UP!`); }
+    return;
+  }
   const sc = document.querySelector('.rpg .scene'); if(!sc) return;
   if(r.k === 'farm'){ const g = RPG.st.sk.farm.stage, n = RPG.st.inv['seed' + g] || 0, tg = sc.querySelector('.target');   // 씨앗이 줄면 달린 열매도 하나씩 줄어든다(줄기·잎은 남는다)
     const bk = sc.querySelector('.basket'); if(bk) bk.innerHTML = farmBasket();   // 거둔 열매가 바구니에 하나씩 쌓인다
@@ -5764,7 +6043,14 @@ function swingAnim(){
 }
 function rpgSwingSfx(){
   const st = RPG.st;
-  if(UI.screen !== 'rpg' || !st.active || st.active !== st.sel || st.active === 'fish' || document.hidden){ SWING.el = null; SWING.nextA = null; return; }
+  if(!st.active || st.active === 'fish' || document.hidden || UI.screen !== 'rpg'){ SWING.el = null; SWING.nextA = null; return; }   // 마작·포커 화면에서는 RPG 소리를 내지 않는다
+  if(st.active !== st.sel){   // RPG의 다른 행동 탭: 그림이 없으니 같은 박자(1.15초)로 시계만 따라 계속 친다(전투는 틱 소리로 대신)
+    if(st.active === 'combat'){ SWING.nextA = null; return; }
+    const now = SFX.now(); if(now == null){ SWING.nextA = null; return; }
+    const period = swingMs() / 1000; if(SWING.nextA == null || SWING.nextA < now - .5) SWING.nextA = now + .05;
+    while(SWING.nextA - now < .3){ if(SWING.nextA >= now - .02) SFX.at(st.active, SWING.nextA - now); SWING.nextA += period; }
+    return;
+  }
   const an = swingAnim();
   if(!an || an.currentTime == null){ SWING.el = null; SWING.nextA = null; return; }
   const now = SFX.now(); if(now == null){ SWING.nextA = null; return; }   // 효과음이 꺼져 있으면 아무것도 하지 않는다
@@ -5861,6 +6147,45 @@ function armorGrad(id, g, none){
 // 용사 위치: 행동마다 서는 자리. 농사는 땅 작물이면 작물 앞에 무릎 꿇고 수확가위, 나무 열매면 뒤에 서서 장대 가위
 const heroKneel = k => k === 'farm' && !TREE_CROPS.includes(RPG.st.sk.farm.stage) && RPG.st.active === 'farm';   // 가위질하는 동안만 무릎 꿇는다(멈추면 일어선다)
 const heroX = k => k === 'fish' ? 70 : k === 'combat' ? 150 : k === 'smelt' ? 160 : k === 'cook' ? 140 : k === 'farm' && !TREE_CROPS.includes(RPG.st.sk.farm.stage) ? 140 : 112;
+// 용사는 그 행동을 하는 동안에만 장면에 있다(시작하면 뿅 하고 나타난다). 다른 행동 탭은 빈 장면으로 둘러볼 수 있다
+// 화면 다시 그리기: 새 DOM(n)과 옛 DOM(o)을 비교해 다른 곳만 고친다(같은 요소는 그대로 둬서 CSS 애니메이션이 처음부터 다시 돌지 않게)
+function domMorph(o, n){
+  const oc = [...o.childNodes], nc = [...n.childNodes];
+  for(let i = 0; i < nc.length; i++){
+    const a = oc[i], b = nc[i];
+    if(!a){ o.appendChild(b); continue; }
+    if(a.nodeType !== b.nodeType || a.nodeName !== b.nodeName){ o.replaceChild(b, a); continue; }
+    if(a.nodeType !== 1){ if(a.nodeValue !== b.nodeValue) a.nodeValue = b.nodeValue; continue; }
+    if(a.classList.contains('pkstk')){ if(a.dataset.k !== b.dataset.k) o.replaceChild(b, a); continue; }   // 포커 칩 탑: 칩 수가 같으면 손대지 않는다
+    if(a.classList.contains('scene')){   // 행동 장면: 같은 장면이면 버튼 줄만 바꾸고(떠 있는 경험치 글씨 등은 그대로), 다르면 통째로 새로
+      if(a.dataset.sig !== b.dataset.sig){ o.replaceChild(b, a); continue; }
+      const ob = a.querySelector('.sbtns'), nb = b.querySelector('.sbtns'); if(ob && nb) domMorph(ob, nb); continue;
+    }
+    for(const at of [...a.attributes]) if(!b.hasAttribute(at.name)) a.removeAttribute(at.name);
+    for(const at of [...b.attributes]) if(a.getAttribute(at.name) !== at.value) a.setAttribute(at.name, at.value);
+    if(a.tagName === 'INPUT' && a.value !== b.value && document.activeElement !== a) a.value = b.value;
+    domMorph(a, b);
+  }
+  for(let i = oc.length - 1; i >= nc.length; i--) if(oc[i].parentNode === o) o.removeChild(oc[i]);
+}
+// 새 화면(newRoot)으로 바꾸되 keepOld(옛 장면)는 그 자리에 둔 채 주변만 갈아 끼운다
+function graftKeep(oldRoot, newRoot, keepOld, keepNew){
+  const pa = (n, r) => { const a = []; for(; n && n !== r; n = n.parentNode) a.unshift(n); return n === r ? a : null; };
+  const po = pa(keepOld, oldRoot), pn = pa(keepNew, newRoot);
+  if(!po || !pn || po.length !== pn.length || po.some((n, i) => n.tagName !== pn[i].tagName)) return false;
+  let o = oldRoot, nn = newRoot;
+  for(let d = 0; d < po.length; d++){
+    if(d > 0){ for(const at of [...o.attributes]) if(!nn.hasAttribute(at.name)) o.removeAttribute(at.name); for(const at of [...nn.attributes]) if(o.getAttribute(at.name) !== at.value) o.setAttribute(at.name, at.value); }
+    const oc = po[d], nc = pn[d], bef = [], aft = []; let seen = false;
+    for(const c of [...nn.childNodes]){ if(c === nc){ seen = true; continue; } (seen ? aft : bef).push(c); }
+    for(const c of [...o.childNodes]) if(c !== oc) o.removeChild(c);
+    for(const c of bef) o.insertBefore(c, oc);
+    for(const c of aft) o.appendChild(c);
+    o = oc; nn = nc;
+  }
+  return true;
+}
+function heroWrap(k, svg){ if(RPG.st.active !== k) return ''; const pop = Date.now() - (UI.heroPopAt || 0) < 700 && UI.heroPopK === k; return `<g class="heroin${pop ? ' pop' : ''}">${svg}${pop ? `<g class="puff">${[[-18,-6],[0,-12],[18,-6],[-9,4],[10,4]].map(([dx, dy]) => `<circle cx="${heroX(k) + dx}" cy="${150 + dy}" r="7" fill="#fff" opacity=".85"/>`).join('')}</g>` : ''}</g>`; }
 function rpgPerson(k, tierC){
   // 평범한 사람(오른쪽을 봄). 앞팔(arm)만 행동에 따라 움직이고, 손에 든 장비는 등급 색
   const X = heroX(k), Y = 170, sh = [X + 4, Y - 58];
@@ -6291,7 +6616,7 @@ function rpgCraftScene(k){
 
       ${[0, 1, 2].map(i => `<circle class="p-ember" style="animation-delay:-${i * 1.1}s" cx="${200 + i * 8}" cy="150" r="1.4" fill="#ffb24a"/>`).join('')}`;
   }
-  return `<svg viewBox="0 0 360 210" aria-label="${esc(SKILLS[k].name)}"><defs><filter id="sDrop" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="2.2" dy="2.6" stdDeviation="2" flood-color="#000" flood-opacity=".38"/></filter></defs>${bg}<g filter="url(#sDrop)">${target}${ready || k !== 'smelt' ? rpgPerson(k, '#9aa3ad') : rpgPerson(k, '#9aa3ad').replace(/<rect x="-7" y="58"[^>]*\/><rect x="-6" y="59"[^>]*\/>/, '')}</g>${fg}${k === 'smelt' || k === 'cook' ? rpgParticles('ember') : ''}${rpgPetSVG(k)}${rpgLvTag(k)}</svg>`;
+  return `<svg viewBox="0 0 360 210" aria-label="${esc(SKILLS[k].name)}"><defs><filter id="sDrop" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="2.2" dy="2.6" stdDeviation="2" flood-color="#000" flood-opacity=".38"/></filter></defs>${bg}<g filter="url(#sDrop)">${target}${heroWrap(k, ready || k !== 'smelt' ? rpgPerson(k, '#9aa3ad') : rpgPerson(k, '#9aa3ad').replace(/<rect x="-7" y="58"[^>]*\/><rect x="-6" y="59"[^>]*\/>/, ''))}</g>${fg}${k === 'smelt' || k === 'cook' ? rpgParticles('ember') : ''}${heroWrap(k, rpgPetSVG(k) + rpgLvTag(k))}</svg>`;
 }
 function rpgScene(k){
   if(SKILLS[k].craft) return rpgCraftScene(k);
@@ -6359,21 +6684,29 @@ function rpgScene(k){
   const fx = `<defs><linearGradient id="sHaze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky2}" stop-opacity="0"/><stop offset=".55" stop-color="${sky2}" stop-opacity=".28"/><stop offset=".8" stop-color="${sky2}" stop-opacity=".06"/><stop offset="1" stop-color="${sky2}" stop-opacity="0"/></linearGradient>
     <filter id="sDrop" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="2.2" dy="2.6" stdDeviation="2" flood-color="#000" flood-opacity=".38"/></filter>
     <radialGradient id="sRim" cx=".18" cy="-.05" r=".9"><stop offset="0" stop-color="#fff4d6" stop-opacity=".32"/><stop offset=".55" stop-color="#fff4d6" stop-opacity="0"/></radialGradient></defs>`;
-  return `<svg viewBox="0 0 360 210" aria-label="${esc(SKILLS[k].name)} · ${esc(nm)}">${fx}${bg}<rect width="360" height="210" fill="url(#sHaze)"/><g filter="url(#sDrop)">${target}${boatFront ? `<g class="boatbob">${rpgPerson(k, tierC).replace(/<g class="chair">[\s\S]*?<\/g>/, '')}${boatFront}</g>` : rpgPerson(k, tierC)}</g>${fg}<rect width="360" height="210" fill="url(#sRim)" style="mix-blend-mode:soft-light"/>${rpgParticles(wx)}${rpgPetSVG(k)}${rpgLvTag(k)}</svg>`;
+  return `<svg viewBox="0 0 360 210" aria-label="${esc(SKILLS[k].name)} · ${esc(nm)}">${fx}${bg}<rect width="360" height="210" fill="url(#sHaze)"/><g filter="url(#sDrop)">${target}${boatFront ? `<g class="boatbob">${heroWrap(k, rpgPerson(k, tierC).replace(/<g class="chair">[\s\S]*?<\/g>/, ''))}${boatFront}</g>` : heroWrap(k, rpgPerson(k, tierC))}</g>${fg}<rect width="360" height="210" fill="url(#sRim)" style="mix-blend-mode:soft-light"/>${rpgParticles(wx)}${heroWrap(k, rpgPetSVG(k) + rpgLvTag(k))}</svg>`;
 }
 // ---------- 화면 ----------
 // 제목 '마작 RPG' 자체가 화면 스위치: 누른 쪽 글자가 밝게, 그 아래로 그 화면이 나온다
+// 슬라이드 뒤 화면 높이 붙잡기 풀기: 새 화면이 짧아 지금 보던 높이가 사라지면 화면이 툭 끌려 올라가므로(출렁임), 위로 스크롤해 그 높이 안으로 들어올 때까지 붙잡아 둔다
+function relMinH(){
+  const mh = $app.style.minHeight; if(!mh){ window.removeEventListener('scroll', relMinH); return; }
+  const y = window.scrollY; $app.style.minHeight = '';   // 높이를 풀기 전 위치로 판단(풀고 나면 브라우저가 이미 끌어올림)
+  if(document.documentElement.scrollHeight < y + window.innerHeight - 1){ $app.style.minHeight = mh; window.scrollTo(0, y); window.addEventListener('scroll', relMinH, { passive: true }); }
+  else window.removeEventListener('scroll', relMinH);
+}
 function hswPlace(sw, on){   // 금색 막대를 고른 글자 폭·위치에 맞춘다
   if(!sw) return; const b = sw.querySelector(`.ht[data-t="${on}"]`); if(!b) return;
   sw.style.setProperty('--kx', b.offsetLeft + 'px'); sw.style.setProperty('--ks', b.offsetWidth / 100);   /* 폭도 transform(scaleX)로 움직여야 화면을 다시 그리는 동안에도 막대가 끊기지 않는다 */
 }
 function heroHTML(on){
   return `<header class="hero"><div class="tiles" title="누적 축의 ${rpgEarnedAll().toLocaleString()}개">${chipTilesHTML(rpgEarnedAll())}</div>
-    <h1 class="htitle"><span class="hsw ${on}" role="radiogroup" aria-label="화면"><i class="knob"></i><button class="ht ${on === 'mj' ? 'on' : ''}" data-act="tab" data-t="mj" role="radio" aria-checked="${on === 'mj'}">마작</button><button class="ht ${on === 'rpg' ? 'on' : ''}" data-act="tab" data-t="rpg" role="radio" aria-checked="${on === 'rpg'}">RPG</button></span></h1></header>`;
+    <h1 class="htitle"><span class="hsw ${on}" role="radiogroup" aria-label="화면"><i class="knob"></i><button class="ht ${on === 'mj' ? 'on' : ''}" data-act="tab" data-t="mj" role="radio" aria-checked="${on === 'mj'}">마작</button><button class="ht ${on === 'rpg' ? 'on' : ''}" data-act="tab" data-t="rpg" role="radio" aria-checked="${on === 'rpg'}">RPG</button><button class="ht pkt ${on === 'pk' ? 'on' : ''}" data-act="tab" data-t="pk" role="radio" aria-checked="${on === 'pk'}" aria-label="포커" title="포커">${pkRedIcon('sw')}</button></span></h1></header>`;
 }
 function appTabs(on){
   const snd = settings.sound !== false;
-  return `<div class="apptools"><button class="btn small spk hbtn" data-act="${on === 'rpg' ? 'rpgHelp' : 'help'}" aria-label="${on === 'rpg' ? 'RPG 도움말' : '도움말'}" title="${on === 'rpg' ? 'RPG 도움말' : '도움말'}">?</button><button class="btn small spk ${snd?'spkon':''}" data-act="toggleSound" aria-label="효과음 ${snd?'끄기':'켜기'}" aria-pressed="${snd}">${speakerSVG(snd)}</button></div>`;
+  const hl = on === 'rpg' ? ['rpgHelp', 'RPG 도움말'] : on === 'pk' ? ['pkHelp', '포커 도움말'] : ['help', '도움말'];
+  return `<div class="apptools"><button class="btn small spk hbtn" data-act="${hl[0]}" aria-label="${hl[1]}" title="${hl[1]}">?</button><button class="btn small spk ${snd?'spkon':''}" data-act="toggleSound" aria-label="효과음 ${snd?'끄기':'켜기'}" aria-pressed="${snd}">${speakerSVG(snd)}</button>${on === 'pk' && pkG() && !pkG().over && !pkG().paused ? '<button class="btn small spk xbtn" data-act="pkQuit" aria-label="나가기" title="나가기">✕</button>' : ''}</div>`;
 }
 
 function rpgHTML(){
@@ -6386,23 +6719,23 @@ function rpgHTML(){
     return `<button class="skc ${k===sel?'sel':''}" data-act="rpgSel" data-s="${k}">${st.active===k?'<span class="on">진행 중</span>':''}
       <span class="t">${SKILLS[k].name}<small class="lv">Lv ${L}</small></span>
       <span class="xpbar"><b style="width:${L>=MAXLV?100:Math.min(100, into/need*100)}%"></b></span>
-      <span class="m">${MJSK[k] ? skillBadge(k) : ''}<span class="xp">${L>=MAXLV?`MAX · 총 ${fmtNum(s.exp)}`:(capped(s) ? `${fmtNum(need)} / ${fmtNum(need)} · 상한` : `${fmtNum(into)} / ${fmtNum(need)}`)}</span></span></button>`;
+      <span class="m">${MJSK[k] ? skillBadge(k) : PKSK[k] ? pkSkillBadge(k) : ''}<span class="xp">${L>=MAXLV?`MAX · 총 ${fmtNum(s.exp)}`:(capped(s) ? `${fmtNum(need)} / ${fmtNum(need)} · 상한` : `${fmtNum(into)} / ${fmtNum(need)}`)}</span></span></button>`;
   };
   // 상점: 등급(장비 + 같은 등급 던전). 산 등급으로 바로 옮기고, 지난 등급으로는 돌아갈 수 없다
   const gradeItems = craft ? '' : mapItems(sel);
   const away = RPG.away;   // 확인을 누를 때까지 남는다
-  const M = MJSK[sel], on = sk.skillOn !== false, ok = !craft && sk.gear >= 2, gc = tier.gl || tier.c;
+  const M = MJSK[sel], on = sk.skillOn !== false, ok = !craft && mjSkillPct(sel) > 0, gc = tier.gl || tier.c;
   const rate = capped(sk) ? `<b>Lv ${LV_CAP(sk.gMax)} 상한</b> · 다음 장비 필요` : `시간당 ${fmtNum(X * 1000)} · ${sk.gear >= 10 ? '만렙' : '~Lv ' + LV_CAP(sk.gear)}`;
   return `${appTabs('rpg')}${heroHTML('rpg')}<div class="rpg">
-    <div class="stage"><div class="skills side l">${CR_KEYS.map(card).join('')}</div>
-    <div class="scene ${st.active === sel ? '' : 'idle'}" style="--swd:${sel === 'combat' ? combatMs() / 1000 : 1.15}s">${rpgScene(sel)}${away ? `<div class="welcome">자리 비운 동안 ${esc(SKILLS[away.k].name)} +${fmtNum(away.gain)} exp${away.after > away.before ? ` · Lv ${away.before}→${away.after}` : ''}${away.cap ? ' · 상한' : ''}${away.stop ? ` · ${away.stop === 'hp' ? 'HP 소진' : away.stop === 'bait' ? '미끼 소진' : away.stop === 'ko' ? '한 방에 쓰러짐' : '재료 소진'}으로 멈춤` : ''}${rpgAwayItems(away.items)}<button class="btn small primary" data-act="awayOk">확인</button></div>` : ''}
+    <div class="stage"><div class="skills side l">${SK_KEYS.map(card).join('')}</div>
+    <div class="scene ${st.active === sel ? '' : 'idle'} ${sel === 'combat' && rageOn() ? 'rage' : ''}" data-sig="${esc(JSON.stringify([sel, st.active === sel, sk.stage, sk.part, sk.gear, st.eq.helm, st.eq.body, st.eq.pet, st.eq.food, st.eq.fruit, st.eq.bait, rpgStatsHTML(sel), !!away, craft ? hasMats(st, R0) : 0, UI.heroPopAt || 0, sel === 'combat' && rageOn() ? 1 : 0]))}" style="--swd:${sel === 'combat' ? combatMs() / 1000 : 1.15}s">${rpgScene(sel)}${sel === 'combat' && rageOn() ? `<div class="ragefx"><i class="spin"></i><i class="sweep"></i></div><div class="ragetag">${TK_RAGE}광전사의 포효 · <b class="rgt">${rageClock()}</b></div>` : ''}${away ? `<div class="welcome">자리 비운 동안 ${esc(SKILLS[away.k].name)} +${fmtNum(away.gain)} exp${away.after > away.before ? ` · Lv ${away.before}→${away.after}` : ''}${away.cap ? ' · 상한' : ''}${away.stop ? ` · ${away.stop === 'hp' ? 'HP 소진' : away.stop === 'bait' ? '미끼 소진' : away.stop === 'ko' ? '한 방에 쓰러짐' : '재료 소진'}으로 멈춤` : ''}${rpgAwayItems(away.items)}<button class="btn small primary" data-act="awayOk">확인</button></div>` : ''}
       <div class="shead"><div class="sleft"><span>${esc(stg[0])}</span>${rpgStatsHTML(sel)}</div>${sel === 'combat' ? (() => { const mm = monHp(sk.stage), mh = st.mhp > 0 ? Math.min(mm, st.mhp) : mm; return `<div class="hps"><span class="shp me"><span class="bars"><i><b data-hpb style="width:${Math.max(0, Math.min(1, st.hp / hpMax(st))) * 100}%"></b></i><u class="tk me"><b></b></u></span><em data-hpt>${Math.ceil(Math.max(0, st.hp))} / ${hpMax(st)}</em></span><span class="shp mhp"><span class="bars"><i><b data-mhb style="width:${mh / mm * 100}%"></b></i><u class="tk mt"><b></b></u></span><em data-mht>${fmtNum(Math.ceil(mh))} / ${fmtNum(mm)}</em></span></div>`; })() : ''}</div>
       <div class="sfoot"><span></span><span class="sbtns">
-        ${st.active === sel ? `<button class="btn small gobtn" data-act="rpgGo">그만하기</button>` : `<button class="btn small primary gobtn" data-act="rpgGo">${esc(S.name)} 시작</button>`}
+        ${st.active === sel ? `<button class="btn small gobtn" data-act="rpgGo">그만하기</button>${sk.nx ? `<button class="btn small primary gobtn" data-act="rpgGo" data-go="nx">${esc(nxName(sel, sk))} 시작</button>` : ''}` : `<button class="btn small primary gobtn" data-act="rpgGo">${esc(S.name)} 시작</button>`}
       </span></div>
       ${sel === 'combat' ? '' : '<div class="tickbar"><b></b></div>'}</div>
-    <div class="skills side r">${SK_KEYS.map(card).join('')}</div></div>
-    ${craft ? `<div class="shop"><h3 class="hrow">${S.name === '제작' ? '' : esc(S.name) + ' '}제작법${sel === 'smith' ? `<div class="invtabs">${SMITH_PARTS.map(pt => `<button class="btn small ${pt === (SMITH_PARTS.includes(UI.smithTab) ? UI.smithTab : sk.part) ? 'on' : ''}" data-act="smithTab" data-t="${pt}">${{ helm:'투구', body:'갑옷', sword:'검', axe:'도끼', pick:'곡괭이', rod:'낚싯대' }[pt]}</button>`).join('')}</div>` : sel === 'smelt' ? `<div class="invtabs">${SMELT_PARTS.map(pt => `<button class="btn small ${pt === smeltTab(sk) ? 'on' : ''}" data-act="smeltTab" data-t="${pt}">${{ bar:'주괴', coal:'목탄' }[pt]}</button>`).join('')}</div>` : ''}</h3><div class="rcps">${rpgRecipes(st, sel, sk)}</div></div>` : gradeItems ? `<div class="shop"><h3>${{ combat:'던전', wood:'숲', mine:'광산', fish:'낚시터' }[sel]}</h3><div class="items">${gradeItems}</div></div>` : ''}
+    <div class="skills side r">${CR_KEYS.map(card).join('')}</div></div>
+    ${craft ? `<div class="shop"><h3 class="hrow"><span class="httl">${S.name === '제작' ? '' : esc(S.name) + ' '}제작법</span>${sel === 'smith' ? `<div class="invtabs">${SMITH_PARTS.map(pt => `<button class="btn small ${pt === (SMITH_PARTS.includes(UI.smithTab) ? UI.smithTab : sk.part) ? 'on' : ''}" data-act="smithTab" data-t="${pt}">${{ helm:'투구', body:'갑옷', sword:'검', axe:'도끼', pick:'곡괭이', rod:'낚싯대' }[pt]}${st.active === sel && sk.part === pt && pt !== (SMITH_PARTS.includes(UI.smithTab) ? UI.smithTab : sk.part) ? '<span class="runt">진행 중</span>' : ''}</button>`).join('')}</div>` : sel === 'smelt' ? `<div class="invtabs">${SMELT_PARTS.map(pt => `<button class="btn small ${pt === smeltTab(sk) ? 'on' : ''}" data-act="smeltTab" data-t="${pt}">${{ bar:'주괴', coal:'목탄' }[pt]}${st.active === sel && (sk.part || 'bar') === pt && pt !== smeltTab(sk) ? '<span class="runt">진행 중</span>' : ''}</button>`).join('')}</div>` : ''}</h3><div class="rcps ${sel === 'smith' || sel === 'smelt' ? 'tabp' : ''}">${rpgRecipes(st, sel, sk)}</div></div>` : gradeItems ? `<div class="shop"><h3>${{ combat:'던전', wood:'숲', mine:'광산', fish:'낚시터' }[sel]}</h3><div class="items">${gradeItems}</div></div>` : ''}
     ${rpgBagHTML(st)}
     ${rpgAccHTML(st)}
     ${rpgAdmin() ? rpgAdminHTML(st) : ''}
@@ -6418,18 +6751,32 @@ function rpgStatsHTML(sel){
   const st = RPG.st, fr = st.eq.fruit && st.eq.fruitN > 0 ? st.eq.fruit : 0, f = n => Math.round(n * 10) / 10;
   const rows = [['ex', 'EXP', ACC_XP[st.eq.ring || 0] + ACC_XP[st.eq.neck || 0]]];
   if(sel === 'combat') rows.push(['ac', 'ACC', 100 - Math.max(0, 10 - (fr ? ACC(fr) : 0))], ['cr', 'CRIT', CRIT(st.sk.combat.gear) * 100], ['dg', 'DODGE', fr ? Math.min(50, DODGE(fr)) : 0]);   // 순서: EXP · ACC · CRIT · DODGE · HASTE
-  rows.push(['hs', 'HASTE', petBoost(sel) > 1 ? Math.round((petBoost(sel) - 1) * 100) : 0]);
+  const bait = sel === 'fish' && st.eq.bait && st.eq.baitN > 0 ? 2 : 1;   // 미끼: 없을 때보다 2배 빠름
+  rows.push(['hs', 'HASTE', Math.round((petBoost(sel) * bait * (sel === 'combat' && rageOn() ? 2 : 1) - 1) * 100)]);   // 펫·미끼를 곱해서
   return rows.filter(r => r[2] > 0).map(([c, k, v]) => `<span class="stp ${c}"><b>${k}</b><em>${f(v)}</em></span>`).join('');
+}
+// 포효가 끝날 때: 장면은 그대로, 휘두르는 애니메이션은 지금 위치(진행률)를 지킨 채 원래 속도로, 금박·표시는 서서히 사라진다
+function rageEndFx(oldMs){
+  const sc = document.querySelector('.rpg .scene.rage'); if(!sc) return;
+  const newMs = combatMs(), anims = sc.getAnimations({ subtree:true }).filter(a => { const d = a.effect && a.effect.getTiming().duration; return typeof d === 'number' && Math.abs(d - oldMs) < 2; });
+  const prog = anims.map(a => (a.currentTime || 0) / oldMs);
+  sc.style.setProperty('--swd', newMs / 1000 + 's'); void sc.offsetWidth;
+  anims.forEach((a, i) => { try{ a.currentTime = prog[i] * newMs; }catch(e){} });
+  sc.classList.add('rageend');
+  const sl = sc.querySelector('.sleft'); if(sl){ const sp = sl.querySelector(':scope > span'); sl.innerHTML = (sp ? sp.outerHTML : '') + rpgStatsHTML('combat'); }   // HASTE 숫자만 고친다
+  setTimeout(() => { sc.classList.remove('rage', 'rageend'); sc.querySelectorAll('.ragefx,.ragetag').forEach(e => e.remove());
+    const tmp = document.createElement('div'); tmp.innerHTML = rpgHTML(); const ns = tmp.querySelector('.rpg .scene'); if(ns) sc.dataset.sig = ns.dataset.sig; }, 1200);   // 다음 화면 갱신 때 장면을 새로 만들지 않게
 }
 function rpgRecipes(st, sel, sk){
   const sp = SMITH_PARTS.includes(UI.smithTab) ? UI.smithTab : sk.part;
   const list = sel === 'smith' ? TIERS.map((t, i) => [i + 1, sp]) : sel === 'smelt' ? TIERS.map((t, i) => [i + 1, smeltTab(sk)]) : TIERS.map((t, i) => [i + 1, null]);
   const L = lvOf(sk.exp);
   return list.map(([g, part]) => {
-    const R = recipe(sel, g, part), ok = Object.keys(R.out)[0], has = hasMats(st, R), cur = part !== 'coal' && has && sk.stage === g && ((sel !== 'smith' && sel !== 'smelt') || sk.part === part), lvOk = part === 'coal' || L >= REQ_LV(g);   // 목탄은 어떤 목재든 레벨 제한 없이
+    const R = recipe(sel, g, part), ok = Object.keys(R.out)[0], has = hasMats(st, R), cur = part !== 'coal' && has && (sk.nx ? sk.nx.g : sk.stage) === g && ((sel !== 'smith' && sel !== 'smelt') || (sk.nx ? sk.nx.pt || sk.part : sk.part) === part), lvOk = part === 'coal' || L >= REQ_LV(g);   // 목탄은 어떤 목재든 레벨 제한 없이
     const ins = Object.entries(R.in).map(([key, c]) => `<span class="${(st.inv[key] || 0) >= c ? '' : 'short'}">${itemIcon(key)}${esc(itemName(key))} ${c}<small>(<b data-cnt="${key}">${fmtNum(st.inv[key] || 0)}</b>)</small></span>`).join('<br>');   // 재료마다 한 줄
     const nm = `${itemIcon(ok)}${esc(itemName(ok))}${R.out[ok] > 1 ? ` ×${R.out[ok]}` : ''}`, can = !cur && lvOk && has;   // 이름이 곧 선택 버튼(선택되면 버튼 테두리 대신 카드에 노란 테두리)
-    return `<div class="it rcp ${cur ? 'eq' : ''} ${lvOk ? '' : 'lock'}"><span class="nrow">${can ? `<button class="rnb" data-act="rpgRecipe" data-g="${g}" data-p="${part || ''}">${nm}</button>` : `<span class="rnb off">${nm}</span>`}${lvOk ? '' : `<small class="lockt">Lv ${REQ_LV(g)}</small>`}</span><span class="d">${ins}</span></div>`;
+    const run = st.active === sel && part !== 'coal' && sk.stage === g && ((sel !== 'smith' && sel !== 'smelt') || sk.part === part);   // 지금 만들고 있는 제작법
+    return `<div class="it rcp ${cur ? 'eq' : ''} ${lvOk ? '' : 'lock'}"><span class="nrow">${can ? `<button class="rnb" data-act="rpgRecipe" data-g="${g}" data-p="${part || ''}">${nm}</button>` : `<span class="rnb off">${nm}</span>`}${run ? '<small class="runt">진행 중</small>' : ''}${lvOk ? '' : `<small class="lockt">Lv ${REQ_LV(g)}</small>`}</span><span class="d">${ins}</span></div>`;
   }).join('');
 }
 const slotName = (s, g) => itemName(s + g);
@@ -6464,7 +6811,7 @@ function rpgBagHTML(st){
   const allKeys = Object.keys(st.inv).filter(key => st.inv[key] > 0 && ikParse(key));
   const tab = INV_TABS.find(t => t[0] === UI.invTab) || INV_TABS[0], inTab = (T, key) => !T[2] || T[2].includes(ikParse(key)[0]);   // 늘 펼쳐 둔다(처음엔 전체)
   const tabs = `<div class="invtabs" role="tablist">${INV_TABS.map(T => { const n = allKeys.filter(key => inTab(T, key)).length; return `<button class="btn small ${T === tab ? 'on' : ''} ${T[2] && allKeys.some(key => inTab(T, key) && SELL_T.includes(ikParse(key)[0])) ? 'sell' : ''} ${n ? '' : 'empty'}" role="tab" aria-selected="${T === tab}" data-act="invTab" data-t="${T[0]}" aria-expanded="${T === tab}">${T[1]}${n ? `<small>${n}</small>` : ''}</button>`; }).join('')}</div>`;
-  const SUBN = { log:'목재', coal:'목탄', seed:'씨앗', ore:'원석', fish:'생선', bar:'주괴', sword:'검', food:'요리', fruit:'열매', bait:'미끼', pet:'펫', helm:'투구', body:'갑옷', ring:'반지', neck:'목걸이', axe:'도끼', pick:'곡괭이', rod:'낚싯대' };
+  const SUBN = { loot:'전리품', log:'목재', coal:'목탄', seed:'씨앗', ore:'원석', fish:'생선', bar:'주괴', sword:'검', food:'요리', fruit:'열매', bait:'미끼', pet:'펫', helm:'투구', body:'갑옷', ring:'반지', neck:'목걸이', axe:'도끼', pick:'곡괭이', rod:'낚싯대' };
   const subs = tab && tab[2] && tab[2].length > 1 ? tab[2] : null, sub = subs ? (subs.includes(UI.invSub) ? UI.invSub : subs[0]) : null;   // 늘 세부 탭 하나(처음엔 검)   // 탭 안의 탭(장비 → 검·투구…)
   const subtabs = subs ? `<div class="invtabs sub">${subs.map(t => { const n = allKeys.filter(key => ikParse(key)[0] === t).length; return `<button class="btn small ${t === sub ? 'on' : ''} ${n && SELL_T.includes(t) ? 'sell' : ''} ${n ? '' : 'empty'}" data-act="invSub" data-t="${t}">${SUBN[t]}${n ? `<small>${n}</small>` : ''}</button>`; }).join('')}</div>` : '';
   const keys = !tab ? [] : allKeys.filter(key => inTab(tab, key) && (!sub || ikParse(key)[0] === sub)).sort((a, b) => { const A = ikParse(a), B = ikParse(b); return ITEM_ORDER.indexOf(A[0]) - ITEM_ORDER.indexOf(B[0]) || (A[0] === 'pet' ? ALL_KEYS.indexOf(PETS[A[1] - 1].k) - ALL_KEYS.indexOf(PETS[B[1] - 1].k) : A[1] - B[1]); });   // 낮은 등급이 위로, 펫은 행동 순서(전투·벌목·채광·낚시·수확·제련·제작·요리)
@@ -6478,32 +6825,22 @@ function rpgBagHTML(st){
   }).join('') + '<div class="ivr empty" aria-hidden="true"></div>'.repeat(Math.max(0, 10 - keys.length) - (keys.length ? 0 : 1));   // 늘 10줄 높이(탭을 바꿔도 가방 높이 그대로)
   return `<div class="shop bag"><h3>장비</h3>
     <div class="eqs">${slots}</div></div>
-    <div class="shop bag invbag"><h3>가방 ${tabs}<span class="baghd">${(() => { const L = bulkSellList(st), v = L.reduce((a, k) => a + itemPrice(k) * st.inv[k], 0); return `<button class="btn small" data-act="rpgBest" title="착용 가능한 최고 등급으로 일괄 장비">일괄 장비</button>` + `<button class="btn small bulk" data-act="rpgBulk" ${L.length ? '' : 'disabled'} title="종류마다 가진 최고 등급만 남기고 아래 등급 장비 전부 판매"><i class="chipi bc"></i>${v.toLocaleString()} 일괄 판매</button>`; })()}<span class="bluec" title="파란 칩"><i class="chipi bc"></i><b data-blue>${Math.floor(st.blue).toLocaleString()}</b></span></span></h3>
+    <div class="shop bag invbag"><h3>가방 ${tabs}<span class="baghd">${(() => { const L = bulkSellList(st), v = L.reduce((a, [k, c]) => a + itemPrice(k) * c, 0); return `<button class="btn small" data-act="rpgBest" title="착용 가능한 최고 등급으로 일괄 장비">일괄 장비</button>` + `<button class="btn small bulk" data-act="rpgBulk" ${L.length ? '' : 'disabled'} title="불필요 아이템 일괄 판매"><i class="chipi bc"></i>${v.toLocaleString()} 일괄 판매</button>`; })()}</span></h3>
     ${subtabs}${!tab ? '' : `<div class="inv">${keys.length ? rows : `<div class="ivr empty"></div>${rows}`}</div>${pager}`}</div>`;
 }
 // 맵: 그 등급의 배경(움직이는 날씨 포함). 가진 장비 등급까지 들어갈 수 있고, 들어가면 그 등급 장비를 든다
+function applyNx(k, sk){ const st = RPG.st; sk.stage = sk.nx.g; if(sk.nx.pt) sk.part = sk.nx.pt; delete sk.nx; if(k === 'combat'){ st.mhp = 0; st.msm = false; } }   // 하는 중에 골라 둔 티어를 실제로 적용
+const nxName = (k, sk) => SKILLS[k].craft ? itemName(Object.keys(recipe(k, sk.nx.g, sk.nx.pt || sk.part).out)[0]) : SKILLS[k].stages[sk.nx.g - 1][0];
 function mapItems(k){   // 맵: 그 행동 레벨이 맵 등급의 요구 레벨(20·30…100)에 닿으면 들어갈 수 있다. 장비와는 따로
   const sk = RPG.st.sk[k], S = SKILLS[k], L = lvOf(sk.exp);
   return TIERS.map((t, i) => {
-    const g = i + 1, cur = g === sk.stage, open = L >= REQ_LV(g);
+    const g = i + 1, cur = g === (sk.nx ? sk.nx.g : sk.stage), run = g === sk.stage && RPG.st.active === k, open = L >= REQ_LV(g);   // 노란 테두리 = 고른 맵, '진행 중' = 지금 하고 있는 맵
     const nm = esc(S.stages[i][0]);   // 이름이 곧 이동 버튼(제작법과 같은 방식)
-    return `<div class="it wshop map ${cur ? 'eq' : ''} ${open ? '' : 'lock'}"><span class="nrow">${!cur && open ? `<button class="rnb" data-act="rpgMap" data-k="${k}" data-g="${g}">${nm}</button>` : `<span class="rnb off">${nm}</span>`}${open ? '' : `<small class="lockt">Lv ${REQ_LV(g)}</small>`}</span>
+    return `<div class="it wshop map ${cur ? 'eq' : ''} ${open ? '' : 'lock'}"><span class="nrow">${!cur && open ? `<button class="rnb" data-act="rpgMap" data-k="${k}" data-g="${g}">${nm}</button>` : `<span class="rnb off">${nm}</span>`}${open ? '' : `<small class="lockt">Lv ${REQ_LV(g)}</small>`}${run ? '<small class="runt">진행 중</small>' : ''}</span>
       ${rpgRack(k, g, true)}</div>`;   // 이름(버튼)이 위, 그림이 아래 — 제작법 카드와 같은 위치
   }).join('');
 }
 // 상점 탭의 도구 줄: 아이콘 + 이름 + (착용 레벨) + 축의칩 가격 / 착용 / 착용 중
-function toolShopItems(k){   // 무기: 축의칩만 있으면 언제든 산다. 착용은 레벨(20·30…100)이 돼야
-  const sk = RPG.st.sk[k], S = SKILLS[k], L = lvOf(sk.exp);
-  return TIERS.map((t, i) => {
-    const g = i + 1; if(g === 1) return '';   // 브론즈는 처음부터 가진 것이라 진열하지 않는다
-    const cur = g === sk.gear, own = owns(sk, g), lvOk = L >= REQ_LV(g);
-    const sold = k === 'combat' ? cur || RPG.st.bought.sword.includes(g) : own;   // 검: 한 번 사면 매진
-    const btn = sold ? '<span class="d">매진</span>'
-      : `<button class="btn small buy" data-act="rpgBuy" data-k="${k}" data-g="${g}"><i class="chipi"></i>${GRADE_PRICE[i]}</button>`;
-    const info = [`${S.name} ${REQ_LV(g)}레벨 이상`, k === 'combat' && CRIT(g) ? `치명타 ${Math.round(CRIT(g) * 100)}%` : ''].filter(Boolean).join(' · ');
-    return `<div class="it ${cur ? 'eq' : ''} ${!cur && own && !lvOk ? 'lock' : ''}"><span class="n">${itemIcon(TOOL_T[k] + g)}${t.n} ${S.tool}${info ? `<small>${info}</small>` : ''}</span>${btn}</div>`;
-  }).join('');
-}
 // ---------- 운영자 모드: 효과음 테스트(소리마다 크기 재기·비교·볼륨 저장) ----------
 // [이름, 표시, 인자, 등급] 등급 f: 자주 나는 소리(기준보다 -3dB), e: 이벤트(기준), s: 특별(+3dB)
 const SND_LIST = [
@@ -6573,14 +6910,14 @@ function sndPanel(){
 const rpgAdmin = () => /(^|[#&])admin\b/.test(location.hash);   // 주소 끝에 #admin 을 붙였을 때만
 function rpgAdminHTML(st){
   const AV = UI.admVals || (UI.admVals = { 'adm-t':'log', 'adm-g':'1', 'adm-n':'100', 'adm-k':'wood', 'adm-l':'50' });
-  const TN = { log:'목재', coal:'목탄', seed:'씨앗', ore:'원석', fish:'생선', fruit:'열매', bar:'주괴', food:'요리', sword:'검', axe:'도끼', pick:'곡괭이', rod:'낚싯대', helm:'투구', body:'갑옷', ring:'반지', neck:'목걸이', bait:'미끼', pet:'펫' };
+  const TN = { loot:'전리품', log:'목재', coal:'목탄', seed:'씨앗', ore:'원석', fish:'생선', fruit:'열매', bar:'주괴', food:'요리', sword:'검', axe:'도끼', pick:'곡괭이', rod:'낚싯대', helm:'투구', body:'갑옷', ring:'반지', neck:'목걸이', bait:'미끼', pet:'펫' };
   const types = ITEM_ORDER.filter(t => t !== 'pet').map(t => `<option value="${t}"${AV['adm-t'] === t ? ' selected' : ''}>${TN[t] || t}</option>`).join('');
   const grades = TIERS.map((t, i) => `<option value="${i + 1}"${AV['adm-g'] === String(i + 1) ? ' selected' : ''}>${i + 1} ${t.n}</option>`).join('');
   const skills = ALL_KEYS.map(k => `<option value="${k}"${AV['adm-k'] === k ? ' selected' : ''}>${SKILLS[k].name}</option>`).join('');
   const B = (op, label, extra) => `<button class="btn small" data-act="adm" data-op="${op}"${extra || ''}>${label}</button>`;
   return `<div class="shop admin"><h3>운영자 모드 <small class="muted">주소의 #admin 을 지우면 사라져요</small></h3>
     <div class="arow"><b>아이템</b><select id="adm-t">${types}</select><select id="adm-g">${grades}</select><input id="adm-n" class="qty" type="number" min="1" value="${esc(AV['adm-n'])}">${B('give', '지급')}${B('giveAll', '모든 아이템 ×100')}${B('clearInv', '가방 비우기')}</div>
-    <div class="arow"><b>칩</b>${B('blue', '파란 칩 +1억')}${B('blue0', '파란 칩 0')}${B('chips', '축의칩 +100')}${B('shopReset', '상점 매진 초기화')}</div>
+    <div class="arow"><b>칩</b>${B('blue', '파란 칩 +1억')}${B('blue0', '파란 칩 0')}${B('chips', '축의칩 +100')}${B('rage10', '포효 10초')}${B('red', '빨간 칩 +10')}${B('red0', '빨간 칩 0')}${B('shopReset', '상점 매진 초기화')}</div>
     <div class="arow"><b>레벨</b><select id="adm-k">${skills}</select><input id="adm-l" class="qty" type="number" min="1" max="${MAXLV}" value="${esc(AV['adm-l'])}">${B('lv', '설정')}${B('lvAll', `전부 ${MAXLV}`)}${B('gearAll', '도구 전 등급 열기')}</div>
     <div class="arow"><b>소리</b>${B('snd', '효과음 테스트')}<small class="muted">소리마다 크기 재고 맞추기</small></div>
     <div class="arow"><b>전투</b>${B('hp0', 'HP 1')}${B('hpFull', 'HP 가득')}${B('unEq', '장착 전부 해제')}</div>
@@ -6598,6 +6935,9 @@ function rpgAdminAct(b){
   else if(op === 'blue') st.blue += 1e8;
   else if(op === 'blue0') st.blue = 0;
   else if(op === 'chips') st.chips += 100;
+  else if(op === 'rage10'){ st.rage = Date.now() + 10000; }
+  else if(op === 'red'){ PK.st.red = (PK.st.red || 0) + 10; pkSave(); }
+  else if(op === 'red0'){ PK.st.red = 0; pkSave(); }
   else if(op === 'shopReset') st.bought = { sword:[], ring:[], neck:[] };
   else if(op === 'lv' || op === 'lvAll'){ const L = Math.max(1, Math.min(MAXLV, Math.floor(+v('adm-l') || 1))); for(const k of op === 'lvAll' ? ALL_KEYS : [v('adm-k')]) st.sk[k].exp = CUM[op === 'lvAll' ? MAXLV : L]; }
   else if(op === 'gearAll'){ for(const k of SK_KEYS) for(let g = 1; g <= 10; g++) addOwn(st.sk[k], g); }
@@ -6611,23 +6951,29 @@ function rpgAdminAct(b){
   else if(op === 'ff'){ st.last -= (+b.dataset.m || 1) * 60000; rpgTick(); }
   rpgSave(); chipFix(); render();
 }
-const SHOP_TABS = [['combat', '무기'], ['ring', '반지'], ['neck', '목걸이'], ['cons', '소모품']];   // 도끼·곡괭이·낚싯대는 대장간에서 만들어 착용
+const SHOP_TABS = [['ring', '반지'], ['neck', '목걸이'], ['cons', '소모품']];   // 검은 대장간에서 만든다   // 도끼·곡괭이·낚싯대는 대장간에서 만들어 착용
 // 소모품: 개수를 넣고 산다(개당 파란 칩 1)
+const BAIT_PACK = 1000, BAIT_COST = 1;   // 미끼 1000개 = 노란 축의칩 1개
 function consShopItems(st){
   return [['bait', '낚시 속도 2배']].map(([t, d]) =>
-    `<div class="it cons"><span class="n">${itemIcon(t + 1)}${ITEM[t].n(1)}<small>${d}</small></span><span class="cbuy"><input class="qty" type="number" inputmode="numeric" min="1" value="100" aria-label="살 개수"><button class="btn small buy" data-act="rpgCons" data-t="${t}"><i class="chipi bc"></i>구매</button></span></div>`).join('');
+    `<div class="it cons"><span class="n">${itemIcon(t + 1)}${ITEM[t].n(1)} ×${BAIT_PACK}<small>${d}</small></span><span class="cbuy"><button class="btn small buy" data-act="rpgCons" data-t="${t}" ${(st.chips || 0) < BAIT_COST ? 'disabled' : ''}><i class="chipi"></i><b class="cprice">${BAIT_COST}</b></button></span></div>`).join('');
 }
-// 일괄 판매: 팔 수 있는 장비(투구·갑옷·도끼·곡괭이·낚싯대)마다 가진 것 중 최고 등급은 남기고 그 아래 등급을 전부
+// 일괄 판매: 장비(검·투구·갑옷·도끼·곡괭이·낚싯대·반지·목걸이)마다 '지금 착용할 수 있는 최고 등급' 1개만 남기고(이미 그걸 착용 중이면 가방 것은 전부) 그 등급 이하를 판다
+// 레벨이 모자라 아직 못 입는 높은 등급은 팔지 않는다. 결과: [아이템, 팔 개수]
 function bulkSellList(st){
   const out = [];
-  for(const t of GEAR_T){
-    const eqG = t === 'helm' || t === 'body' ? st.eq[t] || 0 : st.sk[TOOL_SK[t]].gear || 0;   // 장착 중인 등급
-    let top = eqG; for(let g = 1; g <= 10; g++) if((st.inv[t + g] || 0) > 0) top = Math.max(top, g);
-    for(let g = 1; g < top; g++) if((st.inv[t + g] || 0) > 0) out.push(t + g);
+  const TL = rpgTotalLv();
+  for(const t of ['sword'].concat(GEAR_T, ['ring', 'neck'])){   // 반지·목걸이도 같은 방식
+    const tool = !!TOOL_SK[t], acc = t === 'ring' || t === 'neck', L = tool ? lvOf(st.sk[TOOL_SK[t]].exp) : 0;
+    const eqG = t === 'helm' || t === 'body' || acc ? st.eq[t] || 0 : st.sk[TOOL_SK[t]].gear || 0;   // 장착 중인 등급
+    const ok = g => acc ? TL >= ACC_LV(g) : !tool || L >= REQ_LV(g);   // 투구·갑옷은 등급 제한 없음, 반지·목걸이는 총합 레벨
+    let keep = eqG; for(let g = 10; g > eqG; g--) if((st.inv[t + g] || 0) > 0 && ok(g)){ keep = g; break; }
+    for(let g = 1; g <= keep; g++){ const c = st.inv[t + g] || 0; if(!c) continue; const n = g === keep && keep > eqG ? c - 1 : c; if(n > 0) out.push([t + g, n]); }
   }
+  for(let g = 1; g <= 10; g++) if((st.inv['loot' + g] || 0) > 0) out.push(['loot' + g, st.inv['loot' + g]]);   // 전리품: 쓸 데가 없으니 전부
   for(const t of QTY_SL){   // 요리·열매·미끼: 장착한 등급(또는 가방 최고 등급)보다 낮은 것은 판다
     let top = st.eq[t] || 0; for(let g = 1; g <= 10; g++) if((st.inv[t + g] || 0) > 0) top = Math.max(top, g);
-    for(let g = 1; g < top; g++) if((st.inv[t + g] || 0) > 0) out.push(t + g);
+    for(let g = 1; g < top; g++) if((st.inv[t + g] || 0) > 0) out.push([t + g, st.inv[t + g]]);
   }
   return out;
 }
@@ -6661,13 +7007,13 @@ function bestGear(st){
 function rpgAccHTML(st){
   const row = s => TIERS.slice(1).map((t, i) => {
     const g = i + 2, sold = st.bought[s].includes(g), p = ACC_PRICE[g];
-    return `<div class="it"><span class="n">${itemIcon(s + g)}${t.n} ${s === 'ring' ? '반지' : '목걸이'}<small>총합 ${ACC_LV(g)}레벨 이상 · 경험치 +${ACC_XP[g]}%</small></span>${sold ? '<span class="d">매진</span>' : `<button class="btn small buy" data-act="rpgAcc" data-slot="${s}" data-g="${g}"><i class="chipi bc"></i>${p >= 1e6 ? fmtNum(p) : p.toLocaleString()}</button>`}</div>`;
+    return `<div class="it"><span class="n">${itemIcon(s + g)}${t.n} ${s === 'ring' ? '반지' : '목걸이'}<small>총합 ${ACC_LV(g)}레벨 이상<br>경험치 +${ACC_XP[g]}%</small></span>${sold ? '<span class="d">매진</span>' : `<button class="btn small buy" data-act="rpgAcc" data-slot="${s}" data-g="${g}"><i class="chipi bc"></i>${p.toLocaleString()}</button>`}</div>`;
   }).join('');
-  const sel = st.sel || 'combat', tab = SHOP_TABS.some(t => t[0] === UI.shopTab) ? UI.shopTab : 'combat';
+  const sel = st.sel || 'combat', tab = SHOP_TABS.some(t => t[0] === UI.shopTab) ? UI.shopTab : 'ring';
   const tabs = `<div class="invtabs">${SHOP_TABS.map(([k, n]) => `<button class="btn small ${k === tab ? 'on' : ''}" data-act="shopTab" data-t="${k}">${n}</button>`).join('')}</div>`;
-  const pane = k => k === 'cons' ? consShopItems(st) : k === 'ring' || k === 'neck' ? row(k) : toolShopItems(k);
+  const pane = k => k === 'cons' ? consShopItems(st) : row(k);
   // 네 탭을 같은 자리에 겹쳐 두고 고른 것만 보이게: 상점 높이는 늘 가장 긴 탭 높이(소모품을 눌러도 줄지 않는다)
-  return `<div class="shop shopfix"><h3>상점</h3>${tabs}<div class="shopstack">${SHOP_TABS.map(([k]) => `<div class="items acc3 ${k === tab ? '' : 'off'}" ${k === tab ? '' : 'aria-hidden="true" inert'}>${pane(k)}</div>`).join('')}</div></div>`;
+  return `<div class="shop shopfix"><h3 class="hrow">상점 ${tabs}</h3><div class="shopstack">${SHOP_TABS.map(([k]) => `<div class="items acc3 ${k === tab ? '' : 'off'}" ${k === tab ? '' : 'aria-hidden="true" inert'}>${pane(k)}</div>`).join('')}</div></div>`;
 }
 // 경험치 테이블: 레벨별 누적 경험치와 다음 레벨까지 필요한 양. 지금 고른 행동의 레벨을 강조한다
 // 확인을 누르기 전에 또 자리를 비웠다 오면, 같은 행동이면 합쳐서 보여 준다
@@ -6712,14 +7058,11 @@ function rpgHelpHTML(){
       <li><b>총 레벨</b> ${ALICE_LV}에 설정 '아리스(3인 마작)' 개방</li>
       <li><b>총 레벨</b> ${TULIP_LV}에 설정 '튤립(3인 마작)' 개방</li>
     </ul>
-    <h2>마작 스킬</h2>
+    <h2>행동과 스킬</h2>
     <ul>
-      
-      
-      <li>${MJSK.combat.icon} <b>(${S.combat.n})</b> 손패를 잡고 <kbd>휠</kbd>을 굴리면 방총 확인<br><span style="color:#2fe06a">초록</span> → 안전, <span style="color:#ff3b30">빨강</span> → 방총, <span style="color:#000;text-shadow:.5px 0 #ccc,-.5px 0 #ccc,0 .5px #ccc,0 -.5px #ccc">검정</span> → 스킬 실패</li>
-      <li>${MJSK.wood.icon} <b>(${S.wood.n})</b> 필요 없는 손패 두 장을 패산으로 끌어 교환</li>
-      <li>${MJSK.mine.icon} <b>(${S.mine.n})</b> 도라 표시패를 눌러 스킬 발동 성공 시 뒷도라 표시패 확인</li>
-      <li>${MJSK.fish.icon} <b>(${S.fish.n})</b> 스킬 성공 시 다음 쯔모 패가 투시되어 보임</li>
+      <li><b>마작 스킬</b> ${[['combat', '전투'], ['wood', '벌목'], ['mine', '채광'], ['fish', '낚시']].map(([k, n]) => `<span class="skpill">${MJSK[k].icon}${n}</span>`).join('')}</li>
+      <li><b>포커 스킬</b> ${[['farm', '수확'], ['smelt', '제련'], ['smith', '제작'], ['cook', '요리']].map(([k, n]) => `<span class="skpill">${PKSK[k].icon}${n}</span>`).join('')}</li>
+      <li><b>발동 확률</b> 레벨 20부터 20%, 10레벨마다 +10% (Lv 100에 100%)</li>
     </ul>
     <div class="row"><button class="btn primary" data-act="closeModal">닫기</button></div></div>`;
 }
@@ -6731,28 +7074,14 @@ function rpgToast(msg, html){   // html: 아이콘 등 마크업을 넣을 때(�
 function rpgAct(a, b){
   const st = RPG.st, sel = st.sel || 'combat', sk = st.sk[sel];
   rpgAdvance(false);
-  if(a === 'rpgSel'){ if(b.dataset.s !== st.sel && st.active){ st.active = null; st.carry = 0; st.mcarry = 0; } st.sel = b.dataset.s; }   // 다른 행동으로 바꾸면 하던 행동은 멈춘다
+  if(a === 'rpgSel'){ st.sel = b.dataset.s; }   // 다른 행동 탭을 봐도 하던 행동은 계속(다른 행동을 시작하거나 그만하기 전까지)
   else if(a === 'rpgGo' && st.active !== sel && SKILLS[sel].craft && !(sel === 'smelt' && sk.part === 'coal') && lvOf(sk.exp) < REQ_LV(sk.stage)){ rpgToast(`${REQ_LV(sk.stage)}레벨 이상부터 만들 수 있어요`); return; }
   else if(a === 'rpgGo' && st.active !== sel && SKILLS[sel].craft && !hasMats(st, recipe(sel, sk.stage, sk.part))){ rpgToast('재료가 부족해요'); return; }
   else if(a === 'rpgGo' && st.active !== sel && sel === 'combat' && st.hp < 1){ rpgToast('HP 회복 중이에요'); return; }
   else if(a === 'rpgGo' && st.active !== sel && capped(sk)){ rpgToast(`Lv ${LV_CAP(sk.gMax)} 상한 · ${TIERS[sk.gMax].n} ${SKILLS[sel].tool}이 필요해요`); return; }
-  else if(a === 'rpgGo'){ if(st.active === sel) st.active = null; else { st.active = sel; st.carry = 0; st.mcarry = 0; st.last = Date.now(); if(sel === 'combat') st.msm = smashRoll(sk.stage); SFX.unlock(); if(sel === 'combat') SFX.hit(SKILLS.combat.stages[sk.stage - 1][5]); else if(SFX[sel]) SFX[sel](); } }   // 시작할 때 한 번: 전투는 그 몬스터의 타격음
-  else if(a === 'rpgBuy'){   // 사면 곧 착용. 그 장비의 착용 레벨(20·30…100)에 닿아야 살 수 있다
-    const K = SK_KEYS.includes(b.dataset.k) ? b.dataset.k : sel, sk = st.sk[K];
-    const g = +b.dataset.g, p = GRADE_PRICE[g-1];
-    if(!(g >= 2 && g <= 10)) return;
-    if(K === 'combat'){   // 검: 사면 가방으로. 착용은 가방에서(레벨이 돼야)
-      if(sk.gear === g || st.bought.sword.includes(g)) return;
-      if(st.chips < p){ rpgToast('축의칩이 부족합니다'); return; }
-      st.chips -= p; SFX.cash(.5); st.bought.sword.push(g); st.inv['sword' + g] = (st.inv['sword' + g] || 0) + 1; rpgToast(`${TIERS[g-1].n} 검 구매 완료`);
-      rpgSave(); chipFix(); render(); return;
-    }
-    if(owns(sk, g)) return;   // 레벨과 상관없이 산다
-    if(st.chips < p){ rpgToast('축의칩이 부족합니다'); return; }
-    st.chips -= p; SFX.cash(); addOwn(sk, g);
-    if(lvOf(sk.exp) >= REQ_LV(g)) rpgWear(st, K, sk, g, false, true);   // 레벨이 되면 바로 착용, 아니면 보유만
-    else rpgToast(`${REQ_LV(g)}레벨부터 착용할 수 있어요`);
-  }
+  else if(a === 'rpgGo' && st.active === sel && b.dataset.go === 'nx' && sk.nx && SKILLS[sel].craft && !hasMats(st, recipe(sel, sk.nx.g, sk.nx.pt || sk.part))){ rpgToast('재료가 부족해요'); return; }
+  else if(a === 'rpgGo'){ let swap = false; if(st.active === sel && b.dataset.go === 'nx' && sk.nx){ applyNx(sel, sk); st.active = null; swap = true; }   // 고른 새 티어로 다시 시작
+    if(st.active === sel){ st.active = null; if(sk.nx) applyNx(sel, sk); } else { st.active = sel; st.carry = 0; st.mcarry = 0; st.last = Date.now(); if(!swap){ UI.heroPopAt = Date.now(); UI.heroPopK = sel; }   /* 같은 행동 안에서 티어만 바꾸면 주인공은 그대로 */ if(sel === 'combat') st.msm = smashRoll(sk.stage); SFX.unlock(); if(sel === 'combat') SFX.hit(SKILLS.combat.stages[sk.stage - 1][5]); else if(SFX[sel]) SFX[sel](); } }   // 시작할 때 한 번: 전투는 그 몬스터의 타격음
   else if(a === 'rpgWear'){   // 이미 산 장비로 갈아입기(지난 장비 포함)
     const K = SK_KEYS.includes(b.dataset.k) ? b.dataset.k : sel, sk = st.sk[K];
     const g = +b.dataset.g;
@@ -6762,23 +7091,23 @@ function rpgAct(a, b){
   }
   else if(a === 'rpgCons'){   // 소모품 구매: 개수 × 1
     const t = b.dataset.t; if(t !== 'bait') return;
-    const inp = b.closest('.it') && b.closest('.it').querySelector('.qty'), n = Math.max(0, Math.floor(+(inp ? inp.value : 0) || 0));
-    if(!n){ rpgToast('살 개수를 입력하세요'); return; }
-    if(st.blue < n){ rpgToast('파란 칩이 부족합니다'); return; }
-    st.blue -= n; st.inv[t + 1] = (st.inv[t + 1] || 0) + n; SFX.unlock(); SFX.cash(.5); rpgToast(`${ITEM[t].n(1)} ${n.toLocaleString()}개 구매 완료`);
+    const n = BAIT_PACK;
+    if((st.chips || 0) < BAIT_COST){ rpgToast('노란 축의칩이 부족합니다'); return; }
+    st.chips -= BAIT_COST; st.inv[t + 1] = (st.inv[t + 1] || 0) + n; SFX.unlock(); SFX.cash(.5); rpgToast(`${ITEM[t].n(1)} ${n.toLocaleString()}개 구매 완료`);
   }
   else if(a === 'rpgMap'){   // 맵 이동: 하던 행동은 멈추고 새 맵에서 다시 시작
     const K = SK_KEYS.includes(b.dataset.k) ? b.dataset.k : sel, ks = st.sk[K], g = +b.dataset.g;
-    if(!(g >= 1 && g <= 10) || g === ks.stage) return;
+    if(!(g >= 1 && g <= 10)) return; if(g === ks.stage){ if(ks.nx){ delete ks.nx; } else return; }
     if(lvOf(ks.exp) < REQ_LV(g)){ rpgToast(`${REQ_LV(g)}레벨 이상부터 들어갈 수 있어요`); return; }
-    ks.stage = g; if(K === 'combat'){ st.mhp = 0; st.msm = false; } if(st.active === K){ st.active = null; st.carry = 0; st.mcarry = 0; }
+    if(st.active === K){ ks.nx = { g }; }   // 하는 중이면 고르기만 해 두고 계속한다(시작을 눌러야 그 맵으로)
+    else { ks.stage = g; delete ks.nx; if(K === 'combat'){ st.mhp = 0; st.msm = false; } }
   }
   else if(a === 'rpgRecipe' && sel === 'smelt' && b.dataset.p === 'coal'){   // 목탄 탭: 누르면 그 목재를 전부 바로 목탄으로(경험치 없음)
     const g = +b.dataset.g, key = 'log' + g, n = st.inv[key] || 0; if(!(g >= 1 && g <= 10) || n <= 0) return;
-    delete st.inv[key]; st.inv.coal1 = (st.inv.coal1 || 0) + n * g;
-    SFX.unlock(); SFX.smelt(); rpgToast(`${itemName(key)} ${n.toLocaleString()}개 → 목탄 +${(n * g).toLocaleString()}`); rpgSave(); render(); return;
+    delete st.inv[key]; st.inv.coal1 = (st.inv.coal1 || 0) + n * g * 2;   /* 목재 1 → 목탄 2g: 목재 1개로 주괴·요리 2개 */
+    SFX.unlock(); SFX.smelt(); rpgToast(`${itemName(key)} ${n.toLocaleString()}개 → 목탄 +${(n * g * 2).toLocaleString()}`); rpgSave(); render(); return;
   }
-  else if(a === 'rpgRecipe'){ const g = +b.dataset.g, pt = sel === 'smelt' ? (b.dataset.p === 'coal' ? 'coal' : 'bar') : SMITH_PARTS.includes(b.dataset.p) ? b.dataset.p : 'helm'; if(g >= 1 && g <= 10 && (pt === 'coal' || lvOf(sk.exp) >= REQ_LV(g)) && hasMats(st, recipe(sel, g, pt))){ sk.stage = g; if(sel === 'smith' || sel === 'smelt') sk.part = pt; if(st.active === sel){ st.active = null; st.carry = 0; } } }
+  else if(a === 'rpgRecipe'){ const g = +b.dataset.g, pt = sel === 'smelt' ? (b.dataset.p === 'coal' ? 'coal' : 'bar') : SMITH_PARTS.includes(b.dataset.p) ? b.dataset.p : 'helm'; if(g >= 1 && g <= 10 && (pt === 'coal' || lvOf(sk.exp) >= REQ_LV(g)) && hasMats(st, recipe(sel, g, pt))){ if(st.active === sel){ if(g === sk.stage && ((sel !== 'smith' && sel !== 'smelt') || pt === sk.part)) delete sk.nx; else sk.nx = { g, pt }; } else { sk.stage = g; if(sel === 'smith' || sel === 'smelt') sk.part = pt; delete sk.nx; } } }   // 하는 중이면 고르기만(시작을 눌러야 바뀐다)
   else if(a === 'rpgEq'){   // 투구·갑옷은 가방에서 꺼내 입고(입던 것은 가방으로), 요리·열매는 그 종류를 골라 둔다(전투 중 가방에서 꺼내 먹는다)
     const key = b.dataset.key, t = ikParse(key); if(!t || !(st.inv[key] > 0)) return;
     const sl = ITEM[t[0]].eq; if(!sl) return;
@@ -6813,15 +7142,455 @@ function rpgAct(a, b){
   else if(a === 'rpgUneq'){ const sl = b.dataset.slot; if(!['helm', 'body', 'ring', 'neck', 'pet'].concat(QTY_SL).includes(sl) || !st.eq[sl]) return; const back = sl === 'helm' || sl === 'body' || sl === 'ring' || sl === 'neck' || sl === 'pet' ? 1 : st.eq[sl + 'N'] || 0; if(back) st.inv[sl + st.eq[sl]] = (st.inv[sl + st.eq[sl]] || 0) + back; st.eq[sl] = 0; if(QTY_SL.includes(sl)) st.eq[sl + 'N'] = 0; SFX.unlock(); SFX.unequip(); }   // 해제하면 남은 개수 그대로 가방으로 + 해제음
   else if(a === 'rpgBulk'){
     const L = bulkSellList(st); if(!L.length) return;
-    const v = L.reduce((a2, k) => a2 + itemPrice(k) * st.inv[k], 0), n = L.reduce((a2, k) => a2 + st.inv[k], 0);
+    const v = L.reduce((a2, [k, c]) => a2 + itemPrice(k) * c, 0), n = L.reduce((a2, [k, c]) => a2 + c, 0);
     // 누르면 바로 판다
-    for(const k of L) delete st.inv[k];
+    for(const [k, c] of L){ st.inv[k] -= c; if(st.inv[k] <= 0) delete st.inv[k]; }
     st.blue += v; SFX.unlock(); SFX.cash(); rpgToast('', `<i class="chipi bc"></i> +${v.toLocaleString()}`);   // 얻은 파란 칩만
   }
   else if(a === 'rpgSell'){ const key = b.dataset.key, have = st.inv[key] || 0, tt = ikParse(key); if(have <= 0 || !tt || !SELL_T.includes(tt[0])) return; const c = have; st.inv[key] = have - c; if(!st.inv[key]) delete st.inv[key]; const gv = c * itemPrice(key); if(itemCur(key) === 'chips') st.chips += gv; else st.blue += gv; if(tt[0] === 'sword' || tt[0] === 'ring' || tt[0] === 'neck'){ const on = tt[0] === 'sword' ? st.sk.combat.gear === tt[1] : st.eq[tt[0]] === tt[1]; if(!on) st.bought[tt[0]] = st.bought[tt[0]].filter(x => x !== tt[1]); }   /* 팔면 상점에서 다시 살 수 있다(매진 풀림, 착용 중인 등급은 그대로 매진) */ SFX.unlock(); SFX.cash(); rpgToast('', `${curIcon(key)} +${gv.toLocaleString()}`); }   // 검은 축의칩, 나머지는 파란 칩   // 개별 판매도 얻은 파란 칩만
   else if(a === 'rpgAcc'){ const sl = b.dataset.slot, g = +b.dataset.g, p = ACC_PRICE[g]; if(!ACC_N[sl] || !(g >= 2 && g <= 10) || st.bought[sl].includes(g)) return; if(st.blue < p){ rpgToast('파란 칩이 부족합니다'); return; } st.blue -= p; st.bought[sl].push(g); st.inv[sl + g] = (st.inv[sl + g] || 0) + 1; SFX.unlock(); SFX.cash(.5); rpgToast(`${TIERS[g-1].n} ${sl === 'ring' ? '반지' : '목걸이'} 구매 완료`); }   // 사면 가방으로(착용은 가방에서), 한 번만
   rpgSave(); chipFix(); render();
 }
+// ---------- 포커(텍사스 홀덤 대회) ----------
+// 대회: 3~10티어, 티어마다 정해진 도시에서 열린다. 3~7티어는 한 주(월~일)에 하루씩 무작위 순서로, 8·9·10티어는 매일 열린다.
+// 참가: 파란 칩으로 엔트리(참가비 = 그 티어 풀셋으로 12시간 가장 많이 버는 파란 칩), 대회 날 입장하면 노란 축의칩 티어×10개를 들고 들어간다(토너먼트 칩 = 축의칩 × 100).
+// 6명이 한 테이블에서 마지막 한 명이 남을 때까지(블라인드는 6핸드마다 오른다). 우승: 빨간 칩 +티어. 우승·준우승은 기록에 남는다.
+const PK_KEY = 'rm.poker.v1';
+const pkNorm = d => { d = d || {}; return { red: Math.max(0, +d.red || 0), res: d.res || {}, done: d.done || {}, recs: Array.isArray(d.recs) ? d.recs : [], game: d.game && d.game.v === 1 ? d.game : null, ym: !!d.ym, d0: d.d0 != null ? d.d0 : Object.keys(d).length ? -1 : null }; };   // d0: 이 기기·기록의 첫날(그날 첫 대회는 서울, 회차도 그날부터). -1 = 예전 기록(옛 기준일), null = 처음 켬   // ym: 상점에서 산 '역만 이샹텐'(다음 마작 동1국에 사용)
+const PK_DROP = 10;   // 포커 대회 중도 종료 비용(노란 축의칩)
+const YM2_PRICE = 10, RAGE_PRICE = 10, PETT_PRICE = 10, RAGE_MS = 3600000;   // 상점 티켓 값(빨간 칩) · 광전사의 포효 1시간   // 역만 이샹텐 값(빨간 칩). 3티어 우승(6장) 한 번이면 1개, 준우승 두 번이면 1개
+const PK = { st: pkNorm(store.get(PK_KEY, null)), timer: null };
+const pkSave = () => store.set(PK_KEY, PK.st);
+const PK_FEE = [16000, 24000, 36000, 48000, 60000, 72000, 84000, 96000, 108000, 120000];
+const PK_BUY = t => t * 10;
+const PK_CITIES = ['서울', '도쿄', '베이징', '파리', '런던', '워싱턴', '베를린', '로마', '마드리드', '오타와', '마닐라', '더블린', '프라하', '나소', '몬테카를로', '라스베이거스', '바르셀로나', '마카오'];   // 앞 10개는 예전 기록용(번호 유지)
+// 티어별 개최 도시(고정): 포커 대회의 권위·규모 순
+// 10 라스베이거스(WSOP 메인 이벤트) · 9 몬테카를로(EPT 그랜드 파이널) · 8 바르셀로나(EPT 최대 규모) · 7 나소(PCA·PSPC)
+// 6 런던(EPT·WPT 런던) · 5 프라하(EPT 프라하) · 4 마카오(아시아 포커의 중심, APPT) · 3 서울
+const PK_TIER_CITY = { 3: 0, 4: 17, 5: 12, 6: 4, 7: 13, 8: 16, 9: 14, 10: 15 };
+// 도시마다 그 나라의 흔한 이름(서울은 성까지)
+const PK_CITY_NAMES = {
+  0: ['임윤남', '손지승', '신경준', '신태규', '이윤채', '노준혁', '김민규', '이성근', '김영빈', '김대건'],
+  10: ['후안', '호세', '마리아', '마크', '안젤로', '크리스틴', '라몬', '조이', '카를로', '제니'],
+  11: ['숀', '패트릭', '키어런', '시오반', '니얼', '에이슬링', '코너', '다라', '오언', '클로다'],
+  3: ['장', '피에르', '니콜라', '마리', '쥘리앵', '카미유', '앙투안', '소피', '토마', '클레르'],
+  12: ['얀', '페트르', '토마시', '이르지', '마르틴', '루카시', '야나', '에바', '카테리나', '파벨'],
+  13: ['데온', '트레버', '케이샤', '말릭', '숀델', '라토야', '드웨인', '타마라', '마커스', '케빈'],
+  4: ['올리버', '해리', '잭', '조지', '에밀리', '샬럿', '제임스', '소피', '톰', '루시'],
+  14: ['루이', '알렉상드르', '샤를', '가브리엘', '뤼시', '엘로디', '마티외', '카미유', '레오', '앙브르'],
+  15: ['제이크', '타일러', '브랜든', '애슐리', '케이시', '마이크', '제시카', '라이언', '브리트니', '코디'],
+  16: ['호르디', '마르크', '파우', '라우라', '세르히', '몬세', '알렉스', '누리아', '조안', '아이나'],
+  17: ['카몽', '와이만', '치훙', '호이얀', '카이록', '만와이', '수이킹', '틴록', '카훙', '윙얀']
+};
+const PK_DAYS = ['월', '화', '수', '목', '금', '토', '일'];
+const pkDay = (d = new Date()) => Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5);   // 내 기기 날짜 기준 하루 번호
+const PK_EPOCH = pkDay(new Date(2026, 9, 19)), PK_ED0 = pkDay(new Date(2026, 9, 23));   // PK_ED0: 대회 회차를 세기 시작한 날(이날 대회가 모두 제1회)   // 2026-10-19(월): 1회차 대회들이 열리기 시작한 주
+const pkRng = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+function pkWeekPerm(w){ const r = pkRng(w * 7919 + 17), a = [1, 2, 3, 4, 5, 6, 7]; for(let i = 6; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a.map(t => t === 1 ? 3 : t === 2 ? 5 : t); }   // 매주 3·3·4·5·5·6·7티어를 무작위 순서로(옛 1티어 자리 → 3, 2티어 자리 → 5)
+const pkWeek = day => Math.floor((day - PK_EPOCH) / 7);
+function pkD0(){ if(PK.st.d0 === -1) return PK_ED0; if(PK.st.d0 == null){ PK.st.d0 = pkDay(); pkSave(); } return PK.st.d0; }
+// 3~7티어: 5일마다 한 번씩 무작위 순서(블록이 바뀌는 날 같은 티어가 이어지지 않게)
+const PK_BLK = {};
+function pkBlockPerm(b){
+  if(PK_BLK[b]) return PK_BLK[b];
+  const prev = b > 0 ? pkBlockPerm(b - 1)[4] : 0; let a;
+  for(let tr = 0; tr < 30; tr++){ const r = pkRng(b * 7919 + 17 + tr * 131); a = [3, 4, 5, 6, 7]; for(let i = 4; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } if(a[0] !== prev) break; }
+  return PK_BLK[b] = a;
+}
+const pkBlk = day => Math.floor((day - PK_EPOCH) / 5);
+const pkOpen = day => { if(day < PK_EPOCH) return []; const b = pkBlk(day), p = pkBlockPerm(b).slice(), d0 = pkD0(), i = (day - PK_EPOCH) % 5;
+  if(pkBlk(d0) === b){ const j = (d0 - PK_EPOCH) % 5, k = p.indexOf(3); [p[j], p[k]] = [p[k], p[j]]; }   // 첫날 대회는 서울(3티어): 같은 5일 안에서 3티어 날과 맞바꾼다
+  return [p[i], 8, 9, 10]; };
+const pkCity = (day, t) => PK_TIER_CITY[t] ?? 0;   // 티어마다 늘 같은 도시
+const pkEdCache = {};
+function pkEdition(day, t){   // 그 도시의 몇 번째 대회인가(1회차부터 날짜·티어 순으로 센다)
+  const key = day + '-' + t; if(pkEdCache[key]) return pkEdCache[key];
+  const cnt = new Array(PK_CITIES.length).fill(0);
+  for(let d = pkD0(); d <= day; d++) for(const tt of pkOpen(d).sort((a, b) => a - b)){ const c = pkCity(d, tt); cnt[c]++; pkEdCache[d + '-' + tt] = cnt[c]; if(d === day && tt === t) return cnt[c]; }
+  return 1;
+}
+function pkNextDay(t, today){   // 이 티어 대회가 열리는(오늘 포함) 가장 가까운 날
+  if(t >= 8) return today;
+  for(let d = today; d < today + 14; d++) if(pkOpen(d)[0] === t) return d;
+  return today;
+}
+const pkDate = day => { const dt = new Date(day * 864e5); return `${dt.getUTCMonth() + 1}/${dt.getUTCDate()}(${PK_DAYS[(dt.getUTCDay() + 6) % 7]})`; };
+const pkTitle = (city, ed) => `${PK_CITIES[city]} 제${ed}회 포커대회`;
+
+// ----- 카드·족보 -----
+const PK_R = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'], PK_S = ['♠', '♥', '♦', '♣'];
+const PK_HAND = ['하이카드', '원 페어', '투 페어', '트리플', '스트레이트', '플러시', '풀하우스', '포카드', '스트레이트 플러시'];
+function pkEval(cs){   // 7장(또는 5~6장) 중 가장 좋은 5장의 점수: 클수록 강하다
+  const rc = new Array(13).fill(0), ss = [0, 0, 0, 0], sm = [0, 0, 0, 0]; let m = 0;
+  for(const c of cs){ const r = c % 13, s = (c / 13) | 0; rc[r]++; ss[s]++; sm[s] |= 1 << r; m |= 1 << r; }
+  const sh = x => { for(let h = 12; h >= 4; h--) if(((x >> (h - 4)) & 31) === 31) return h; return (x & 0x100F) === 0x100F ? 3 : -1; };
+  const E = (c, k) => { let v = c; for(let i = 0; i < 5; i++) v = v * 13 + (k[i] == null ? 0 : k[i]); return v; };
+  const fs = ss.findIndex(n => n >= 5);
+  if(fs >= 0){ const h = sh(sm[fs]); if(h >= 0) return E(8, [h]); }
+  const q = [], t = [], p = [], s = [];
+  for(let r = 12; r >= 0; r--){ if(rc[r] === 4) q.push(r); else if(rc[r] === 3) t.push(r); else if(rc[r] === 2) p.push(r); else if(rc[r] === 1) s.push(r); }
+  if(q.length){ const k = t.concat(p, s, q.slice(1)).sort((a, b) => b - a)[0]; return E(7, [q[0], k]); }
+  if(t.length && (t.length > 1 || p.length)) return E(6, [t[0], Math.max(t[1] == null ? -1 : t[1], p[0] == null ? -1 : p[0])]);
+  if(fs >= 0){ const k = []; for(let r = 12; r >= 0 && k.length < 5; r--) if(sm[fs] >> r & 1) k.push(r); return E(5, k); }
+  const h = sh(m); if(h >= 0) return E(4, [h]);
+  if(t.length) return E(3, [t[0]].concat(p.concat(s).sort((a, b) => b - a).slice(0, 2)));
+  if(p.length >= 2) return E(2, [p[0], p[1], p.slice(2).concat(s).sort((a, b) => b - a)[0]]);
+  if(p.length) return E(1, [p[0]].concat(s.slice(0, 3)));
+  return E(0, s.slice(0, 5));
+}
+const pkCat = v => Math.floor(v / Math.pow(13, 5));
+const pkHandName = v => { const c = pkCat(v); return c === 8 && Math.floor(v / Math.pow(13, 4)) % 13 === 12 ? '로열 플러시' : PK_HAND[c]; };
+function pkEquity(hole, board, nOpp, sims){   // 남은 카드를 무작위로 깔아 이길 확률을 어림한다(상대 패는 무작위로 가정)
+  const used = new Set(hole.concat(board)), deck = []; for(let c = 0; c < 52; c++) if(!used.has(c)) deck.push(c);
+  const need = 5 - board.length + nOpp * 2; let win = 0;
+  for(let i = 0; i < sims; i++){
+    for(let j = 0; j < need; j++){ const k = j + Math.floor(Math.random() * (deck.length - j)); [deck[j], deck[k]] = [deck[k], deck[j]]; }
+    const bd = board.concat(deck.slice(0, 5 - board.length)); let o = 5 - board.length;
+    const me = pkEval(hole.concat(bd)); let best = 0, ties = 0;
+    for(let n = 0; n < nOpp; n++){ const v = pkEval([deck[o], deck[o + 1]].concat(bd)); o += 2; if(v > best){ best = v; ties = 0; } else if(v === best) ties++; }
+    if(me > best) win++; else if(me === best) win += 1 / (ties + 2);
+  }
+  return win / sims;
+}
+
+// ----- 대회 진행 -----
+const PK_NAMES = ['레이먼드', '소피아', '다니엘', '미카', '엘레나', '하킴', '유키', '마르코', '이반', '클로이', '루카스', '아이샤', '첸', '파블로', '노아', '사라', '빅터', '레나'];
+const PK_LV = [1, 2, 3, 4, 6, 8, 10, 15, 20, 30, 40, 60];   // 큰 블라인드(×티어, 노란칩). 작은 블라인드는 절반(내림, 0이면 없음)
+const PK_HANDS_PER_LV = 6;
+const pkG = () => PK.st.game;
+const PK_TEMPO = 1 / 1.5;   // 전체 진행 속도(기본 대비 1.5배 빠르게)
+const pkSp = g => (g.pl[0].folded && !g.pl[0].out ? .5 : 1) * PK_TEMPO;   // 내가 폴드한 판은 2배속
+function pkReset(d){ clearTimeout(PK.timer); PK.timer = null; for(const k in pkEdCache) delete pkEdCache[k]; PK.st = pkNorm(d); PK.stkEl = null; pkSave(); }   // 기록 삭제(d 없음) · 기록 가져오기(d)
+const pkBusy = () => { const g = PK.st.game, today = pkDay(); if(g && !g.over) return g.key; return Object.keys(PK.st.res).find(k => !PK.st.done[k] && +k.split('-')[0] >= today) || null; };   // 지금 걸려 있는 대회(엔트리했거나 진행 중). 끝나기 전엔 다른 대회 엔트리 불가
+const pkBl = g => g.sb ? `${g.sb}/${g.bb}` : `${g.bb}`;
+const pkAlive = g => g.pl.filter(p => !p.out);
+const pkPot = g => g.pl.reduce((a, p) => a + p.inHand, 0);
+const pkNext = (g, i, ok) => { for(let k = 1; k <= g.pl.length; k++){ const j = (i + k) % g.pl.length; if(ok(g.pl[j])) return j; } return -1; };
+const pkCanAct = p => !p.out && !p.folded && !p.allin;
+function pkLog(g, t){ g.log.unshift(t); if(g.log.length > 6) g.log.length = 6; }
+function pkNewGame(t, key, day){
+  const names = (PK_CITY_NAMES[pkCity(day, t)] || PK_NAMES).slice().sort(() => Math.random() - .5).slice(0, 5), stack = PK_BUY(t);   // 낸 노란 축의칩이 그대로 내 스택
+  const pl = [{ name: '나', me: true, stack }].concat(names.map(n => ({ name: n, stack, agg: .2 + Math.random() * .6, loose: Math.random() * .4, bluff: .03 + Math.random() * .1 })));
+  pl.forEach(p => Object.assign(p, { cards: [], bet: 0, inHand: 0, folded: false, allin: false, out: false, acted: false, shown: false }));
+  PK.st.game = { v: 1, tier: t, key, day, city: pkCity(day, t), ed: pkEdition(day, t), pl, btn: Math.floor(Math.random() * 6), hand: 0, lv: 0, sb: 0, bb: 0, board: [], deck: [], stage: 'pre', cur: -1, curBet: 0, minR: 0, log: [], bust: [], msg: '', over: null, wait: 0 };
+  pkStartHand(PK.st.game);
+}
+function pkStartHand(g){
+  const al = pkAlive(g);
+  if(al.length < 2 || g.pl[0].out){ pkFinish(g); return; }
+  g.hand++; g.lv = Math.min(PK_LV.length - 1, Math.floor((g.hand - 1) / PK_HANDS_PER_LV));
+  g.bb = PK_LV[g.lv] * g.tier; g.sb = Math.floor(g.bb / 2);
+  g.pl.forEach(p => Object.assign(p, { cards: [], bet: 0, inHand: 0, folded: p.out, allin: false, acted: false, shown: false, start: p.stack, best: '' }));
+  g.btn = pkNext(g, g.btn, p => !p.out);
+  const d = []; for(let c = 0; c < 52; c++) d.push(c);
+  for(let i = 51; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [d[i], d[j]] = [d[j], d[i]]; }
+  g.deck = d; g.board = []; g.stage = 'pre'; g.msg = ''; g.win = null; g.flipFrom = 0; g.flipAt = 0; g.pl.forEach(p => { p.say = ''; });
+  const lvUp = g.hand > 1 && (g.hand - 1) % PK_HANDS_PER_LV === 0;
+  const hu = al.length === 2, sbI = hu ? g.btn : pkNext(g, g.btn, p => !p.out), bbI = pkNext(g, sbI, p => !p.out);
+  const post = (i, amt) => { const p = g.pl[i], a = Math.min(amt, p.stack); p.stack -= a; p.bet += a; p.inHand += a; if(!p.stack) p.allin = true; };
+  post(sbI, g.sb); post(bbI, g.bb); g.sbI = sbI; g.bbI = bbI;
+  for(let r = 0; r < 2; r++) for(let k = 1; k <= 6; k++){ const p = g.pl[(g.btn + k) % 6]; if(!p.out) p.cards.push(g.deck.pop()); }
+  g.curBet = g.bb; g.minR = g.bb;
+  g.cur = pkNext(g, bbI, pkCanAct);
+  g.skl = {}; g.peek = {}; g.read = {}; g.lastAgg = -1;   // 스킬은 핸드마다 새로
+  pkLog(g, `#${g.hand} 블라인드 ${pkBl(g)}`);
+  if(lvUp) g.msg = `블라인드 상승 ${pkBl(g)}`;
+  const nCards = al.length * 2; g.dealAt = Date.now(); g.wait = g.dealAt + (900 + nCards * 110 + (lvUp ? 900 : 0)) * PK_TEMPO;   // 딜러가 한 장씩 돌리는 시간
+  for(let k = 0; k < nCards; k++) setTimeout(() => SFX.draw(), (300 + k * 110) * PK_TEMPO);
+  if(g.cur < 0 || pkRoundDone(g)) pkEndStreet(g);
+}
+function pkRoundDone(g){
+  const live = g.pl.filter(p => !p.out && !p.folded);
+  if(live.length <= 1) return true;
+  return g.pl.every(p => !pkCanAct(p) || (p.acted && p.bet === g.curBet));
+}
+function pkDo(g, i, act, to){   // act: fold · call(체크 포함) · raise(to = 이번 거리 총 베팅액)
+  const p = g.pl[i], need = g.curBet - p.bet, b0 = p.bet, cb0 = g.curBet;
+  if(act === 'fold'){ p.folded = true; pkLog(g, `${p.name} 폴드`); SFX.discard(); }
+  else if(act === 'call' || (act === 'raise' && to <= g.curBet)){
+    const a = Math.min(need, p.stack); p.stack -= a; p.bet += a; p.inHand += a; if(!p.stack) p.allin = true;
+    pkLog(g, a === 0 ? `${p.name} 체크` : p.allin ? `${p.name} 올인 ${p.bet.toLocaleString()}` : `${p.name} 콜 ${a.toLocaleString()}`); if(a) SFX.chip();
+  } else {
+    to = Math.min(to, p.bet + p.stack); const a = to - p.bet; p.stack -= a; p.bet = to; p.inHand += a; if(!p.stack) p.allin = true;
+    if(to - g.curBet >= g.minR) g.minR = to - g.curBet;
+    g.curBet = Math.max(g.curBet, to); g.pl.forEach((q, j) => { if(j !== i && pkCanAct(q)) q.acted = false; }); g.lastAgg = i;
+    pkLog(g, p.allin ? `${p.name} 올인 ${to.toLocaleString()}` : `${p.name} ${need > 0 ? '레이즈' : '베팅'} ${to.toLocaleString()}`); SFX.chip(); setTimeout(() => SFX.chip(), 90);
+  }
+  p.acted = true; g.msg = '';
+  p.say = act === 'fold' ? '폴드' : p.allin ? '올인' : p.bet === b0 ? '체크' : p.bet > cb0 ? (cb0 > 0 ? '레이즈' : '베팅') : '콜'; p.sayAt = Date.now();
+  if(pkRoundDone(g)){ g.cur = -1; g.wait = Date.now() + 1200 * pkSp(g); }   // 한 바퀴가 끝나면 칩을 모으는 잠깐의 숨
+  else { g.cur = pkNext(g, i, pkCanAct); g.wait = Date.now() + 450 * pkSp(g); }
+}
+function pkEndStreet(g){
+  g.pl.forEach(p => { p.bet = 0; p.acted = false; }); g.lastAgg = -1;
+  g.curBet = 0; g.minR = g.bb;
+  const live = g.pl.filter(p => !p.out && !p.folded);
+  if(live.length <= 1){ pkShowdown(g); return; }
+  const actors = live.filter(p => !p.allin);
+  if(g.stage === 'river'){ pkShowdown(g); return; }
+  g.stage = g.stage === 'pre' ? 'flop' : g.stage === 'flop' ? 'turn' : 'river';
+  g.deck.pop(); const n = g.stage === 'flop' ? 3 : 1; g.flipFrom = g.board.length; g.flipAt = Date.now(); for(let k = 0; k < n; k++) g.board.push(g.deck.pop());
+  for(let k = 0; k < n; k++) setTimeout(() => SFX.draw(), (250 + k * 380) * pkSp(g));
+  g.pl.forEach(p => { p.say = ''; });
+  if(actors.length <= 1){ live.forEach(p => p.shown = true); g.cur = -1; g.runout = true; g.flipK = pkSp(g); g.wait = Date.now() + (1100 + n * 380 + (g.stage === 'river' ? 900 : 1600)) * g.flipK; return; }   // 올인 대결: 한 장 한 장 숨죽이며
+  g.flipK = pkSp(g); g.wait = Date.now() + (700 + n * 380) * g.flipK;   // 올인끼리: 패를 열고 남은 카드를 한 장씩 깐다
+  g.cur = pkNext(g, g.btn, pkCanAct);
+}
+function pkShowdown(g){
+  const live = g.pl.filter(p => !p.out && !p.folded);
+  let wins = [];
+  if(live.length === 1){ const w = live[0]; const pot = pkPot(g); w.stack += pot; wins.push([w, pot]); g.msg = `${w.name} 승리 +${pot.toLocaleString()}`; }
+  else {
+    while(g.board.length < 5){ if(g.board.length === 0) g.deck.pop(); g.board.push(g.deck.pop()); }
+    live.forEach(p => { p.shown = true; p.val = pkEval(p.cards.concat(g.board)); p.best = pkHandName(p.val); });
+    const lv = [...new Set(live.map(p => p.inHand))].sort((a, b) => a - b); let prev = 0; const pots = [];
+    for(const L of lv){ let amt = 0; g.pl.forEach(p => { amt += Math.max(0, Math.min(p.inHand, L) - prev); }); pots.push({ amt, el: live.filter(p => p.inHand >= L) }); prev = L; }
+    const extra = g.pl.reduce((a, p) => a + Math.max(0, p.inHand - prev), 0); if(extra && pots.length) pots[pots.length - 1].amt += extra;
+    const got = new Map();
+    for(const pt of pots){ if(!pt.amt) continue; const top = Math.max(...pt.el.map(p => p.val)), ws = pt.el.filter(p => p.val === top); const each = Math.floor(pt.amt / ws.length); let rem = pt.amt - each * ws.length;
+      const order = ws.slice().sort((a, b) => ((g.pl.indexOf(a) - g.btn + 6) % 6) - ((g.pl.indexOf(b) - g.btn + 6) % 6));
+      order.forEach(w => { const x = each + (rem > 0 ? 1 : 0); if(rem > 0) rem--; w.stack += x; got.set(w, (got.get(w) || 0) + x); }); }
+    wins = [...got.entries()];
+    g.msg = wins.map(([w, x]) => `${w.name} ${w.best} +${x.toLocaleString()}`).join(' · ');
+  }
+  g.win = wins.map(([w]) => g.pl.indexOf(w));
+  pkLog(g, g.msg);
+  if(wins.some(([w]) => w.me)) SFX.cash(.6);
+  g.stage = 'show'; g.cur = -1; g.runout = false;
+  const busted = g.pl.filter(p => !p.out && p.stack <= 0).sort((a, b) => a.start - b.start);   // 이번 핸드에 털린 사람: 시작 칩이 적었던 쪽이 먼저 떨어진다
+  busted.forEach(p => { p.out = true; p.place = pkAlive(g).length + 1; g.bust.push(p.name); pkLog(g, `${p.name} 탈락(${p.place}위)`); });
+  g.wait = Date.now() + ((live.length === 1 ? 2600 : 5500) + (busted.length ? 1800 : 0)) * pkSp(g);   // 쇼다운은 패를 충분히 볼 수 있게
+}
+function pkFinish(g){
+  const me = g.pl[0], al = pkAlive(g);
+  if(!me.out && al.length === 1) me.place = 1;
+  const place = me.place || al.length;
+  g.over = { place };
+  PK.st.done[g.key] = place;
+  if(place === 1){ PK.st.red += g.tier * 2; chipFix();   /* 건 노란칩은 소모, 보상은 빨간 칩만(우승 티어×2) */ PK.st.recs.unshift({ k: 'win', city: g.city, ed: g.ed, tier: g.tier, day: g.day, red: g.tier * 2 }); SFX.fanfare(); confetti(); }
+  else if(place === 2){ PK.st.red += g.tier; chipFix(); PK.st.recs.unshift({ k: 'second', city: g.city, ed: g.ed, tier: g.tier, day: g.day, red: g.tier }); SFX.fanfare(.4); }   /* 준우승: 빨간 칩 우승의 절반 */
+  else SFX.miss();
+}
+// AI 결정: 이길 확률(몬테카를로) · 팟 오즈 · 성향(공격성·느슨함·블러프) · 티어가 높을수록 실수가 적다
+function pkAI(g, i){
+  const p = g.pl[i], need = g.curBet - p.bet, pot = pkPot(g), opp = g.pl.filter((q, j) => j !== i && !q.out && !q.folded).length;
+  const eq = pkEquity(p.cards, g.board, Math.max(1, opp), g.stage === 'pre' ? 90 : 140);
+  const skill = .45 + g.tier * .05, rel = eq * (opp + 1) + (Math.random() - .5) * (1.1 - skill) * .8 + p.loose * .3;
+  const odds = need / (pot + need), bbs = (p.stack + p.bet) / g.bb, r = Math.random();
+  const raiseTo = mult => { const base = g.curBet + Math.max(g.minR, Math.round((pot + need) * mult / g.bb) * g.bb); return Math.min(p.bet + p.stack, base); };
+  if(bbs < 5 && rel > 1.15) return ['raise', p.bet + p.stack];   // 짧은 스택: 괜찮으면 올인
+  if(need === 0){
+    if(rel > 1.55 || (g.stage !== 'pre' && r < p.bluff)) return ['raise', raiseTo(.45 + p.agg * .5)];
+    return ['call'];
+  }
+  if(eq < odds * (1.15 - p.loose * .4) && rel < 1.3 && !(r < p.bluff * .4)) return ['fold'];
+  if(rel > 1.9 && r < .45 + p.agg * .4) return ['raise', raiseTo(.6 + p.agg * .6)];
+  if(rel < .8 && need > p.stack * .35 && r > p.loose) return ['fold'];
+  return ['call'];
+}
+function pkLoop(){
+  clearTimeout(PK.timer); PK.timer = null;
+  const g = pkG(); if(!g || g.over || g.paused || UI.screen !== 'poker') return;
+  const now = Date.now();
+  if(now < (g.wait || 0)){ PK.timer = setTimeout(pkLoop, g.wait - now + 20); return; }   // 연출 중: 다 끝날 때까지 기다린다
+  if(g.stage === 'show'){ pkStartHand(g); pkSave(); pkRender(); pkLoop(); return; }
+  if(g.runout || g.cur < 0){ pkEndStreet(g); pkSave(); pkRender(); pkLoop(); return; }
+  const p = g.pl[g.cur];
+  if(p.me){ if(!document.querySelector('.pkbar [data-op="fold"]')) pkRender(); return; }   // 내 차례: 버튼이 안 떠 있으면 띄우고 기다린다(이어하기·같은 금액 재차례에도)   // 내 차례: 버튼을 띄우고 기다린다
+  const meIn = !g.pl[0].folded && !g.pl[0].out, need = g.curBet - p.bet, big = need > 0 && need >= (p.stack + p.bet) * .25;
+  const think = (1100 + Math.random() * 1600 + (big ? 1200 + Math.random() * 1500 : 0) + (g.stage === 'river' ? 500 : 0)) * pkSp(g);   // 사람처럼 고민하는 시간(큰 베팅 앞에선 더 오래)
+  g.think = Date.now(); pkRender();
+  PK.timer = setTimeout(() => { const g2 = pkG(); if(!g2 || g2 !== g || g.cur < 0 || g.pl[g.cur] !== p) return; const [a, to] = pkAI(g, g.cur); pkDo(g, g.cur, a, to); pkSave(); pkRender(); pkLoop(); }, think);
+}
+
+// ----- 화면 -----
+const PK_RED = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#c8202a" stroke="#6a0a10" stroke-width="1"/>${[0, 60, 120, 180, 240, 300].map(a => `<rect x="10.3" y="1.2" width="3.4" height="4" rx=".6" fill="#fff" transform="rotate(${a} 12 12)"/>`).join('')}<circle cx="12" cy="12" r="7" fill="#a8141e" stroke="#fff" stroke-width=".8" stroke-dasharray="1.6 1.2"/><path d="M7.6 14.6 L7 9.2 L9.6 11.2 L12 7.6 L14.4 11.2 L17 9.2 L16.4 14.6 Z" fill="#ffd23a" stroke="#8a5a00" stroke-width=".6" stroke-linejoin="round"/><rect x="7.6" y="14.6" width="8.8" height="1.6" rx=".4" fill="#ffd23a" stroke="#8a5a00" stroke-width=".5"/></svg>`;
+const pkRedIcon = cls => `<i class="redchip ${cls || ''}">${PK_RED}</i>`;
+const pkCard = (c, cls) => c == null ? `<span class="pc empty ${cls || ''}"></span>` : c < 0 ? `<span class="pc back ${cls || ''}"></span>` : `<span class="pc ${(c / 13 | 0) === 1 || (c / 13 | 0) === 2 ? 'red' : ''} ${cls || ''}"><b>${PK_R[c % 13]}</b><i>${PK_S[c / 13 | 0]}</i></span>`;
+function pokerHTML(){
+  const g = pkG();
+  return `${appTabs('pk')}${heroHTML('pk')}<div class="poker">${g && !g.over && !g.paused ? pkTableHTML(g) : g && g.over ? pkOverHTML(g) : pkLobbyHTML()}</div>`;
+}
+function pkLobbyHTML(){
+  const today = pkDay(), blue = RPG.st.blue || 0, chips = RPG.st.chips || 0;
+  const card = (t, all, d0) => {   // all: 대회 스케줄(일정만) · d0: 그 대회가 열리는 날
+    const i = t - 1, day = d0 != null ? d0 : pkNextDay(t, all ? today + 1 : today), key = day + '-' + t, city = pkCity(day, t), ed = pkEdition(day, t), res = !!PK.st.res[key], done = PK.st.done[key];
+    const isToday = day === today, fee = PK_FEE[i], buy = PK_BUY(t);
+    let btn; const gg = pkG();
+    if(all) btn = '';
+    else if(gg && !gg.over && gg.key === key) btn = `<span class="pkst good">진행 중</span>`;
+    else if(done) btn = `<span class="pkst ${done <= 2 ? 'good' : ''}">결과 ${done}위</span>`;
+    else if(res && isToday) btn = `<button class="btn primary" data-act="pk" data-op="enter" data-t="${t}" ${chips < buy ? 'disabled title="노란 축의칩 부족"' : ''}>입장 <span class="pkc"><i class="chipi"></i>${buy}</span></button>`;
+    else if(res) btn = `<span class="pkst">엔트리 완료 · ${pkDate(day)} 입장</span>`;
+    else btn = `<button class="btn primary" data-act="pk" data-op="join" data-t="${t}" ${pkBusy() ? 'disabled title="참가 중인 대회가 끝나야 입장 가능"' : chips < buy ? 'disabled title="노란 축의칩 부족"' : blue < fee ? 'disabled title="파란 칩 부족"' : ''}>입장 <span class="pkc"><i class="chipi"></i>${buy}</span><span class="pkc"><i class="chipi bc"></i>${fee.toLocaleString()}</span></button>`;   // 입장할 때 참가비(파란 칩)와 지참 칩(노란 축의칩)을 한꺼번에
+    return `<div class="pkcard t${t} ${t < 8 ? 'low' : ''}" data-suit="${['♣', '♦', '♥', '♠', ''][t - 3] || ''}">${t >= 8 ? `<div class="pkbg">${rpgRack('combat', t, true)}</div>` : ''}<div class="pkt">${t}티어</div><div class="pkcity">${esc(pkTitle(city, ed))}</div>
+      <div class="pkwhen">${t >= 8 ? '<b>매일 개최</b>' : isToday ? '<b>오늘 개최</b>' : pkDate(day) + ' 개최'}</div>
+      <dl><dt>참가비</dt><dd><i class="chipi bc"></i>${fee.toLocaleString()}</dd><dt>지참 칩</dt><dd><i class="chipi"></i>${buy}</dd><dt>우승</dt><dd>${pkRedIcon()}×${t * 2}</dd><dt>준우승</dt><dd>${pkRedIcon()}×${t}</dd></dl>${btn}</div>`;
+  };
+  const row = (id, ts) => `<div class="pkgrid">${ts.map(t => Array.isArray(t) ? card(t[0], true, t[1]) : card(t, id === 'pkcards')).join('')}</div>`;   // 한 줄 4칸(넘기기 없음)
+  const open = pkOpen(today).filter(Boolean).sort((a, b) => a - b);   // 오늘 열리는 대회
+  const recs = PK.st.recs.slice().reverse().map(r => `<li class="${r.k}"><b>${r.k === 'win' ? '우승' : '준우승'}</b>${esc(pkTitle(r.city, r.ed))} <small>${r.tier}티어 · ${pkDate(r.day)}</small>${r.k === 'win' ? `<span>${pkRedIcon()}+${r.red || r.tier}</span>` : r.red ? `<span>${pkRedIcon()}+${r.red}</span>` : ''}</li>`).join('');
+  const gp = pkG(), resume = gp && gp.paused && !gp.over ? `<section class="card resume"><div class="rsinfo"><h3>이어하기</h3><div class="rstags"><span>${esc(pkTitle(gp.city, gp.ed))}</span><span>${gp.tier}티어</span><span>핸드 #${gp.hand} · 남은 ${pkAlive(gp).length}명</span></div></div>
+    <div class="rsbtns"><button class="btn primary" data-act="pk" data-op="resume">이어서 하기</button><button class="btn" data-act="pk" data-op="drop" ${(RPG.st.chips || 0) < PK_DROP ? 'disabled title="축의칩 부족으로 게임 종료 불가"' : `title="게임 종료 시 축의칩 ${PK_DROP}개 지불"`}>게임 종료 <span class="dropcost"><i class="chipi"></i>${PK_DROP}</span></button></div></section>` : '';
+  return `${resume}<section class="card pklobby"><h3>개최 중인 대회</h3>${row('pkcards0', open)}</section>
+    <section class="card pklobby"><h3>대회 스케줄</h3>${row('pkcards', [1, 2, 3, 4].map(k => [pkOpen(today + k)[0], today + k]))}</section>
+    <section class="card pkrec reccard"><h3>기록 및 상점</h3>${pkShopHTML()}<button class="rchd ${UI.pkRecOpen ? 'on' : ''}" data-act="pk" data-op="recOpen" aria-expanded="${!!UI.pkRecOpen}"><span>우승 기록</span><i></i></button>${UI.pkRecOpen ? (recs ? `<ul id="pkrecs">${recs}</ul>` : '<p class="muted">아직 기록 없음</p>') : ''}</section>`;   // 마작 '역 완성 횟수'처럼 눌러서 펼친다. 5줄만 보이고 위로 스크롤하면 예전 기록
+}
+// ===== 포커 스킬(수확·제련·제작·요리): 행동 레벨 10마다 10%(Lv 20부터), 한 핸드에 한 번, 눌러야 발동 =====
+const PKSK = {
+  farm:  { n:'솎아내기', d:'프리플랍에 발동하고 내 카드 1장을 누르면 덱의 새 카드로 바꿔요', icon:'<svg class="ski" viewBox="0 0 24 24" aria-hidden="true"><g transform="rotate(-45 12 12)"><circle cx="7.2" cy="18" r="3.3" fill="none" stroke="#fff" stroke-width="2.3"/><circle cx="16.8" cy="18" r="3.3" fill="none" stroke="#fff" stroke-width="2.3"/><path d="M8.6 15.2 L14.6 1.2 L16 1.8 L11.2 15 Z M15.4 15.2 L9.4 1.2 L8 1.8 L12.8 15 Z" fill="#fff"/></g></svg>' },
+  smelt: { n:'합금', d:'프리플랍에 발동하면 내 카드 2장의 무늬가 같아져요', icon:'<svg class="ski" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 17.5 L6.5 8 L21.5 8 L21.5 12.5 L17 22 L2 22 Z" fill="#fff" opacity=".55"/><path d="M2 17.5 L6.5 8 L21.5 8 L17 17.5 Z" fill="#fff"/><path d="M8 6 l1-2.5 M13 6 l0-3 M18 6 l-1-2.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>' },
+  smith: { n:'망치질', d:'발동하고 상대 한 명을 누르면 그 사람 카드 1장이 보여요', icon:'<svg class="ski" viewBox="0 0 24 24" aria-hidden="true"><g transform="rotate(45 12 12)"><path d="M12 23.5 L12 8" stroke="#fff" stroke-width="2.7" stroke-linecap="round"/><rect x="4" y="2.5" width="16" height="7" rx="1.5" fill="#fff"/></g></svg>' },
+  cook:  { n:'간 보기', d:'상대가 베팅·레이즈하면 발동해서 그 사람이 강한지(빨강) 블러프인지(초록) 알아내요', icon:'<svg class="ski" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 1.5 L11 13" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><path d="M3 13 h14 a7 7 0 0 1 -14 0 Z" fill="#fff"/></svg>' }
+};
+const PK_SKK = ['farm', 'smelt', 'smith', 'cook'];
+const pkSkillPct = k => { const sk = RPG.st.sk[k]; if(!sk) return 0; const L = lvOf(sk.exp); return L >= 20 ? Math.min(100, Math.floor(L / 10) * 10) : 0; };   // 포커 스킬: 그 행동 레벨 10마다 10%(Lv 20부터)
+const pkSkillColor = k => { const p = pkSkillPct(k); const t = TIERS[Math.max(0, Math.min(9, p / 10 - 1))]; return t.gl || t.c; };   // 확률 단계에 맞는 등급 색
+function pkSkillBadge(k){ const p = pkSkillPct(k); return `<span class="skb ${p ? '' : 'off'}" style="--gc:${pkSkillColor(k)}" title="${PKSK[k].n} ${p}%">${PKSK[k].icon}<small>${p}%</small></span>`; }
+function pkSkCan(g, k){   // 지금 쓸 수 있나
+  const me = g.pl[0]; if(!g.skl) g.skl = {};
+  if(!pkSkillPct(k) || g.over || g.paused || me.out || me.folded || g.stage === 'show' || (g.skl[k] && g.skl[k] !== 'arm')) return false;
+  if(k === 'farm') return g.stage === 'pre';
+  if(k === 'smelt') return g.stage === 'pre' && (me.cards[0] / 13 | 0) !== (me.cards[1] / 13 | 0) && me.cards[0] % 13 !== me.cards[1] % 13;   // 페어는 무늬를 맞출 수 없다
+  if(k === 'smith') return g.pl.some((p, i) => i && !p.out && !p.folded && !(g.peek && g.peek[i] != null));
+  if(k === 'cook') return g.lastAgg > 0 && !g.pl[g.lastAgg].folded && !(g.read && g.read[g.lastAgg]);
+  return false;
+}
+function pkSkBar(g){
+  return `<span class="skbs pkskbs">${PK_SKK.map(k => { const p = pkSkillPct(k), stt = g.skl && g.skl[k], can = pkSkCan(g, k);
+    return `<button class="skb pkskb ${p ? '' : 'off'} ${stt || ''} ${can ? 'can' : ''}" style="--gc:${pkSkillColor(k)}" data-act="pk" data-op="sk" data-k="${k}" title="${PKSK[k].n} ${p}% · ${PKSK[k].d}" ${can ? '' : 'disabled'}>${PKSK[k].icon}<small>${p}%</small></button>`; }).join('')}</span>`;
+}
+const pkRoll = k => Math.random() * 100 < pkSkillPct(k);
+const PK_SEAT = [[50, 86], [12, 66], [14, 24], [50, 9], [86, 24], [88, 66]];   // 내 자리(아래 가운데)부터 시계 방향
+// 내 칩 탑(마작 축의칩과 같은 3D 칩): 카드 오른쪽, 내 손 가까운 테이블 위. 노란칩 탑 + 검정칩(10짜리) 탑들, 20장씩
+const PK_COLC = {}, pkChipCol = (k, bk) => PK_COLC[k + (bk ? 'b' : 'y')] || (PK_COLC[k + (bk ? 'b' : 'y')] = chipStackHTML(k, bk, 24));   // 포커 칩 탑: 조각 24개(작아서 차이 없음), 한 번 만든 건 재사용
+function pkMyStack(g){
+  const me = g.pl[0]; if(me.out || me.stack <= 0 || UI.sliding) return '';   // 화면 넘기는 중엔 안 만든다(칩 조각 수천 개라 무겁다). 다 넘어가면 그린다
+  const y = me.stack < 10 ? me.stack : 10 + (me.stack - 10) % 10, b = (me.stack - y) / 10, cols = [[y, 0]];   // 노란칩은 늘 10장(+끝수), 나머지는 10칩마다 검정칩 1장
+  for(let c = 0; c < b; c += 20) cols.push([Math.min(20, b - c), 1]);
+  const C = matchMedia('(max-width:560px)').matches ? 3 : 5, rows = []; for(let r = 0; r < cols.length; r += C) rows.push(cols.slice(r, r + C));   // 한 줄에 C개 탑, 넘치면 뒤쪽 줄로
+  return `<div class="pkstk" data-k="${C}:${cols.join(',')}">${rows.map((r, ri) => `<div class="pkrw" style="bottom:calc(var(--ro) * ${ri});left:calc(var(--ro) * ${ri * .55});z-index:${20 - ri}">${r.map(([k, bk]) => pkChipCol(k, bk)).join('')}</div>`).join('')}</div>`;
+}
+function pkTableHTML(g){
+  const now = Date.now(), me = g.pl[0], my = g.cur === 0 && !g.over && now >= (g.wait || 0), need = g.curBet - me.bet;
+  const dEl = (now - (g.dealAt || 0)) / 1000, dOn = dEl < 4, ord = g.pl.map((p, i) => (i - g.btn + 5) % 6), nAl = pkAlive(g).length, alOrd = g.pl.map((p, i) => p.out ? -1 : g.pl.filter((q, j) => !q.out && ord[j] < ord[i]).length);
+  const anim = (d, cls) => `${cls}" style="animation-delay:${(d).toFixed(2)}s`;   // 다시 그려도 애니메이션이 이어지게(지난 시간만큼 앞당김)
+  const seats = g.pl.map((p, i) => {
+    const [x, y] = PK_SEAT[i], show = p.me || p.shown, st = p.out ? '탈락' : p.folded ? '폴드' : p.allin ? '올인' : '';
+    const farmArm = p.me && g.skl && g.skl.farm === 'arm', smithArm = !p.me && g.skl && g.skl.smith === 'arm' && !p.out && !p.folded && !(g.peek && g.peek[i] != null);
+    const cards = p.out ? '' : p.cards.length ? p.cards.map((c, r) => pkCard(show || (g.peek && g.peek[i] === r) ? c : -1, (p.folded && !p.me ? 'dim ' : '') + (g.peek && g.peek[i] === r && !show ? 'peek ' : '') + (farmArm ? `pick" data-act="pk" data-op="skCard" data-r="${r}" data-x="` : '') + (dOn ? anim((.3 + (r * nAl + alOrd[i]) * .11) * PK_TEMPO - dEl, 'deal') : ''))).join('') : '';
+    const read = g.read && g.read[i] ? `<div class="pkread ${g.read[i]}">${g.read[i] === 'r' ? '강함' : '블러프'}</div>` : '';
+    const say = p.say && now - (p.sayAt || 0) < 2200 ? `<div class="pksay ${p.say === '폴드' ? 'f' : p.say === '레이즈' || p.say === '베팅' || p.say === '올인' ? 'r' : ''}" style="animation-delay:${-(now - p.sayAt) / 1000}s">${p.say}</div>` : '';
+    return `<div class="pkseat ${g.cur === i && now >= (g.wait || 0) ? 'act' : ''} ${p.out ? 'out' : ''} ${g.win && g.win.includes(i) ? 'win' : ''} ${p.me ? 'me' : ''} ${smithArm ? 'pick' : ''}" style="left:${x}%;top:${y}%"${smithArm ? ` data-act="pk" data-op="skSeat" data-i="${i}"` : ''}>${read}
+      <div class="pkcards2">${cards}</div><div class="pkname">${g.btn === i ? '<i class="dbtn">D</i>' : ''}${esc(p.name)}</div><div class="pkstack">${p.out ? '' : `<i class="ycn"></i>${p.stack.toLocaleString()}`}</div>${st ? `<div class="pkstat">${st}</div>` : ''}${p.best && p.shown ? `<div class="pkbest">${p.best}</div>` : ''}${p.bet ? `<div class="pkbet">${p.bet.toLocaleString()}</div>` : ''}${say}</div>`;
+  }).join('');
+  const fEl = (now - (g.flipAt || 0)) / 1000, board = [0, 1, 2, 3, 4].map(k => pkCard(g.board[k] == null ? null : g.board[k], g.board[k] != null && k >= (g.flipFrom || 0) && fEl < 4 ? anim((.25 + (k - g.flipFrom) * .38) * (g.flipK || 1) - fEl, 'flip') : '')).join('');
+  let bar = '';
+  if(my){
+    const minTo = Math.min(me.bet + me.stack, g.curBet + Math.max(g.minR, g.bb)), maxTo = me.bet + me.stack, v = Math.min(maxTo, Math.max(minTo, UI.pkRaise || minTo));
+    bar = `<div class="pkbar"><button class="btn" data-act="pk" data-op="fold">폴드</button><button class="btn" data-act="pk" data-op="call">${need > 0 ? `콜 ${Math.min(need, me.stack).toLocaleString()}` : '체크'}</button>
+      ${maxTo > g.curBet ? `<span class="pkraise"><input type="range" id="pk-raise" min="${minTo}" max="${maxTo}" step="1" value="${v}"><button class="btn primary" data-act="pk" data-op="raise">${need > 0 ? '레이즈' : '베팅'} <b id="pk-rv">${v.toLocaleString()}</b></button><button class="btn warn" data-act="pk" data-op="allin">올인</button></span>` : ''}</div>`;
+  } else bar = `<div class="pkbar wait">${me.out ? '탈락' : me.folded ? '폴드 · 다음 핸드를 기다리는 중' : g.cur >= 0 && !g.pl[g.cur].me ? `${esc(g.pl[g.cur].name)} 생각 중…` : ''}</div>`;
+  return `<section class="card pktable"><div class="pkhead"><b>${esc(pkTitle(g.city, g.ed))}${pkSkBar(g)}</b><span>${g.tier}티어 · 핸드 #${g.hand} · 블라인드 ${pkBl(g)} · 남은 ${pkAlive(g).length}명</span></div>
+    <div class="pkfelt"><div class="pkboard">${board}</div><div class="pkpot">팟 <i class="ycn"></i>${pkPot(g).toLocaleString()}</div>${g.msg ? `<div class="pkmsg">${esc(g.msg)}</div>` : ''}${seats}${pkMyStack(g)}</div>
+    ${bar}<div class="pklog">${g.log.map(l => `<span>${esc(l)}</span>`).join('')}</div></section>`;
+}
+function pkOverHTML(g){
+  const pl = g.over.place;
+  return `<section class="card pkover"><h2 class="${pl === 2 ? 'silver' : ''}">${pl === 1 ? '우승' : pl === 2 ? '준우승' : pl + '위'}</h2><p>${esc(pkTitle(g.city, g.ed))}</p>
+    ${pl === 1 ? `<div class="pkprizes"><p class="pkprize">${pkRedIcon('big')}빨간 칩 +${g.tier * 2}</p></div>` : pl === 2 ? `<div class="pkprizes"><p class="pkprize">${pkRedIcon('big')}빨간 칩 +${g.tier}</p></div>` : ''}
+    <button class="btn primary" data-act="pk" data-op="lobby">대회장으로</button></section>`;
+}
+// 상점: 역만 이샹텐(1개 한정). 사면 매진, 다음 마작 대국 동1국 배패에 쓰이고, 그 대국이 끝나야 다시 살 수 있다
+const TK_RAGE = '<svg viewBox="0 0 24 24" preserveAspectRatio="none" aria-hidden="true"><g fill="#fff3c4"><g transform="rotate(-45 12 13)"><rect x="11.1" y="1.6" width="1.8" height="22" rx=".9"/><path d="M12 3.4 Q9.4 3.6 6 0.2 Q1.6 6 6 11.8 Q9.4 8.4 12 8.6 Z"/><path d="M12.6 4.8 L16.2 6 L12.6 7.2 Z"/></g><g transform="translate(24 0) scale(-1 1) rotate(-45 12 13)"><rect x="11.1" y="1.6" width="1.8" height="22" rx=".9"/><path d="M12 3.4 Q9.4 3.6 6 0.2 Q1.6 6 6 11.8 Q9.4 8.4 12 8.6 Z"/><path d="M12.6 4.8 L16.2 6 L12.6 7.2 Z"/></g></g></svg>';   // X자로 엇갈린 전투 도끼(날카로운 초승달 날·뒷가시)
+const TK_PET = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="#fff3c4"><ellipse cx="12" cy="16" rx="5.4" ry="4.6"/><ellipse cx="5.2" cy="10.6" rx="2.2" ry="2.8" transform="rotate(-18 5.2 10.6)"/><ellipse cx="9.2" cy="6.4" rx="2.2" ry="2.9" transform="rotate(-6 9.2 6.4)"/><ellipse cx="14.8" cy="6.4" rx="2.2" ry="2.9" transform="rotate(6 14.8 6.4)"/><ellipse cx="18.8" cy="10.6" rx="2.2" ry="2.8" transform="rotate(18 18.8 10.6)"/></g></svg>';   // 발바닥
+// 상점 티켓: 역만의 꿈(다음 대국 동1국) · 광전사의 포효(1시간 전투 틱 2배) · 펫 소환(못 얻은 펫 1마리)
+function pkShopHTML(){
+  const red = PK.st.red || 0, inGame = !!store.get(KEY.save, null), now = Date.now();
+  const btn = (op, price) => `<button class="btn pkbuy" data-act="pk" data-op="${op}" ${red < price ? 'disabled title="빨간 칩 부족"' : ''}>구매 <span class="pkc">${pkRedIcon()}${price}</span></button>`;
+  const sold = '<span class="pksold">매진</span>';
+  const rageLeft = RPG.st.rage > now ? Math.ceil((RPG.st.rage - now) / 60000) : 0, missing = PETS.filter(p => !RPG.st.pets[p.k]).length;
+  const row = (seal, nm, sub, st) => `<div class="pkshop"><div class="pkshi">${seal}<div><b>${nm}</b>${sub ? `<small>${sub}</small>` : ''}</div></div>${st}</div>`;
+  return row('<span class="ymseal"><i>役</i><i>満</i></span>', '역만의 꿈 티켓', '', PK.st.ym || inGame ? sold : btn('buyYm', YM2_PRICE))
+    + row(`<span class="ymseal tks rage">${TK_RAGE}</span>`, '광전사의 포효 티켓', rageLeft ? `발동 중 · <b class="rgt">${rageClock()}</b> 남음` : '', rageLeft ? sold : btn('buyRage', RAGE_PRICE))
+    + row(`<span class="ymseal tks pet">${TK_PET}</span>`, '펫 소환 티켓', '', missing ? btn('buyPet', PETT_PRICE) : sold);
+}
+const pkRecBottom = () => { const u = document.getElementById('pkrecs'); if(u) u.scrollTop = u.scrollHeight; };   // 최신 기록(맨 아래)부터 보이게
+function pkRender(){ if(UI.screen !== 'poker') return; const box = document.querySelector('.poker'); if(!box) return; const sc = document.getElementById('pkcards'), sl = sc ? sc.scrollLeft : null, sc0 = document.getElementById('pkcards0'), sl0 = sc0 ? sc0.scrollLeft : null; const g = pkG(); const ostk = box.querySelector('.pkfelt > .pkstk') || PK.stkEl, tmp = document.createElement('div'); tmp.innerHTML = g && !g.over && !g.paused ? pkTableHTML(g) : g && g.over ? pkOverHTML(g) : pkLobbyHTML();   /* 화면을 갔다 와도 만든 탑을 다시 쓴다 */
+  { const nstk = tmp.querySelector('.pkfelt > .pkstk'); if(ostk && nstk && ostk.dataset.k === nstk.dataset.k && !box.contains(ostk)) nstk.replaceWith(ostk); }
+  domMorph(box, tmp); PK.stkEl = box.querySelector('.pkfelt > .pkstk') || PK.stkEl;   /* 바뀐 곳만 고친다: 칩 탑은 그대로 두어 깜빡이지 않게 */   /* 칩 수가 같으면 만든 탑을 그대로 쓴다 */ const sc2 = document.getElementById('pkcards'); if(sc2 && sl != null) sc2.scrollLeft = sl; const sc3 = document.getElementById('pkcards0'); if(sc3 && sl0 != null) sc3.scrollLeft = sl0; chipFix(); }
+function pokerAct(b){
+  const op = b.dataset.op, t = +b.dataset.t, today = pkDay(), g = pkG();
+  if(op === 'scroll'){ const sc = document.getElementById(b.dataset.tg || 'pkcards'); if(sc) sc.scrollBy({ left: (+b.dataset.d) * (sc.clientWidth * .8), behavior: 'smooth' }); return; }
+  if(op === 'join'){ const key = today + '-' + t; if(!pkOpen(today).includes(t) || PK.st.done[key] || g || pkBusy()) return;
+    if((RPG.st.chips || 0) < PK_BUY(t)){ rpgToast('노란 축의칩이 부족합니다'); return; } if((RPG.st.blue || 0) < PK_FEE[t - 1]){ rpgToast('파란 칩이 부족합니다'); return; }
+    RPG.st.blue -= PK_FEE[t - 1]; RPG.st.chips -= PK_BUY(t); rpgSave(); chipFix(); SFX.unlock(); SFX.cash(.5); pkNewGame(t, key, today); pkSave(); render(); pkLoop(); return; }
+  if(op === 'reserve'){ const day = pkNextDay(t, today), key = day + '-' + t; if(PK.st.res[key] || PK.st.done[key] || pkBusy()) return; if((RPG.st.chips || 0) < PK_BUY(t)){ rpgToast('지참 칩(노란 축의칩)이 부족합니다'); return; } if((RPG.st.blue || 0) < PK_FEE[t - 1]){ rpgToast('파란 칩이 부족합니다'); return; }
+    RPG.st.blue -= PK_FEE[t - 1]; PK.st.res[key] = 1; rpgSave(); pkSave(); SFX.unlock(); SFX.cash(.5); rpgToast(`${pkTitle(pkCity(day, t), pkEdition(day, t))} 엔트리 완료`); pkRender(); return; }
+  if(op === 'enter'){ const key = today + '-' + t; if(!PK.st.res[key] || PK.st.done[key] || g) return; if((RPG.st.chips || 0) < PK_BUY(t)){ rpgToast('노란 축의칩이 부족합니다'); return; }
+    RPG.st.chips -= PK_BUY(t); delete PK.st.res[key]; rpgSave(); chipFix(); SFX.unlock(); pkNewGame(t, key, today); pkSave(); render(); pkLoop(); return; }
+  if(op === 'buyRage'){ if(RPG.st.rage > Date.now() || (PK.st.red || 0) < RAGE_PRICE) return; PK.st.red -= RAGE_PRICE; RPG.st.rage = Date.now() + RAGE_MS; rpgSave(); pkSave(); chipFix(); SFX.unlock(); SFX.cash(.5); rpgToast('광전사의 포효 · 1시간 동안 전투 틱 2배'); pkRender(); return; }
+  if(op === 'buyPet'){ const miss = PETS.filter(p => !RPG.st.pets[p.k]); if(!miss.length || (PK.st.red || 0) < PETT_PRICE) return; PK.st.red -= PETT_PRICE; pkSave(); const pp = miss[Math.floor(Math.random() * miss.length)]; petGain(pp.k); rpgSave(); chipFix(); SFX.unlock(); SFX.cash(.5); rpgToast('랜덤 펫 소환 성공');   /* 무슨 펫인지는 RPG에 들어가서 빵빠레와 함께 */ pkRender(); return; }
+  if(op === 'buyYm'){ if(PK.st.ym || store.get(KEY.save, null) || (PK.st.red || 0) < YM2_PRICE) return; PK.st.red -= YM2_PRICE; PK.st.ym = true; pkSave(); chipFix(); SFX.unlock(); SFX.cash(.6); rpgToast('역만의 꿈 티켓 구매'); pkRender(); return; }
+  if(op === 'recOpen'){ UI.pkRecOpen = !UI.pkRecOpen; pkRender(); pkRecBottom(); return; }
+  if(op === 'leave'){ if(g && !g.over){ g.paused = true; pkSave(); } $modal.hidden = true; render(); return; }   // 대회 나가기: 진행은 저장, 대회장에서 이어서
+  if(op === 'sk' || op === 'skCard' || op === 'skSeat'){   // 포커 스킬(클릭 조작)
+    if(!g || g.over || g.paused) return; if(!g.skl) g.skl = {}; if(!g.peek) g.peek = {}; if(!g.read) g.read = {};
+    const me = g.pl[0], k = op === 'skCard' ? 'farm' : op === 'skSeat' ? 'smith' : b.dataset.k;
+    const done = ok => { g.skl[k] = ok ? 'used' : 'fail'; if(!ok) rpgToast(`${PKSK[k].n} 실패`); SFX.unlock(); ok ? SFX.chip() : SFX.miss(); pkSave(); pkRender(); };
+    if(op === 'sk'){
+      if(g.skl[k] === 'arm'){ delete g.skl[k]; pkRender(); return; }   // 다시 누르면 취소
+      if(!pkSkCan(g, k)) return;
+      if(k === 'farm' || k === 'smith'){ g.skl[k] = 'arm'; SFX.unlock(); SFX.draw(); pkRender(); return; }   // 카드·상대를 고르게 한다
+      if(k === 'smelt'){
+        const [c1, c2] = me.cards, s1 = c1 / 13 | 0, s2 = c2 / 13 | 0;
+        const tryA = s1 * 13 + c2 % 13, tryB = s2 * 13 + c1 % 13; let j = g.deck.indexOf(tryA), slot = 1, nc = tryA;
+        if(j < 0){ j = g.deck.indexOf(tryB); slot = 0; nc = tryB; }
+        if(j < 0){ rpgToast('합금할 카드가 없음'); return; }   // 같은 숫자·같은 무늬 카드가 이미 나가 있으면 못 씀(소모 안 함)
+        if(!pkRoll(k)) return done(false);
+        g.deck[j] = me.cards[slot]; me.cards[slot] = nc; return done(true);
+      }
+      if(k === 'cook'){
+        if(!pkRoll(k)) return done(false);
+        const i = g.lastAgg, p = g.pl[i], opp = g.pl.filter((q, j) => j !== i && !q.out && !q.folded).length, eq = pkEquity(p.cards, g.board, Math.max(1, opp), 160);
+        g.read[i] = eq * (opp + 1) >= 1.1 ? 'r' : 'b'; return done(true);
+      }
+      return;
+    }
+    if(g.skl[k] !== 'arm') return;
+    if(op === 'skCard'){ const r = +b.dataset.r; if(!pkRoll(k)) return done(false); me.cards[r] = g.deck.pop(); SFX.draw(); return done(true); }
+    if(op === 'skSeat'){ const i = +b.dataset.i; if(!pkRoll(k)) return done(false); g.peek[i] = Math.random() < .5 ? 0 : 1; return done(true); }
+    return;
+  }
+  if(op === 'drop'){ if(!g || g.over || !g.paused || (RPG.st.chips || 0) < PK_DROP) return; RPG.st.chips -= PK_DROP; rpgSave(); PK.st.done[g.key] = pkAlive(g).length; PK.st.game = null; pkSave(); chipFix(); SFX.unlock(); SFX.cash(); render(); return; }   // 카칭 · 기권: 남은 인원 중 꼴찌로 기록, 보상 없음
+  if(op === 'resume'){ if(g && g.paused){ g.paused = false; g.wait = Date.now() + 700; pkSave(); SFX.unlock(); render(); pkLoop(); } return; }
+  if(op === 'lobby'){ PK.st.game = null; pkSave(); render(); return; }
+  if(!g || g.over || g.cur !== 0 || Date.now() < (g.wait || 0)) return;
+  const me = g.pl[0];
+  if(op === 'fold') pkDo(g, 0, 'fold');
+  else if(op === 'call') pkDo(g, 0, 'call');
+  else if(op === 'raise'){ const v = +((document.getElementById('pk-raise') || {}).value || 0); pkDo(g, 0, 'raise', v); }
+  else if(op === 'allin') pkDo(g, 0, 'raise', me.bet + me.stack);
+  UI.pkRaise = 0; pkSave(); pkRender(); pkLoop();
+}
+document.addEventListener('input', e => { if(e.target.matches && e.target.matches('.cbuy .qty')){ const o = e.target.parentNode.querySelector('.cprice'); if(o) o.textContent = Math.max(0, Math.floor(+e.target.value || 0)).toLocaleString(); }   /* 소모품: 개당 1이라 개수 = 값 */
+  if(e.target.id === 'pk-raise'){ UI.pkRaise = +e.target.value; const o = document.getElementById('pk-rv'); if(o) o.textContent = (+e.target.value).toLocaleString(); } });
+function pkHelpHTML(){
+  return `<div class="sheet help" role="dialog" aria-modal="true"><h2>포커 도움말</h2><ul>
+    <li><b>대회</b> 3~10티어, 티어마다 정해진 도시에서 개최. 3~7티어 5일마다 한 번씩(순서 무작위), 8~10티어 매일. 도시별로 제n회 누적.</li>
+        <li><b>입장</b> 파란 칩 참가비와 노란 축의칩 티어×10개를 함께 내고 착석. 건 노란칩은 소모.</li>
+    <li><b>게임</b> 6명 텍사스 홀덤. 6핸드마다 블라인드 상승, 마지막 한 명이 남으면 종료. 내 칩 탑을 누르거나 위로 긁으면 칩놀음.</li>
+    <li><b>상</b> 우승 빨간 칩 +티어×2, 준우승 빨간 칩 +티어.</li></ul>
+    <h2>RPG 스킬 레벨에 따라 발동확률을 가진 스킬</h2>
+    <ul>
+      <li>${PKSK.farm.icon} 솎아내기 — 프리플랍에 스킬 <kbd>좌클릭</kbd> 후 내 카드 <kbd>좌클릭</kbd>: 덱의 새 카드로 교환</li>
+      <li>${PKSK.smelt.icon} 합금 — 프리플랍에 스킬 <kbd>좌클릭</kbd>: 내 카드 2장의 무늬가 같아짐 (페어 불가)</li>
+      <li>${PKSK.smith.icon} 망치질 — 스킬 <kbd>좌클릭</kbd> 후 상대 <kbd>좌클릭</kbd>: 그 상대의 카드 1장이 보임</li>
+      <li>${PKSK.cook.icon} 간 보기 — 상대가 베팅·레이즈하면 스킬 <kbd>좌클릭</kbd>: 강함 감지<br>(<span style="color:#ff3b30">빨강</span> → 강함, <span style="color:#2fe06a">초록</span> → 블러프, <span style="color:#000;text-shadow:.5px 0 #ccc,-.5px 0 #ccc,0 .5px #ccc,0 -.5px #ccc">검정</span> → 스킬 실패)</li>
+    </ul>
+    <div class="row"><button class="btn primary" data-act="closeModal">닫기</button></div></div>`;
+}
+
 // 시작: 꺼 둔 동안 쌓인 몫을 받고, 이후 0.25초마다 흐름 처리
 // 첫 슬라이드가 멈칫하지 않게: 켜고 잠시 뒤 RPG 화면을 안 보이게 한 번 배치해 보고(스타일·글꼴 준비), 효과음 엔진도 미리 만들어 둔다
 setTimeout(() => {
@@ -6841,6 +7610,12 @@ setTimeout(() => {
   RPG.booting = false;
   rpgSave();
   setInterval(rpgTick, 50);
+  setInterval(() => {   // 광전사의 포효: 남은 시간 글자만 매초 바꾸고, 끝나면 장면을 다시 그리지 않고 테두리·표시만 부드럽게 지운다
+    if(!RPG.st.rage) return;
+    if(RPG.st.rage > Date.now()){ const c = rageClock(); document.querySelectorAll('.rgt').forEach(el => { if(el.textContent !== c) el.textContent = c; }); return; }
+    const oldMs = combatMs(); delete RPG.st.rage; rpgSave(); rageEndFx(oldMs);
+    if(UI.screen === 'poker') pkRender();
+  }, 250);
   requestAnimationFrame(rpgFrame);
   const flush = () => { rpgAdvance(false); rpgSave(); };
   // 탭을 가린 동안에도 타이머가 틱을 조금씩 처리해 버리므로, 가릴 때의 경험치를 적어 두고 돌아왔을 때 그 차이를 알려 준다(1틱이라도)
@@ -6866,7 +7641,7 @@ document.addEventListener('click', e => {
   switch(a){
     case 'start': if(store.get(KEY.save, null)) return; startGame(b.dataset.mode); break;   // 이어하기가 남아 있으면 새 대국 불가(버리기 먼저)
     case 'resume': { const sv = store.get(KEY.save, null); if(sv) startGame(null, sv); break; }
-    case 'dropSave': if(RPG.st.chips < 1) return; RPG.st.chips -= 1; rpgSave(); chipFix(); store.del(KEY.save); render(); break;   // 버리기: 축의칩 1개
+    case 'dropSave': if(RPG.st.chips < 1) return; RPG.st.chips -= 1; SFX.unlock(); SFX.cash();   /* 카칭 */ rpgSave(); chipFix(); store.del(KEY.save); render(); break;   // 버리기: 축의칩 1개
     case 'records': UI.token++; show('records'); break;
     case 'home': UI.token++; show('home'); break;
     case 'awayOk': RPG.away = null; render(); break;   // RPG 자리 비운 동안 안내: 확인을 눌러야 닫힌다
@@ -6876,26 +7651,31 @@ document.addEventListener('click', e => {
       $modal.hidden = false; break;
     case 'help': $modal.innerHTML = helpHTML(); $modal.hidden = false; break;
     case 'closeModal': $modal.hidden = true; break;
-    case 'tab': { const to = b.dataset.t === 'rpg' ? 'rpg' : 'home'; if(to === UI.screen || UI.sliding) break;
-      SFX.unlock(); SFX.slide(to === 'rpg' ? -1 : 1);   // 슬라이드 효과음
+    case 'tab': { window.removeEventListener('scroll', relMinH); const tk = ['mj', 'rpg', 'pk'], scr = { mj:'home', rpg:'rpg', pk:'poker' }, tt = tk.includes(b.dataset.t) ? b.dataset.t : 'mj', to = scr[tt]; if(to === UI.screen || UI.sliding) break;
+      const fromT = UI.screen === 'rpg' ? 'rpg' : UI.screen === 'poker' ? 'pk' : 'mj';   // 마작 - RPG - 포커 순: 오른쪽 것을 고르면 왼쪽으로 밀려 나간다
+      SFX.unlock(); SFX.slide(tk.indexOf(tt) > tk.indexOf(fromT) ? -1 : 1);   // 슬라이드 효과음
       // 홈 화면 전체가 옆으로 밀려 나가고 새 화면이 반대쪽에서 밀려 들어온다(제목 스위치는 제자리)
-      const sw = document.querySelector('.hsw'); if(sw){ sw.querySelectorAll('.ht').forEach(x => x.classList.toggle('on', x.dataset.t === (to === 'rpg' ? 'rpg' : 'mj'))); hswPlace(sw, to === 'rpg' ? 'rpg' : 'mj'); }
-      const dir = to === 'rpg' ? -1 : 1, outs = [...$app.querySelectorAll('.hero ~ *')];
-      UI.sliding = true; $app.style.minHeight = $app.offsetHeight + 'px';   // 슬라이드 동안 화면 높이를 붙잡아 둔다(짧은 화면으로 바뀌며 스크롤바가 사라졌다 생기는 출렁임 방지)
+      const sw = document.querySelector('.hsw'); if(sw){ sw.querySelectorAll('.ht').forEach(x => x.classList.toggle('on', x.dataset.t === tt)); hswPlace(sw, tt); }
+      const dir = tk.indexOf(tt) > tk.indexOf(fromT) ? -1 : 1, outs = [...$app.querySelectorAll('.hero ~ *')];
+      UI.sliding = true; document.body.classList.add('sliding'); $app.style.minHeight = $app.offsetHeight + 'px';   // 슬라이드 동안 화면 높이를 붙잡아 둔다(짧은 화면으로 바뀌며 스크롤바가 사라졌다 생기는 출렁임 방지)
       outs.forEach(el => { el.style.transition = 'transform .09s cubic-bezier(.5,0,1,1), opacity .09s'; el.style.transform = `translateX(${dir * 100}vw)`; el.style.opacity = '0'; });
       setTimeout(() => {
         const keepHero = $app.querySelector('.hero');   // 달리는 중인 금색 막대 요소를 그대로 살려 둔다(새로 그리면 막대가 처음 자리로 튀었다)
         const sy = window.scrollY; rq = true; show(to); rq = false; window.scrollTo(0, sy);   // 슬라이드는 보던 높이 그대로(맨 위로 튀지 않게)   // show()가 예약하는 두 번째 전체 재그리기를 막는다(draw 한 번만)
         UI.slideLock = false; draw(); UI.slideLock = true; UI.slidePend = false; window.scrollTo(0, sy);
-        { const nh = $app.querySelector('.hero'); if(keepHero && nh){ nh.replaceWith(keepHero); const sw2 = keepHero.querySelector('.hsw'); if(sw2){ sw2.classList.remove('mj', 'rpg'); sw2.classList.add(to === 'rpg' ? 'rpg' : 'mj'); sw2.querySelectorAll('.ht').forEach(x => { const on2 = x.dataset.t === (to === 'rpg' ? 'rpg' : 'mj'); x.classList.toggle('on', on2); x.setAttribute('aria-checked', on2); }); } } }
+        { const nh = $app.querySelector('.hero'); if(keepHero && nh){ nh.replaceWith(keepHero); const sw2 = keepHero.querySelector('.hsw'); if(sw2){ sw2.classList.remove('mj', 'rpg', 'pk'); sw2.classList.add(tt); sw2.querySelectorAll('.ht').forEach(x => { const on2 = x.dataset.t === tt; x.classList.toggle('on', on2); x.setAttribute('aria-checked', on2); }); } } }
         const ins = [...$app.querySelectorAll('.hero ~ *')];
         ins.forEach(el => { el.style.transition = 'none'; el.style.transform = `translateX(${-dir * 100}vw)`; el.style.opacity = '0'; });
         void document.body.offsetWidth;
         ins.forEach(el => { el.style.transition = 'transform .13s cubic-bezier(0,0,.3,1), opacity .13s'; el.style.transform = ''; el.style.opacity = ''; });
-        setTimeout(() => { ins.forEach(el => { el.style.transition = ''; }); UI.sliding = false; UI.slideLock = false; $app.style.minHeight = ''; if(UI.slidePend){ UI.slidePend = false; render(); } }, 150);
+        setTimeout(() => { ins.forEach(el => { el.style.transition = ''; }); UI.sliding = false; document.body.classList.remove('sliding'); if(UI.screen === 'poker') pkRender(); UI.slideLock = false; relMinH(); if(UI.slidePend){ UI.slidePend = false; render(); } }, 150);
       }, 90);
       break; }
     case 'adm': if(rpgAdmin()) rpgAdminAct(b); break;
+    case 'pk': pokerAct(b); break;
+    case 'pkQuit': $modal.innerHTML = `<div class="sheet"><h2>대회 나가기</h2><p class="muted" style="margin:0">지금까지 진행 저장. 대회장에서 이어서 하기 가능.</p>
+        <div class="row"><button class="btn warn" data-act="pk" data-op="leave">나가기</button><button class="btn" data-act="closeModal">계속하기</button></div></div>`; $modal.hidden = false; break;
+    case 'pkHelp': $modal.innerHTML = pkHelpHTML(); $modal.hidden = false; break;
     case 'slotOpen': UI.invTab = b.dataset.tab; UI.invSub = b.dataset.sub; UI.invPage = 0; render(); { const bags = document.querySelectorAll('.rpg .bag'); const bg = bags[bags.length - 1]; if(bg) bg.scrollIntoView({behavior:'smooth', block:'start'}); } break;   // 장비 칸을 누르면 가방의 그 종류가 열린다
     case 'invTab': UI.invTab = b.dataset.t; UI.invSub = null; UI.invPage = 0; render(); break;
     case 'invSub': UI.invSub = b.dataset.t; UI.invPage = 0; render(); break;   // 탭 안의 탭: 같은 걸 다시 누르면 그 탭 전체
@@ -6910,7 +7690,7 @@ document.addEventListener('click', e => {
       $modal.innerHTML = `<div class="sheet"><h2>기록을 모두 삭제할까요?</h2>
 <div class="row"><button class="btn warn" data-act="recWipeGo">모두 삭제</button><button class="btn" data-act="closeModal">취소</button></div></div>`;
       $modal.hidden = false; break;
-    case 'recWipeGo': store.del(KEY.rec); store.del(KEY.save);   /* 이어하기도 함께 지운다 */ UI.last = null; UI.recP = 3; settings = Object.assign({}, SETTINGS0); store.set(KEY.set, settings); store.del(RPG_KEY); RPG.st = rpgLoad(); RPG.away = null; rpgSave(); chipFix(); $modal.hidden = true; render(); break;
+    case 'recWipeGo': store.del(KEY.rec); store.del(KEY.save);   /* 이어하기도 함께 지운다 */ UI.last = null; UI.recP = 3; settings = Object.assign({}, SETTINGS0); store.set(KEY.set, settings); store.del(RPG_KEY); RPG.st = rpgLoad(); RPG.away = null; rpgSave(); pkReset(); chipFix();   /* 포커(빨간 칩·엔트리·진행 중 대회·기록)도 초기화 */ $modal.hidden = true; render(); break;
     case 'autoSort': settings.autoSort = settings.autoSort === false; store.set(KEY.set, settings); UI.order = null; render(); break;   // 켜면 바로 정렬
     case 'autoWin': UI.autoWin = !UI.autoWin; render(); if(UI.autoWin) autoWinCheck(); break;
     case 'autoTsumogiri': UI.autoTsumogiri = !UI.autoTsumogiri; render(); if(UI.autoTsumogiri) autoActCheck(); break;
@@ -6934,7 +7714,12 @@ document.addEventListener('click', e => {
       if(list.length === 1) choose(list[0]); else { UI.callPick = true; render(); }
     } break;
     case 'nuki': if(pd && pd.kind === 'riichiNuki') choose(true); else if(pd && pd.kind === 'action' && pd.ctx.nuki && UI.riichiDiscard == null) choose({type:'nuki'}); break;
-    case 'recP': UI.recP = +b.dataset.p; render(); break;
+    case 'recP': if(+b.dataset.p === 4 && UI.recP !== 4 && !settings.p4warned){   // 4인 마작: 처음 한 번만 확인
+        $modal.innerHTML = `<div class="sheet"><h2>4인 마작</h2><p class="muted" style="margin:0">축의칩 획득에 비효율적인 모드입니다. 그래도 하시겠습니까?</p>
+        <div class="row"><button class="btn primary" data-act="p4ok">예</button><button class="btn" data-act="closeModal">아니요</button></div></div>`;
+        $modal.hidden = false; break; }
+      UI.recP = +b.dataset.p; render(); break;
+    case 'p4ok': settings.p4warned = true; store.set(KEY.set, settings); $modal.hidden = true; UI.recP = 4; render(); break;
     case 'recOpen': { const o = UI.recOpen || (UI.recOpen = {}); o[b.dataset.k] = !o[b.dataset.k]; render(); break; }
     case 'confirmOK': { const c = UI.confirm; UI.confirm = null; if(pd && c) pd.resolve(c.value); break; }
     case 'riichi': UI.riichiMode = !UI.riichiMode; UI.sel = null; UI.hoverDiscard = null; render(); break;
@@ -6975,7 +7760,7 @@ document.addEventListener('click', e => {
       break; }
     case 'import': {
       const io = document.getElementById('io');
-      try{ const n = importCode(io.value.trim()); msg(`${n}판을 불러왔어요${UI.importedRpg ? ' · RPG 진행도도 덮어썼어요' : ''}.`); const r0 = records(); if(r0.length) UI.last = r0[r0.length-1].id; render(); }catch(err){ msg('불러오지 못했어요: ' + err.message); }
+      try{ const n = importCode(io.value.trim()); msg(`${n}판을 불러왔어요${UI.importedRpg ? ' · RPG·포커 진행도도 덮어썼어요' : ''}.`); const r0 = records(); if(r0.length) UI.last = r0[r0.length-1].id; render(); }catch(err){ msg('불러오지 못했어요: ' + err.message); }
       break; }
   }
 });
@@ -6991,6 +7776,7 @@ document.addEventListener('pointerdown', e => {
 document.addEventListener('pointerdown', e => {
   const slot = e.target.closest('[data-dicedrag]');
   if(!slot || UI.screen !== 'game' || !UI.rollWait) return;
+  if(settings.phone){ e.preventDefault(); const w = UI.rollWait; UI.rollWait = null; w.done(); return; }   // 폰 모드(터치만): 누르면 바로 굴린다
   e.preventDefault();
   const v = UI.lastDice || (UI.game && UI.game.diceVals) || [5, 1];
   const ghost = document.createElement('div');
@@ -7458,7 +8244,7 @@ document.addEventListener('change', e => {
   if(t.id && t.id.startsWith('adm-')){ (UI.admVals || (UI.admVals = {}))[t.id] = t.value; return; }
   if(t.id === 'file' && t.files[0]){
     const fr = new FileReader();
-    fr.onload = () => { const m = document.getElementById('iomsg'); try{ const n = importCode(fr.result); if(m) m.textContent = `${n}판을 불러왔어요${UI.importedRpg ? ' · RPG 진행도도 덮어썼어요' : ''}.`; setTimeout(render, 600); }catch(err){ if(m) m.textContent = '불러오지 못했어요: ' + err.message; } };
+    fr.onload = () => { const m = document.getElementById('iomsg'); try{ const n = importCode(fr.result); if(m) m.textContent = `${n}판을 불러왔어요${UI.importedRpg ? ' · RPG·포커 진행도도 덮어썼어요' : ''}.`; setTimeout(render, 600); }catch(err){ if(m) m.textContent = '불러오지 못했어요: ' + err.message; } };
     fr.readAsText(t.files[0]); return;
   }
   if(t.id === 's-hint') settings.hint = t.checked;

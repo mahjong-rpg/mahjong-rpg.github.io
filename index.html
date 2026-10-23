@@ -719,8 +719,8 @@ section.card.resume .rsinfo{align-items:flex-start}
 .rpg .shop h3.acch small{font-weight:600;font-size:11px;margin-left:6px}
 .rpg .shop h3.acch{font-size:13px;color:var(--ink-dim);margin-top:2px}
 .rpg .sklbl{font-size:12px;font-weight:800;color:var(--ink-dim);margin:0 2px -5px}
-.rpg .rcp,.rpg .items .wshop.map{height:80px;box-sizing:border-box;padding:7px 9px;gap:6px;justify-content:flex-start}   /* 8개 행동 카드 크기 통일 */
-.rpg .items .wshop.map .rack{height:34px;flex:none}
+.rpg .rcp,.rpg .items .wshop.map{height:102px;box-sizing:border-box;padding:7px 9px;gap:6px;justify-content:flex-start}   /* 8개 행동 카드 크기 통일: 가장 긴 카드(잠긴 검·도구 4줄)에 맞춘다 */
+.rpg .items .wshop.map .rack{height:auto;flex:1 1 auto;min-height:0}   /* 맵 풍경은 남는 세로를 채운다 */
 .rpg .rcps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
 /* 세부 탭(검·투구… / 주괴·목탄): 고른 탭이 노란 판으로 이어지고, 그 판 위에 제작법이 올려진다 */
 .rpg .shop:has(.rcps.tabp){gap:0}
@@ -737,7 +737,10 @@ section.card.resume .rsinfo{align-items:flex-start}
 .rpg .rcps.tabp .it{background:linear-gradient(rgba(0,0,0,.34),rgba(0,0,0,.34)),#16382c;box-shadow:0 1px 3px rgba(0,0,0,.35)}   /* 노란 판 위에 어두운 카드가 올려진 느낌 */
 .rpg .rcps.tabp .it.lock{opacity:1}.rpg .rcps.tabp .it.lock > *{opacity:.45}   /* 잠긴 카드도 판은 불투명, 내용만 흐리게 */
 .rpg .shop:has(.rcps.tabp) h3.hrow{padding-bottom:0}   /* 제작법도 맵처럼 2×5 */
-@media (max-width:760px){.rpg .rcps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.rpg .items:has(> .wshop.map){grid-template-columns:repeat(5,minmax(0,1fr))}   /* 맵도 제작법처럼 2×5 */
+@media (max-width:760px){.rpg .rcps,.rpg .items:has(> .wshop.map){grid-template-columns:repeat(2,minmax(0,1fr))}.rpg .shop h3.hrow > .invtabs{flex-basis:100%;margin-left:0}}   /* 좁으면 세부 탭은 항상 둘째 줄 */
+.rpg{--acth:273px}@media (max-width:760px){.rpg{--acth:632px}}@media (max-width:380px){.rpg{--acth:666px}}
+.rpg .shop:has(.rcps),.rpg .shop:has(.wshop.map){min-height:var(--acth,0)}   /* 행동마다 아래 선택창 세로 길이를 같게 */
 .rpg .rcp{gap:3px;padding:7px 9px}
 .rpg .nrow{display:flex;align-items:center;justify-content:space-between;gap:4px;min-width:0}
 .rpg .rnb{font:inherit;font-weight:800;font-size:13px;color:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;text-align:left;padding:2px 6px 2px 3px;margin-left:-3px;border:1px solid rgba(255,255,255,.28);border-radius:7px;background:rgba(255,255,255,.06);cursor:pointer}
@@ -746,6 +749,12 @@ section.card.resume .rsinfo{align-items:flex-start}
 .rpg .rnb .iic{width:18px;height:18px;vertical-align:-4px;margin-right:4px}
 .rpg .lockt{font-size:11px;color:var(--ink-dim);white-space:nowrap;flex:none}
 .rpg .rcp .d.lockt,.rpg .rcp .d.short{align-self:flex-end}
+.rpg .rcp .d.lockl{font-size:11px;color:var(--ink-dim);line-height:1.3}
+.rpg .it.map .lockt{position:absolute;left:50%;bottom:37px;transform:translate(-50%,50%);padding:2px 8px;border-radius:999px;background:rgba(0,0,0,.55);color:#ff8a7a;z-index:2}   /* 잠긴 맵: 못 미친 레벨을 풍경 위에 빨강으로 */
+.rpg .it.map.lock{opacity:1}.rpg .it.map.lock > *:not(.lockt){opacity:.5}   /* 맵은 흐리게 해도 레벨 글씨는 또렷하게 */
+.rpg .rcp .d.wreq{font-size:11px;color:#7ee08a;line-height:1.3}
+.rpg .wlv{color:#7ee08a}   /* 착용 가능한 레벨은 초록 */
+.rpg .wlv.miss,.rpg .rcp .d.wreq.miss,.rpg .rcp .d.lockl{color:#ff8a7a}   /* 아직 못 미친 레벨 제한은 빨강 */
 .rpg .rcp .n small,.rpg .rcp .d small{font-weight:600;color:var(--ink-dim);font-size:11px;margin-left:3px}
 .rpg .rcp .d{font-size:11.5px;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.55}
 .rpg .rcp .d .short,.rpg .rcp .d.short{color:#ff8a7a}
@@ -767,8 +776,10 @@ section.card.resume .rsinfo{align-items:flex-start}
 .rpg .slot[data-act]{cursor:pointer;transition:border-color .15s}.rpg .slot[data-act]:hover{border-color:rgba(255,255,255,.25)}
 .rpg .slot{background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:6px 8px;display:flex;flex-direction:column;gap:2px;min-width:0;min-height:72px;box-sizing:border-box}   /* 비어 있어도 장착했을 때와 같은 높이 */
 .rpg .slot .sl{font-size:11px;color:var(--ink-dim);display:flex;justify-content:space-between;gap:6px;white-space:nowrap}
+.rpg .slot .sl > span{min-width:0;white-space:normal;word-break:keep-all}   /* 칸보다 긴 설명은 줄을 바꿔 칸 안에 */
 .rpg .slot .sv{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rpg .slot .sv.none{color:var(--ink-dim);font-weight:600}
+.rpg .slot .sv:has(.svc){display:flex;align-items:center;justify-content:space-between;gap:6px}.rpg .slot .svn{min-width:0;overflow:hidden;text-overflow:ellipsis}.rpg .slot .svc{flex:none;font-size:12px;font-weight:700;color:var(--ink-dim)}.rpg .slot .svc b{color:#fff}   /* 소모품 장착 개수는 이름 오른쪽 */
 .rpg .slot .x{all:unset;cursor:pointer;color:#ff9a8a;font-weight:800}
 .rpg .hpwrap{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-dim);flex-wrap:wrap}
 .rpg .hpb{flex:1 1 120px;height:10px;border-radius:99px;background:rgba(0,0,0,.4);overflow:hidden}
@@ -1075,6 +1086,10 @@ section.card.resume .rsinfo{align-items:flex-start}
 @keyframes pbob{50%{transform:scaleY(.95) scaleX(1.03)}}
 .rpg .pj.fly .pb{animation:pfly 1.2s ease-in-out infinite}@keyframes pfly{50%{transform:translateY(-3px) scaleX(.94)}}
 .rpg .scene:not(.idle) .pj{animation:phop 7s ease-in-out infinite}   /* 행동 중: 가끔 깡총깡총 + 하트 */
+.rpg .pj.owl .pb{animation:owlfly 12s ease-in-out infinite}@keyframes owlfly{0%,6%,12%,18%,24%,30%,36%,42%{transform:none}3%,9%,15%,21%,27%,33%,39%{transform:scaleY(.96) scaleX(1.03)}45%{transform:scaleY(.9) scaleX(1.08)}50%{transform:translateY(-15px)}54%{transform:translateY(-13px) scaleX(.95)}58%{transform:translateY(-16px) scaleX(.95)}62%{transform:translateY(-13px) scaleX(.95)}66%{transform:translateY(-16px) scaleX(.95)}70%{transform:translateY(-13px) scaleX(.95)}74%{transform:translateY(-16px) scaleX(.95)}78%{transform:translateY(-13px) scaleX(.95)}82%{transform:translateY(-16px) scaleX(.95)}86%{transform:translateY(-13px) scaleX(.95)}92%{transform:translateY(0)}95%{transform:scaleY(.88) scaleX(1.1)}98%,100%{transform:none}}   /* 부엉이: 가끔 날아올라 박쥐처럼 둥둥 떠 있다가 내려앉는다 */
+.rpg .scene:not(.idle) .pj.owl{animation:none}   /* 나는 동안 깡총은 안 한다 */
+.rpg .pj.owl .ow{transform-box:fill-box;transform-origin:50% 0;animation:owlwing 12s linear infinite}@keyframes owlwing{0%,47%,92%,100%{transform:none}48%{transform:scaleY(.55)}50%{transform:scaleY(1)}52%{transform:scaleY(.55)}54%{transform:scaleY(1)}56%{transform:scaleY(.55)}58%{transform:scaleY(1)}60%{transform:scaleY(.55)}62%{transform:scaleY(1)}64%{transform:scaleY(.55)}66%{transform:scaleY(1)}68%{transform:scaleY(.55)}70%{transform:scaleY(1)}72%{transform:scaleY(.55)}74%{transform:scaleY(1)}76%{transform:scaleY(.55)}78%{transform:scaleY(1)}80%{transform:scaleY(.55)}82%{transform:scaleY(1)}84%{transform:scaleY(.55)}86%{transform:scaleY(1)}88%{transform:scaleY(.55)}90%{transform:scaleY(1)}}   /* 날 때만 날갯짓 */
+
 @keyframes phop{0%,72%,100%{transform:none}76%{transform:translateY(-7px) rotate(-6deg)}80%{transform:none}84%{transform:translateY(-5px) rotate(5deg)}88%{transform:none}}
 .rpg .scene:not(.idle) .ph{animation:pheart 7s ease-out infinite;transform-box:fill-box;transform-origin:50% 50%}
 @keyframes pheart{0%,74%{opacity:0;transform:translateY(0) scale(.5)}80%{opacity:1;transform:translateY(-4px) scale(1)}94%{opacity:0;transform:translateY(-12px) scale(1.1)}100%{opacity:0}}
@@ -5598,6 +5613,7 @@ function itemIcon(key, opt){
 // 가방 탭: 전체 · 장비(검·투구·갑옷·반지·목걸이·요리·열매) · 도구(도끼·곡괭이·낚싯대) · 재료(씨앗·목재·원석·생선·주괴)
 const INV_TABS = [['gear', '장비', ['sword', 'helm', 'body', 'pet', 'ring', 'neck', 'axe', 'pick', 'rod', 'food', 'fruit', 'bait']], ['etc', '재료', ['seed', 'log', 'coal', 'ore', 'fish', 'bar', 'loot']]];
 const TOOL_T = { combat:'sword', wood:'axe', mine:'pick', fish:'rod' }, TOOL_SK = { sword:'combat', axe:'wood', pick:'mine', rod:'fish' };   // 행동 ↔ 도구 아이템
+const WEAR_SK = Object.assign({ helm:'combat', body:'combat' }, TOOL_SK);   // 착용 레벨을 보는 행동(투구·갑옷도 검처럼 전투)
 const GEAR_T = ['helm', 'body', 'axe', 'pick', 'rod'];
 const QTY_SL = ['food', 'fruit', 'bait'];   // 개수를 정해 장착하는 소모품
 const SELL_T = ['sword', 'helm', 'body', 'ring', 'neck', 'axe', 'pick', 'rod', 'food', 'fruit', 'bait', 'seed', 'log', 'coal', 'ore', 'fish', 'bar', 'loot'];   // 펫 말고 전부 판다   // 팔 수 있는 것: 장비(등급값) + 요리(등급×2) + 열매(등급×1) + 원석·생선·미끼(1)   // 팔 수 있는 장비(검·반지·목걸이는 등급마다 한 번만 사는 것이라 못 판다)
@@ -5632,10 +5648,13 @@ const josa = (w, a, b) => { const c = (w || '').charCodeAt(w.length - 1); return
 // 펫: 행동마다 아주 드물게(Melvor 공식: 틱 시간(초) × (레벨 + 1) ÷ 2,500만) 한 번만. 그 행동 펫을 장착하면 그 행동 속도 +15%
 const PETS = [
   { k:'wood', n:'다람쥐' }, { k:'mine', n:'박쥐' }, { k:'fish', n:'고양이' }, { k:'combat', n:'강아지' },
-  { k:'farm', n:'토끼' }, { k:'smelt', n:'아기 용' }, { k:'smith', n:'고슴도치' }, { k:'cook', n:'햄스터' }
+  { k:'farm', n:'토끼' }, { k:'smelt', n:'아기 용' }, { k:'smith', n:'고슴도치' }, { k:'cook', n:'햄스터' },
+  { k:'all', n:'전설의 부엉이' }   // 9번: 행동으로는 안 나오고, 펫 소환 티켓으로 8마리를 다 모은 뒤 마지막에 나온다
 ];
+const OWL = 9, OWL_LV = 800;   // 부엉이 착용: 총합 800레벨
+const petEff = i => i === OWL ? '모든 행동 속도 +20%' : `${SKILLS[PETS[i - 1].k].name} 속도 +15%`;
 const petOf = k => PETS.findIndex(p => p.k === k) + 1;   // 행동 → 펫 번호(1~8)
-const petBoost = k => RPG.st.eq.pet && PETS[RPG.st.eq.pet - 1].k === k ? 1.15 : 1;
+const petBoost = k => RPG.st.eq.pet === OWL ? 1.2 : RPG.st.eq.pet && PETS[RPG.st.eq.pet - 1].k === k ? 1.15 : 1;   // 부엉이는 모든 행동 +20%
 // 강타(6~10등급 던전): 몬스터 공격마다 확률로 강타. 다음 공격이 강타인지 미리 정해 두고, 강타면 몬스터 공격 틱이 빨갛게, 1.5배 빨리 차오른다(예고)
 // 방어력을 무시하고 최대 HP의 일정 비율을 깎는다 → 요리를 먹게 만든다. 확률 6등급 1/9 … 10등급 1/4, 피해 30% … 45%(한 방에 쓰러지지는 않는다). 연속으로 나올 수 있고, 열매 회피로 피할 수 있다
 const SMASH = s => s >= 6 ? { p: 1 / [9, 7.5, 6, 5, 4][s - 6], pct: [.30, .34, .38, .42, .45][s - 6] } : null;
@@ -5697,7 +5716,23 @@ function petSVG(i){   // 24×24, 오른쪽을 본다
      <ellipse cx="12" cy="14.6" rx="8.4" ry="7.2" fill="#e8a85a" ${O}/><ellipse cx="12" cy="17" rx="5.6" ry="4.6" fill="#fff4e4"/>
      <ellipse cx="6.2" cy="14.4" rx="2.4" ry="1.8" fill="#ffd0a0"/><ellipse cx="17.8" cy="14.4" rx="2.4" ry="1.8" fill="#ffd0a0"/>
      ${eye(9.2, 12.2)}${eye(14.8, 12.2)}<path d="M11.4 14.2 l.6 .6 l.6 -.6 Z" fill="#ff7090"/>${blush(7.6, 15)}${blush(16.4, 15)}
-     <path d="M11 16.6 Q12 18.8 13 16.6" fill="#3a2a1a"/><ellipse cx="12" cy="18.6" rx="1.4" ry="2" fill="#5a4a3a" transform="rotate(20 12 18.6)"/><path d="M9.6 18 q1 -.8 1.8 .4 M14.4 18 q-1 -.8 -1.8 .4" stroke="#e8a85a" stroke-width="1.4" fill="none" stroke-linecap="round"/>`
+     <path d="M11 16.6 Q12 18.8 13 16.6" fill="#3a2a1a"/><ellipse cx="12" cy="18.6" rx="1.4" ry="2" fill="#5a4a3a" transform="rotate(20 12 18.6)"/><path d="M9.6 18 q1 -.8 1.8 .4 M14.4 18 q-1 -.8 -1.8 .4" stroke="#e8a85a" stroke-width="1.4" fill="none" stroke-linecap="round"/>`,
+    // 전설의 부엉이(공허): 검보라 깃털, 보랏빛 눈, 배에 별, 뒤로 공허의 기운
+    `<ellipse cx="12" cy="13.5" rx="11.6" ry="10.6" fill="#a070ff" opacity=".12"/><ellipse cx="12" cy="13.8" rx="10" ry="9.6" fill="#a070ff" opacity=".14"/>
+     <path d="M5.2 6.2 L4.4 1.6 L8.6 4.6 Z M18.8 6.2 L19.6 1.6 L15.4 4.6 Z" fill="#2a1a48" stroke="#0c0618" stroke-width=".7" stroke-linejoin="round"/>
+     <ellipse cx="12" cy="14.4" rx="8" ry="8.4" fill="#2a1a48" stroke="#0c0618" stroke-width=".8"/>
+     <path class="ow" d="M4.4 12 Q2.2 17 5.6 21.4 Q7 17.6 6.6 12.6 Z M19.6 12 Q21.8 17 18.4 21.4 Q17 17.6 17.4 12.6 Z" fill="#1c1034" stroke="#0c0618" stroke-width=".7" stroke-linejoin="round"/>
+     <path d="M5.2 15 q.9 .5 .8 1.6 M5.4 17.6 q.8 .5 .7 1.5 M18.8 15 q-.9 .5 -.8 1.6 M18.6 17.6 q-.8 .5 -.7 1.5" stroke="#6a4ab0" stroke-width=".5" fill="none"/>
+     <ellipse cx="12" cy="17" rx="4.6" ry="4.6" fill="#3e2a6e"/>
+     <path d="M9.6 15.6 q1 .8 2 0 q1 .8 2 0 q1 .8 2 0 M9.4 18 q1.2 .8 2.4 0 q1.2 .8 2.4 0" stroke="#5a40a0" stroke-width=".5" fill="none"/>
+     <path d="M10.4 19.4 l.3 .7 l.7 .1 l-.6 .4 l.2 .7 l-.6 -.4 l-.6 .4 l.2 -.7 l-.6 -.4 l.7 -.1 Z" fill="#e8d8ff"/><circle cx="14" cy="16.6" r=".35" fill="#e8d8ff"/><circle cx="13.2" cy="20.4" r=".3" fill="#c8b0ff"/>
+     <path d="M3.8 10.4 Q12 4.6 20.2 10.4 Q19.6 13.2 16.4 13.4 Q12 12.4 7.6 13.4 Q4.4 13.2 3.8 10.4 Z" fill="#3a2766" stroke="#0c0618" stroke-width=".6"/>
+     <circle cx="8.4" cy="10" r="3.1" fill="#0c0618"/><circle cx="15.6" cy="10" r="3.1" fill="#0c0618"/>
+     <circle cx="8.4" cy="10" r="2.2" fill="#b47cff"/><circle cx="15.6" cy="10" r="2.2" fill="#b47cff"/><circle cx="8.4" cy="10" r="1.1" fill="#f4eaff"/><circle cx="15.6" cy="10" r="1.1" fill="#f4eaff"/>
+     <circle cx="9" cy="9.3" r=".45" fill="#fff"/><circle cx="16.2" cy="9.3" r=".45" fill="#fff"/>
+     <path d="M11 11.6 L12 14 L13 11.6 Q12 11 11 11.6 Z" fill="#ffcf5a" stroke="#8a5a10" stroke-width=".4" stroke-linejoin="round"/>
+     <path d="M9.4 22.2 l-.6 1.2 M10.2 22.4 v1.2 M11 22.2 l.6 1.2 M13 22.2 l-.6 1.2 M13.8 22.4 v1.2 M14.6 22.2 l.6 1.2" stroke="#ffcf5a" stroke-width=".7" stroke-linecap="round"/>
+     <circle cx="2.6" cy="5" r=".4" fill="#d8c0ff"/><circle cx="21.6" cy="6.4" r=".35" fill="#d8c0ff"/><circle cx="21" cy="19" r=".3" fill="#d8c0ff"/>`
   ][i - 1];
 }
 // 장면 속 펫: 주인공 왼쪽. 쉬는 동안엔 숨만 쉬고, 행동 중엔 가끔 깡총·하트 같은 귀여운 몸짓
@@ -5705,7 +5740,7 @@ function rpgPetSVG(k){
   const st = RPG.st, i = st.eq.pet; if(!i) return '';
   const X = heroX(k), fly = PETS[i - 1].k === 'mine';
   const sc = 1.55, h = 24 * sc, px = Math.max(2, X - (k === 'fish' ? 68 : 64)), py = (k === 'fish' ? 151 : 173) - h - (fly ? 22 : 0);
-  return `<g transform="translate(${px} ${py.toFixed(1)}) scale(${sc})"><g class="pj ${fly ? 'fly' : ''}"><g class="pb">${petSVG(i)}</g><path class="ph" d="M18 0 q-1.6 -2 -3 -.4 q-1.4 1.4 3 4.4 q4.4 -3 3 -4.4 q-1.4 -1.6 -3 .4 Z" fill="#ff5a7a" opacity="0"/></g></g>`;
+  return `<g transform="translate(${px} ${py.toFixed(1)}) scale(${sc})"><g class="pj ${fly ? 'fly' : ''} ${i === OWL ? 'owl' : ''}"><g class="pb">${petSVG(i)}</g><path class="ph" d="M18 0 q-1.6 -2 -3 -.4 q-1.4 1.4 3 4.4 q4.4 -3 3 -4.4 q-1.4 -1.6 -3 .4 Z" fill="#ff5a7a" opacity="0"/></g></g>`;
 }
 // 펫 획득: 행동마다 한 번만, 가방으로
 function petGain(k, quiet){   // quiet: 이미 그 자리에서 알렸다(펫 소환 티켓) → 나중에 다시 알리지 않는다
@@ -6731,7 +6766,7 @@ function rpgHTML(){
     <div class="scene ${st.active === sel ? '' : 'idle'} ${sel === 'combat' && rageOn() ? 'rage' : ''}" data-sig="${esc(JSON.stringify([sel, st.active === sel, sk.stage, sk.part, sk.gear, st.eq.helm, st.eq.body, st.eq.pet, st.eq.food, st.eq.fruit, st.eq.bait, rpgStatsHTML(sel), !!away, craft ? hasMats(st, R0) : 0, UI.heroPopAt || 0, sel === 'combat' && rageOn() ? 1 : 0]))}" style="--swd:${sel === 'combat' ? combatMs() / 1000 : 1.15}s">${rpgScene(sel)}${sel === 'combat' && rageOn() ? `<div class="ragefx"><i class="spin"></i><i class="sweep"></i></div><div class="ragetag">${TK_RAGE}광전사의 포효 · <b class="rgt">${rageClock()}</b></div>` : ''}${away ? `<div class="welcome">자리 비운 동안 ${esc(SKILLS[away.k].name)} +${fmtNum(away.gain)} exp${away.after > away.before ? ` · Lv ${away.before}→${away.after}` : ''}${away.cap ? ' · 상한' : ''}${away.stop ? ` · ${away.stop === 'hp' ? 'HP 소진' : away.stop === 'bait' ? '미끼 소진' : away.stop === 'ko' ? '한 방에 쓰러짐' : '재료 소진'}으로 멈춤` : ''}${rpgAwayItems(away.items)}<button class="btn small primary" data-act="awayOk">확인</button></div>` : ''}
       <div class="shead"><div class="sleft"><span>${esc(stg[0])}</span>${rpgStatsHTML(sel)}</div>${sel === 'combat' ? (() => { const mm = monHp(sk.stage), mh = st.mhp > 0 ? Math.min(mm, st.mhp) : mm; return `<div class="hps"><span class="shp me"><span class="bars"><i><b data-hpb style="width:${Math.max(0, Math.min(1, st.hp / hpMax(st))) * 100}%"></b></i><u class="tk me"><b></b></u></span><em data-hpt>${Math.ceil(Math.max(0, st.hp))} / ${hpMax(st)}</em></span><span class="shp mhp"><span class="bars"><i><b data-mhb style="width:${mh / mm * 100}%"></b></i><u class="tk mt"><b></b></u></span><em data-mht>${fmtNum(Math.ceil(mh))} / ${fmtNum(mm)}</em></span></div>`; })() : ''}</div>
       <div class="sfoot"><span></span><span class="sbtns">
-        ${st.active === sel ? `<button class="btn small gobtn" data-act="rpgGo">그만하기</button>${sk.nx ? `<button class="btn small primary gobtn" data-act="rpgGo" data-go="nx">${esc(nxName(sel, sk))} 시작</button>` : ''}` : `<button class="btn small primary gobtn" data-act="rpgGo">${esc(S.name)} 시작</button>`}
+        ${st.active === sel ? `<button class="btn small gobtn" data-act="rpgGo">그만하기</button>${sk.nx ? `<button class="btn small primary gobtn" data-act="rpgGo" data-go="nx">변경</button>` : ''}` : `<button class="btn small primary gobtn" data-act="rpgGo">${esc(S.name)} 시작</button>`}
       </span></div>
       ${sel === 'combat' ? '' : '<div class="tickbar"><b></b></div>'}</div>
     <div class="skills side r">${CR_KEYS.map(card).join('')}</div></div>
@@ -6776,37 +6811,38 @@ function rpgRecipes(st, sel, sk){
     const ins = Object.entries(R.in).map(([key, c]) => `<span class="${(st.inv[key] || 0) >= c ? '' : 'short'}">${itemIcon(key)}${esc(itemName(key))} ${c}<small>(<b data-cnt="${key}">${fmtNum(st.inv[key] || 0)}</b>)</small></span>`).join('<br>');   // 재료마다 한 줄
     const nm = `${itemIcon(ok)}${esc(itemName(ok))}${R.out[ok] > 1 ? ` ×${R.out[ok]}` : ''}`, can = !cur && lvOk && has;   // 이름이 곧 선택 버튼(선택되면 버튼 테두리 대신 카드에 노란 테두리)
     const run = st.active === sel && part !== 'coal' && sk.stage === g && ((sel !== 'smith' && sel !== 'smelt') || sk.part === part);   // 지금 만들고 있는 제작법
-    return `<div class="it rcp ${cur ? 'eq' : ''} ${lvOk ? '' : 'lock'}"><span class="nrow">${can ? `<button class="rnb" data-act="rpgRecipe" data-g="${g}" data-p="${part || ''}">${nm}</button>` : `<span class="rnb off">${nm}</span>`}${run ? '<small class="runt">진행 중</small>' : ''}${lvOk ? '' : `<small class="lockt">Lv ${REQ_LV(g)}</small>`}</span><span class="d">${ins}</span></div>`;
+    return `<div class="it rcp ${cur ? 'eq' : ''} ${lvOk ? '' : 'lock'}"><span class="nrow">${can ? `<button class="rnb" data-act="rpgRecipe" data-g="${g}" data-p="${part || ''}">${nm}</button>` : `<span class="rnb off">${nm}</span>`}${run ? '<small class="runt">진행 중</small>' : ''}</span>${lvOk ? '' : `<span class="d lockl">${SKILLS[sel].name} ${REQ_LV(g)}레벨</span>`}${WEAR_SK[part] ? `<span class="d wreq${lvOf(st.sk[WEAR_SK[part]].exp) < REQ_LV(g) ? ' miss' : ''}">착용 ${SKILLS[WEAR_SK[part]].name} ${REQ_LV(g)}레벨</span>` : ''}<span class="d">${ins}</span></div>`;   // 검·도구는 착용 요구 레벨을 레시피와 재료 사이에
   }).join('');
 }
 const slotName = (s, g) => itemName(s + g);
 // 장착 효과(가방 목록에 같이 적는다)
 function itemEffect(key){
   const p = ikParse(key); if(!p) return ''; const [t, g] = p;
-  if(t === 'helm') return `방어력 +${DEF_H(g)}`;
-  if(t === 'body') return `방어력 +${DEF_B(g)}`;
-  if(t === 'sword') return `${SKILLS.combat.name} ${REQ_LV(g)}레벨 이상 · 공격력 +${ATK(g)}${CRIT(g) ? ` · 치명타 ${Math.round(CRIT(g) * 100)}%` : ''}`;
-  if(TOOL_SK[t]) return `${SKILLS[TOOL_SK[t]].name} ${REQ_LV(g)}레벨 이상 · ${g}티어 ${{ wood:'숲', mine:'광산', fish:'낚시터' }[TOOL_SK[t]]} 이하 패널티 없음`;
+  const wk = WEAR_SK[t], miss = wk ? lvOf(RPG.st.sk[wk].exp) < REQ_LV(g) : (t === 'ring' || t === 'neck') ? rpgTotalLv() < ACC_LV(g) : t === 'pet' && g === OWL && rpgTotalLv() < OWL_LV, W = `wlv${miss ? ' miss' : ''}`;   // 못 미친 착용 레벨은 빨강
+  if(t === 'helm') return `<span class="${W}">${SKILLS.combat.name} ${REQ_LV(g)}레벨 이상</span> · 방어력 +${DEF_H(g)}`;
+  if(t === 'body') return `<span class="${W}">${SKILLS.combat.name} ${REQ_LV(g)}레벨 이상</span> · 방어력 +${DEF_B(g)}`;
+  if(t === 'sword') return `<span class="${W}">${SKILLS.combat.name} ${REQ_LV(g)}레벨 이상</span> · 공격력 +${ATK(g)}${CRIT(g) ? ` · 치명타 ${Math.round(CRIT(g) * 100)}%` : ''}`;
+  if(TOOL_SK[t]) return `<span class="${W}">${SKILLS[TOOL_SK[t]].name} ${REQ_LV(g)}레벨 이상</span> · ${g}티어 ${{ wood:'숲', mine:'광산', fish:'낚시터' }[TOOL_SK[t]]} 이하 패널티 없음`;
   if(t === 'food') return `회복 ${HEAL(g)}`;
   if(t === 'fruit') return `회피 ${DODGE(g)}% · 정확도 +${ACC(g)}`;
   if(t === 'bait') return '낚시 속도 2배';
-  if(t === 'ring' || t === 'neck') return `총합 ${ACC_LV(g)}레벨 이상 · 경험치 +${ACC_XP[g]}%`;
-  if(t === 'pet') return `${SKILLS[PETS[g-1].k].name} 속도 +15%`;
+  if(t === 'ring' || t === 'neck') return `<span class="${W}">총합 ${ACC_LV(g)}레벨 이상</span> · 경험치 +${ACC_XP[g]}%`;
+  if(t === 'pet') return g === OWL ? `<span class="${W}">총합 ${OWL_LV}레벨 이상</span> · ${petEff(g)}` : petEff(g);
   return '';
 }
 function rpgBagHTML(st){
   const eq = st.eq;
-  const slot = (lbl, s, extra, canX) => { const g = eq[s]; return `<div class="slot" data-act="slotOpen" data-tab="gear" data-sub="${s}" title="가방에서 ${lbl} 보기"><span class="sl">${lbl}${g && canX ? `<button class="x" data-act="rpgUneq" data-slot="${s}">해제</button>` : ''}</span><span class="sv ${g ? '' : 'none'}">${g ? itemIcon(s + g) + esc(slotName(s, g)) : '없음'}</span><span class="sl"><span>${g && extra ? extra : '&nbsp;'}</span></span></div>`; };
+  const slot = (lbl, s, extra, canX, n) => { const g = eq[s]; return `<div class="slot" data-act="slotOpen" data-tab="gear" data-sub="${s}" title="가방에서 ${lbl} 보기"><span class="sl">${lbl}${g && canX ? `<button class="x" data-act="rpgUneq" data-slot="${s}">해제</button>` : ''}</span><span class="sv ${g ? '' : 'none'}">${g ? `<span class="svn">${itemIcon(s + g)}${esc(slotName(s, g))}</span>${n ? `<span class="svc">${n}</span>` : ''}` : '없음'}</span><span class="sl"><span>${g && extra ? extra : '&nbsp;'}</span></span></div>`; };
   const cnt = sl => `<b data-eqn="${sl}">${fmtNum(eq[sl + 'N'] || 0)}</b>개`;
-  const tool = k => { const g = st.sk[k].gear; return `<div class="slot" data-act="slotOpen" data-tab="gear" data-sub="${TOOL_T[k]}" title="가방에서 ${SKILLS[k].tool} 보기"><span class="sl">${SKILLS[k].tool === '검' ? '무기' : SKILLS[k].tool}</span><span class="sv">${itemIcon(TOOL_T[k] + g)}${TIERS[g-1].n} ${SKILLS[k].tool}</span><span class="sl"><span>${k === 'combat' ? `공격력 +${ATK(g)}${CRIT(g) ? ` · 치명 ${Math.round(CRIT(g) * 100)}%` : ''}` : speedLabel(st.sk[k]) || '속도 보통'}</span></span></div>`; };
+  const tool = k => { const g = st.sk[k].gear; return `<div class="slot" data-act="slotOpen" data-tab="gear" data-sub="${TOOL_T[k]}" title="가방에서 ${SKILLS[k].tool} 보기"><span class="sl">${SKILLS[k].tool === '검' ? '무기' : SKILLS[k].tool}</span><span class="sv">${itemIcon(TOOL_T[k] + g)}${TIERS[g-1].n} ${SKILLS[k].tool}</span><span class="sl"><span>${k === 'combat' ? itemEffect('sword' + g) : `<span class="wlv">${SKILLS[k].name} ${REQ_LV(g)}레벨 이상</span> · ${speedLabel(st.sk[k]) || '속도 보통'}`}</span></span></div>`; };   // 착용 설명은 가방과 같게
   const slots = tool('combat')   // 검 · 투구 · 갑옷 · 펫 · 반지 · 목걸이 · 도끼 · 곡괭이 · 낚싯대 · 요리 · 열매 · 미끼
-    + slot('투구', 'helm', eq.helm ? `방어력 +${DEF_H(eq.helm)}` : '', true) + slot('갑옷', 'body', eq.body ? `방어력 +${DEF_B(eq.body)}` : '', true)
-    + slot('펫', 'pet', eq.pet ? `${SKILLS[PETS[eq.pet - 1].k].name} 속도 +15%` : '', true)
-    + slot('반지', 'ring', eq.ring ? `경험치 +${ACC_XP[eq.ring]}%` : '', true) + slot('목걸이', 'neck', eq.neck ? `경험치 +${ACC_XP[eq.neck]}%` : '', true)
+    + slot('투구', 'helm', eq.helm ? itemEffect('helm' + eq.helm) : '', true) + slot('갑옷', 'body', eq.body ? itemEffect('body' + eq.body) : '', true)
+    + slot('펫', 'pet', eq.pet ? itemEffect('pet' + eq.pet) : '', true)
+    + slot('반지', 'ring', eq.ring ? itemEffect('ring' + eq.ring) : '', true) + slot('목걸이', 'neck', eq.neck ? itemEffect('neck' + eq.neck) : '', true)
     + ['wood', 'mine', 'fish'].map(tool).join('')
-    + slot('요리', 'food', eq.food ? `회복 ${HEAL(eq.food)} · ${cnt('food')}` : '', true)
-    + slot('열매', 'fruit', eq.fruit ? `회피 ${DODGE(eq.fruit)}% · 정확도 +${ACC(eq.fruit)} · ${cnt('fruit')}` : '', true)
-    + slot('미끼', 'bait', eq.bait ? `낚시 속도 2배 · ${cnt('bait')}` : '', true);
+    + slot('요리', 'food', eq.food ? `회복 ${HEAL(eq.food)}` : '', true, cnt('food'))
+    + slot('열매', 'fruit', eq.fruit ? `회피 ${DODGE(eq.fruit)}% · 정확도 +${ACC(eq.fruit)}` : '', true, cnt('fruit'))
+    + slot('미끼', 'bait', eq.bait ? '낚시 속도 2배' : '', true, cnt('bait'));
   const hm = hpMax(st), hp = Math.max(0, Math.min(hm, st.hp)), dm = dmgPerHit(st);
   const allKeys = Object.keys(st.inv).filter(key => st.inv[key] > 0 && ikParse(key));
   const tab = INV_TABS.find(t => t[0] === UI.invTab) || INV_TABS[0], inTab = (T, key) => !T[2] || T[2].includes(ikParse(key)[0]);   // 늘 펼쳐 둔다(처음엔 전체)
@@ -6836,7 +6872,7 @@ function mapItems(k){   // 맵: 그 행동 레벨이 맵 등급의 요구 레벨
   return TIERS.map((t, i) => {
     const g = i + 1, cur = g === (sk.nx ? sk.nx.g : sk.stage), run = g === sk.stage && RPG.st.active === k, open = L >= REQ_LV(g);   // 노란 테두리 = 고른 맵, '진행 중' = 지금 하고 있는 맵
     const nm = esc(S.stages[i][0]);   // 이름이 곧 이동 버튼(제작법과 같은 방식)
-    return `<div class="it wshop map ${cur ? 'eq' : ''} ${open ? '' : 'lock'}"><span class="nrow">${!cur && open ? `<button class="rnb" data-act="rpgMap" data-k="${k}" data-g="${g}">${nm}</button>` : `<span class="rnb off">${nm}</span>`}${open ? '' : `<small class="lockt">Lv ${REQ_LV(g)}</small>`}${run ? '<small class="runt">진행 중</small>' : ''}</span>
+    return `<div class="it wshop map ${cur ? 'eq' : ''} ${open ? '' : 'lock'}"><span class="nrow">${!cur && open ? `<button class="rnb" data-act="rpgMap" data-k="${k}" data-g="${g}">${nm}</button>` : `<span class="rnb off">${nm}</span>`}${run ? '<small class="runt">진행 중</small>' : ''}</span>${open ? '' : `<small class="lockt">${SKILLS[k].name} ${REQ_LV(g)}레벨</small>`}
       ${rpgRack(k, g, true)}</div>`;   // 이름(버튼)이 위, 그림이 아래 — 제작법 카드와 같은 위치
   }).join('');
 }
@@ -6921,7 +6957,7 @@ function rpgAdminHTML(st){
     <div class="arow"><b>레벨</b><select id="adm-k">${skills}</select><input id="adm-l" class="qty" type="number" min="1" max="${MAXLV}" value="${esc(AV['adm-l'])}">${B('lv', '설정')}${B('lvAll', `전부 ${MAXLV}`)}${B('gearAll', '도구 전 등급 열기')}</div>
     <div class="arow"><b>소리</b>${B('snd', '효과음 테스트')}<small class="muted">소리마다 크기 재고 맞추기</small></div>
     <div class="arow"><b>전투</b>${B('hp0', 'HP 1')}${B('hpFull', 'HP 가득')}${B('unEq', '장착 전부 해제')}</div>
-    <div class="arow"><b>펫</b>${ALL_KEYS.map(k => PETS.find(p => p.k === k)).map(p => B('pet', `${p.n}${st.pets[p.k] ? ' ✓' : ''}`, ` data-k="${p.k}"`)).join('')}${B('petAll', '펫 전부')}${B('petReset', '펫 초기화')}</div>
+    <div class="arow"><b>펫</b>${ALL_KEYS.map(k => PETS.find(p => p.k === k)).concat([PETS[OWL - 1]]).map(p => B('pet', `${p.n}${st.pets[p.k] ? ' ✓' : ''}`, ` data-k="${p.k}"`)).join('')}${B('petAll', '펫 전부')}${B('petReset', '펫 초기화')}</div>
     <div class="arow"><b>시간</b>${B('ff', '+1분', ' data-m="1"')}${B('ff', '+10분', ' data-m="10"')}${B('ff', '+1시간', ' data-m="60"')}${B('ff', '+10시간', ' data-m="600"')}<small class="muted">진행 중인 행동을 그만큼 돌린다</small></div>
   </div>`;
 }
@@ -6964,9 +7000,9 @@ function bulkSellList(st){
   const out = [];
   const TL = rpgTotalLv();
   for(const t of ['sword'].concat(GEAR_T, ['ring', 'neck'])){   // 반지·목걸이도 같은 방식
-    const tool = !!TOOL_SK[t], acc = t === 'ring' || t === 'neck', L = tool ? lvOf(st.sk[TOOL_SK[t]].exp) : 0;
+    const wk = WEAR_SK[t], acc = t === 'ring' || t === 'neck', L = wk ? lvOf(st.sk[wk].exp) : 0;
     const eqG = t === 'helm' || t === 'body' || acc ? st.eq[t] || 0 : st.sk[TOOL_SK[t]].gear || 0;   // 장착 중인 등급
-    const ok = g => acc ? TL >= ACC_LV(g) : !tool || L >= REQ_LV(g);   // 투구·갑옷은 등급 제한 없음, 반지·목걸이는 총합 레벨
+    const ok = g => acc ? TL >= ACC_LV(g) : !wk || L >= REQ_LV(g);   // 투구·갑옷은 전투 레벨, 반지·목걸이는 총합 레벨
     let keep = eqG; for(let g = 10; g > eqG; g--) if((st.inv[t + g] || 0) > 0 && ok(g)){ keep = g; break; }
     for(let g = 1; g <= keep; g++){ const c = st.inv[t + g] || 0; if(!c) continue; const n = g === keep && keep > eqG ? c - 1 : c; if(n > 0) out.push([t + g, n]); }
   }
@@ -6992,7 +7028,7 @@ function bestGear(st){
     n++;
   }
   for(const sl of ['helm', 'body', 'ring', 'neck']){
-    let g = topIn(sl); if(sl === 'ring' || sl === 'neck'){ const T = rpgTotalLv(); g = 0; for(let x = 10; x >= 2; x--) if((st.inv[sl + x] || 0) > 0 && T >= ACC_LV(x)){ g = x; break; } } if(g <= (st.eq[sl] || 0)) continue;
+    let g = topIn(sl); if(sl === 'helm' || sl === 'body'){ const CL = lvOf(st.sk.combat.exp); g = 0; for(let x = 10; x >= 1; x--) if((st.inv[sl + x] || 0) > 0 && CL >= REQ_LV(x)){ g = x; break; } } if(sl === 'ring' || sl === 'neck'){ const T = rpgTotalLv(); g = 0; for(let x = 10; x >= 2; x--) if((st.inv[sl + x] || 0) > 0 && T >= ACC_LV(x)){ g = x; break; } } if(g <= (st.eq[sl] || 0)) continue;
     if(st.eq[sl]) put(sl + st.eq[sl], 1); take(sl + g); st.eq[sl] = g; n++;
   }
   for(const sl of QTY_SL){
@@ -7000,14 +7036,14 @@ function bestGear(st){
     if(cur && cur !== g){ put(sl + cur, st.eq[sl + 'N'] || 0); st.eq[sl + 'N'] = 0; }
     st.eq[sl] = g; st.eq[sl + 'N'] = (st.eq[sl + 'N'] || 0) + st.inv[sl + g]; delete st.inv[sl + g]; n++;
   }
-  { const pi = petOf(st.active || st.sel);   // 펫: 지금 하는 행동(없으면 보고 있는 행동)에 맞는 펫이 가방에 있으면 바꿔 단다
+  { const pi = st.eq.pet === OWL || ((st.inv['pet' + OWL] || 0) > 0 && rpgTotalLv() >= OWL_LV) ? OWL : petOf(st.active || st.sel);   // 부엉이가 있으면 최우선   // 펫: 지금 하는 행동(없으면 보고 있는 행동)에 맞는 펫이 가방에 있으면 바꿔 단다
     if(pi && st.eq.pet !== pi && (st.inv['pet' + pi] || 0) > 0){ if(st.eq.pet) put('pet' + st.eq.pet, 1); take('pet' + pi); st.eq.pet = pi; n++; } }
   return n;
 }
 function rpgAccHTML(st){
   const row = s => TIERS.slice(1).map((t, i) => {
     const g = i + 2, sold = st.bought[s].includes(g), p = ACC_PRICE[g];
-    return `<div class="it"><span class="n">${itemIcon(s + g)}${t.n} ${s === 'ring' ? '반지' : '목걸이'}<small>총합 ${ACC_LV(g)}레벨 이상<br>경험치 +${ACC_XP[g]}%</small></span>${sold ? '<span class="d">매진</span>' : `<button class="btn small buy" data-act="rpgAcc" data-slot="${s}" data-g="${g}"><i class="chipi bc"></i>${p.toLocaleString()}</button>`}</div>`;
+    return `<div class="it"><span class="n">${itemIcon(s + g)}${t.n} ${s === 'ring' ? '반지' : '목걸이'}<small><span class="wlv${rpgTotalLv() < ACC_LV(g) ? ' miss' : ''}">총합 ${ACC_LV(g)}레벨 이상</span><br>경험치 +${ACC_XP[g]}%</small></span>${sold ? '<span class="d">매진</span>' : `<button class="btn small buy" data-act="rpgAcc" data-slot="${s}" data-g="${g}"><i class="chipi bc"></i>${p.toLocaleString()}</button>`}</div>`;
   }).join('');
   const sel = st.sel || 'combat', tab = SHOP_TABS.some(t => t[0] === UI.shopTab) ? UI.shopTab : 'ring';
   const tabs = `<div class="invtabs">${SHOP_TABS.map(([k, n]) => `<button class="btn small ${k === tab ? 'on' : ''}" data-act="shopTab" data-t="${k}">${n}</button>`).join('')}</div>`;
@@ -7126,6 +7162,8 @@ function rpgAct(a, b){
       rpgWear(st, K, tsk, t[1], false); rpgSave(); chipFix(); render(); return;
     }
     if(['helm', 'body', 'ring', 'neck', 'pet'].includes(sl) && st.eq[sl] === t[1]){ rpgToast('이미 착용 중이에요'); return; }
+    if((sl === 'helm' || sl === 'body') && lvOf(st.sk.combat.exp) < REQ_LV(t[1])){ rpgToast(`${SKILLS.combat.name} ${REQ_LV(t[1])}레벨 이상 착용 가능`); return; }
+    if(sl === 'pet' && t[1] === OWL && rpgTotalLv() < OWL_LV){ rpgToast(`총합 ${OWL_LV}레벨 이상 착용 가능`); return; }
     if((sl === 'ring' || sl === 'neck') && rpgTotalLv() < ACC_LV(t[1])){ rpgToast(`총합 ${ACC_LV(t[1])}레벨 이상 착용 가능`); return; }
     if(sl === 'helm' || sl === 'body' || sl === 'ring' || sl === 'neck' || sl === 'pet'){ if(st.eq[sl]) st.inv[sl + st.eq[sl]] = (st.inv[sl + st.eq[sl]] || 0) + 1; st.inv[key]--; if(!st.inv[key]) delete st.inv[key]; }
     else {   // 요리·열매·숫돌·미끼: 입력한 개수만큼 가방에서 장비로 옮긴다. 다른 종류가 장착돼 있으면 그건 가방으로 돌려보낸다
@@ -7532,7 +7570,7 @@ function pokerAct(b){
   if(op === 'enter'){ const key = today + '-' + t; if(!PK.st.res[key] || PK.st.done[key] || g) return; if((RPG.st.chips || 0) < PK_BUY(t)){ rpgToast('엔트리 비용 부족'); return; }
     RPG.st.chips -= PK_BUY(t); delete PK.st.res[key]; rpgSave(); chipFix(); SFX.unlock(); pkNewGame(t, key, today); pkSave(); render(); pkLoop(); return; }
   if(op === 'buyRage'){ if(RPG.st.rage > Date.now() || (PK.st.red || 0) < RAGE_PRICE) return; PK.st.red -= RAGE_PRICE; RPG.st.rage = Date.now() + RAGE_MS; rpgSave(); pkSave(); chipFix(); SFX.unlock(); SFX.cash(.5); rpgToast('광전사의 포효 · 1시간 동안 전투 틱 2배'); pkRender(); return; }
-  if(op === 'buyPet'){ const miss = PETS.filter(p => !RPG.st.pets[p.k]); if(!miss.length || (PK.st.red || 0) < PETT_PRICE) return; PK.st.red -= PETT_PRICE; pkSave(); const pp = miss[Math.floor(Math.random() * miss.length)]; petGain(pp.k); rpgSave(); chipFix(); SFX.unlock(); SFX.cash(.5); rpgToast('랜덤 펫 소환 성공');   /* 무슨 펫인지는 RPG에 들어가서 빵빠레와 함께 */ pkRender(); return; }
+  if(op === 'buyPet'){ const m8 = PETS.filter(p => p.k !== 'all' && !RPG.st.pets[p.k]), miss = m8.length ? m8 : PETS.filter(p => p.k === 'all' && !RPG.st.pets.all);   /* 8마리를 다 모으면 마지막으로 부엉이 */ if(!miss.length || (PK.st.red || 0) < PETT_PRICE) return; PK.st.red -= PETT_PRICE; pkSave(); const pp = miss[Math.floor(Math.random() * miss.length)]; petGain(pp.k); rpgSave(); chipFix(); SFX.unlock(); SFX.cash(.5); rpgToast('랜덤 펫 소환 성공');   /* 무슨 펫인지는 RPG에 들어가서 빵빠레와 함께 */ pkRender(); return; }
   if(op === 'buyYm'){ if(PK.st.ym || store.get(KEY.save, null) || (PK.st.red || 0) < YM2_PRICE) return; PK.st.red -= YM2_PRICE; PK.st.ym = true; pkSave(); chipFix(); SFX.unlock(); SFX.cash(.6); rpgToast('역만의 꿈 티켓 구매'); pkRender(); return; }
   if(op === 'recOpen'){ UI.pkRecOpen = !UI.pkRecOpen; pkRender(); pkRecBottom(); return; }
   if(op === 'leave'){ if(g && !g.over){ g.paused = true; pkSave(); } $modal.hidden = true; render(); return; }   // 대회 나가기: 진행은 저장, 대회장에서 이어서

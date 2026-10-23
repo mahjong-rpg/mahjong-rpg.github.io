@@ -2786,9 +2786,7 @@ const store = {
 const SETTINGS0 = {hint:false, skipDeal:true, alice:false, tulip:false, phone:true, autoSort:true, speed:'normal', sound:true};   // 처음 시작: 배패 스킵·폰 모드·소리 켜짐, 나머지 꺼짐
 let settings = Object.assign({}, SETTINGS0, store.get(KEY.set, {}));
 settings.hint = false;   // AI 힌트 표시는 설정에서 뺐다
-delete settings.admin; delete settings.pwOk;   // 운영자 모드는 없앴다(예전에 켜 둔 값도 지운다)
 if(settings.alice && settings.tulip) settings.tulip = false;   // 아리스·튤립은 둘 중 하나만
-if(settings.phone === undefined) settings.phone = true;   // 폰 모드: 처음엔 켜 둔다
 settings.aka = true; settings.oneTap = true;            // 적도라·한 번 탭 버리기는 항상
 settings.speed = 'normal';   // CPU 속도는 보통으로 고정
 const SPEED = {fast:300, normal:750};   // CPU가 패산에서 끌어 오는 모습이 보이도록 여유 있게
@@ -3298,7 +3296,6 @@ const SFX = (() => {
   const VKEY = 'rm.sfxvol';
   const VDEF = {"discard":0.35,"chip":2,"flipTick":2.7,"stick":1.95,"dice":0.9,"call":0.5,"swap":1.1,"jjan":0.45,"miss":1.15,"ching":0.6,"drumroll.1.3":2.65,"win":0.4,"result":0.3,"cash":0.45,"allLast":0.35,"fanfare":0.45,"slide.1":0.75,"slide.-1":0.5,"wood":0.65,"mine":1.2,"fish":0.95,"farm":1.55,"smelt":0.9,"smith":0.5,"cook":1.1,"gain":0.85,"crit":1.2,"hurt":2.75,"combat":1.2,"skOk":0.5,"skFail":0.5,"skWarn":0.7,"lvup":0.5,"equip.combat":1.45,"equip.wood":0.75,"equip.mine":2.45,"equip.fish":2.05,"unequip":1.9,"hit.slime":0.95,"hit.wolf":1.35,"hit.lizard":1.25,"hit.scorpion":3,"hit.yeti":3,"hit.skeleton":0.65,"hit.golem":0.85,"hit.demon":1.2,"hit.dragon":0.6,"die.slime":3,"die.wolf":1.35,"die.lizard":1.55,"die.scorpion":3,"die.yeti":1.45,"die.skeleton":1.1,"die.golem":2.55,"die.demon":2.1,"die.dragon":1.7};   // 운영자 모드에서 맞춘 기본 볼륨(10/22)
   let VOL = store.get(VKEY, null) || { ...VDEF }, PREV = null;
-  if(!store.get('rm.sfx.s75', 0)){ VOL['slide.1'] = .75; store.set(VKEY, VOL); store.set('rm.sfx.s75', 1); }   // 슬라이드 큰음 볼륨 75%(저장해 둔 볼륨에도 한 번 적용)   // PREV: 테스트 재생 때 쓸 배율(null이면 저장된 값)
   const volOf = (n, a) => PREV != null ? PREV : (VOL[n + '.' + a] ?? VOL[n] ?? 1);
   for(const n of Object.keys(api)){
     if(n === 'unlock' || n === 'now' || n === 'ctx' || typeof api[n] !== 'function') continue;
@@ -5385,14 +5382,14 @@ function ioSheet(mode){
   const ex = mode === 'export';
   $modal.innerHTML = `<div class="sheet" role="dialog" aria-modal="true">
     <h2>${ex ? '기록 내보내기' : '기록 가져오기'}</h2>
-    <p class="muted" style="margin:0;font-size:13px">${ex ? '아래 코드를 복사해서 다른 PC의 리치 마작에서 <b>기록 가져오기</b>에 붙여 넣으세요. 4인·3인 기록과 RPG 진행도(레벨·장비·단계·축의칩)·포커(빨간 칩·대회 기록)가 모두 들어 있어요.' : '다른 PC에서 내보낸 코드를 붙여 넣으세요. 이미 있는 판은 건너뛰고 새 판만 더해지고, RPG·포커 진행도는 가져온 것으로 <b>덮어써져요</b>.'}</p>
+    <p class="muted" style="margin:0;font-size:13px">${ex ? '아래 코드를 복사해서 다른 PC의 리치 마작에서 <b>기록 가져오기</b>에 붙여 넣으세요. 4인·3인 기록, RPG 진행도, 포커, 설정, 이어하기(진행 중인 대국), 효과음 볼륨이 모두 들어 있어요.' : '다른 PC에서 내보낸 코드를 붙여 넣으세요. 이미 있는 판은 건너뛰고 새 판만 더해지고, RPG·포커·설정·이어하기·효과음 볼륨은 가져온 것으로 <b>덮어써져요</b>.'}</p>
     <textarea id="io" class="iobox" spellcheck="false" ${ex ? 'readonly' : 'placeholder="여기에 붙여 넣기"'}>${ex ? esc(exportCode()) : ''}</textarea>
     <p id="iomsg" class="muted" style="margin:0;min-height:1.4em;font-size:13px"></p>
     <div class="row">${ex ? '<button class="btn primary" data-act="copy">복사</button>' : '<button class="btn primary" data-act="import">가져오기</button>'}<button class="btn" data-act="closeModal">닫기</button></div></div>`;
   $modal.hidden = false;
   const io = document.getElementById('io'); if(ex){ io.focus(); io.select(); } else io.focus();
 }
-function exportCode(){ rpgAdvance(false); rpgSave(); pkSave(); return JSON.stringify({app:'tapae-dojo', v:1, records:records(), rpg:RPG.st, poker:PK.st}); }
+function exportCode(){ rpgAdvance(false); rpgSave(); pkSave(); return JSON.stringify({app:'tapae-dojo', v:1, records:records(), rpg:RPG.st, poker:PK.st, settings, save:store.get(KEY.save, null), vol:SFX.vol.all()}); }   // 설정·이어하기(진행 중인 마작)·효과음 볼륨까지
 function importCode(txt){
   const data = JSON.parse(txt);
   if(!data || !Array.isArray(data.records)) throw new Error('리치 마작 백업 코드가 아니에요');
@@ -5410,6 +5407,13 @@ function importCode(txt){
     RPG.st = st; rpgSave(); chipFix(); UI.importedRpg = true;
   }
   if(data.poker && typeof data.poker === 'object'){ pkReset(data.poker); chipFix(); UI.importedRpg = true; }   // 포커도 가져온 것으로 덮어쓴다
+  if(data.settings && typeof data.settings === 'object'){   // 설정: 고정값(적도라·한 번 탭·속도·힌트)은 그대로 두고 덮어쓴다
+    settings = Object.assign({}, SETTINGS0, data.settings, { aka:true, oneTap:true, speed:'normal', hint:false });
+    if(settings.alice && settings.tulip) settings.tulip = false;
+    store.set(KEY.set, settings); UI.importedRpg = true;
+  }
+  if('save' in data){ if(data.save && typeof data.save === 'object') store.set(KEY.save, data.save); else store.del(KEY.save); }   // 이어하기(진행 중인 마작)
+  if(data.vol && typeof data.vol === 'object') SFX.vol.save(data.vol);   // 효과음 볼륨
   return added;
 }
 
@@ -5793,7 +5797,6 @@ function dmgPerHit(st){ const s = st.sk.combat.stage, def = (st.eq.helm ? DEF_H(
 for(const k of CR_KEYS) BGM_ENV[k] = Array(10).fill({ farm:['calm','breeze',['bird']], smelt:['calm','none',['crackle']], smith:['calm','none',['crackle']], cook:['calm','breeze',['crackle']] }[k]);
 // 등급 g(장비 + 같은 등급 던전)를 사는 값. 하루에 마작 2~3판 → 축의 하루 약 10개로 보고,
 //  앞 등급이 상한까지 가는 실제 시간(6등급 11h · 7등급 28h · 8등급 72h)에 하루치 축의가 맞도록 정했다
-const GRADE_PRICE = [0, 2, 3, 4, 5, 10, 20, 50, 100, 350];   // 실버 2 · 골드 3 · 아이언 4 · 스틸 5 · 미스릴 10 · 아다만트 20 · 룬 50 · 드래곤 100 · 옵시디언 350
 // 레벨 상한: 1등급 19 · 2등급 29 … 8등급 89, 옵시디언은 99 이후로도 끝없이. 상한에 닿으면 경험치도 더 쌓이지 않는다(저축 없음)
 // 착용 레벨: 실버 20 · 골드 30 … 드래곤 90 · 옵시디언 100. 상한은 다음 등급의 착용 레벨(브론즈 20 … 드래곤 100), 그 레벨에 닿는 순간 멈춘다
 const REQ_LV = g => g >= 2 ? 10 * g : 1;
@@ -5808,8 +5811,6 @@ const CUM = [0, 0]; { let pts = 0; for(let L = 2; L <= 100; L++){ pts += Math.fl
 const MAXLV = 125;   // 행동 하나 만렙 125(8개 합 1000). 100 이후로는 99→100과 같은 양씩, 더 가팔라지지 않는다
 for(let L = 101; L <= MAXLV; L++) CUM[L] = CUM[L-1] + (CUM[100] - CUM[99]);
 const NEED = [0]; for(let L = 1; L < MAXLV; L++) NEED[L] = CUM[L+1] - CUM[L];
-// 예전 버전(37×1.19^(L-1)) 경험치 → 레벨·진행률을 유지한 채 새 표로 옮길 때 쓴다
-const OLD_CUM = [0, 0]; for(let L = 2; L <= 99; L++) OLD_CUM[L] = OLD_CUM[L-1] + Math.round(37 * Math.pow(1.19, L - 2));
 const MAXEXP = CUM[MAXLV];   // 만렙(125)이 되는 경험치. 그 뒤로는 레벨은 그대로지만 경험치는 끝없이 쌓인다
 const lvOf = e => { let L = 1; while(L < MAXLV && e >= CUM[L+1]) L++; return L; };
 // 틱은 3.6초(시간당 1000틱). 던전(등급)별 시간당 경험치: 13K·25K·30K·34K·37K·41K·44K·47K·50K
@@ -5822,31 +5823,18 @@ const fmtOS = n => { n = Math.max(0, Math.floor(n || 0)); return n >= 1e7 ? Math
 const fmtNum = n => n >= 1e9 ? (n/1e9).toFixed(n >= 1e11 ? 0 : 2) + 'B' : n >= 1e6 ? (n/1e6).toFixed(n >= 1e8 ? 0 : 1) + 'M' : n >= 1e4 ? (n/1e3).toFixed(n >= 1e6 ? 0 : 1) + 'K' : Math.floor(n).toLocaleString();
 function rpgLoad(){
   let st = null; try{ st = JSON.parse(localStorage.getItem(RPG_KEY) || 'null'); }catch(e){}
-  if(!st || st.v !== 1) st = { v:1, xv:2, chips:0, active:null, last:Date.now(), carry:0, sel:'combat', sk:{} };
+  if(!st || st.v !== 1) st = { v:1, chips:0, active:null, last:Date.now(), carry:0, sel:'combat', sk:{} };
   return rpgNorm(st);
 }
-// 행동마다 장비와 던전은 한 등급(grade)으로 묶인다. 예전 저장(장비·단계 따로, 옛 경험치 표)은 여기서 옮긴다
+// 저장된 RPG 상태를 정리한다(값 범위·빠진 칸 채우기)
 function rpgNorm(st){
-  const old = !st.xv || st.xv < 2;
   for(const k of SK_KEYS){
     const sk = Object.assign({ exp:0, gear:1, stage:1, gMax:1, sMax:1 }, st.sk[k] || {});
-    if(old){
-      let L = 1; while(L < 99 && sk.exp >= OLD_CUM[L+1]) L++;
-      const f = L >= 99 ? 0 : (sk.exp - OLD_CUM[L]) / (OLD_CUM[L+1] - OLD_CUM[L]);
-      sk.exp = L >= 99 ? CUM[99] : Math.floor(CUM[L] + f * NEED[L]);
-    }
-    if(!st.xv || st.xv < 4){   // 예전 저장: 사 둔 장비·단계 중 높은 등급을 착용한 것으로
-      const g = Math.max(1, Math.min(10, Math.max(+sk.gMax || 1, +sk.sMax || 1)));
-      sk.gear = sk.stage = sk.gMax = sk.sMax = g;
-    } else {
-      sk.gear = Math.max(1, Math.min(10, +sk.gear || 1)); sk.stage = Math.max(1, Math.min(10, +sk.stage || sk.gear));   // 장비와 맵은 따로
-      let gm = Math.max(sk.gear, Math.min(10, +sk.gMax || 1));
-      if(st.xv === 4){ for(let g = sk.gear + 1; g <= gm; g++) st.chips = (+st.chips || 0) + GRADE_PRICE[g - 1]; gm = sk.gear; }   // 그 버전에서 사 두고 못 입은 장비는 축의칩으로 돌려준다
-      sk.gMax = sk.sMax = gm;   // 산 장비 중 최고 등급(낮은 장비를 입고 있어도 유지)
-    }
+    sk.gear = Math.max(1, Math.min(10, +sk.gear || 1)); sk.stage = Math.max(1, Math.min(10, +sk.stage || sk.gear));   // 장비와 맵은 따로
+    sk.gMax = sk.sMax = Math.max(sk.gear, Math.min(10, +sk.gMax || 1));   // 가진 장비 중 최고 등급
     sk.exp = Math.max(0, +sk.exp || 0);
     delete sk.nx;   /* 다시 켜면 골라만 둔 티어는 버림 */
-    if(!Array.isArray(sk.own)) sk.own = Array.from({length: sk.gMax || 1}, (_, i) => i + 1);   // 가진 장비 등급(예전 저장: 최고 등급 이하 전부)
+    if(!Array.isArray(sk.own)) sk.own = Array.from({length: sk.gMax || 1}, (_, i) => i + 1);   // 가진 장비 등급
     sk.own = [...new Set(sk.own.map(Number).filter(g => g >= 1 && g <= 10).concat([1, sk.gear]))].sort((a, b) => a - b);
     st.sk[k] = sk;
   }
@@ -5856,22 +5844,17 @@ function rpgNorm(st){
     st.sk[k] = sk;
   }
   st.inv = st.inv && typeof st.inv === 'object' ? st.inv : {};
-  for(const key of Object.keys(st.inv)){ st.inv[key] = Math.max(0, Math.floor(+st.inv[key] || 0)); if(!st.inv[key] || !ikParse(key) || key === 'ring1' || key === 'neck1') delete st.inv[key]; }   // 반지·목걸이는 실버(2등급)부터 있다
+  for(const key of Object.keys(st.inv)){ st.inv[key] = Math.max(0, Math.floor(+st.inv[key] || 0)); if(!st.inv[key] || !ikParse(key)) delete st.inv[key]; }
   for(const key of Object.keys(st.inv)) if(/^(sword|ring|neck)\d+$/.test(key) && st.inv[key] > 1) st.inv[key] = 1;   // 등급마다 한 번만 사는 것: 최대 1개
-  if(st.eq){ if(st.eq.ring === 1) st.eq.ring = 0; if(st.eq.neck === 1) st.eq.neck = 0; }
   st.eq = Object.assign({ helm:0, body:0, food:0, fruit:0, foodN:0, fruitN:0, ring:0, neck:0, bait:0, baitN:0, pet:0 }, st.eq || {});
-  delete st.eq.whet; delete st.eq.whetN;
   st.pets = st.pets && typeof st.pets === 'object' ? st.pets : {};   // 얻은 펫(행동마다 한 번만)
   PETS.forEach((pp, x) => { const i = x + 1, worn = st.eq.pet === i ? 1 : 0, bag = st.inv['pet' + i] || 0;   // 안전장치: 펫은 종류마다 딱 1마리(가방+장착)
     if(worn + bag > 1){ if(worn) delete st.inv['pet' + i]; else st.inv['pet' + i] = 1; }
     if(worn + bag > 0) st.pets[pp.k] = 1; });
   for(const sl of QTY_SL){ st.eq[sl + 'N'] = Math.max(0, Math.floor(+st.eq[sl + 'N'] || 0)); if(!st.eq[sl + 'N']) st.eq[sl] = 0; }   // 요리·열매는 장착한 개수만큼 가방에서 옮겨 둔다
   st.blue = Math.max(0, +st.blue || 0);
-  st.bought = Object.assign({ sword:[], ring:[], neck:[] }, st.bought || {});   // 상점에서 한 번 산 것(다시 못 산다 = 매진)
-  for(const sl of ['ring', 'neck']) if(st.eq[sl] && !st.bought[sl].includes(st.eq[sl])) st.bought[sl].push(st.eq[sl]);
   if(!Number.isFinite(+st.hp)) st.hp = hpMax(st);
   if(st.active && !ALL_KEYS.includes(st.active)) st.active = null;
-  st.xv = 6;
   return st;
 }
 const RPG = { st: rpgLoad(), away: null, events: [] };
@@ -7074,8 +7057,8 @@ function rpgAct(a, b){
     for(const [k, c] of L){ st.inv[k] -= c; if(st.inv[k] <= 0) delete st.inv[k]; }
     st.blue += v; SFX.unlock(); SFX.cash(); rpgToast('', `<i class="chipi bc"></i> +${v.toLocaleString()}`);   // 얻은 파란 칩만
   }
-  else if(a === 'rpgSell'){ const key = b.dataset.key, have = st.inv[key] || 0, tt = ikParse(key); if(have <= 0 || !tt || !SELL_T.includes(tt[0])) return; const c = have; st.inv[key] = have - c; if(!st.inv[key]) delete st.inv[key]; const gv = c * itemPrice(key); if(itemCur(key) === 'chips') st.chips += gv; else st.blue += gv; if(tt[0] === 'sword' || tt[0] === 'ring' || tt[0] === 'neck'){ const on = tt[0] === 'sword' ? st.sk.combat.gear === tt[1] : st.eq[tt[0]] === tt[1]; if(!on) st.bought[tt[0]] = st.bought[tt[0]].filter(x => x !== tt[1]); }   /* 팔면 상점에서 다시 살 수 있다(매진 풀림, 착용 중인 등급은 그대로 매진) */ SFX.unlock(); SFX.cash(); rpgToast('', `${curIcon(key)} +${gv.toLocaleString()}`); }   // 검은 축의칩, 나머지는 파란 칩   // 개별 판매도 얻은 파란 칩만
-  else if(a === 'rpgAcc'){ const sl = b.dataset.slot, g = +b.dataset.g, p = ACC_PRICE[g]; if(!ACC_N[sl] || !(g >= 2 && g <= 10) || accOwned(st, sl, g)) return; if(st.blue < p){ rpgToast('파란 칩이 부족합니다'); return; } st.blue -= p; st.bought[sl].push(g); st.inv[sl + g] = (st.inv[sl + g] || 0) + 1; SFX.unlock(); SFX.cash(.5); rpgToast(`${TIERS[g-1].n} ${sl === 'ring' ? '반지' : '목걸이'} 구매 완료`); }   // 사면 가방으로(착용은 가방에서), 한 번만
+  else if(a === 'rpgSell'){ const key = b.dataset.key, have = st.inv[key] || 0, tt = ikParse(key); if(have <= 0 || !tt || !SELL_T.includes(tt[0])) return; const c = have; st.inv[key] = have - c; if(!st.inv[key]) delete st.inv[key]; const gv = c * itemPrice(key); if(itemCur(key) === 'chips') st.chips += gv; else st.blue += gv; SFX.unlock(); SFX.cash(); rpgToast('', `${curIcon(key)} +${gv.toLocaleString()}`); }   // 검은 축의칩, 나머지는 파란 칩   // 개별 판매도 얻은 파란 칩만
+  else if(a === 'rpgAcc'){ const sl = b.dataset.slot, g = +b.dataset.g, p = ACC_PRICE[g]; if(!ACC_N[sl] || !(g >= 2 && g <= 10) || accOwned(st, sl, g)) return; if(st.blue < p){ rpgToast('파란 칩이 부족합니다'); return; } st.blue -= p; st.inv[sl + g] = (st.inv[sl + g] || 0) + 1; SFX.unlock(); SFX.cash(.5); rpgToast(`${TIERS[g-1].n} ${sl === 'ring' ? '반지' : '목걸이'} 구매 완료`); }   // 사면 가방으로(착용은 가방에서), 한 번만
   rpgSave(); chipFix(); render();
 }
 // ---------- 포커(텍사스 홀덤 대회) ----------
@@ -7083,7 +7066,7 @@ function rpgAct(a, b){
 // 참가: 파란 칩으로 엔트리(참가비 = 그 티어 풀셋으로 12시간 가장 많이 버는 파란 칩), 대회 날 입장하면 노란 축의칩 티어×10개를 들고 들어간다(토너먼트 칩 = 축의칩 × 100).
 // 6명이 한 테이블에서 마지막 한 명이 남을 때까지(블라인드는 6핸드마다 오른다). 우승: 빨간 칩 +티어. 우승·준우승은 기록에 남는다.
 const PK_KEY = 'rm.poker.v1';
-const pkNorm = d => { d = d || {}; return { red: Math.max(0, +d.red || 0), res: d.res || {}, done: d.done || {}, recs: Array.isArray(d.recs) ? d.recs : [], game: d.game && d.game.v === 1 ? d.game : null, ym: !!d.ym, ymUsed: !!d.ymUsed, d0: d.d0 != null ? d.d0 : Object.keys(d).length ? -1 : null }; };   // d0: 이 기기·기록의 첫날(그날 첫 대회는 서울, 회차도 그날부터). -1 = 예전 기록(옛 기준일), null = 처음 켬   // ym: 상점에서 산 '역만 이샹텐'(다음 마작 동1국에 사용)
+const pkNorm = d => { d = d || {}; return { red: Math.max(0, +d.red || 0), res: d.res || {}, done: d.done || {}, recs: Array.isArray(d.recs) ? d.recs : [], game: d.game && d.game.v === 1 ? d.game : null, ym: !!d.ym, ymUsed: !!d.ymUsed, d0: d.d0 != null ? d.d0 : null }; };   // d0: 이 기기·기록의 첫날(그날 첫 대회는 서울, 회차도 그날부터). null = 처음 켬   // ym: 상점에서 산 '역만 이샹텐'(다음 마작 동1국에 사용)
 const PK_DROP = 10;   // 포커 대회 중도 종료 비용(노란 축의칩)
 const YM2_PRICE = 10, RAGE_PRICE = 10, PETT_PRICE = 10, RAGE_MS = 3600000;   // 상점 티켓 값(빨간 칩) · 광전사의 포효 1시간   // 역만 이샹텐 값(빨간 칩). 3티어 우승(6장) 한 번이면 1개, 준우승 두 번이면 1개
 const PK = { st: pkNorm(store.get(PK_KEY, null)), timer: null };
@@ -7111,11 +7094,11 @@ const PK_CITY_NAMES = {
 };
 const PK_DAYS = ['월', '화', '수', '목', '금', '토', '일'];
 const pkDay = (d = new Date()) => Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5);   // 내 기기 날짜 기준 하루 번호
-const PK_EPOCH = pkDay(new Date(2026, 9, 19)), PK_ED0 = pkDay(new Date(2026, 9, 23));   // PK_ED0: 대회 회차를 세기 시작한 날(이날 대회가 모두 제1회)   // 2026-10-19(월): 1회차 대회들이 열리기 시작한 주
+const PK_EPOCH = pkDay(new Date(2026, 9, 19));   // 2026-10-19(월): 1회차 대회들이 열리기 시작한 주
 const pkRng = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
 function pkWeekPerm(w){ const r = pkRng(w * 7919 + 17), a = [1, 2, 3, 4, 5, 6, 7]; for(let i = 6; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a.map(t => t === 1 ? 3 : t === 2 ? 5 : t); }   // 매주 3·3·4·5·5·6·7티어를 무작위 순서로(옛 1티어 자리 → 3, 2티어 자리 → 5)
 const pkWeek = day => Math.floor((day - PK_EPOCH) / 7);
-function pkD0(){ if(PK.st.d0 === -1) return PK_ED0; if(PK.st.d0 == null){ PK.st.d0 = pkDay(); pkSave(); } return PK.st.d0; }
+function pkD0(){ if(PK.st.d0 == null){ PK.st.d0 = pkDay(); pkSave(); } return PK.st.d0; }
 // 3~7티어: 5일마다 한 번씩 무작위 순서(블록이 바뀌는 날 같은 티어가 이어지지 않게)
 const PK_BLK = {};
 function pkBlockPerm(b){
@@ -7689,7 +7672,7 @@ document.addEventListener('click', e => {
       break; }
     case 'import': {
       const io = document.getElementById('io');
-      try{ const n = importCode(io.value.trim()); msg(`${n}판을 불러왔어요${UI.importedRpg ? ' · RPG·포커 진행도도 덮어썼어요' : ''}.`); const r0 = records(); if(r0.length) UI.last = r0[r0.length-1].id; render(); }catch(err){ msg('불러오지 못했어요: ' + err.message); }
+      try{ const n = importCode(io.value.trim()); msg(`${n}판을 불러왔어요${UI.importedRpg ? ' · RPG·포커·설정·이어하기도 덮어썼어요' : ''}.`); const r0 = records(); if(r0.length) UI.last = r0[r0.length-1].id; render(); }catch(err){ msg('불러오지 못했어요: ' + err.message); }
       break; }
   }
 });
@@ -8173,7 +8156,7 @@ document.addEventListener('change', e => {
   if(t.id && t.id.startsWith('adm-')){ (UI.admVals || (UI.admVals = {}))[t.id] = t.value; return; }
   if(t.id === 'file' && t.files[0]){
     const fr = new FileReader();
-    fr.onload = () => { const m = document.getElementById('iomsg'); try{ const n = importCode(fr.result); if(m) m.textContent = `${n}판을 불러왔어요${UI.importedRpg ? ' · RPG·포커 진행도도 덮어썼어요' : ''}.`; setTimeout(render, 600); }catch(err){ if(m) m.textContent = '불러오지 못했어요: ' + err.message; } };
+    fr.onload = () => { const m = document.getElementById('iomsg'); try{ const n = importCode(fr.result); if(m) m.textContent = `${n}판을 불러왔어요${UI.importedRpg ? ' · RPG·포커·설정·이어하기도 덮어썼어요' : ''}.`; setTimeout(render, 600); }catch(err){ if(m) m.textContent = '불러오지 못했어요: ' + err.message; } };
     fr.readAsText(t.files[0]); return;
   }
   if(t.id === 's-hint') settings.hint = t.checked;

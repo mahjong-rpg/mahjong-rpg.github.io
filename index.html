@@ -5803,7 +5803,6 @@ const REQ_LV = g => g >= 2 ? 10 * g : 1;
 const LV_CAP = g => g >= 10 ? Infinity : 10 * g + 10;
 const EXP_CAP = g => Infinity;   // 장비로 레벨을 막지 않는다(맵은 레벨로 열리고, 장비는 속도·전투력에만 영향)
 const capped = sk => false;
-const owns = (sk, g) => !!(sk.own && sk.own.includes(g));
 const addOwn = (sk, g) => { sk.own = sk.own || [1]; if(!sk.own.includes(g)){ sk.own.push(g); sk.own.sort((a, b) => a - b); } sk.gMax = sk.sMax = Math.max(sk.gMax || 1, g); };
 const OFFLINE_CAP = 12 * 3600 * 1000;                         // 꺼 둔 동안은 최대 12시간까지 쌓인다
 // 레벨 L까지 누적 경험치 = ⌊¼ × Σ(l=1..L-1) ⌊l + 300·2^(l/7)⌋⌋ (Lv2 83 · Lv50 101,333 · Lv92 6,517,253 · Lv99 13,034,431)
@@ -5844,6 +5843,7 @@ function rpgNorm(st){
     st.sk[k] = sk;
   }
   st.inv = st.inv && typeof st.inv === 'object' ? st.inv : {};
+  if(!st.toolBag){ for(const k of ['wood', 'mine', 'fish']){ const sk = st.sk[k], prev = Math.max(0, ...sk.own.filter(g => g > 1 && g < sk.gear)); if(prev) st.inv[TOOL_T[k] + prev] = (st.inv[TOOL_T[k] + prev] || 0) + 1; } st.toolBag = 1; }   // 도구도 가방으로 돌아오게 바뀐 날: 바로 전에 들던 도구 하나를 돌려준다
   for(const key of Object.keys(st.inv)){ st.inv[key] = Math.max(0, Math.floor(+st.inv[key] || 0)); if(!st.inv[key] || !ikParse(key)) delete st.inv[key]; }
   for(const key of Object.keys(st.inv)) if(/^(sword|ring|neck)\d+$/.test(key) && st.inv[key] > 1) st.inv[key] = 1;   // 등급마다 한 번만 사는 것: 최대 1개
   st.eq = Object.assign({ helm:0, body:0, food:0, fruit:0, foodN:0, fruitN:0, ring:0, neck:0, bait:0, baitN:0, pet:0 }, st.eq || {});
@@ -6893,10 +6893,9 @@ function bestGear(st){
   const put = (key, c) => { st.inv[key] = (st.inv[key] || 0) + c; };
   for(const t of ['sword', 'axe', 'pick', 'rod']){   // 무기·도구: 레벨이 되는 것 중 최고 등급
     const K = TOOL_SK[t], tsk = st.sk[K], L = lvOf(tsk.exp);
-    let best = 0; for(let g = 10; g > tsk.gear; g--) if(L >= REQ_LV(g) && ((st.inv[t + g] || 0) > 0 || (t !== 'sword' && owns(tsk, g)))){ best = g; break; }
+    let best = 0; for(let g = 10; g > tsk.gear; g--) if(L >= REQ_LV(g) && (st.inv[t + g] || 0) > 0){ best = g; break; }
     if(!best) continue;
-    if(t === 'sword'){ put('sword' + tsk.gear, 1); take('sword' + best); tsk.gear = best; addOwn(tsk, best); }
-    else { if(!owns(tsk, best)) take(t + best); rpgWear(st, K, tsk, best, false, true); }
+    put(t + tsk.gear, 1); take(t + best); rpgWear(st, K, tsk, best, false, true);   // 들고 있던 것은 가방으로
     n++;
   }
   for(const sl of ['helm', 'body', 'ring', 'neck']){
@@ -6990,13 +6989,6 @@ function rpgAct(a, b){
   else if(a === 'rpgGo' && st.active === sel && b.dataset.go === 'nx' && sk.nx && SKILLS[sel].craft && !hasMats(st, recipe(sel, sk.nx.g, sk.nx.pt || sk.part))){ rpgToast('재료가 부족해요'); return; }
   else if(a === 'rpgGo'){ let swap = false; if(st.active === sel && b.dataset.go === 'nx' && sk.nx){ applyNx(sel, sk); st.active = null; swap = true; }   // 고른 새 티어로 다시 시작
     if(st.active === sel){ st.active = null; if(sk.nx) applyNx(sel, sk); } else { st.active = sel; st.carry = 0; st.mcarry = 0; st.last = Date.now(); if(!swap){ UI.heroPopAt = Date.now(); UI.heroPopK = sel; }   /* 같은 행동 안에서 티어만 바꾸면 주인공은 그대로 */ if(sel === 'combat') st.msm = smashRoll(sk.stage); SFX.unlock(); if(sel === 'combat') SFX.hit(SKILLS.combat.stages[sk.stage - 1][5]); else if(SFX[sel]) SFX[sel](); } }   // 시작할 때 한 번: 전투는 그 몬스터의 타격음
-  else if(a === 'rpgWear'){   // 이미 산 장비로 갈아입기(지난 장비 포함)
-    const K = SK_KEYS.includes(b.dataset.k) ? b.dataset.k : sel, sk = st.sk[K];
-    const g = +b.dataset.g;
-    if(!owns(sk, g) || g === sk.gear) return;
-    if(lvOf(sk.exp) < REQ_LV(g)){ rpgToast(`${REQ_LV(g)}레벨부터 착용할 수 있어요`); return; }
-    rpgWear(st, K, sk, g);
-  }
   else if(a === 'rpgCons'){   // 소모품 구매: 개수 × 1
     const t = b.dataset.t; if(t !== 'bait') return;
     const n = BAIT_PACK;
@@ -7019,17 +7011,11 @@ function rpgAct(a, b){
   else if(a === 'rpgEq'){   // 투구·갑옷은 가방에서 꺼내 입고(입던 것은 가방으로), 요리·열매는 그 종류를 골라 둔다(전투 중 가방에서 꺼내 먹는다)
     const key = b.dataset.key, t = ikParse(key); if(!t || !(st.inv[key] > 0)) return;
     const sl = ITEM[t[0]].eq; if(!sl) return;
-    if(sl === 'tool'){   // 만든 도구: 착용하면 그 등급까지 장비가 열린다(상점에서 산 것과 같다). 맵은 그대로
+    if(sl === 'tool'){   // 검·도끼·곡괭이·낚싯대: 가방 ↔ 손. 들고 있던 것은 가방으로 돌아간다
       const K = TOOL_SK[t[0]], tsk = st.sk[K];
-      if(K === 'combat'){   // 검: 투구·갑옷처럼 가방 ↔ 손. 들고 있던 검은 가방으로 돌아간다
-        if(lvOf(tsk.exp) < REQ_LV(t[1])){ rpgToast(`${REQ_LV(t[1])}레벨부터 착용할 수 있어요`); return; }
-        if(tsk.gear === t[1]){ rpgToast('이미 착용 중이에요'); return; }
-        st.inv['sword' + tsk.gear] = (st.inv['sword' + tsk.gear] || 0) + 1;
-        st.inv[key]--; if(!st.inv[key]) delete st.inv[key];
-        tsk.gear = t[1]; addOwn(tsk, t[1]); SFX.unlock(); SFX.equip('combat'); rpgSave(); render(); return;
-      }
-      if(owns(tsk, t[1])){ if(t[1] !== tsk.gear && lvOf(tsk.exp) >= REQ_LV(t[1])) rpgWear(st, K, tsk, t[1], false); rpgSave(); render(); return; }   // 이미 열린 등급: 그 등급으로 바꿔 들기만(아이템은 그대로)
-      if(lvOf(tsk.exp) < REQ_LV(t[1])){ rpgToast(`${SKILLS[K].name} ${REQ_LV(t[1])}레벨 이상부터 착용할 수 있어요`); return; }
+      if(lvOf(tsk.exp) < REQ_LV(t[1])){ rpgToast(`${SKILLS[K].name} ${REQ_LV(t[1])}레벨 이상 착용 가능`); return; }
+      if(tsk.gear === t[1]) return;
+      st.inv[t[0] + tsk.gear] = (st.inv[t[0] + tsk.gear] || 0) + 1;
       st.inv[key]--; if(!st.inv[key]) delete st.inv[key];
       rpgWear(st, K, tsk, t[1], false); rpgSave(); chipFix(); render(); return;
     }

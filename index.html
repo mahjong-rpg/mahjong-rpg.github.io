@@ -1139,7 +1139,7 @@ section.card.resume .rsinfo{align-items:flex-start}
 .pkcard dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin:4px 0;font-size:12.5px}.pkcard dt{color:var(--ink-dim)}.pkcard dd{margin:0;font-family:var(--f-num);display:flex;align-items:center;gap:2px}
 .pkcard dd small{font-family:inherit;color:var(--ink-dim);margin-left:4px}
 .pkcard .btn{margin-top:auto;height:44px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:9px;font:700 13px/1 var(--f-ui);letter-spacing:.08em}
-.pkcard .btn[data-op="join"]{gap:7px;letter-spacing:0;padding-inline:6px}.pkcard .btn[data-op="join"] .pkc{gap:3px;font-size:12.5px}   /* 입장 + 노란·파란 칩이 한 줄에 들어가게 */
+.pkcard .btn[data-op="join"]{padding:0 6px;letter-spacing:0}.pkcard .btn[data-op="join"] .jl{font:700 13px/1 var(--f-ui);letter-spacing:.08em}.pkcard .btn[data-op="join"] .jc{display:flex;align-items:center;justify-content:center;gap:6px}.pkcard .btn[data-op="join"] .pkc{gap:4px;font-size:12.5px}   /* 노란·파란 칩만(누르면 입장) */
 .pkcard .btn .pkc{margin:0;display:inline-flex;align-items:center;gap:5px;font:800 13.5px/1 var(--f-num);letter-spacing:0}.pkcard .btn .pkc .chipi{width:14px;height:14px;margin:0;vertical-align:0}
 .pkcard{overflow:hidden}.pkcard > *:not(.pkbg){position:relative;z-index:1}
 .pkbg{position:absolute;inset:0;z-index:0;pointer-events:none}.pkbg .rack{position:absolute;inset:0;border-radius:0}
@@ -3810,7 +3810,7 @@ function startGame(mode, saved, practice, drill, ym){
   const YT = UI.ymTest != null ? YM_TESTS[UI.ymTest] : null;
   const D = drill ? DRILLS[drill] : YT ? { dealer: YT.oya || 'me', rig: gg => YT.rig ? YT.rig(gg) : ymRig(gg, YT) } : null;
   const ymBuff = !saved && !drill && ym == null && !practice && PK.st.ym;   // 상점의 역만 이샹텐: 새 대국 시작에 쓰인다
-  if(ymBuff){ PK.st.ym = false; pkSave(); setTimeout(ymFireBanner, 350); }
+  if(ymBuff){ PK.st.ym = false; PK.st.ymUsed = true; pkSave(); setTimeout(ymFireBanner, 350); }
   let ymDone = false;
   const P3 = UI.mode.endsWith('3');
   setNP(P3 ? 3 : 4);
@@ -7156,7 +7156,7 @@ function rpgAct(a, b){
 // 참가: 파란 칩으로 엔트리(참가비 = 그 티어 풀셋으로 12시간 가장 많이 버는 파란 칩), 대회 날 입장하면 노란 축의칩 티어×10개를 들고 들어간다(토너먼트 칩 = 축의칩 × 100).
 // 6명이 한 테이블에서 마지막 한 명이 남을 때까지(블라인드는 6핸드마다 오른다). 우승: 빨간 칩 +티어. 우승·준우승은 기록에 남는다.
 const PK_KEY = 'rm.poker.v1';
-const pkNorm = d => { d = d || {}; return { red: Math.max(0, +d.red || 0), res: d.res || {}, done: d.done || {}, recs: Array.isArray(d.recs) ? d.recs : [], game: d.game && d.game.v === 1 ? d.game : null, ym: !!d.ym, d0: d.d0 != null ? d.d0 : Object.keys(d).length ? -1 : null }; };   // d0: 이 기기·기록의 첫날(그날 첫 대회는 서울, 회차도 그날부터). -1 = 예전 기록(옛 기준일), null = 처음 켬   // ym: 상점에서 산 '역만 이샹텐'(다음 마작 동1국에 사용)
+const pkNorm = d => { d = d || {}; return { red: Math.max(0, +d.red || 0), res: d.res || {}, done: d.done || {}, recs: Array.isArray(d.recs) ? d.recs : [], game: d.game && d.game.v === 1 ? d.game : null, ym: !!d.ym, ymUsed: !!d.ymUsed, d0: d.d0 != null ? d.d0 : Object.keys(d).length ? -1 : null }; };   // d0: 이 기기·기록의 첫날(그날 첫 대회는 서울, 회차도 그날부터). -1 = 예전 기록(옛 기준일), null = 처음 켬   // ym: 상점에서 산 '역만 이샹텐'(다음 마작 동1국에 사용)
 const PK_DROP = 10;   // 포커 대회 중도 종료 비용(노란 축의칩)
 const YM2_PRICE = 10, RAGE_PRICE = 10, PETT_PRICE = 10, RAGE_MS = 3600000;   // 상점 티켓 값(빨간 칩) · 광전사의 포효 1시간   // 역만 이샹텐 값(빨간 칩). 3티어 우승(6장) 한 번이면 1개, 준우승 두 번이면 1개
 const PK = { st: pkNorm(store.get(PK_KEY, null)), timer: null };
@@ -7420,9 +7420,9 @@ function pkLobbyHTML(){
     if(all) btn = '';
     else if(gg && !gg.over && gg.key === key) btn = `<span class="pkst good">진행 중</span>`;
     else if(done) btn = `<span class="pkst ${done <= 2 ? 'good' : ''}">결과 ${done}위</span>`;
-    else if(res && isToday) btn = `<button class="btn primary" data-act="pk" data-op="enter" data-t="${t}" ${chips < buy ? 'disabled title="노란 축의칩 부족"' : ''}>입장 <span class="pkc"><i class="chipi"></i>${buy}</span></button>`;
+    else if(res && isToday) btn = `<button class="btn primary" data-act="pk" data-op="enter" data-t="${t}" ${chips < buy ? 'disabled title="엔트리 비용 부족"' : ''}>입장 <span class="pkc"><i class="chipi"></i>${buy}</span></button>`;
     else if(res) btn = `<span class="pkst">엔트리 완료 · ${pkDate(day)} 입장</span>`;
-    else btn = `<button class="btn primary" data-act="pk" data-op="join" data-t="${t}" ${pkBusy() ? 'disabled title="참가 중인 대회가 끝나야 입장 가능"' : chips < buy ? 'disabled title="노란 축의칩 부족"' : blue < fee ? 'disabled title="파란 칩 부족"' : ''}>입장 <span class="pkc"><i class="chipi"></i>${buy}</span><span class="pkc"><i class="chipi bc"></i>${fee.toLocaleString()}</span></button>`;   // 입장할 때 참가비(파란 칩)와 지참 칩(노란 축의칩)을 한꺼번에
+    else btn = `<button class="btn primary" data-act="pk" data-op="join" data-t="${t}" ${pkBusy() ? 'disabled title="참가 중인 대회가 끝나야 입장 가능"' : chips < buy ? 'disabled title="엔트리 비용 부족"' : blue < fee ? 'disabled title="엔트리 비용 부족"' : ''}><span class="jc"><span class="pkc"><i class="chipi"></i>${buy}</span><span class="pkc"><i class="chipi bc"></i>${fee.toLocaleString()}</span></span></button>`;   // 입장할 때 참가비(파란 칩)와 지참 칩(노란 축의칩)을 한꺼번에
     return `<div class="pkcard t${t} ${t < 8 ? 'low' : ''}" data-suit="${['♣', '♦', '♥', '♠', ''][t - 3] || ''}">${t >= 8 ? `<div class="pkbg">${rpgRack('combat', t, true)}</div>` : ''}<div class="pkt">${t}티어</div><div class="pkcity">${esc(pkTitle(city, ed))}</div>
       <div class="pkwhen">${t >= 8 ? '<b>매일 개최</b>' : isToday ? '<b>오늘 개최</b>' : pkDate(day) + ' 개최'}</div>
       <dl><dt>참가비</dt><dd><i class="chipi bc"></i>${fee.toLocaleString()}</dd><dt>지참 칩</dt><dd><i class="chipi"></i>${buy}</dd><dt>우승</dt><dd>${pkRedIcon()}×${t * 2}</dd><dt>준우승</dt><dd>${pkRedIcon()}×${t}</dd></dl>${btn}</div>`;
@@ -7511,7 +7511,9 @@ function pkShopHTML(){
   const sold = '<span class="pksold">매진</span>';
   const rageLeft = RPG.st.rage > now ? Math.ceil((RPG.st.rage - now) / 60000) : 0, missing = PETS.filter(p => !RPG.st.pets[p.k]).length;
   const row = (seal, nm, sub, st) => `<div class="pkshop"><div class="pkshi">${seal}<div><b>${nm}</b>${sub ? `<small>${sub}</small>` : ''}</div></div>${st}</div>`;
-  return row('<span class="ymseal"><i>役</i><i>満</i></span>', '역만의 꿈 티켓', '', PK.st.ym || inGame ? sold : btn('buyYm', YM2_PRICE))
+  if(!inGame && PK.st.ymUsed){ PK.st.ymUsed = false; pkSave(); }   // 티켓을 쓴 대국이 끝났다
+  const ymBtn = PK.st.ym || (inGame && PK.st.ymUsed) ? sold : inGame ? `<button class="btn pkbuy" disabled title="${red < YM2_PRICE ? '빨간 칩 부족' : '대국 중 구매 불가'}">구매 <span class="pkc">${pkRedIcon()}${YM2_PRICE}</span></button>` : btn('buyYm', YM2_PRICE);   // 산 티켓이 있거나 그 티켓으로 대국 중이면 매진, 티켓 없이 대국 중이면 비활성
+  return row('<span class="ymseal"><i>役</i><i>満</i></span>', '역만의 꿈 티켓', '', ymBtn)
     + row(`<span class="ymseal tks rage">${TK_RAGE}</span>`, '광전사의 포효 티켓', rageLeft ? `발동 중 · <b class="rgt">${rageClock()}</b> 남음` : '', rageLeft ? sold : btn('buyRage', RAGE_PRICE))
     + row(`<span class="ymseal tks pet">${TK_PET}</span>`, '펫 소환 티켓', '', missing ? btn('buyPet', PETT_PRICE) : sold);
 }
@@ -7523,11 +7525,11 @@ function pokerAct(b){
   const op = b.dataset.op, t = +b.dataset.t, today = pkDay(), g = pkG();
   if(op === 'scroll'){ const sc = document.getElementById(b.dataset.tg || 'pkcards'); if(sc) sc.scrollBy({ left: (+b.dataset.d) * (sc.clientWidth * .8), behavior: 'smooth' }); return; }
   if(op === 'join'){ const key = today + '-' + t; if(!pkOpen(today).includes(t) || PK.st.done[key] || g || pkBusy()) return;
-    if((RPG.st.chips || 0) < PK_BUY(t)){ rpgToast('노란 축의칩이 부족합니다'); return; } if((RPG.st.blue || 0) < PK_FEE[t - 1]){ rpgToast('파란 칩이 부족합니다'); return; }
+    if((RPG.st.chips || 0) < PK_BUY(t)){ rpgToast('엔트리 비용 부족'); return; } if((RPG.st.blue || 0) < PK_FEE[t - 1]){ rpgToast('엔트리 비용 부족'); return; }
     RPG.st.blue -= PK_FEE[t - 1]; RPG.st.chips -= PK_BUY(t); rpgSave(); chipFix(); SFX.unlock(); SFX.cash(.5); pkNewGame(t, key, today); pkSave(); render(); pkLoop(); return; }
-  if(op === 'reserve'){ const day = pkNextDay(t, today), key = day + '-' + t; if(PK.st.res[key] || PK.st.done[key] || pkBusy()) return; if((RPG.st.chips || 0) < PK_BUY(t)){ rpgToast('지참 칩(노란 축의칩)이 부족합니다'); return; } if((RPG.st.blue || 0) < PK_FEE[t - 1]){ rpgToast('파란 칩이 부족합니다'); return; }
+  if(op === 'reserve'){ const day = pkNextDay(t, today), key = day + '-' + t; if(PK.st.res[key] || PK.st.done[key] || pkBusy()) return; if((RPG.st.chips || 0) < PK_BUY(t)){ rpgToast('엔트리 비용 부족'); return; } if((RPG.st.blue || 0) < PK_FEE[t - 1]){ rpgToast('엔트리 비용 부족'); return; }
     RPG.st.blue -= PK_FEE[t - 1]; PK.st.res[key] = 1; rpgSave(); pkSave(); SFX.unlock(); SFX.cash(.5); rpgToast(`${pkTitle(pkCity(day, t), pkEdition(day, t))} 엔트리 완료`); pkRender(); return; }
-  if(op === 'enter'){ const key = today + '-' + t; if(!PK.st.res[key] || PK.st.done[key] || g) return; if((RPG.st.chips || 0) < PK_BUY(t)){ rpgToast('노란 축의칩이 부족합니다'); return; }
+  if(op === 'enter'){ const key = today + '-' + t; if(!PK.st.res[key] || PK.st.done[key] || g) return; if((RPG.st.chips || 0) < PK_BUY(t)){ rpgToast('엔트리 비용 부족'); return; }
     RPG.st.chips -= PK_BUY(t); delete PK.st.res[key]; rpgSave(); chipFix(); SFX.unlock(); pkNewGame(t, key, today); pkSave(); render(); pkLoop(); return; }
   if(op === 'buyRage'){ if(RPG.st.rage > Date.now() || (PK.st.red || 0) < RAGE_PRICE) return; PK.st.red -= RAGE_PRICE; RPG.st.rage = Date.now() + RAGE_MS; rpgSave(); pkSave(); chipFix(); SFX.unlock(); SFX.cash(.5); rpgToast('광전사의 포효 · 1시간 동안 전투 틱 2배'); pkRender(); return; }
   if(op === 'buyPet'){ const miss = PETS.filter(p => !RPG.st.pets[p.k]); if(!miss.length || (PK.st.red || 0) < PETT_PRICE) return; PK.st.red -= PETT_PRICE; pkSave(); const pp = miss[Math.floor(Math.random() * miss.length)]; petGain(pp.k); rpgSave(); chipFix(); SFX.unlock(); SFX.cash(.5); rpgToast('랜덤 펫 소환 성공');   /* 무슨 펫인지는 RPG에 들어가서 빵빠레와 함께 */ pkRender(); return; }

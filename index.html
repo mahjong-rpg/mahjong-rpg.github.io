@@ -2897,6 +2897,8 @@ function tbFit(){
   }
 }
 window.addEventListener('resize', () => tbFit());
+// 폰 브라우저가 지운 화면(대회장 카드)을 잔상으로 남겨 깜빡이면, 페이지 전체를 한 번 다시 칠하게 한다
+function repaintAll(){ const b = document.body; b.style.opacity = '.999'; requestAnimationFrame(() => requestAnimationFrame(() => { b.style.opacity = ''; })); }
 function render(){ if(rq) return; rq = true; requestAnimationFrame(()=>{ rq = false; draw(); }); }
 // 다시 그릴 때 같은 패(data-fk)는 이전 자리에서 새 자리로 미끄러진다: 손패→강, 강→울은 패, 손패 정렬, CPU 손패 빈칸 메우기
 function flipCapture(){
@@ -2926,7 +2928,7 @@ function flipPlay(m){
 function draw(){
   if(UI.slideLock){ UI.slidePend = true; return; }   // 화면 슬라이드 중에는 다시 그리지 않는다(끝나면 한 번 그림)
   { const de = document.documentElement, g = UI.screen === 'poker' && typeof pkG === 'function' ? pkG() : null;   // 대회장 → 대회 화면: 카드 배경 애니메이션을 한 프레임 먼저 꺼서(폰에서 지운 배경이 잠깐 깜빡이는 잔상 방지) 그다음 바꾼다
-    if(g && !g.paused && document.querySelector('.pklobby') && !de.classList.contains('pkswap')){ de.classList.add('pkswap'); requestAnimationFrame(() => requestAnimationFrame(() => { draw(); setTimeout(() => de.classList.remove('pkswap'), 300); })); return; } }
+    if(g && !g.paused && document.querySelector('.pklobby') && !de.classList.contains('pkswap')){ de.classList.add('pkswap'); requestAnimationFrame(() => requestAnimationFrame(() => { draw(); setTimeout(() => de.classList.remove('pkswap'), 300); [60, 400, 1200].forEach(t => setTimeout(repaintAll, t)); })); return; } }
   if(UI.screen === 'home'){ $app.innerHTML = homeHTML(); fitStats(); }
   else if(UI.screen === 'game'){ const m = flipCapture(), oldStk = $app.querySelector('.table > .chipstk'); $app.innerHTML = gameHTML(); flipPlay(m);
     const nw = $app.querySelector('.table > .chipstk');   // 축의탑은 다시 그려도 같은 요소를 그대로 둔다(만지작거리는 애니메이션·드래그가 끊기지 않게)
@@ -7523,6 +7525,7 @@ function pkShopHTML(){
 const pkRecBottom = () => { const u = document.getElementById('pkrecs'); if(u) u.scrollTop = u.scrollHeight; };   // 최신 기록(맨 아래)부터 보이게
 function pkRender(){ if(UI.screen !== 'poker') return; const box = document.querySelector('.poker'); if(!box) return; { const g0 = pkG(), want = g0 && !g0.paused ? (g0.over ? 'o' : 't') : '', top = document.querySelector('.pktop'); if(want !== (top ? top.dataset.st : '')){ draw(); return; } }   /* 대회 화면 ↔ 대회장이 바뀌면 통째로 다시 그린다 */ const sc = document.getElementById('pkcards'), sl = sc ? sc.scrollLeft : null, sc0 = document.getElementById('pkcards0'), sl0 = sc0 ? sc0.scrollLeft : null; const g = pkG(); const ostk = box.querySelector('.pkfelt > .pkstk') || PK.stkEl, tmp = document.createElement('div'); tmp.innerHTML = g && !g.over && !g.paused ? pkTableHTML(g) : g && g.over ? pkOverHTML(g) : pkLobbyHTML();   /* 화면을 갔다 와도 만든 탑을 다시 쓴다 */
   { const nstk = tmp.querySelector('.pkfelt > .pkstk'); if(ostk && nstk && ostk.dataset.k === nstk.dataset.k && !box.contains(ostk)) nstk.replaceWith(ostk); }
+  if(g && !g.over && UI.pkHandSeen !== g.key + '#' + g.hand){ UI.pkHandSeen = g.key + '#' + g.hand; setTimeout(repaintAll, 50); }   // 새 핸드마다 한 번: 폰의 화면 잔상 정리
   domMorph(box, tmp); PK.stkEl = box.querySelector('.pkfelt > .pkstk') || PK.stkEl;   /* 바뀐 곳만 고친다: 칩 탑은 그대로 두어 깜빡이지 않게 */   /* 칩 수가 같으면 만든 탑을 그대로 쓴다 */ const sc2 = document.getElementById('pkcards'); if(sc2 && sl != null) sc2.scrollLeft = sl; const sc3 = document.getElementById('pkcards0'); if(sc3 && sl0 != null) sc3.scrollLeft = sl0; chipFix(); }
 function pokerAct(b){
   const op = b.dataset.op, t = +b.dataset.t, today = pkDay(), g = pkG();

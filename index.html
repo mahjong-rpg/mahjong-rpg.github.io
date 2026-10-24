@@ -744,6 +744,7 @@ section.card.resume .rsinfo{align-items:flex-start}
 button.skb{font:inherit;cursor:pointer}.skb.can{border-color:var(--gc);box-shadow:0 0 0 1px var(--gc)}.skb.can:hover{box-shadow:0 0 8px var(--gc)}.skb.on{border-color:#ffd23a;box-shadow:0 0 10px rgba(255,210,58,.7);animation:pkBlink 1s infinite}   /* 쓸 수 있으면 티어색 테두리(가만히) · 고르는 중엔 포커처럼 노란 테두리가 깜빡 */
 .skb.live{position:relative;border-color:var(--gc);box-shadow:0 0 0 1px var(--gc)}.skb.live::before,.sk .tf.pk > .pkring{content:'';position:absolute;inset:-2px;border-radius:calc(8px + 1px);padding:2px;box-sizing:border-box;background:conic-gradient(from var(--skA),transparent 0deg,rgba(255,255,255,.95) 35deg,transparent 80deg,transparent 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:skbSpin 2.4s linear infinite;animation-delay:var(--ad,0ms);pointer-events:none}
 @property --skA{syntax:'<angle>';initial-value:0deg;inherits:false}@keyframes skbSpin{from{--skA:360deg}to{--skA:0deg}}   /* 입질 발동 중: 티어색 테두리가 반시계로 돈다(아이콘·패산의 보이는 패 모두) */
+.skb.live.lt::before,.sk .tf.pk.lt > .pkring{background:conic-gradient(from var(--skA),transparent 0deg,rgba(0,0,0,.75) 35deg,transparent 80deg,transparent 360deg)}   /* 밝은 티어: 흰 빛 대신 어두운 그림자가 돈다 */
 .sk .tf.pk > .pkring{display:block;inset:-4px;padding:3px;border-radius:calc(var(--ww)*.12);z-index:3}
 @keyframes skbPulse{50%{box-shadow:0 0 0 1px var(--gc),0 0 3px var(--gc)}}   /* 쓸 수 있는 마작 스킬: 빛나며 숨쉬기, 고른 상태는 꽉 찬 색 */
 .hand .tile.senseable{cursor:pointer;box-shadow:inset 0 0 0 1px var(--ivory-edge),0 0 0 2px var(--gc)}
@@ -3599,6 +3600,7 @@ function skillDice(k){
   h = Math.imul(h ^ (h >>> 13), 0xC2B2AE35) >>> 0; h ^= h >>> 16;
   return (h >>> 0) / 4294967296;
 }
+const isLightC = c => { const m = /^#?([0-9a-f]{6})$/i.exec(String(c || '').trim()); if(!m) return false; const n = parseInt(m[1], 16), r = n >> 16, g = n >> 8 & 255, b = n & 255; return .299 * r + .587 * g + .114 * b > 225; };   // 밝은 티어색(실버 등)
 const mjSkillColor = k => { const sk = RPG.st.sk[k], L = sk ? lvOf(sk.exp) : 1, t = TIERS[Math.max(0, Math.min(9, Math.floor(L / 10) - 1))]; return t.gl || t.c; };   // 확률 단계(레벨)에 맞는 등급 색
 const turnKey = () => UI.game ? `${UI.kyokuSerial || 0}-${UI.game.players[0].discards.length}` : '';
 // 살기 감지: 이 패를 지금 내면 누가 론하는지
@@ -3735,7 +3737,7 @@ function skillBadges(){   // 입질은 저절로(누를 수 없음) · 살기 �
   return SK_KEYS.map(k => { const p = mjSkillPct(k), can = p && (k === 'combat' ? senseReady() : k === 'wood' ? pruneReady() : k === 'mine' ? uraNext() >= 0 : false), on = can && (k === 'combat' ? UI.senseMode === turnKey() : k === 'wood' && UI.pruneMode);
     const inner = `${MJSK[k].icon}<small>${k === 'wood' && can ? UI.prune.left + '장' : p + '%'}</small>`, tt = `${MJSK[k].n} ${p}%`;
     const live = k === 'fish' && UI.peek && UI.peek.serial === UI.kyokuSerial && !UI.dealing;
-    if(live) return `<span class="skb live" style="--gc:${mjSkillColor(k)};--ad:-${Date.now() % 2400}ms" title="${tt} · 발동 중">${inner}</span>`;
+    if(live) return `<span class="skb live ${isLightC(mjSkillColor(k)) ? 'lt' : ''}" style="--gc:${mjSkillColor(k)};--ad:-${Date.now() % 2400}ms" title="${tt} · 발동 중">${inner}</span>`;
     return can ? `<button class="skb can ${on ? 'on' : ''}" style="--gc:${mjSkillColor(k)}" data-act="mjsk" data-k="${k}" title="${tt}">${inner}</button>` : `<span class="skb ${p ? '' : 'off'}" style="--gc:${mjSkillColor(k)}" title="${tt}">${inner}</span>`; }).join('');   // 0%여도 아이콘은 보인다
 }
 // 살기 감지: 내 차례(쯔모해 온 뒤) 한 번. 아이콘을 누른 뒤 손패 한 장을 누르면 그 패가 위나 아래로 한 바퀴 돌며 판정
@@ -4336,7 +4338,7 @@ function wallsScreenHTML(walls, fx, uraGc){
       if(!inner) return;
       // 입질: 그 자리에 놓인 방향 그대로 앞면을 보인다. 아랫패면 윗패를 반투명하게 해서 비쳐 보이게
       const pkNext = sl.pk && ((!sl.pk.lower && nt) || (sl.pk.lower && nb));   // 입질로 본 패가 바로 지금 뽑을 패면, 앞면 그대로 끌어 온다
-      const pkf = sl.pk ? `<span class="tf pk ${sl.pk.lower ? 'pkb' : ''} ${pkNext ? 'wnext' : ''}" ${pkNext ? `data-act="takeDraw" ${sl.pk.lower ? wiB : wiT}` : ''} style="--gc:${sl.pk.gc};--ad:-${Date.now() % 2400}ms">${tile(kindOf(sl.pk.id), {size:'wl', id: sl.pk.id, cls: vert ? 'rot' + v : ''})}<i class="pkring"></i></span>` : '';
+      const pkf = sl.pk ? `<span class="tf pk ${isLightC(sl.pk.gc) ? 'lt' : ''} ${sl.pk.lower ? 'pkb' : ''} ${pkNext ? 'wnext' : ''}" ${pkNext ? `data-act="takeDraw" ${sl.pk.lower ? wiB : wiT}` : ''} style="--gc:${sl.pk.gc};--ad:-${Date.now() % 2400}ms">${tile(kindOf(sl.pk.id), {size:'wl', id: sl.pk.id, cls: vert ? 'rot' + v : ''})}<i class="pkring"></i></span>` : '';
       const ud = sl.ura != null && sl.t && sl.dora != null ? uraSwap(v, j) : '';
       const urap = sl.ura != null && sl.t && sl.dora != null ? `<span class="urap ura-v${v}" style="--gc:${uraGc};animation-delay:-${Date.now() - (sl.uraAt || 0)}ms" title="광맥 탐지: 뒷도라 표시패">${tile(sl.ura, {size:'wl', cls: vert ? 'rot' + v : ''})}</span>` : '';
       // 광맥 탐지: 뒷도라 표시패를 콘솔 쪽으로 완전히 빼서 붙여 둔다. 강보다 위에 보이도록 앞 레이어에 따로 그린다

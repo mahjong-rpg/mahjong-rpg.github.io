@@ -1221,8 +1221,8 @@ button.skb{font:inherit;cursor:pointer}.skb.can{border-color:var(--gc);box-shado
 .pkstat{font-size:11px;color:#ff8a6a;font-weight:800}
 .pkbest{font-size:11px;color:#7ee08a;font-weight:800;white-space:nowrap}
 .pkbet{position:absolute;bottom:-20px;font:800 11px var(--f-num);color:#fff;background:#b8862a;border-radius:99px;padding:1px 8px;white-space:nowrap}
-.pkbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;min-height:42px}
-.pkbar.wait{color:var(--ink-dim);font-size:13px}
+.pkbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;align-content:center;justify-content:center;box-sizing:border-box;height:56px}.pktable{container:pktb / inline-size}@container pktb (max-width:640px){.pkbar{height:108px}}@container pktb (max-width:520px){.pkraise{flex-wrap:nowrap;width:100%;justify-content:center}.pkraise input{width:auto;flex:1 1 60px;min-width:60px;max-width:150px}}   /* 좁으면: 슬라이더를 줄여 레이즈·올인과 한 줄 */   /* 버튼 줄 높이 고정: 차례가 바뀌어도 테이블 높이가 그대로 */
+.pkbar.wait{color:var(--ink-dim);font-size:13px;position:relative}.pkbar.wait .pkghost{display:contents;visibility:hidden}.pkbar.wait .pkghost *{visibility:hidden;pointer-events:none}.pkbar.wait .pkwmsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center}
 .pkraise{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}.pkraise input{width:150px}
 .pkraise b{font-family:var(--f-num)}
 .pklog{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--ink-dim);min-height:60px}
@@ -7495,7 +7495,10 @@ function pkTableHTML(g){
     const minTo = Math.min(me.bet + me.stack, g.curBet + Math.max(g.minR, g.bb)), maxTo = me.bet + me.stack, v = Math.min(maxTo, Math.max(minTo, UI.pkRaise || minTo));
     bar = `<div class="pkbar"><button class="btn" data-act="pk" data-op="fold">폴드</button><button class="btn" data-act="pk" data-op="call">${need > 0 ? `콜 ${Math.min(need, me.stack).toLocaleString()}` : '체크'}</button>
       ${maxTo > g.curBet ? `<span class="pkraise"><input type="range" id="pk-raise" min="${minTo}" max="${maxTo}" step="1" value="${v}"><button class="btn primary" data-act="pk" data-op="raise">${need > 0 ? '레이즈' : '베팅'} <b id="pk-rv">${v.toLocaleString()}</b></button><button class="btn warn" data-act="pk" data-op="allin">올인</button></span>` : ''}</div>`;
-  } else bar = `<div class="pkbar wait">${me.out ? '탈락' : me.folded ? '폴드 · 다음 핸드를 기다리는 중' : g.cur >= 0 && !g.pl[g.cur].me ? `${esc(g.pl[g.cur].name)} 생각 중…` : ''}</div>`;
+  } else {   // 내 차례가 아니어도 버튼 줄과 똑같은 칸을 비워 둔다(차례마다 테이블 높이가 변하지 않게 — 높이가 출렁이면 폰에서 화면 잔상이 생긴다)
+    const msg = me.out ? '탈락' : me.folded ? '폴드 · 다음 핸드를 기다리는 중' : g.cur >= 0 && !g.pl[g.cur].me ? `${esc(g.pl[g.cur].name)} 생각 중…` : '';
+    bar = `<div class="pkbar wait"><span class="pkghost" aria-hidden="true"><button class="btn" tabindex="-1">폴드</button><button class="btn" tabindex="-1">콜 0</button><span class="pkraise"><input type="range" tabindex="-1"><button class="btn primary" tabindex="-1">레이즈 <b>0</b></button><button class="btn warn" tabindex="-1">올인</button></span></span><span class="pkwmsg">${msg}</span></div>`;
+  }
   return `<section class="card pktable"><div class="pkhead"><b>${esc(pkTitle(g.city, g.ed))}${pkSkBar(g)}</b><span>${g.tier}티어 · 핸드 #${g.hand} · 블라인드 ${pkBl(g)} · 남은 ${pkAlive(g).length}명</span></div>
     <div class="pkfelt"><div class="pkboard">${board}</div><div class="pkpot">팟 <i class="ycn"></i>${pkPot(g).toLocaleString()}</div>${g.msg ? `<div class="pkmsg">${esc(g.msg)}</div>` : ''}${seats}${pkMyStack(g)}<div class="pklog">${g.log.slice(0, 6).map(l => `<span>${esc(l)}</span>`).join('')}</div></div>
     ${bar}</section>`;

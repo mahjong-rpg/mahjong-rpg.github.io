@@ -6789,6 +6789,29 @@ function hswRefit(){ const sw = document.querySelector('.hsw'), k = sw && sw.que
 window.addEventListener('resize', () => requestAnimationFrame(hswRefit));
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(() => hswRefit());
 if(window.ResizeObserver){ const ro = new ResizeObserver(() => hswRefit()); const watch = () => { const sw = document.querySelector('.hsw'); if(sw && sw !== ro.cur){ if(ro.cur) ro.unobserve(ro.cur); ro.cur = sw; ro.observe(sw); } }; setInterval(watch, 500); }
+// 낚싯줄: 매 프레임 낚싯대 끝 ↔ 찌를 이어 고무줄처럼 늘었다 줄었다 한다
+(function fishLine(){
+  try{
+    const fl = UI.screen === 'rpg' && !document.hidden ? document.querySelector('.rpg .scene .fline > line') : null, rod = fl && document.querySelector('.rpg .scene .rodA line'), bob = fl && document.querySelector('.rpg .scene .fline .bob');
+    if(fl && rod){
+      const sv = fl.ownerSVGElement, inv = fl.getScreenCTM().inverse(), at = (el, x, y) => { const pt = sv.createSVGPoint(); pt.x = x; pt.y = y; return pt.matrixTransform(el.getScreenCTM()).matrixTransform(inv); };
+      const a = at(rod, +rod.getAttribute('x2'), +rod.getAttribute('y2'));
+      fl.setAttribute('x1', a.x.toFixed(2)); fl.setAttribute('y1', a.y.toFixed(2));
+      if(bob){ const c = at(bob, 236.2, 146); fl.setAttribute('x2', c.x.toFixed(2)); fl.setAttribute('y2', c.y.toFixed(2)); }
+    }
+  }catch(e){}
+  try{   // 요리: 손이 꼬치 손잡이를 실제로 쥐고 같이 돈다(팔 각도·길이를 매 프레임 손잡이에 맞춘다)
+    const arm = UI.screen === 'rpg' && !document.hidden ? document.querySelector('.rpg .scene:not(.idle) .hero.cook .arm') : null, cw = arm && document.querySelector('.rpg .scene .crankw path');
+    if(arm && cw){
+      const par = arm.parentNode, sv = arm.ownerSVGElement, pt = sv.createSVGPoint(); pt.x = 162; pt.y = 116;
+      const g = pt.matrixTransform(cw.getScreenCTM()).matrixTransform(par.getScreenCTM().inverse());
+      const o = (arm.style.transformOrigin || '0px 0px').split(' ').map(parseFloat), vx = g.x - o[0], vy = g.y - o[1];
+      const th = Math.atan2(vy, vx) * 180 / Math.PI - 90, L = Math.hypot(vx, vy) - 29;
+      arm.style.animation = 'none'; arm.style.transform = `rotate(${th.toFixed(2)}deg) translate(0px, ${L.toFixed(2)}px)`; arm.dataset.ck = '1';
+    } else document.querySelectorAll('.rpg .arm[data-ck]').forEach(e => { if(e.closest('.scene.idle') || !e.closest('.hero.cook')){ e.style.animation = ''; e.style.transform = ''; delete e.dataset.ck; } });
+  }catch(e){}
+  requestAnimationFrame(fishLine);
+})();
 function hswPlace(sw, on){   // 금색 막대를 고른 글자 폭·위치에 맞춘다
   if(!sw) return; const b = sw.querySelector(`.ht[data-t="${on}"]`); if(!b) return;
   sw.style.setProperty('--kx', b.offsetLeft + 'px'); sw.style.setProperty('--ks', b.offsetWidth / 100);   /* 폭도 transform(scaleX)로 움직여야 화면을 다시 그리는 동안에도 막대가 끊기지 않는다 */

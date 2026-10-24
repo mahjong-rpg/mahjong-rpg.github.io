@@ -1200,7 +1200,7 @@ button.skb{font:inherit;cursor:pointer}.skb.can{border-color:var(--gc);box-shado
 .pc.peek{outline:2px solid #7fd4ff;outline-offset:1px}
 .pkread{position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-size:11.5px;font-weight:800;padding:2px 9px;border-radius:99px;white-space:nowrap;z-index:3}.pkread.r{background:#e0453a;color:#fff}.pkread.b{background:#3fbf6a;color:#06210f}
 .pkstk{position:absolute;left:calc(50% + 52px);top:calc(86% + 32px);width:1px;height:1px;--ro:14px;z-index:6}   /* 3D 칩에 filter 그림자는 무거워서 바닥 그림자를 따로 깐다 */
-.sliding .pkstk,.sliding .pkbg .rfx{visibility:hidden}.pkstk{animation:pkStkIn .2s ease-out}@keyframes pkStkIn{from{opacity:0}}   /* 화면 넘길 땐 3D 칩 탑·배경 입자를 잠깐 숨겨 가볍게 */
+.sliding .pkstk,.sliding .pkbg .rfx{visibility:hidden}html.pkswap .pkbg{display:none}.pkstk{animation:pkStkIn .2s ease-out}@keyframes pkStkIn{from{opacity:0}}   /* 화면 넘길 땐 3D 칩 탑·배경 입자를 잠깐 숨겨 가볍게 */
 .pkstk .pkrw::before{content:'';position:absolute;left:-4px;right:-4px;bottom:-9px;height:12px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);pointer-events:none}
 .pkstk .pkrw{position:absolute;display:flex;gap:4px;align-items:flex-end}   /* 테이블 위에 살짝 떠 있는 내 칩 */
 .pkstk .chipstk{position:relative;--cd:28px;--ct:calc(var(--cd)*.095);width:var(--cd);height:calc(var(--cd)*.56 + var(--ct)*var(--n)*.85);pointer-events:auto;cursor:grab;touch-action:none;user-select:none}.pkstk .chipstk.grab{cursor:grabbing}
@@ -2925,6 +2925,8 @@ function flipPlay(m){
 }
 function draw(){
   if(UI.slideLock){ UI.slidePend = true; return; }   // 화면 슬라이드 중에는 다시 그리지 않는다(끝나면 한 번 그림)
+  { const de = document.documentElement, g = UI.screen === 'poker' && typeof pkG === 'function' ? pkG() : null;   // 대회장 → 대회 화면: 카드 배경 애니메이션을 한 프레임 먼저 꺼서(폰에서 지운 배경이 잠깐 깜빡이는 잔상 방지) 그다음 바꾼다
+    if(g && !g.paused && document.querySelector('.pklobby') && !de.classList.contains('pkswap')){ de.classList.add('pkswap'); requestAnimationFrame(() => requestAnimationFrame(() => { draw(); setTimeout(() => de.classList.remove('pkswap'), 300); })); return; } }
   if(UI.screen === 'home'){ $app.innerHTML = homeHTML(); fitStats(); }
   else if(UI.screen === 'game'){ const m = flipCapture(), oldStk = $app.querySelector('.table > .chipstk'); $app.innerHTML = gameHTML(); flipPlay(m);
     const nw = $app.querySelector('.table > .chipstk');   // 축의탑은 다시 그려도 같은 요소를 그대로 둔다(만지작거리는 애니메이션·드래그가 끊기지 않게)

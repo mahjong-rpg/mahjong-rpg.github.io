@@ -18,6 +18,8 @@
   .btn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:10px;padding:11px 20px;border-radius:12px;font-weight:700;background:#fff;color:#1f1f1f;box-shadow:0 2px 8px rgba(0,0,0,.35)}
   .btn svg{width:20px;height:20px}
   .btn.sub{background:rgba(255,255,255,.08);color:#e8efe9;border:1px solid rgba(255,255,255,.18);box-shadow:none;font-weight:600;padding:8px 16px;font-size:14px}
+  .btn.gold{background:linear-gradient(#f6d77e,#d9a53a);color:#1b1406}
+  .brow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
   .bar{width:min(320px,80vw);height:8px;border-radius:8px;background:rgba(0,0,0,.4);overflow:hidden}
   .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#c9972e,#f3d27a);transition:width .2s}
   .up{display:flex;flex-direction:column;gap:10px;align-items:center;padding:16px;border:1px dashed rgba(243,210,122,.5);border-radius:12px;max-width:360px}
@@ -35,7 +37,10 @@
   <h1>마작 RPG</h1>
   <div class="msg" id="msg">불러오는 중…</div>
   <div class="bar" id="bar" hidden><i id="barI"></i></div>
-  <button class="btn" id="login" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z" fill="#4285f4"/><path d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z" fill="#34a853"/><path d="M6.4 14c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.4H3.1a10 10 0 0 0 0 9.2L6.4 14z" fill="#fbbc05"/><path d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.4L6.4 10c.8-2.3 3-4.1 5.6-4.1z" fill="#ea4335"/></svg>구글로 로그인</button>
+  <div class="brow">
+    <button class="btn" id="login" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z" fill="#4285f4"/><path d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z" fill="#34a853"/><path d="M6.4 14c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.4H3.1a10 10 0 0 0 0 9.2L6.4 14z" fill="#fbbc05"/><path d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.4L6.4 10c.8-2.3 3-4.1 5.6-4.1z" fill="#ea4335"/></svg>구글로 로그인</button>
+    <a class="btn gold" href="https://github.com/mahjong-rpg/mahjong-rpg.github.io#readme" target="_blank" rel="noopener">게임 소개</a>
+  </div>
   <div class="up" id="up" hidden>
     <b>게임 업데이트 (운영자)</b>
     <input type="file" id="file" accept=".html,text/html">
@@ -43,8 +48,8 @@
   </div>
   <button class="btn sub" id="logout" hidden>다른 계정으로 로그인</button>
   <div class="note" id="note" hidden>
-    플레이어 등록을 원하시면 사용하실 Gmail 주소를 적어<br><a href="mailto:ekacks77@gmail.com"><b>ekacks77@gmail.com</b></a>으로 메일을 보내 주세요.<br><br>
-    이 게임은 무료이며 현금 결제·환전이 없습니다.<br>게임 속 칩은 게임 안에서만 쓰는 점수로, 사행성과 무관합니다.
+    플레이어 등록을 원하시면 사용하실 Gmail 계정으로<br><a href="mailto:ekacks77@gmail.com"><b>ekacks77@gmail.com</b></a>(운영자)에 메일을 보내 주세요.<br><br>
+    이 게임은 무료이며 현금 결제·환전이 없습니다.<br>게임 속 칩은 게임 안에서만 쓰는 재화로, 사행성과 무관합니다.<br>등록된 이메일 주소는 아래 방침을 철저히 따릅니다.
   </div>
   <small><a href="privacy.html">개인정보처리방침</a></small>
 </div>
@@ -80,7 +85,7 @@ async function boot(){
   lib.au.onAuthStateChanged(lib.auth, u => {
     if(ran) return;   // 게임으로 바뀐 뒤에는 입구는 손대지 않는다
     $('login').hidden = !!u; $('logout').hidden = !u; $('note').hidden = !!u;
-    if(!u){ say('초대받은 계정으로 로그인하세요'); return; }
+    if(!u){ say('등록된 계정으로 로그인하세요'); return; }
     if(u.email === OWNER && location.hash === '#upload'){ $('up').hidden = false; say(`<b>${u.email}</b> · 운영자`); return; }
     start(false);
   });

@@ -18,9 +18,9 @@
 
 | 마작 | 퍼즐 |
 |:---:|:---:|
-| ![마작](mahjong.gif) | ![퍼즐](puzzle.gif) |
+| ![마작](mahjong_v2.gif) | ![퍼즐](puzzle_v2.gif) |
 | **RPG** | **포커 / 블랙잭** |
-| ![RPG](rpg.gif) | ![포커와 블랙잭](poker_blackjack.gif) |
+| ![RPG](rpg_v2.gif) | ![포커와 블랙잭](poker_blackjack_v2.gif) |
 
 ---
 

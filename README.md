@@ -1,5 +1,8 @@
 # 🀄 마작 RPG
 
+[![한국어](https://img.shields.io/badge/%ED%95%9C%EA%B5%AD%EC%96%B4-KO-d9ab45?style=for-the-badge)](README.md) [![日本語](https://img.shields.io/badge/%E6%97%A5%E6%9C%AC%E8%AA%9E-JP-555555?style=for-the-badge)](README.ja.md)
+
+
 **리치 마작 · 마작 퍼즐 · 방치형 RPG · 텍사스 홀덤 포커 · 클래식 블랙잭**을 한곳에서 즐기는 웹 게임입니다.
 
 설치 없이 브라우저에서 바로 플레이할 수 있고, PC와 폰 모두 지원합니다.

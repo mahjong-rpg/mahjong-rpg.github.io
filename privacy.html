@@ -56,8 +56,8 @@
   document.addEventListener('change', e => { const id = e.target && e.target.id; if(id !== 's-ja' && id !== 's-ko') return; const l = (id === 's-ja') === e.target.checked ? 'ja' : 'ko'; window.setLang(l); const a = document.getElementById('s-ja'), k = document.getElementById('s-ko'); if(a) a.checked = l === 'ja'; if(k) k.checked = l !== 'ja'; });
 })();
 </script>
-</head>
-<body>
+<style>.lsw{display:inline-flex;gap:4px;padding:3px;margin:0 0 14px;border-radius:999px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.15)}.lsw a{padding:5px 12px;border-radius:999px;font-size:13px;font-weight:700;color:rgba(255,255,255,.65);text-decoration:none}html[lang=ko] .lsw .ko,html[lang=ja] .lsw .ja{background:linear-gradient(#f3d58a,#d9ab45);color:#1d1a12}</style></head>
+<body><div style="text-align:right;padding:10px 16px 0"><div class="lsw notr"><a href="#" class="ko" onclick="setLang('ko');return false">한국어(KO)</a><a href="#" class="ja" onclick="setLang('ja');return false">日本語(JP)</a></div></div>
 <main>
 <h1>마작 RPG 개인정보처리방침</h1>
 <small>시행일: 2026년 10월 27일</small>
@@ -86,6 +86,5 @@
 
 <p><a href="https://mahjong-rpg.github.io">← 마작 RPG로 돌아가기</a></p>
 </main>
-<div class="notr" style="margin-top:14px;font-size:13px;opacity:.8"><a href="#" onclick="setLang('ko');return false" style="color:inherit">한국어(KO)</a> · <a href="#" onclick="setLang('ja');return false" style="color:inherit">日本語(JP)</a></div>
 </body>
 </html>

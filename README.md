@@ -13,6 +13,8 @@
 
 플레이어 등록을 원하시면 사용하실 Gmail 계정으로 **silentlessercuckoo@gmail.com**(운영자)에 메일을 보내 주세요.
 
+X [@mahjong_rpg](https://x.com/mahjong_rpg) DM으로도 신청할 수 있습니다.
+
 이 게임은 무료이며 현금 결제·환전이 없습니다. 게임 속 칩은 게임 안에서만 쓰는 재화로, 사행성과 무관합니다.
 
 ---

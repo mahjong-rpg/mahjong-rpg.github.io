@@ -10,6 +10,52 @@
   h1{font-size:26px;margin:0 0 6px}h2{font-size:18px;margin:28px 0 8px;color:#f3d27a}
   p,li{color:#cfdcd3}a{color:#8cc8ff}small{color:#8fa597}
 </style>
+<script>/* ==== 일본어 선택(i18n): 한국어 원문은 그대로 두고, 日本語일 때만 화면 글자를 사전으로 바꿔 보여 준다 ==== */
+(function(){
+  let L = 'ko';
+  try{ L = localStorage.getItem('rm.lang') || (/^ja/i.test(navigator.language || '') ? 'ja' : 'ko'); }catch(_){}
+  window.LANG = L;
+  const D = {"마작 RPG 개인정보처리방침": "麻雀RPG プライバシーポリシー", "시행일: 2026년 10월 27일": "施行日: 2026年10月27日", "1. 수집하는 정보": "1. 収集する情報", "구글 계정으로 로그인한 경우에만 아래 정보를 처리합니다. 로그인하지 않으면 어떤 정보도 서버로 보내지 않으며, 게임 기록은 이용자의 기기(브라우저)에만 저장됩니다.": "Googleアカウントでログインした場合にのみ、以下の情報を取り扱います。ログインしない場合はいかなる情報もサーバーへ送信せず、ゲームの記録は利用者の端末(ブラウザ)にのみ保存されます。", "구글 계정 식별 정보: 계정 고유 번호, 이름, 이메일 주소(로그인 처리용, Google Firebase Authentication이 보관)": "Googleアカウントの識別情報: アカウント固有番号、名前、メールアドレス(ログイン処理用、Google Firebase Authenticationが保管)", "게임 기록: 마작·RPG·포커·블랙잭 진행도와 설정(Google Cloud Firestore에 보관)": "ゲームの記録: 麻雀・RPG・ポーカー・ブラックジャックの進行度と設定(Google Cloud Firestoreに保管)", "2. 이용 목적": "2. 利用目的", "여러 기기에서 같은 게임 진행도로 이어서 플레이할 수 있도록 기록을 저장하고 불러오는 데에만 사용합니다. 광고, 마케팅, 분석 목적으로 사용하지 않습니다.": "複数の端末で同じ進行度のまま続けてプレイできるよう、記録の保存と読み込みにのみ使用します。広告、マーケティング、分析の目的では使用しません。", "3. 제3자 제공": "3. 第三者への提供", "수집한 정보를 제3자에게 판매하거나 제공하지 않습니다. 저장은 Google Firebase(Google LLC)의 서비스를 통해 이루어집니다.": "収集した情報を第三者に販売・提供することはありません。保存はGoogle Firebase(Google LLC)のサービスを通じて行われます。", "4. 보관 기간과 삭제": "4. 保管期間と削除", "로그아웃해도 계정에 저장된 기록은 남아 있으며, 다시 로그인하면 이어서 사용할 수 있습니다. 기록과 계정 정보의 삭제를 원하면 아래 이메일로 요청해 주세요. 확인 후 지체 없이 삭제합니다.": "ログアウトしてもアカウントに保存された記録は残り、再度ログインすると続けて利用できます。記録とアカウント情報の削除をご希望の場合は、下記のメールアドレスまでご依頼ください。確認後、速やかに削除します。", "5. 보안": "5. セキュリティ", "저장된 기록은 보안 규칙에 따라 로그인한 본인만 읽고 쓸 수 있습니다.": "保存された記録はセキュリティルールにより、ログインした本人だけが読み書きできます。", "6. 문의": "6. お問い合わせ", "이메일:": "メール:", "← 마작 RPG로 돌아가기": "← 麻雀RPGに戻る"};
+  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const keys = Object.keys(D).sort((a, b) => b.length - a.length);
+  const LK = keys.filter(k => k.length > 2), SK = keys.filter(k => k.length <= 2);
+  const reL = new RegExp(LK.map(esc).join('|'), 'g');
+  const reS = new RegExp('(?<![\\uac00-\\ud7a3])(?:' + SK.map(esc).join('|') + ')(?![\\uac00-\\ud7a3])', 'g');
+  const H = /[가-힣]/;
+  const tr = s => { if(!s || !H.test(s)) return s; s = s.replace(reL, m => D[m]); if(H.test(s)) s = s.replace(reS, m => D[m]); return s; };
+  window.jaTr = tr;
+  const OT = new WeakMap(), OA = new WeakMap();   // 원래 한국어(되돌리기용)
+  const setT = (n, t) => { if(!OT.has(n)) OT.set(n, n.nodeValue); n.nodeValue = t; };
+  const NOTR = e => !!(e && e.closest && (e.closest('.notr') || (e.closest('.netchat') && !e.closest('.sys'))));   // 채팅: 사람이 쓴 말은 그대로, 시스템 줄(.sys)만 번역
+  const SKIP = { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, NOSCRIPT: 1 };
+  const ATTR = ['placeholder', 'title', 'aria-label', 'alt'];
+  function el(e){ for(const a of ATTR){ const v = e.getAttribute && e.getAttribute(a); if(v && H.test(v)){ const t = tr(v); if(t !== v){ const o = OA.get(e) || {}; if(!(a in o)) o[a] = v; OA.set(e, o); e.setAttribute(a, t); } } } if(e.tagName === 'INPUT' && (e.type === 'button' || e.type === 'submit') && H.test(e.value)) e.value = tr(e.value); }
+  function walk(root){
+    if(!root) return;
+    if(root.nodeType === 3){ const p = root.parentNode; if(p && !SKIP[p.nodeName] && !NOTR(p)){ const v = root.nodeValue, t = tr(v); if(t !== v) setT(root, t); } return; }
+    if(root.nodeType !== 1 || SKIP[root.nodeName] || (root.closest && root.closest('.notr'))) return;
+    el(root);
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, { acceptNode: n => (n.nodeType === 1 && (SKIP[n.nodeName] || n.classList.contains('notr')) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
+    let n; while((n = w.nextNode())){ if(n.nodeType === 1) el(n); else { const v = n.nodeValue; if(NOTR(n.parentNode)) continue; if(H.test(v)){ const t = tr(v); if(t !== v) setT(n, t); } } }
+  }
+  let obs = null;
+  function on(){
+    walk(document.body); if(H.test(document.title)) document.title = tr(document.title);
+    if(obs) return;
+    obs = new MutationObserver(ms => { for(const m of ms){ if(m.type === 'childList') m.addedNodes.forEach(walk); else if(m.type === 'characterData') walk(m.target); else if(m.type === 'attributes') el(m.target); } });
+    obs.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ATTR });
+  }
+  function off(){ if(obs){ obs.disconnect(); obs = null; }
+    const w = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT); let n;
+    while((n = w.nextNode())){ if(n.nodeType === 3){ if(OT.has(n)){ n.nodeValue = OT.get(n); OT.delete(n); } } else { const o = OA.get(n); if(o){ for(const a in o) n.setAttribute(a, o[a]); OA.delete(n); } } }
+    if(document.title === '麻雀RPG') document.title = '마작 RPG'; }
+  window.setLang = l => { try{ localStorage.setItem('rm.lang', l); }catch(_){} window.LANG = l; if(l === 'ja'){ on(); } else { off(); } try{ render(); }catch(_){} if(l === 'ja') walk(document.body); document.documentElement.lang = l; };
+  document.documentElement.lang = L;
+  const start = () => { if(window.LANG === 'ja') on(); };
+  if(document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+  document.addEventListener('change', e => { const id = e.target && e.target.id; if(id !== 's-ja' && id !== 's-ko') return; const l = (id === 's-ja') === e.target.checked ? 'ja' : 'ko'; window.setLang(l); const a = document.getElementById('s-ja'), k = document.getElementById('s-ko'); if(a) a.checked = l === 'ja'; if(k) k.checked = l !== 'ja'; });
+})();
+</script>
 </head>
 <body>
 <main>
@@ -40,5 +86,6 @@
 
 <p><a href="https://mahjong-rpg.github.io">← 마작 RPG로 돌아가기</a></p>
 </main>
+<div class="notr" style="margin-top:14px;font-size:13px;opacity:.8"><a href="#" onclick="setLang('ko');return false" style="color:inherit">한국어(KO)</a> · <a href="#" onclick="setLang('ja');return false" style="color:inherit">日本語(JP)</a></div>
 </body>
 </html>

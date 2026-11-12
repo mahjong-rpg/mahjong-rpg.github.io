@@ -57,7 +57,7 @@
 // 입구: 구글 로그인 → 허락된 계정이면 Firestore(game/*)에서 게임 파일을 받아 이 주소 그대로 실행(기기 기록 유지)
 // 게임은 기기(IndexedDB)에 남겨 두고, 새 버전이 올라왔을 때만 다시 받는다. 인터넷이 없으면 남겨 둔 게임으로 실행
 const CFG = { apiKey:'AIzaSyA71uCghM3gazaX-HVIbJEDa6zwoqBqfXA', authDomain:'mahjong-rpg-poker-blackjack.firebaseapp.com', projectId:'mahjong-rpg-poker-blackjack', storageBucket:'mahjong-rpg-poker-blackjack.firebasestorage.app', messagingSenderId:'728732325986', appId:'1:728732325986:web:7cc1a72a647ef6adf6193b' };
-const OWNER = 'ekacks77@gmail.com', CHUNK = 900000;
+const OWNER = 'silentlessercuckoo@gmail.com', CHUNK = 900000;
 const $ = id => document.getElementById(id), say = h => { $('msg').innerHTML = h; };
 const prog = f => { $('bar').hidden = f == null; if(f != null) $('barI').style.width = Math.round(f * 100) + '%'; };
 // ---- 기기 보관(IndexedDB) ----

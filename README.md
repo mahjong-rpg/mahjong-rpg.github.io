@@ -9,11 +9,9 @@
 
 - **플레이**: https://mahjong-rpg.github.io
 
-등록된 구글 계정만 플레이할 수 있습니다.
+구글 계정으로 로그인하면 바로 가입되어 무료로 플레이할 수 있습니다. 선착순 30명까지입니다.
 
-플레이어 등록을 원하시면 사용하실 Gmail 계정으로 **silentlessercuckoo@gmail.com**(운영자)에 메일을 보내 주세요.
-
-X [@mahjong_rpg](https://x.com/mahjong_rpg) DM으로도 신청할 수 있습니다.
+소식은 X [@mahjong_rpg](https://x.com/mahjong_rpg)에서 전합니다.
 
 이 게임은 무료이며 현금 결제·환전이 없습니다. 게임 속 칩은 게임 안에서만 쓰는 재화로, 사행성과 무관합니다.
 

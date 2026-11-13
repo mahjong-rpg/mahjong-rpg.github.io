@@ -8,11 +8,9 @@
 
 - **プレイ**: https://mahjong-rpg.github.io
 
-登録されたGoogleアカウントだけがプレイできます。
+Googleアカウントでログインするとすぐに登録され、無料でプレイできます。先着30名までです。
 
-プレイヤー登録をご希望の方は、使用するGmailアカウントで **silentlessercuckoo@gmail.com**(運営者)にメールをお送りください。
-
-X [@mahjong_rpg](https://x.com/mahjong_rpg) のDMでも申し込めます。
+お知らせはX [@mahjong_rpg](https://x.com/mahjong_rpg) でお届けします。
 
 このゲームは無料で、現金での決済・換金はありません。ゲーム内のチップはゲーム内だけで使う通貨で、賭博性とは無関係です。
 

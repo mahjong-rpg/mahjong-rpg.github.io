@@ -8,6 +8,7 @@
 설치 없이 브라우저에서 바로 플레이할 수 있고, PC와 폰 모두 지원합니다.
 
 - **플레이**: https://mahjong-rpg.github.io
+- **공식 문의**: X [@mahjong_rpg](https://x.com/mahjong_rpg)
 
 구글 계정으로 로그인하면 바로 가입되어 무료로 플레이할 수 있습니다. 선착순 30명까지입니다.
 

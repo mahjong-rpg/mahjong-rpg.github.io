@@ -7,6 +7,7 @@
 インストール不要でブラウザからすぐに遊べます。PCとスマホの両方に対応しています。
 
 - **プレイ**: https://mahjong-rpg.github.io
+- **公式お問い合わせ**: X [@mahjong_rpg](https://x.com/mahjong_rpg)
 
 Googleアカウントでログインするとすぐに登録され、無料でプレイできます。先着30名までです。
 
